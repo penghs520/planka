@@ -1,0 +1,186 @@
+    Checking pgraph v1.0.0 (/Users/penghongsi/workspaces/sources/agilean/viber-coding/planka/pgraph)
+error[E0432]: unresolved import `crate::proto::pgraph::common::ValueUnitState`
+ --> src/cli/query_converter.rs:5:23
+  |
+5 |     common::{SortWay, ValueUnitState},
+  |                       ^^^^^^^^^^^^^^ no `ValueUnitState` in `proto::pgraph::common`
+
+error[E0432]: unresolved import `crate::proto::pgraph::model::CardState`
+   --> src/cli/result_processor.rs:222:13
+    |
+222 |         use crate::proto::pgraph::model::CardState;
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `CardState` in `proto::pgraph::model`
+    |
+help: consider importing one of these enums instead
+    |
+222 -         use crate::proto::pgraph::model::CardState;
+222 +         use crate::database::model::CardState;
+    |
+222 -         use crate::proto::pgraph::model::CardState;
+222 +         use crate::proto::CardState;
+    |
+
+error[E0433]: failed to resolve: could not find `CardState` in `model`
+   --> src/server/card_converter.rs:354:59
+    |
+354 |         CardState::Active => crate::proto::pgraph::model::CardState::Active as i32,
+    |                                                           ^^^^^^^^^ could not find `CardState` in `model`
+    |
+help: consider importing one of these enums
+    |
+  4 + use crate::database::model::CardState;
+    |
+  4 + use crate::proto::CardState;
+    |
+help: if you import `CardState`, refer to it directly
+    |
+354 -         CardState::Active => crate::proto::pgraph::model::CardState::Active as i32,
+354 +         CardState::Active => CardState::Active as i32,
+    |
+
+error[E0433]: failed to resolve: could not find `CardState` in `model`
+   --> src/server/card_converter.rs:355:61
+    |
+355 |         CardState::Archived => crate::proto::pgraph::model::CardState::Archived as i32,
+    |                                                             ^^^^^^^^^ could not find `CardState` in `model`
+    |
+help: consider importing one of these enums
+    |
+  4 + use crate::database::model::CardState;
+    |
+  4 + use crate::proto::CardState;
+    |
+help: if you import `CardState`, refer to it directly
+    |
+355 -         CardState::Archived => crate::proto::pgraph::model::CardState::Archived as i32,
+355 +         CardState::Archived => CardState::Archived as i32,
+    |
+
+error[E0433]: failed to resolve: could not find `CardState` in `model`
+   --> src/server/card_converter.rs:356:62
+    |
+356 |         CardState::Discarded => crate::proto::pgraph::model::CardState::Discarded as i32,
+    |                                                              ^^^^^^^^^ could not find `CardState` in `model`
+    |
+help: consider importing one of these enums
+    |
+  4 + use crate::database::model::CardState;
+    |
+  4 + use crate::proto::CardState;
+    |
+help: if you import `CardState`, refer to it directly
+    |
+356 -         CardState::Discarded => crate::proto::pgraph::model::CardState::Discarded as i32,
+356 +         CardState::Discarded => CardState::Discarded as i32,
+    |
+
+warning: ambiguous glob re-exports
+  --> src/proto.rs:52:9
+   |
+49 | pub use pgraph::common::*;
+   |         ----------------- but the name `TitleJointArea` in the type namespace is also re-exported here
+...
+52 | pub use pgraph::model::*;
+   |         ^^^^^^^^^^^^^^^^ the name `TitleJointArea` in the type namespace is first re-exported here
+   |
+   = note: `#[warn(ambiguous_glob_reexports)]` on by default
+
+warning: unused imports: `EdgeDescriptor`, `EdgeDirection`, and `NeighborQuery`
+ --> src/server/filter.rs:3:16
+  |
+3 |     CardState, EdgeDescriptor, EdgeDirection, FieldValue, Identifier, NeighborQuery,
+  |                ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `futures::SinkExt`
+  --> src/server/helper.rs:12:5
+   |
+12 | use futures::SinkExt;
+   |     ^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::database::database::Database`
+ --> src/server/test/test_query_cards_with_return.rs:1:5
+  |
+1 | use crate::database::database::Database;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::database::transaction::Transaction`
+ --> src/server/test/test_query_cards_with_return.rs:3:5
+  |
+3 | use crate::database::transaction::Transaction;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `CardQueryRequest`, `ConditionGroup`, `ConditionNode`, `Condition`, `LogicOperator`, `Page`, `QueryContext`, `QueryScope`, `SortAndPage`, `StateConditionItem`, `StateEqualOperator`, `StateOperator`, `TitleConditionItem`, `TitleContainsOperator`, `TitleOperator`, `Yield`, `YieldedField`, `YieldedLink`, `condition_node::NodeType`, `state_operator`, and `title_operator`
+  --> src/server/test/test_query_cards_with_return.rs:9:5
+   |
+ 9 |     condition_node::NodeType, title_operator, state_operator, Condition, ConditionGroup,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^  ^^^^^^^^^^^^^^
+10 |     ConditionNode, LogicOperator, TitleConditionItem, TitleContainsOperator, TitleOperator,
+   |     ^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+11 |     StateConditionItem, StateEqualOperator, StateOperator, CardQueryRequest, QueryContext,
+   |     ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^
+12 |     QueryScope, SortAndPage, Page, Yield, YieldedField, YieldedLink,
+   |     ^^^^^^^^^^  ^^^^^^^^^^^  ^^^^  ^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^
+
+warning: unused import: `crate::server::query_cards`
+  --> src/server/test/test_query_cards_with_return.rs:14:5
+   |
+14 | use crate::server::query_cards;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Entry`
+  --> src/raft/store.rs:13:5
+   |
+13 |     Entry, ErrorSubject, LogId, Snapshot, SnapshotData, SnapshotMeta, StorageError,
+   |     ^^^^^
+
+warning: unnecessary parentheses around closure body
+   --> src/utils.rs:312:30
+    |
+312 |         text.chars().all(|c| (c.is_ascii_lowercase() || c == ' '))
+    |                              ^                                  ^
+    |
+    = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+    |
+312 -         text.chars().all(|c| (c.is_ascii_lowercase() || c == ' '))
+312 +         text.chars().all(|c| c.is_ascii_lowercase() || c == ' ')
+    |
+
+warning: unused variable: `txn`
+   --> src/server/querys.rs:254:5
+    |
+254 |     txn: &T,
+    |     ^^^ help: if this is intentional, prefix it with an underscore: `_txn`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `txn`
+   --> src/server/writes.rs:955:54
+    |
+955 | fn link_to_edge<'a, T: Transaction<'a>>(link: &Link, txn: &T) -> Result<Edge, String> {
+    |                                                      ^^^ help: if this is intentional, prefix it with an underscore: `_txn`
+
+error: binding modifiers may only be written when the default binding mode is `move`
+   --> src/database/errors.rs:100:39
+    |
+100 |             DbError::TransactionError(ref err) => write!(f, "Underlying storage error: {err}"),
+    |                                       ^^^ binding modifier not allowed under `ref` default binding mode
+    |
+    = note: for more information, see <https://doc.rust-lang.org/nightly/edition-guide/rust-2024/match-ergonomics.html>
+note: matching on a reference type with a non-reference pattern changes the default binding mode
+   --> src/database/errors.rs:100:13
+    |
+100 |             DbError::TransactionError(ref err) => write!(f, "Underlying storage error: {err}"),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this matches on type `&_`
+help: remove the unnecessary binding modifier
+    |
+100 -             DbError::TransactionError(ref err) => write!(f, "Underlying storage error: {err}"),
+100 +             DbError::TransactionError(err) => write!(f, "Underlying storage error: {err}"),
+    |
+
+Some errors have detailed explanations: E0432, E0433.
+For more information about an error, try `rustc --explain E0432`.
+warning: `pgraph` (lib) generated 11 warnings
+error: could not compile `pgraph` (lib) due to 6 previous errors; 11 warnings emitted

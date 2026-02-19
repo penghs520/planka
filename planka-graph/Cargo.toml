@@ -1,0 +1,231 @@
+[package]
+name = "pgraph"
+version = "1.0.0"
+edition = "2024"
+
+[features]
+
+[dev-dependencies]
+# 基准测试框架，提供：
+# - 统计分析功能
+# - HTML报告生成
+# - 支持异步基准测试
+# - 自动进行多次采样
+criterion = "0.5"
+
+# 临时文件和目录管理
+# - 自动清理机制
+# - 跨平台支持
+# - 安全的临时文件创建
+tempfile = "3.8"
+
+# 随机数生成库
+rand = "0.9.1"
+
+[[bench]]
+name = "vertex_id_to_u32"
+harness = false
+
+[[bench]]
+name = "vertex_bench"
+harness = false
+
+[[bench]]
+name = "edge_bench"
+harness = false
+
+
+[[bin]]
+name = "pgraph-cli"
+path = "src/bin/cli.rs"
+
+[dependencies]
+
+openraft = { git = "https://github.com/databendlabs/openraft", branch = "release-0.10" ,features = ["serde","type-alias"]}
+reqwest = { version = "0.11", features = ["json"] }
+
+actix-web = "4.10.2"
+
+rand = "0.9"
+
+# 命令行参数解析
+# - 支持子命令、选项和参数
+# - 自动生成帮助信息
+# - 提供类型安全的API
+clap = { version = "4.5.2", features = ["derive"] }
+
+# 错误处理库
+# - 提供上下文和回溯
+# - 支持自定义错误类型
+# - 简化错误处理流程
+anyhow = "1.0.97"
+
+# 交互式命令行UI
+# - 密码输入
+# - 选择菜单
+# - 进度条等
+dialoguer = "0.11.0"
+
+# 命令行编辑和历史记录支持
+# - 上下箭头浏览历史记录
+# - 行内编辑功能
+# - 历史记录保存
+rustyline = "13.0.0"
+
+# 用户目录路径辅助库
+# - 跨平台的目录查找
+# - 查找常用系统目录的位置
+dirs = "5.0.1"
+
+# 字节序处理工具
+# - 提供大端/小端字节序的读写
+# - 支持各种数值类型的字节序转换
+# - 无分配的高效实现
+byteorder = "^1.5.0"
+
+# 字符串驻留池
+# - 用于重复字符串的内存优化
+# - 线程安全的实现
+# - 自动垃圾回收
+internment = "0.8.6"
+
+# 延迟初始化的全局变量支持
+# - 线程安全的懒加载
+# - 支持可变和不可变全局变量
+# - 比 lazy_static 更现代的实现
+once_cell = "^1.20.2"
+
+# MessagePack序列化/反序列化支持
+# - 比JSON更紧凑的二进制格式
+# - 支持类型安全的序列化
+# - 高性能实现
+rmp-serde = "^1.1.1"
+
+# 通用序列化/反序列化框架
+# - 提供派生宏支持
+# - 支持自定义序列化行为
+# - 广泛的格式支持
+serde = { version = "1.0.114", features = ["derive"] }
+serde_json = "1.0.57"
+
+# YAML序列化/反序列化支持
+# - 支持YAML格式的配置文件
+# - 与serde集成
+# - 高性能实现
+serde_yaml = "^0.9.34"
+
+# UUID生成和处理
+# - 支持v1版本UUID
+# - 提供serde序列化支持
+# - 线程安全的生成器
+uuid = { version = "^1.11.0", features = ["v1", "serde"] }
+
+# 线程安全的并发哈希表
+# - 比std::sync::RwLock<HashMap>更高效
+# - 细粒度的锁定机制
+# - 支持并发读写
+dashmap = "6.1.0"
+
+# 高性能哈希函数
+# - 来自Firefox和Rust编译器内部使用的哈希算法
+# - 适用于内部应用的快速哈希算法
+# - 提供比标准哈希器更高的性能
+fxhash = "0.2.1"
+
+# 高性能缓存库
+# - 支持LRU/TTL策略
+# - 线程安全的实现
+# - 高并发性能
+moka2 = {version = "0.13.0",features = ["sync"]}
+
+foyer = {version = "0.18"}
+
+# 优化的小字符串存储
+# - 栈上分配优化
+# - Clone操作O(1)复杂度
+# - 支持从&'static str创建无需堆分配
+# - 提供serde序列化支持
+compact_str = { version = "0.8.1", features = ["serde"] }
+
+# 异步运行时和网络框架
+# - 提供完整的异步生态
+# - 高性能的调度器
+# - 丰富的异步工具集
+tokio = { version = "1", features = ["full"] }
+
+# Protocol Buffers实现
+# - 高效的二进制序列化格式
+# - 支持跨语言通信
+# - 自动代码生成
+prost = {version = "0.12" ,features = ["prost-derive"]}
+
+# RocksDB存储引擎
+# - LSM树实现的高性能KV存储
+# - 支持列族
+# - 集成snappy和lz4压缩算法
+# - 提供丰富的配置选项
+rocksdb = { version = "0.23.0", features = ["snappy", "lz4"] }
+
+# 二进制序列化格式
+# - 比JSON更紧凑
+# - 类型安全
+# - 高性能实现
+bincode = { version = "^1.3.3" }
+
+# 日志门面接口
+# - 提供统一的日志抽象
+# - 支持多种日志后端
+# - 可配置的日志级别
+log = "0.4"
+
+# 拼音转换库
+# - 支持汉字转拼音
+# - 支持多种输出格式
+# - 包含词组支持
+pinyin = "0.10.0"
+
+# 时间日期处理
+# - 提供全面的时间操作
+# - 支持时区处理
+# - 格式化和解析功能
+chrono = "0.4"
+
+# 正则表达式处理
+# - 高性能的正则表达式引擎
+# - 支持Unicode
+# - 线程安全
+regex = "1.10"
+
+# 分布式追踪框架
+# - 结构化日志
+# - 分布式追踪
+# - 性能分析
+tracing = "0.1"
+
+# 追踪数据订阅者
+# - 支持环境变量过滤
+# - JSON格式输出
+# - 时间戳集成
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "chrono"] }
+
+# 追踪数据写入器
+# - 文件输出支持
+# - 日志轮转
+# - 异步写入
+tracing-appender = "0.2"
+
+
+# 小向量优化
+# - 栈上分配优化
+# - 自动堆栈切换
+# - 零成本抽象
+smallvec = { version = "1.13.2", features = ["union"] }
+num_cpus = "1.16.0"
+futures = "0.3.31"
+
+[build-dependencies]
+# gRPC代码生成工具
+# - 从proto文件生成Rust代码
+# - 支持客户端和服务端代码生成
+# - 集成tonic框架
+tonic-build = "0.11"

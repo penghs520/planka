@@ -1,0 +1,106 @@
+services:
+  # Nacos 服务注册与配置中心
+  # 使用方式:
+  #   - ARM64(Apple Silicon): NACOS_IMAGE=v2.3.0-slim docker-compose up -d
+  #   - x86_64: docker-compose up -d (默认使用v2.3.0)
+  nacos:
+    image: nacos/nacos-server:${NACOS_IMAGE:-v2.3.0}
+    container_name: kanban-nacos
+    restart: unless-stopped
+    ports:
+      - "18848:8848"
+      - "19848:9848"
+    environment:
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: ""
+      NACOS_AUTH_ENABLE: "false"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8848/nacos/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: kanban-mysql
+    restart: unless-stopped
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: kanban_schema
+      TZ: Asia/Shanghai
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: kanban-redis
+    restart: unless-stopped
+    ports:
+      - "16379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Zookeeper (Kafka 依赖)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: kanban-zookeeper
+    restart: unless-stopped
+    ports:
+      - "12181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
+
+  # Kafka 消息队列
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kanban-kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "19092:19092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:19092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:19092", "--list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  mysql-data:
+  redis-data:
+  zookeeper-data:
+  zookeeper-log:
+  kafka-data:

@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package zgraph.field;
+
+import "common/enums.proto";
+
+option java_package = "planka.graph.driver.proto.field";
+option java_multiple_files = true;
+
+// 字段值接口
+message FieldValue {
+  string field_id = 1;
+  oneof field_type {
+    TextFieldValue text_field = 2;
+    NumberFieldValue number_field = 3;
+    DateFieldValue date_field = 4;
+    EnumFieldValue enum_field = 5;
+    WebLinkFieldValue web_link_field = 6;
+    AttachmentFieldValue attachment_field = 7;
+    DeriveFieldValue derive_field = 8;
+  }
+}
+
+//关联关系上的属性：衍生属性
+message FieldValueOnLink {
+  string field_id = 1;
+  oneof field_type {
+    NumberFieldValue number_field = 2;
+    DateFieldValue date_field = 3;
+    EnumFieldValue enum_field = 4;
+  }
+}
+
+// 文本字段值
+message TextFieldValue {
+  string value = 1;
+  int64 max_string_length = 2;
+}
+
+// 数字字段值
+message NumberFieldValue {
+  double value = 1;
+}
+
+// 日期字段值
+message DateFieldValue {
+  int64 value = 1;
+}
+
+// 枚举字段值（存储选项 ID 列表）
+message EnumFieldValue {
+  repeated string value = 1;
+}
+
+// 链接字段值
+message WebLinkFieldValue {
+  string href = 1;
+  string name = 2;
+}
+
+// 附件字段值
+message AttachmentFieldValue {
+  repeated AttachmentItem value = 1;
+}
+
+// 附件项
+message AttachmentItem {
+  string id = 1;
+  string name = 2;
+  string uploader = 3;
+  int64 created_at = 4;
+  int64 size = 5;
+}
+
+// 关联衍生字段值，存在于关联关系上
+message DeriveFieldValue {
+  uint64 opponent_card_id = 1;  // 对端卡片ID，使用u64类型
+  oneof field_type {
+    DateFieldValue date_field = 2;
+    NumberFieldValue number_field = 3;
+    EnumFieldValue enum_field = 4;
+  }
+}

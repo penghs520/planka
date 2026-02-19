@@ -1,0 +1,131 @@
+package planka.graph.driver.handler;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import planka.graph.driver.exception.RequestIdMismatchException;
+import planka.graph.driver.pool.ZgraphChannelHealthChecker;
+import planka.graph.driver.proto.auth.AuthResponse;
+import planka.graph.driver.proto.request.Request;
+import planka.graph.driver.proto.response.Response;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+/**
+ * 认证处理器
+ * <p>
+ * 处理与 zgraph 服务器的认证握手。
+ * 前置条件：pipeline 中已有 LengthFieldBasedFrameDecoder，
+ * 因此 channelRead0 接收到的 ByteBuf 是完整的帧（不含长度前缀）。
+ */
+public class AuthChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthChannelHandler.class);
+
+    private final Channel channel;
+    private final CompletableFuture<Boolean> future;
+    private final Request request;
+    private final ScheduledFuture<?> timeoutFuture;
+
+    public AuthChannelHandler(Channel channel,
+                              CompletableFuture<Boolean> future,
+                              Request request,
+                              long timeoutMillis) {
+        this.channel = channel;
+        this.future = future;
+        this.request = request;
+        this.timeoutFuture = channel.eventLoop().schedule(() -> {
+            if (!future.isDone()) {
+                future.completeExceptionally(new TimeoutException("认证超时"));
+                cleanupHandler();
+            }
+        }, timeoutMillis, TimeUnit.MILLISECONDS);
+    }
+
+    private void cleanupHandler() {
+        if (!timeoutFuture.isDone()) {
+            timeoutFuture.cancel(false);
+        }
+        try {
+            ChannelPipeline pipeline = channel.pipeline();
+            if (pipeline.context("authHandler") != null) {
+                pipeline.remove("authHandler");
+            }
+        } catch (Exception e) {
+            logger.error("移除认证处理器失败", e);
+        }
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+        // LengthFieldBasedFrameDecoder 已完成帧拆包，msg 是完整的 protobuf 数据
+        byte[] responseBytes = new byte[msg.readableBytes()];
+        msg.readBytes(responseBytes);
+
+        try {
+            Response response = Response.parseFrom(responseBytes);
+
+            if (!future.isDone()) {
+                try {
+                    checkResponseStatus(response);
+                    validateRequestId(request, response);
+
+                    if (response.hasAuthResponse()) {
+                        AuthResponse authResponse = response.getAuthResponse();
+                        future.complete(authResponse.getSuccess());
+                        ZgraphChannelHealthChecker.markActive(channel);
+                    } else {
+                        future.completeExceptionally(
+                                new RuntimeException("响应中不包含认证信息"));
+                    }
+                } catch (Exception e) {
+                    future.completeExceptionally(e);
+                }
+            }
+
+            cleanupHandler();
+        } catch (InvalidProtocolBufferException e) {
+            logger.error("认证响应解析失败: {}", e.getMessage());
+            if (!future.isDone()) {
+                future.completeExceptionally(e);
+            }
+            cleanupHandler();
+        }
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        if (!future.isDone()) {
+            future.completeExceptionally(cause);
+        }
+        cleanupHandler();
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        if (!future.isDone()) {
+            future.completeExceptionally(new RuntimeException("连接关闭，但未完成认证"));
+        }
+        cleanupHandler();
+    }
+
+    private void checkResponseStatus(Response response) {
+        if (response.getCode() != 200) {
+            throw new RuntimeException("请求失败，响应码: " + response.getCode() +
+                    "，消息: " + response.getMessage());
+        }
+    }
+
+    private void validateRequestId(Request request, Response response) {
+        String requestId = request.getRequestId();
+        String responseRequestId = response.getRequestId();
+        if (!requestId.equals(responseRequestId)) {
+            throw new RequestIdMismatchException("请求ID不匹配", requestId, responseRequestId);
+        }
+    }
+}

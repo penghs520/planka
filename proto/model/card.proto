@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package zgraph.model;
+
+import "field/field_value.proto";
+import "common/enums.proto";
+
+option java_package = "planka.graph.driver.proto.model";
+option java_multiple_files = true;
+
+// 卡片
+message Card {
+  // ==================== 标识信息 ====================
+  uint64 id = 1;  // 卡片ID，使用u64类型
+  string org_id = 2;
+  int64 code_in_org = 3;
+  string custom_code = 4;
+  string type_id = 5;                    // 卡片类型ID
+
+  // ==================== 基本信息 ====================
+  Title title = 6;
+  string description = 7;
+
+  // ==================== 状态信息 ====================
+  common.CardState state = 8;                   // 卡片周期状态
+  string stream_id = 9;                  // 价值流定义ID
+  string status_id = 10;                  // 价值流状态ID  无需记录价值流阶段ID
+
+  // ==================== 属性值 ====================
+  map<string, zgraph.field.FieldValue> custom_field_value_map = 11;
+
+  // ==================== 关联卡片 ====================
+  map<string, CardList> link_card_map = 12;
+
+  // ==================== 审计信息 ====================
+  int64 created_at = 13;
+  int64 updated_at = 14;
+  int64 discarded_at = 15;                // 丢弃时间
+  int64 archived_at = 16;                // 归档时间
+}
+
+// 标题
+message Title {
+  oneof title_type {
+    PureTitle pure = 1;
+    JointTitle joint = 2;
+  }
+}
+
+// 纯标题
+message PureTitle {
+  string value = 1;
+}
+
+// 拼接标题
+message JointTitle {
+  string name = 1;
+  TitleJointArea area = 2;
+  repeated JointTitleParts multi_parts = 3;
+}
+
+// 拼接区域枚举
+enum TitleJointArea {
+  PREFIX = 0;   // 前缀
+  SUFFIX = 1;   // 后缀
+}
+
+// 拼接标题的组成部分-多项
+message JointTitleParts {
+  repeated JointTitlePart parts = 1;
+}
+
+// 拼接标题的组成部分-单项
+message JointTitlePart {
+  string name = 1;
+}
+
+// 卡片列表
+message CardList {
+  repeated Card cards = 1;
+}

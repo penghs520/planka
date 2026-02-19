@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package zgraph.response;
+
+import "auth/auth.proto";
+import "query/query.proto";
+import "linkquery/linkquery.proto";
+import "write/write.proto";
+import "admin/admin.proto";
+
+option java_package = "planka.graph.driver.proto.response";
+option java_multiple_files = true;
+
+message Response {
+  int32 code = 1; // 返回码,200表示成功,其他表示失败
+  string request_id = 2;// 请求id，和request中的request_id对应
+  string message = 3; // 返回信息
+  oneof response_type {
+    auth.AuthResponse auth_response = 4;
+    query.CardQueryResponse card_query_response = 5;
+    query.CardCountResponse card_count_response = 6;
+    query.QueryIdsResponse query_ids_response = 7;
+    linkquery.LinkQueryResponse link_query_response = 8;
+    write.BatchCardCommonResponse batch_card_common_response = 9;
+    write.BatchLinkCommonResponse batch_link_common_response = 10;
+    admin.UpdateLogLevelResponse update_log_level_response = 11;
+    query.CardCountByGroupResponse card_count_by_group_response = 12;
+    admin.DatabaseStatsResponse database_stats_response = 13;
+    query.QueryCardTitlesResponse query_card_titles_response = 14;
+  }
+}

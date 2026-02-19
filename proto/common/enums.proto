@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package zgraph.common;
+
+option java_package = "planka.graph.driver.proto.common";
+option java_multiple_files = true;
+
+// 卡片状态
+enum CardState {
+  Active = 0;//进行中
+  Discarded = 1;//已丢弃
+  Archived = 2;//已归档
+}
+
+// 拼接标题区域枚举，表示前缀还是后缀
+enum TitleJointArea {
+  Prefix = 0; //前缀
+  Suffix = 1; //后缀
+}
+
+// 连接方向枚举
+enum LinkPosition {
+  Src = 0; //源侧
+  Dest = 1; //目标侧
+}
+
+// 排序方式
+enum SortWay {
+  Asc = 0;
+  Desc = 1;
+  Unsorted = 2;
+}

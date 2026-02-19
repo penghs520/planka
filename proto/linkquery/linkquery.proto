@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package zgraph.linkquery;
+
+import "common/enums.proto";
+import "model/link.proto";
+import "field/field_value.proto";
+
+option java_package = "planka.graph.driver.proto.linkquery";
+option java_multiple_files = true;
+
+// 从给定的卡片id出发，沿着给定的关联关系+方向，查询关联关系
+message LinkQueryRequest {
+  repeated uint64 card_ids = 1;  // card_id 现在是 u64 类型
+  repeated LtWithPosition lt_with_position = 2;
+}
+
+// 根据 srcId + ltId + destId 三元组查找关系，这个三元组可以一条唯一的关系
+message LinkFetchRequest {
+  repeated model.LinkKey link_keys = 1;
+}
+
+// 查询关联关系响应
+message LinkQueryResponse {
+  repeated zgraph.model.Link links = 1;
+}
+
+// 关联关系+方向
+message LtWithPosition{
+  string lt_id = 1;
+  common.LinkPosition position = 2;
+}

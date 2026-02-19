@@ -1,0 +1,121 @@
+#!/bin/bash
+
+# Git pre-commit hook
+# 在提交前确保类型检查和编码规范符合要求
+
+set -e
+
+echo "🔍 Running pre-commit checks..."
+
+# 获取项目根目录
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+
+# 检查是否有前端文件变更
+FRONTEND_CHANGED=$(git diff --cached --name-only | grep -E "^kanban-ui/" || true)
+
+# 检查是否有后端文件变更
+BACKEND_CHANGED=$(git diff --cached --name-only | grep -E "\.java$" || true)
+
+# 前端检查
+if [ -n "$FRONTEND_CHANGED" ]; then
+    echo ""
+    echo "📦 Frontend files changed, running TypeScript check..."
+    cd "$ROOT_DIR/kanban-ui"
+
+    # TypeScript 类型检查
+    if ! npx vue-tsc --noEmit; then
+        echo ""
+        echo "❌ TypeScript check failed!"
+        echo "Please fix the type errors before committing."
+        exit 1
+    fi
+    echo "✅ TypeScript check passed"
+
+    # ESLint 检查
+    echo "🔎 Running ESLint check..."
+    if ! pnpm lint:check; then
+        echo ""
+        echo "❌ ESLint check failed!"
+        echo "Please fix the lint errors or run 'pnpm lint' to auto-fix."
+        exit 1
+    fi
+    echo "✅ ESLint check passed"
+
+    # 运行单元测试
+    echo "🧪 Running frontend unit tests..."
+    if ! pnpm test:run; then
+        echo ""
+        echo "❌ Frontend unit tests failed!"
+        echo "Please fix the failing tests before committing."
+        exit 1
+    fi
+    echo "✅ Frontend unit tests passed"
+
+    # 运行前端构建
+    echo "🧪 Running frontend build..."
+    if ! pnpm build; then
+        echo ""
+        echo "❌ Frontend build failed!"
+        echo "Please fix the failing build before committing."
+        exit 1
+    fi
+    echo "✅ Frontend build passed"
+
+    cd "$ROOT_DIR"
+fi
+
+# 后端检查
+if [ -n "$BACKEND_CHANGED" ]; then
+    echo ""
+    echo "☕ Java files changed, detecting affected modules..."
+    cd "$ROOT_DIR"
+
+    # 从变更的文件路径中提取受影响的模块
+    AFFECTED_MODULES=""
+    
+    for file in $BACKEND_CHANGED; do
+        # 从文件路径中提取模块路径
+        # 例如: kanban-services/schema-service/src/main/java/... -> kanban-services/schema-service
+        # 或者: zgraph-driver/src/test/java/... -> zgraph-driver
+        
+        # 检查是否是多层模块结构 (如 kanban-services/schema-service)
+        if [[ "$file" =~ ^([^/]+/[^/]+)/src/ ]]; then
+            module="${BASH_REMATCH[1]}"
+        elif [[ "$file" =~ ^([^/]+)/src/ ]]; then
+            module="${BASH_REMATCH[1]}"
+        else
+            continue
+        fi
+        
+        # 检查模块目录是否存在 pom.xml
+        if [ -f "$ROOT_DIR/$module/pom.xml" ]; then
+            # 避免重复添加
+            if [[ ! "$AFFECTED_MODULES" =~ "$module" ]]; then
+                if [ -z "$AFFECTED_MODULES" ]; then
+                    AFFECTED_MODULES="$module"
+                else
+                    AFFECTED_MODULES="$AFFECTED_MODULES,$module"
+                fi
+            fi
+        fi
+    done
+    
+    if [ -z "$AFFECTED_MODULES" ]; then
+        echo "No Maven modules detected in changes, skipping tests."
+    else
+        echo "📋 Affected modules: $AFFECTED_MODULES"
+        echo "🧪 Running tests for affected modules..."
+        
+        # 使用 -pl 指定模块，-am 确保也构建依赖模块
+        if ! mvn test -pl "$AFFECTED_MODULES" -am -q; then
+            echo ""
+            echo "❌ Maven test failed!"
+            echo "Please fix the compile errors or failing tests before committing."
+            exit 1
+        fi
+        echo "✅ Maven test passed"
+    fi
+fi
+
+echo ""
+echo "✅ All pre-commit checks passed!"

@@ -1,0 +1,84 @@
+server:
+  port: 8101
+
+spring:
+  application:
+    name: card-service
+
+  # Nacos 服务注册配置
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:18848
+        namespace: public
+
+  # Redis配置
+  data:
+    redis:
+      host: localhost
+      port: 16379
+      database: 0
+      timeout: 3000ms
+
+  # Kafka配置
+  kafka:
+    bootstrap-servers: localhost:19092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        # 连接空闲超时设置为5分钟（小于broker的connections.max.idle.ms默认10分钟）
+        connections.max.idle.ms: 300000
+        # 重连退避时间
+        reconnect.backoff.ms: 1000
+        reconnect.backoff.max.ms: 10000
+        # 请求超时
+        request.timeout.ms: 30000
+        # 重试次数
+        retries: 3
+        retry.backoff.ms: 500
+    consumer:
+      group-id: card-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        # Consumer 连接保活配置
+        connections.max.idle.ms: 300000
+        reconnect.backoff.ms: 1000
+        reconnect.backoff.max.ms: 10000
+
+  # MySQL数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:13306/kanban_card?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  # Flyway配置
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+# MyBatis Plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: input
+
+# 日志配置
+logging:
+  level:
+    dev.planka: DEBUG
+    org.springframework.kafka: INFO

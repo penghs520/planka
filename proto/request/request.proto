@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package zgraph.request;
+
+import "auth/auth.proto";
+import "query/query.proto";
+import "linkquery/linkquery.proto";
+import "write/write.proto";
+import "admin/admin.proto";
+
+option java_package = "planka.graph.driver.proto.request";
+option java_multiple_files = true;
+
+message Request {
+  string request_id = 1;
+  oneof request_type {
+    auth.AuthRequest auth = 4;
+    query.CardQueryRequest card_query = 5;
+    query.CardCountRequest card_count = 6;
+    query.CardIdQueryRequest card_id_query = 7;
+    linkquery.LinkQueryRequest link_query = 8;
+    linkquery.LinkFetchRequest link_fetch = 9;
+    write.BatchCreateCardRequest batch_create_card = 10;
+    write.BatchCreateLinkRequest batch_create_link = 11;
+    write.BatchUpdateCardRequest batch_update_card = 12;
+    write.BatchUpdateLinkRequest batch_update_link = 13;
+    write.BatchDeleteLinkRequest batch_delete_link = 14;
+    write.BatchUpdateCardStateRequest batch_update_card_state = 15;
+    write.BatchUpdateCardValueStreamStatusRequest batch_update_card_value_stream_status = 16;
+    write.BatchUpdateCardTitleRequest batch_update_card_title = 17;
+    write.BatchUpdateCardFieldRequest batch_update_card_fields = 18;
+    admin.UpdateLogLevelRequest update_log_level = 19;
+    query.CardCountByGroupRequest card_count_by_group = 20;
+    admin.DatabaseStatsRequest database_stats = 21;
+    query.QueryCardTitlesRequest query_card_titles = 22;
+  }
+}

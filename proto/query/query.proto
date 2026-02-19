@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+package zgraph.query;
+
+import "common/enums.proto";
+import "common/path.proto";
+import "model/card.proto";
+import "field/field_value.proto";
+import "query/condition.proto";
+import "linkquery/linkquery.proto";
+
+option java_package = "planka.graph.driver.proto.query";
+option java_multiple_files = true;
+
+// 查询上下文
+message QueryContext {
+  optional string org_id = 1;
+  optional string member_id = 2;
+  map<string, string> parameters = 3;
+  //一致性读
+  bool consistentRead = 4;
+}
+
+// 查询范围
+message QueryScope {
+  repeated string card_type_ids = 1;
+  repeated uint64 card_ids = 2;  // 卡片ID列表，使用u64类型
+  repeated string container_ids = 3;
+  repeated common.CardState states = 4;
+}
+
+// 返回字段定义  默认包含所有内置属性，这里只需要指定自定义属性、是否包含卡片描述
+message YieldedField {
+  repeated string custom_fields = 1;
+  bool contains_all_custom_field = 2; //表示返回所有内置属性
+  bool contains_desc = 3; //是否包含卡片描述，只有在打开卡片详情页时才需要
+}
+
+// 返回关联卡定义
+message YieldedLink {
+  common.PathNode path_node = 1;
+  YieldedField yielded_field = 2;
+  //关联衍生属性
+  map<string/*deriveDefineId*/, string/*deriveFieldId*/> fields_on_link = 3;
+  bool contains_discard = 4;
+  repeated YieldedLink next_yielded_link = 5;
+}
+
+// 返回定义
+message Yield {
+  YieldedField yielded_field = 1;
+  repeated YieldedLink yielded_links = 2;
+}
+
+// 排序和分页
+message SortAndPage {
+  Page page = 1;
+  repeated Sort sorts = 2; //支持多字段组合排序
+}
+
+// 分页信息
+message Page {
+  uint32 page_num = 1;  // 第一页从0开始，如果小于0，表示不分页
+  uint32 page_size = 2; // 页大小
+}
+
+// 排序项
+message Sort {
+  SortField sort_field = 1;
+  zgraph.common.SortWay sort_way = 2;
+}
+
+// 排序字段
+message SortField {
+  //支持使用多级关联节点的属性进行排序
+  common.Path path = 1;
+  //支持日期属性排序（包括内置日期属性，如创建日期，和自定义日期属性）
+  //支持数字属性排序
+  //支持文本属性排序
+  //支持枚举属性排序，要提供枚举项的order信息，按照每一个枚举项对应的order来排序
+  //支持关联属性排序，按照关联卡的标题来排序
+  //支持一些内置属性的排序：
+  //     卡片类型、容器，这些就按照他们排序就行
+  //     标题：要按照拼接标题来排序
+  //     卡片编号：如果有custom_code，则按照custom_code排序，否则按照code_in_org进行排序，前者是文本，后置是数字
+  //不支持计算属性排序、价值流状态排序、架构属性排序
+  oneof field_type {
+    SortDateField date_field = 2;
+    SortNumberField number_field = 3;
+    SortTextField text_field = 4;
+    SortEnumField enum_field = 5;
+    SortLinkField link_field = 6;
+    SortInnerField inner_field = 7;
+    SortBlockState block_state = 8;
+  }
+}
+
+message SortDateField {
+  string field_id = 1;
+}
+
+//内置属性：标题、编号、卡片类型、创建时间、更新时间、创建人、更新人、丢弃时间、归档时间
+message SortInnerField {
+  string field_id = 1;
+}
+
+message SortTextField {
+  string field_id = 1;
+}
+
+message SortNumberField {
+  string field_id = 1;
+}
+
+message SortEnumField {
+  string field_id = 1;
+  map<string, uint32> enum_item_order_map = 2;
+}
+
+message SortLinkField {
+  string lt_id = 1;
+  common.LinkPosition position = 2;
+}
+
+//阻塞状态
+message SortBlockState {
+  string block_lt_id = 1;
+  common.LinkPosition position = 2;
+}
+
+// 卡片查询请求
+message CardQueryRequest {
+  QueryContext query_context = 1;
+  QueryScope query_scope = 2;
+  Condition condition = 3;
+  Yield yield = 4;
+  SortAndPage sort_and_page = 6;
+}
+
+// 卡片查询请求
+message CardQueryResponse {
+  repeated model.Card cards = 1;
+  uint32 count = 2; //返回的数量，分页后不等于总数
+  uint32 total = 3; //总数
+}
+
+// 卡片计数请求
+message CardCountRequest {
+  QueryContext query_context = 1;
+  QueryScope query_scope = 2;
+  Condition condition = 3;
+}
+
+// 卡片计数响应
+message CardCountResponse {
+  // 卡片计数结果
+  uint32 count = 1;
+}
+
+// 卡片ID查询请求
+message CardIdQueryRequest {
+  QueryContext query_context = 1;
+  QueryScope query_scope = 2;
+  Condition condition = 3;
+}
+
+// 查询ID响应
+message QueryIdsResponse {
+  repeated uint64 ids = 1;  // 卡片ID列表，使用u64类型
+}
+
+// 按分组计数请求
+message CardCountByGroupRequest {
+  QueryContext query_context = 1;
+  QueryScope query_scope = 2;
+  Condition condition = 3;
+  linkquery.LtWithPosition group_by = 4;
+  repeated string group_ids = 5;
+}
+
+// 按分组计数响应
+message CardCountByGroupResponse {
+  map<string, uint32> counts = 1; // 每个组ID对应的卡片数量
+}
+
+// 查询卡片标题请求
+message QueryCardTitlesRequest {
+  repeated string card_ids = 1; // 卡片ID列表
+}
+
+// 查询卡片标题响应
+message QueryCardTitlesResponse {
+  map<string, model.Title> titles = 1; // 卡片ID到标题的映射
+}
+

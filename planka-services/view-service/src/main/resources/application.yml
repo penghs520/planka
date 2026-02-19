@@ -1,0 +1,57 @@
+server:
+  port: 8103
+  # Tomcat 连接管理配置
+  tomcat:
+    connection-timeout: 20000
+    keep-alive-timeout: 60000
+    max-keep-alive-requests: 100
+    max-connections: 8192
+    threads:
+      max: 200
+      min-spare: 10
+
+spring:
+  application:
+    name: view-service
+
+  # Nacos 服务注册配置
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:18848
+        namespace: public
+
+  # Redis配置
+  data:
+    redis:
+      host: localhost
+      port: 16379
+      database: 0
+      timeout: 3000ms
+
+  # Kafka配置
+  kafka:
+    bootstrap-servers: localhost:19092
+
+# OpenFeign 配置
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 30000
+        loggerLevel: BASIC
+      # schema-service 配置
+      schema-service:
+        connectTimeout: 5000
+        readTimeout: 10000
+      # card-service 配置
+      card-service:
+        connectTimeout: 5000
+        readTimeout: 30000
+
+# 日志配置
+logging:
+  level:
+    dev.planka: DEBUG
+    org.springframework.cloud.openfeign: DEBUG

@@ -1,0 +1,317 @@
+/**
+ * 飞书风格主题变量
+ * 用于覆盖 Arco Design 默认主题
+ */
+
+:root {
+  /* ========================================
+     字体
+     ======================================== */
+  --font-family: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* ========================================
+     主色 - 飞书蓝
+     ======================================== */
+  --color-primary: #3370FF;
+  --color-primary-hover: #4E83FD;
+  --color-primary-active: #245BDB;
+  --color-primary-light: #E8F3FF;
+  --color-primary-lighter: #F0F5FF;
+
+  /* Arco Design RGB 格式变量覆盖 */
+  --primary-1: 240, 245, 255;
+  --primary-2: 232, 243, 255;
+  --primary-3: 194, 218, 255;
+  --primary-4: 148, 191, 255;
+  --primary-5: 78, 131, 253;
+  --primary-6: 51, 112, 255;
+  --primary-7: 36, 91, 219;
+  --primary-8: 26, 72, 184;
+  --primary-9: 18, 55, 148;
+  --primary-10: 12, 40, 112;
+
+  /* 同步 arcoblue */
+  --arcoblue-1: 240, 245, 255;
+  --arcoblue-2: 232, 243, 255;
+  --arcoblue-3: 194, 218, 255;
+  --arcoblue-4: 148, 191, 255;
+  --arcoblue-5: 78, 131, 253;
+  --arcoblue-6: 51, 112, 255;
+  --arcoblue-7: 36, 91, 219;
+  --arcoblue-8: 26, 72, 184;
+  --arcoblue-9: 18, 55, 148;
+  --arcoblue-10: 12, 40, 112;
+
+  /* ========================================
+     成功色
+     ======================================== */
+  --color-success: #34C759;
+  --color-success-hover: #4CD964;
+  --color-success-active: #2DB84D;
+  --color-success-light: #E8F8ED;
+
+  --green-1: 232, 248, 237;
+  --green-2: 212, 240, 220;
+  --green-3: 169, 224, 182;
+  --green-4: 115, 204, 136;
+  --green-5: 76, 217, 100;
+  --green-6: 52, 199, 89;
+  --green-7: 45, 184, 77;
+  --green-8: 38, 156, 65;
+  --green-9: 28, 120, 50;
+  --green-10: 20, 88, 36;
+
+  /* ========================================
+     警告色
+     ======================================== */
+  --color-warning: #FF9500;
+  --color-warning-hover: #FFAA33;
+  --color-warning-active: #E68600;
+  --color-warning-light: #FFF7E6;
+
+  --orange-1: 255, 247, 230;
+  --orange-2: 255, 238, 204;
+  --orange-3: 255, 221, 153;
+  --orange-4: 255, 200, 102;
+  --orange-5: 255, 170, 51;
+  --orange-6: 255, 149, 0;
+  --orange-7: 230, 134, 0;
+  --orange-8: 194, 113, 0;
+  --orange-9: 148, 87, 0;
+  --orange-10: 102, 60, 0;
+
+  /* ========================================
+     危险色
+     ======================================== */
+  --color-danger: #F54A45;
+  --color-danger-hover: #F76560;
+  --color-danger-active: #D93F3A;
+  --color-danger-light: #FEECE8;
+
+  --red-1: 254, 236, 232;
+  --red-2: 253, 220, 214;
+  --red-3: 251, 186, 175;
+  --red-4: 248, 141, 127;
+  --red-5: 247, 101, 96;
+  --red-6: 245, 74, 69;
+  --red-7: 217, 63, 58;
+  --red-8: 184, 53, 49;
+  --red-9: 138, 40, 37;
+  --red-10: 92, 27, 25;
+
+  --danger-1: 254, 236, 232;
+  --danger-2: 253, 220, 214;
+  --danger-3: 251, 186, 175;
+  --danger-4: 248, 141, 127;
+  --danger-5: 247, 101, 96;
+  --danger-6: 245, 74, 69;
+  --danger-7: 217, 63, 58;
+  --danger-8: 184, 53, 49;
+  --danger-9: 138, 40, 37;
+  --danger-10: 92, 27, 25;
+
+  /* ========================================
+     中性色 - 文本
+     ======================================== */
+  --color-text-1: #1F2329;
+  --color-text-2: #646A73;
+  --color-text-3: #8F959E;
+  --color-text-4: #BBBFC4;
+
+  /* ========================================
+     中性色 - 填充/背景
+     ======================================== */
+  --color-fill-1: #F5F6F7;
+  --color-fill-2: #F0F1F2;
+  --color-fill-3: #DEE0E3;
+  --color-fill-4: #C9CDD4;
+
+  --color-bg-1: #FFFFFF;
+  --color-bg-2: #F5F6F7;
+  --color-bg-3: #F0F1F2;
+  --color-bg-4: #E5E6EB;
+  --color-bg-5: #C9CDD4;
+
+  /* ========================================
+     中性色 - 边框
+     ======================================== */
+  --color-border-1: #E5E6EB;
+  --color-border-2: #C9CDD4;
+  --color-border-3: #F2F3F5;
+
+  /* ========================================
+     阴影
+     ======================================== */
+  --shadow-sm: 0 1px 2px rgba(31, 35, 41, 0.05);
+  --shadow-md: 0 2px 8px rgba(31, 35, 41, 0.08);
+  --shadow-lg: 0 4px 14px rgba(31, 35, 41, 0.1);
+  --shadow-xl: 0 8px 24px rgba(31, 35, 41, 0.12);
+
+  /* ========================================
+     圆角
+     ======================================== */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* ========================================
+     Arco Design 覆盖
+     ======================================== */
+  --border-radius-small: 4px;
+  --border-radius-medium: 6px;
+  --border-radius-large: 8px;
+}
+
+/* ========================================
+   全局基础样式
+   ======================================== */
+body {
+  font-family: var(--font-family);
+  color: var(--color-text-1);
+  background-color: var(--color-bg-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   Arco Design 组件覆盖 - 圆角
+   ======================================== */
+.arco-btn {
+  border-radius: var(--radius-md) !important;
+}
+
+.arco-input-wrapper,
+.arco-textarea-wrapper,
+.arco-select-view,
+.arco-tree-select-view,
+.arco-cascader-view,
+.arco-input-number {
+  border-radius: var(--radius-md) !important;
+}
+
+.arco-select-dropdown,
+.arco-dropdown-list,
+.arco-trigger-popup {
+  border-radius: var(--radius-lg) !important;
+}
+
+.arco-card {
+  border-radius: var(--radius-lg) !important;
+}
+
+.arco-modal {
+  border-radius: var(--radius-md) !important;
+}
+
+
+/* Modal 确认弹窗按钮样式 */
+.arco-modal-footer .arco-btn-primary {
+  background: #3350EB !important;
+  border-color: #3350EB !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+}
+
+.arco-modal-footer .arco-btn-primary:hover {
+  background: #4E83FD !important;
+  border-color: #4E83FD !important;
+}
+
+.arco-modal-footer .arco-btn-primary:active {
+  background: #245BDB !important;
+  border-color: #245BDB !important;
+}
+
+.arco-modal-footer .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger) {
+  background: #F2F3F5 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  color: var(--color-text-1, #1F2329) !important;
+  font-weight: 500 !important;
+}
+
+.arco-modal-footer .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger):hover {
+  background: #E5E6EB !important;
+  box-shadow: none !important;
+  color: var(--color-text-1, #1F2329) !important;
+}
+
+.arco-modal-footer .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger):active {
+  background: #C9CDD4 !important;
+}
+
+.arco-drawer-content {
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl) !important;
+}
+
+/* 遮罩层背景色 - 混合后呈现 #8C8C8C */
+.arco-drawer-mask,
+.arco-modal-mask {
+  background-color: rgba(25, 25, 25, 0.5) !important;
+}
+
+/* ========================================
+   Arco Design 组件覆盖 - 阴影
+   ======================================== */
+.arco-select-dropdown,
+.arco-dropdown-list,
+.arco-trigger-popup {
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.arco-modal {
+  box-shadow: var(--shadow-xl) !important;
+}
+
+.arco-card {
+  box-shadow: var(--shadow-md);
+}
+
+/* ========================================
+   按钮渐变优化
+   ======================================== */
+.arco-btn-primary:not(.arco-btn-disabled) {
+  background: linear-gradient(135deg, #4E83FD 0%, #3370FF 100%);
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.arco-btn-primary:not(.arco-btn-disabled):hover {
+  background: linear-gradient(135deg, #5C8FFE 0%, #4580FF 100%);
+  box-shadow: 0 4px 12px rgba(51, 112, 255, 0.3);
+}
+
+.arco-btn-primary:not(.arco-btn-disabled):active {
+  background: linear-gradient(135deg, #3370FF 0%, #245BDB 100%);
+}
+
+/* ========================================
+   Arco Design 组件覆盖 - 禁用输入框背景色
+   ======================================== */
+.arco-input-wrapper.arco-input-disabled {
+  background-color: var(--color-fill-1);
+}
+
+.arco-input-wrapper.arco-input-disabled .arco-input {
+  color: var(--color-text-2);
+  -webkit-text-fill-color: var(--color-text-2);
+}
+
+.arco-textarea-wrapper.arco-textarea-disabled {
+  background-color: var(--color-fill-1);
+}
+
+.arco-textarea-wrapper.arco-textarea-disabled .arco-textarea {
+  color: var(--color-text-2);
+  -webkit-text-fill-color: var(--color-text-2);
+}
+
+.arco-input-number.arco-input-number-disabled {
+  background-color: var(--color-fill-1);
+}
+
+.arco-input-number.arco-input-number-disabled .arco-input {
+  color: var(--color-text-2);
+  -webkit-text-fill-color: var(--color-text-2);
+}

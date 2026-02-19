@@ -1,0 +1,11 @@
+// 属性配置子组件
+export { default as ValueSourceConfig } from './ValueSourceConfig.vue'
+export { default as CommonFieldConfig } from './CommonFieldConfig.vue'
+export { default as ValidationRuleConfig } from './ValidationRuleConfig.vue'
+export { default as TextFieldConfig } from './TextFieldConfig.vue'
+export { default as NumberFieldConfig } from './NumberFieldConfig.vue'
+export { default as DateFieldConfig } from './DateFieldConfig.vue'
+export { default as EnumFieldConfig } from './EnumFieldConfig.vue'
+export { default as AttachmentFieldConfig } from './AttachmentFieldConfig.vue'
+export { default as WebUrlFieldConfig } from './WebUrlFieldConfig.vue'
+export { default as StructureFieldConfig } from './StructureFieldConfig.vue'

@@ -1,0 +1,456 @@
+:root {
+  font-family: var(--font-family, "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif);
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: var(--color-text-1, #1F2329);
+  background-color: var(--color-bg-1, #ffffff);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: var(--color-primary, #3370FF);
+  text-decoration: inherit;
+}
+
+p {
+  margin-bottom: 8px !important;
+}
+
+a:hover {
+  color: var(--color-primary-hover, #4E83FD);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: var(--radius-md, 6px);
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--color-fill-2, #F0F1F2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  border-color: var(--color-primary, #3370FF);
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;
+}
+
+.card {
+  padding: 2em;
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: var(--color-text-1, #1F2329);
+    background-color: var(--color-bg-1, #ffffff);
+  }
+
+  a:hover {
+    color: var(--color-primary-hover, #4E83FD);
+  }
+
+  button {
+    background-color: var(--color-fill-2, #F0F1F2);
+  }
+}
+
+/* 全局 Tooltip 样式优化 */
+.arco-tooltip-content {
+  background-color: #ffffff !important;
+  color: var(--color-text-1) !important;
+  border: 1px solid var(--color-border-2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  font-size: 12px !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+}
+
+/* Tooltip 箭头样式 */
+.arco-tooltip-arrow,
+.arco-tooltip-popup-arrow,
+.arco-tooltip-arrow-content,
+div[class*="arco-tooltip"] div[class*="arrow"] {
+  background-color: #ffffff !important;
+  border-color: var(--color-border-2) !important;
+}
+
+.arco-tooltip-arrow::before,
+.arco-tooltip-arrow::after,
+.arco-tooltip-popup-arrow::before,
+.arco-tooltip-popup-arrow::after,
+div[class*="arco-tooltip"] div[class*="arrow"]::before,
+div[class*="arco-tooltip"] div[class*="arrow"]::after {
+  background-color: #ffffff !important;
+  border-color: var(--color-border-2) !important;
+}
+
+/* 针对不同方向的箭头 */
+.arco-trigger-arrow-content {
+  background-color: #ffffff !important;
+}
+
+
+.arco-trigger-arrow-content svg {
+  fill: #ffffff !important;
+}
+
+/* 移除 Drawer 和 Modal 底部按钮上方的横线 */
+/* 移除 Drawer 和 Modal 底部按钮上方的横线 */
+.arco-drawer-footer,
+.arco-modal-footer {
+  border-top: none !important;
+}
+
+/* 优化全局删除提示框样式 */
+.arco-modal-simple {
+  border-radius: 12px !important;
+  padding: 24px !important;
+}
+
+.arco-modal-simple .arco-modal-title {
+  color: var(--color-text-1) !important;
+  /* 黑色标题 */
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+}
+
+.arco-modal-simple .arco-modal-content {
+  color: var(--color-text-1) !important;
+  font-size: 14px !important;
+  text-align: left !important;
+  padding-left: 0 !important;
+}
+
+.arco-modal-simple .arco-modal-footer {
+  text-align: right !important;
+  padding-top: 24px !important;
+}
+
+/* 模态框按钮样式 */
+.arco-modal-simple .arco-modal-footer .arco-btn {
+  border-radius: 4px !important;
+  /* 调整为小圆角，参考 SaveButton */
+  padding: 0 16px !important;
+  height: 28px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  /* 加粗字体 */
+  border: none !important;
+  margin-left: 12px !important;
+}
+
+/* 取消按钮 - 蓝色 (参考 SaveButton) */
+.arco-modal-simple .arco-modal-footer .arco-btn-secondary,
+.arco-modal-simple .arco-modal-footer .arco-btn-secondary:hover {
+  background: linear-gradient(135deg, #4E83FD 0%, #3370FF 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(51, 112, 255, 0.2) !important;
+}
+
+.arco-modal-simple .arco-modal-footer .arco-btn-secondary:hover {
+  background: linear-gradient(135deg, #5C8FFE 0%, #4580FF 100%) !important;
+  box-shadow: 0 4px 8px rgba(51, 112, 255, 0.3) !important;
+}
+
+/* 确认/删除按钮 - 红色 (参考 CancelButton) */
+.arco-modal-simple .arco-modal-footer .arco-btn-primary,
+.arco-modal-simple .arco-modal-footer .arco-btn-primary:hover {
+  background: #F54A45 !important;
+  color: #ffffff !important;
+}
+
+.arco-modal-simple .arco-modal-footer .arco-btn-primary:hover {
+  background: #F76560 !important;
+}
+
+.arco-modal-simple .arco-modal-footer .arco-btn-primary:active {
+  background: #D93F3A !important;
+}
+
+/* ============================================
+   全局表单文本框样式
+   ============================================ */
+
+/* Input 输入框 */
+.arco-input-wrapper {
+  border-radius: 4px !important;
+  border-color: var(--color-border-2) !important;
+  background-color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+
+.arco-input-wrapper:hover {
+  border-color: var(--color-border-3) !important;
+}
+
+.arco-input-wrapper:focus-within,
+.arco-input-wrapper.arco-input-focus {
+  border-color: var(--color-primary, #3370FF) !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.1) !important;
+}
+
+.arco-input {
+  font-size: 14px !important;
+  color: var(--color-text-1) !important;
+}
+
+.arco-input::placeholder {
+  color: var(--color-text-3) !important;
+}
+
+/* Textarea 文本域 */
+.arco-textarea-wrapper {
+  border-radius: 4px !important;
+  border-color: var(--color-border-2) !important;
+  background-color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+
+.arco-textarea-wrapper:hover {
+  border-color: var(--color-border-3) !important;
+}
+
+.arco-textarea-wrapper:focus-within,
+.arco-textarea-wrapper.arco-textarea-focus {
+  border-color: var(--color-primary, #3370FF) !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.1) !important;
+}
+
+.arco-textarea {
+  font-size: 14px !important;
+  color: var(--color-text-1) !important;
+}
+
+.arco-textarea::placeholder {
+  color: var(--color-text-3) !important;
+}
+
+/* InputNumber 数字输入框 */
+.arco-input-number {
+  border-radius: 4px !important;
+}
+
+.arco-input-number .arco-input-wrapper {
+  border-radius: 4px !important;
+}
+
+/* InputSearch 搜索框 */
+.arco-input-search .arco-input-wrapper {
+  border-radius: 4px !important;
+}
+
+/* 禁用状态 */
+.arco-input-wrapper.arco-input-disabled,
+.arco-textarea-wrapper.arco-textarea-disabled {
+  background-color: var(--color-fill-2) !important;
+  border-color: var(--color-border-1) !important;
+  cursor: not-allowed !important;
+}
+
+.arco-input-wrapper.arco-input-disabled .arco-input,
+.arco-textarea-wrapper.arco-textarea-disabled .arco-textarea {
+  color: var(--color-text-4) !important;
+  cursor: not-allowed !important;
+}
+
+/* 错误状态 */
+.arco-input-wrapper.arco-input-error,
+.arco-textarea-wrapper.arco-textarea-error {
+  border-color: rgb(var(--danger-6)) !important;
+  background-color: #ffffff !important;
+}
+
+.arco-input-wrapper.arco-input-error:focus-within,
+.arco-textarea-wrapper.arco-textarea-error:focus-within {
+  box-shadow: 0 0 0 2px rgba(var(--danger-6), 0.1) !important;
+}
+
+/* ============================================
+   全局下拉框样式
+   ============================================ */
+
+/* Select 选择器 */
+.arco-select-view {
+  border-radius: 4px !important;
+  border-color: var(--color-border-2) !important;
+  background-color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+
+.arco-select-view:hover {
+  border-color: var(--color-border-3) !important;
+}
+
+.arco-select-view.arco-select-view-focus,
+.arco-select-focused .arco-select-view {
+  border-color: var(--color-primary, #3370FF) !important;
+  box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.1) !important;
+}
+
+/* Select 下拉菜单 */
+.arco-select-dropdown {
+  border-radius: 4px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid var(--color-border-2) !important;
+  overflow-x: hidden !important;
+  min-height: 140px !important;
+}
+
+/* 隐藏下拉列表水平滚动条 */
+.arco-select-dropdown-list-wrapper,
+.arco-select-dropdown-list {
+  overflow-x: hidden !important;
+}
+
+.arco-select-dropdown-list-wrapper::-webkit-scrollbar-horizontal,
+.arco-select-dropdown-list::-webkit-scrollbar-horizontal {
+  display: none !important;
+}
+
+/* Select 选项 */
+.arco-select-option {
+  border-radius: 2px !important;
+  margin: 0 4px !important;
+  padding: 4px 8px !important;
+  line-height: 1.4 !important;
+}
+
+.arco-select-option:hover {
+  background-color: var(--color-fill-2) !important;
+}
+
+.arco-select-option.arco-select-option-selected {
+  background-color: rgba(51, 112, 255, 0.1) !important;
+  color: var(--color-primary, #3370FF) !important;
+}
+
+/* Select 禁用状态 */
+.arco-select-view.arco-select-view-disabled {
+  background-color: var(--color-fill-2) !important;
+  border-color: var(--color-border-1) !important;
+  cursor: not-allowed !important;
+}
+
+/* Select 错误状态 */
+.arco-select-view.arco-select-view-error {
+  border-color: rgb(var(--danger-6)) !important;
+}
+
+.arco-select-view.arco-select-view-error.arco-select-view-focus {
+  box-shadow: 0 0 0 2px rgba(var(--danger-6), 0.1) !important;
+}
+
+/* TreeSelect 树选择器 */
+.arco-tree-select-view {
+  border-radius: 4px !important;
+  border-color: var(--color-border-2) !important;
+  background-color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+
+.arco-tree-select-view:hover {
+  border-color: var(--color-border-3) !important;
+}
+
+.arco-tree-select-view.arco-tree-select-view-focus {
+  border-color: var(--color-primary, #3370FF) !important;
+  box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.1) !important;
+}
+
+/* Cascader 级联选择器 */
+.arco-cascader-view {
+  border-radius: 4px !important;
+  border-color: var(--color-border-2) !important;
+  background-color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+
+.arco-cascader-view:hover {
+  border-color: var(--color-border-3) !important;
+}
+
+.arco-cascader-view.arco-cascader-view-focus {
+  border-color: var(--color-primary, #3370FF) !important;
+  box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.1) !important;
+}
+
+/* ============================================
+   全局开关按钮样式
+   ============================================ */
+
+/* Switch 开关 - 全局使用小号尺寸 */
+.arco-switch {
+  min-width: 28px !important;
+  height: 16px !important;
+  line-height: 16px !important;
+  background-color: var(--color-fill-4) !important;
+  transition: all 0.2s ease !important;
+}
+
+.arco-switch:hover {
+  background-color: var(--color-fill-3) !important;
+}
+
+/* 开关圆点 */
+.arco-switch-handle {
+  width: 12px !important;
+  height: 12px !important;
+  top: 2px !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 开启状态 */
+.arco-switch-checked {
+  background-color: var(--color-primary, #3370FF) !important;
+}
+
+.arco-switch-checked:hover {
+  background-color: var(--color-primary-hover, #4E83FD) !important;
+}
+
+/* 开启状态圆点位置 */
+.arco-switch-checked .arco-switch-handle {
+  left: calc(100% - 14px) !important;
+}
+
+/* 禁用状态 */
+.arco-switch-disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}

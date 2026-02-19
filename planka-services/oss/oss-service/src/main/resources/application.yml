@@ -1,0 +1,70 @@
+server:
+  port: 8104
+
+spring:
+  application:
+    name: oss-service
+
+  # Nacos 服务注册配置
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:18848
+        namespace: public
+
+  # MySQL数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:13306/kanban_oss?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  # Flyway配置
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+# MyBatis Plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: input
+
+# OSS 配置
+oss:
+  active-plugin: local
+  max-file-size: 100
+
+  local:
+    enabled: true
+    base-path: ~/kanban-data/oss
+    base-url: /api/v1/files/static
+
+  minio:
+    enabled: false
+    endpoint: http://localhost:9000
+    access-key: minioadmin
+    secret-key: minioadmin
+    bucket: kanban
+
+# 日志配置
+logging:
+  level:
+    dev.planka: DEBUG

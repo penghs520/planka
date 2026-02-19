@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package zgraph.admin;
+
+option java_package = "planka.graph.driver.proto.admin";
+option java_multiple_files = true;
+
+// 更新日志级别请求
+message UpdateLogLevelRequest {
+  // 新的日志级别配置
+  string log_level = 1;
+}
+
+// 更新日志级别响应
+message UpdateLogLevelResponse {
+  // 操作是否成功
+  bool success = 1;
+  // 新的日志级别
+  string log_level = 2;
+  // 详细信息
+  string message = 3;
+}
+
+// 数据库统计请求
+message DatabaseStatsRequest {
+  // 是否包含详细的缓存统计信息
+  optional bool include_cache_details = 1;
+}
+
+// 数据库统计响应
+message DatabaseStatsResponse {
+  // 基础统计信息
+  uint64 total_vertices = 1;              // 节点总数
+  uint64 total_edges = 2;                 // 边总数（去重）
+  uint32 vertex_type_size = 3;            // 节点类型数
+  uint32 edge_type_size = 4;              // 边类型数
+  
+  // 缓存统计信息
+  CacheStats cache_stats = 5;
+  
+
+  
+  // RocksDB统计信息
+  optional string rocksdb_stats = 7;      // RocksDB内部统计信息
+}
+
+// 缓存统计信息
+message CacheStats {
+  uint64 vertex_lru_cache_size = 1;       // 节点LRU缓存数量
+  uint64 desc_lru_cache_size = 2;         // 节点描述LRU缓存数量
+}
+
+ 

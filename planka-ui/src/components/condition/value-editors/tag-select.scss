@@ -1,0 +1,67 @@
+/**
+ * 多选标签选择器通用样式
+ * 复用自 CardTypeSelect 组件的标签样式
+ */
+
+/* 多选标签容器 */
+.tag-select .arco-select-view-multiple {
+  background-color: #fff;
+  border: 1px solid #e5e6eb;
+  min-height: 24px;
+  padding: 1px 4px;
+}
+
+/* 标签样式 */
+.tag-select .arco-tag {
+  background-color: #d6e9f8 !important;
+  border: none !important;
+  color: #1f2329 !important;
+  border-radius: 4px;
+  margin: 1px;
+  padding: 0 6px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+}
+
+/* 关闭按钮默认隐藏，hover 时显示 */
+.tag-select .arco-tag .arco-tag-close-btn {
+  display: none;
+  margin-left: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #9dc5e0;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-select .arco-tag:hover .arco-tag-close-btn {
+  display: inline-flex;
+}
+
+/* 关闭图标 */
+.tag-select .arco-tag .arco-icon-close {
+  font-size: 8px;
+  color: #fff !important;
+  background: none !important;
+  transition: none !important;
+}
+
+.tag-select .arco-tag .arco-icon-close:hover {
+  background: none !important;
+  color: #fff !important;
+}
+
+/* 关闭按钮 hover 效果 */
+.tag-select .arco-tag .arco-tag-close-btn:hover {
+  background-color: #6a9ec4 !important;
+}
+
+/* 移除图标 hover 高亮效果 */
+.tag-select .arco-tag .arco-tag-close-btn.arco-icon-hover::before,
+.tag-select .arco-tag .arco-tag-close-btn.arco-icon-hover:hover::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}

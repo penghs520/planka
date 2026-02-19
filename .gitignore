@@ -1,0 +1,53 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build
+build/
+out/
+dist/
+
+# Test
+test-output/
+surefire-reports/
+
+# Misc
+*.bak
+*.tmp
+*.temp
+
+# pnpm
+planka-ui/.pnpm-store/
+
+# claude
+/.claude/agent-memory/
+/.claude/settings.local.json
+
+node_modules

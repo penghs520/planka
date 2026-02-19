@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package zgraph.auth;
+
+option java_multiple_files = true;
+option java_package = "planka.graph.driver.proto.auth";
+
+// 认证请求消息
+message AuthRequest {
+  // 用户名
+  string username = 1;
+  // 密码
+  string password = 2;
+}
+
+// 认证响应消息
+message AuthResponse {
+  // 认证是否成功
+  bool success = 1;
+  // 响应消息
+  string message = 2;
+} 

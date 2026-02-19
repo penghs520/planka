@@ -1,0 +1,640 @@
+syntax = "proto3";
+
+package zgraph.query;
+
+import "common/enums.proto";
+import "common/path.proto";
+import "field/field_value.proto";
+
+option java_package = "planka.graph.driver.proto.query";
+option java_multiple_files = true;
+
+//==============================================================================
+// 递归嵌套条件结构
+//==============================================================================
+
+// 过滤条件容器
+message Condition {
+  ConditionNode root = 1;
+}
+
+// 条件节点（支持递归嵌套）
+// 可以是组合节点（ConditionGroup）或具体条件项
+message ConditionNode {
+  oneof node_type {
+    // 组合节点（支持递归）
+    ConditionGroup group = 1;
+    // 标题条件
+    TitleConditionItem title = 2;
+    // 编号条件
+    CodeConditionItem code = 3;
+    // 文本条件
+    TextConditionItem text = 4;
+    // 数字条件
+    NumberConditionItem number = 5;
+    // 日期条件
+    DateConditionItem date = 6;
+    // 枚举条件
+    EnumConditionItem enum_item = 7;
+    // 价值流状态条件
+    StatusConditionItem status = 8;
+    // 卡片生命周期状态条件
+    StateConditionItem state = 9;
+    // 关联卡片条件
+    LinkConditionItem link = 10;
+    // 链接属性条件
+    WebLinkConditionItem web_link = 11;
+    // 关键词条件
+    KeywordConditionItem keyword = 12;
+    // 卡片类型条件
+    CardTypeConditionItem card_type = 13;
+  }
+}
+
+// 条件组（支持 AND/OR 逻辑）
+message ConditionGroup {
+  LogicOperator operator = 1;
+  repeated ConditionNode children = 2;
+}
+
+// 逻辑运算符
+enum LogicOperator {
+  AND = 0;
+  OR = 1;
+}
+
+//==============================================================================
+// 标题条件
+//==============================================================================
+message TitleConditionItem {
+  TitleOperator operator = 1;
+}
+
+message TitleOperator {
+  oneof operator_type {
+    TitleContainsOperator contains = 1;
+    TitleEqualOperator equal = 2;
+    TitleInOperator in = 3;
+  }
+}
+
+message TitleContainsOperator {
+  string value = 1;
+}
+
+message TitleEqualOperator {
+  string value = 1;
+}
+
+message TitleInOperator {
+  repeated string values = 1;
+}
+
+//==============================================================================
+// 编号条件
+//==============================================================================
+message CodeConditionItem {
+  string value = 1;
+}
+
+//==============================================================================
+// 文本条件
+//==============================================================================
+message TextSubject {
+  zgraph.common.Path path = 1;
+  string field_id = 2;
+  string name = 3;
+}
+
+message TextConditionItem {
+  TextSubject subject = 1;
+  TextOperator operator = 2;
+}
+
+message TextOperator {
+  oneof operator_type {
+    TextEqualOperator equal = 1;
+    TextNotEqualOperator not_equal = 2;
+    TextContainsOperator contains = 3;
+    TextNotContainsOperator not_contains = 4;
+    TextStartsWithOperator starts_with = 5;
+    TextEndsWithOperator ends_with = 6;
+    TextIsBlankOperator is_blank = 7;
+    TextIsNotBlankOperator is_not_blank = 8;
+  }
+}
+
+message TextEqualOperator {
+  string value = 1;
+}
+
+message TextNotEqualOperator {
+  string value = 1;
+}
+
+message TextContainsOperator {
+  string value = 1;
+}
+
+message TextNotContainsOperator {
+  string value = 1;
+}
+
+message TextStartsWithOperator {
+  string value = 1;
+}
+
+message TextEndsWithOperator {
+  string value = 1;
+}
+
+message TextIsBlankOperator {}
+
+message TextIsNotBlankOperator {}
+
+//==============================================================================
+// 价值流状态条件
+//==============================================================================
+message StatusSubject {
+  zgraph.common.Path path = 1;
+}
+
+message StatusConditionItem {
+  StatusSubject subject = 1;
+  StatusOperator operator = 2;
+  // 状态的顺序，用来支持 已超过、未到达这种操作符的过滤
+  repeated string status_orders = 3;
+}
+
+message StatusOperator {
+  oneof operator_type {
+    StatusEqualOperator equal = 1;
+    StatusNotEqualOperator not_equal = 2;
+    StatusInOperator in = 3;
+    StatusNotInOperator not_in = 4;
+  }
+}
+
+message StatusEqualOperator {
+  string stream_id = 1;
+  string status_id = 2;
+}
+
+message StatusNotEqualOperator {
+  string stream_id = 1;
+  string status_id = 2;
+}
+
+message StatusInOperator {
+  string stream_id = 1;
+  repeated string values = 2;
+}
+
+message StatusNotInOperator {
+  string stream_id = 1;
+  repeated string values = 2;
+}
+
+//==============================================================================
+// 卡片生命周期状态条件
+//==============================================================================
+message StateSubject {
+  zgraph.common.Path path = 1;
+}
+
+message StateConditionItem {
+  StateSubject subject = 1;
+  StateOperator operator = 2;
+}
+
+message StateOperator {
+  oneof operator_type {
+    StateEqualOperator equal = 1;
+    StateNotEqualOperator not_equal = 2;
+    StateInOperator in = 3;
+    StateNotInOperator not_in = 4;
+  }
+}
+
+message StateEqualOperator {
+  string value = 1;
+}
+
+message StateNotEqualOperator {
+  string value = 1;
+}
+
+message StateInOperator {
+  repeated string values = 1;
+}
+
+message StateNotInOperator {
+  repeated string values = 1;
+}
+
+//==============================================================================
+// 卡片类型条件
+//==============================================================================
+message CardTypeSubject {
+  zgraph.common.Path path = 1;
+}
+
+message CardTypeConditionItem {
+  CardTypeSubject subject = 1;
+  CardTypeOperator operator = 2;
+}
+
+message CardTypeOperator {
+  oneof operator_type {
+    CardTypeEqualOperator equal = 1;
+    CardTypeInOperator in = 2;
+  }
+}
+
+message CardTypeEqualOperator {
+  string value = 1;
+}
+
+message CardTypeInOperator {
+  repeated string values = 1;
+}
+
+//==============================================================================
+// 数字条件
+//==============================================================================
+message NumberSubject {
+  zgraph.common.Path path = 1;
+  string field_id = 2;
+  string name = 3;
+}
+
+message NumberConditionItem {
+  NumberSubject subject = 1;
+  NumberOperator operator = 2;
+}
+
+message NumberOperator {
+  oneof operator_type {
+    NumberEqualOperator equal = 1;
+    NumberNotEqualOperator not_equal = 2;
+    NumberGreaterThanOperator greater_than = 3;
+    NumberLessThanOperator less_than = 4;
+    NumberGreaterThanOrEqualOperator greater_than_or_equal = 5;
+    NumberLessThanOrEqualOperator less_than_or_equal = 6;
+    NumberBetweenOperator between = 7;
+    NumberNotBetweenOperator not_between = 8;
+    NumberIsNullOperator is_null = 9;
+    NumberIsNotNullOperator is_not_null = 10;
+  }
+}
+
+message NumberEqualOperator {
+  double value = 1;
+}
+
+message NumberNotEqualOperator {
+  double value = 1;
+}
+
+message NumberGreaterThanOperator {
+  double value = 1;
+}
+
+message NumberLessThanOperator {
+  double value = 1;
+}
+
+message NumberGreaterThanOrEqualOperator {
+  double value = 1;
+}
+
+message NumberLessThanOrEqualOperator {
+  double value = 1;
+}
+
+message NumberBetweenOperator {
+  double min_value = 1;
+  double max_value = 2;
+}
+
+message NumberNotBetweenOperator {
+  double min_value = 1;
+  double max_value = 2;
+}
+
+message NumberIsNullOperator {}
+
+message NumberIsNotNullOperator {}
+
+//==============================================================================
+// 日期条件
+//==============================================================================
+message DateSubject {
+  zgraph.common.Path path = 1;
+  string field_id = 2;
+  string name = 3;
+}
+
+message DateConditionItem {
+  DateSubject subject = 1;
+  DateOperator operator = 2;
+  string time_precision = 3; // 时间精度: DAY, MILLISECOND
+}
+
+message DateOperator {
+  oneof operator_type {
+    DateEqualOperator equal = 1;
+    DateNotEqualOperator not_equal = 2;
+    DateBeforeOperator before = 3;
+    DateAfterOperator after = 4;
+    DateBeforeOrEqualOperator before_or_equal = 5;
+    DateAfterOrEqualOperator after_or_equal = 6;
+    DateBetweenOperator between = 7;
+    DateNotBetweenOperator not_between = 8;
+    DateIsNullOperator is_null = 9;
+    DateIsNotNullOperator is_not_null = 10;
+  }
+}
+
+message DateEqualOperator {
+  oneof value_type {
+    int64 static_value = 1;
+    ReferDate refer_date = 2;
+  }
+}
+
+message DateNotEqualOperator {
+  oneof value_type {
+    int64 static_value = 1;
+    ReferDate refer_date = 2;
+  }
+}
+
+message DateBeforeOperator {
+  oneof value_type {
+    int64 static_value = 1;
+    ReferDate refer_date = 2;
+  }
+}
+
+message DateAfterOperator {
+  oneof value_type {
+    int64 static_value = 1;
+    ReferDate refer_date = 2;
+  }
+}
+
+message DateBeforeOrEqualOperator {
+  oneof value_type {
+    int64 static_value = 1;
+    ReferDate refer_date = 2;
+  }
+}
+
+message DateAfterOrEqualOperator {
+  oneof value_type {
+    int64 static_value = 1;
+    ReferDate refer_date = 2;
+  }
+}
+
+message DateBetweenOperator {
+  int64 static_start_value = 1;
+  int64 static_end_value = 2;
+}
+
+message DateNotBetweenOperator {
+  int64 static_start_value = 1;
+  int64 static_end_value = 2;
+}
+
+message DateIsNullOperator {}
+
+message DateIsNotNullOperator {}
+
+// 日期引用值
+message ReferDate {
+  oneof refer_on_type {
+    ReferOnCurrentCard refer_on_current_card = 1;
+    ReferOnParameterCard refer_on_parameter_card = 2;
+    ReferOnMember refer_on_member = 3;
+    ReferOnContextualCard refer_on_contextual_card = 4;
+  }
+  string field_id = 5;
+}
+
+//==============================================================================
+// 枚举条件
+//==============================================================================
+message EnumSubject {
+  zgraph.common.Path path = 1;
+  string field_id = 2;
+  string name = 3;
+}
+
+message EnumConditionItem {
+  EnumSubject subject = 1;
+  EnumOperator operator = 2;
+}
+
+message EnumOperator {
+  oneof operator_type {
+    EnumEqualOperator equal = 1;
+    EnumNotEqualOperator not_equal = 2;
+    EnumInOperator in = 3;
+    EnumNotInOperator not_in = 4;
+    EnumIsNullOperator is_null = 5;
+    EnumIsNotNullOperator is_not_null = 6;
+  }
+}
+
+message EnumEqualOperator {
+  oneof value_type {
+    EnumStaticValues static_values = 1;
+    ReferEnum refer_enum = 2;
+  }
+}
+
+message EnumNotEqualOperator {
+  oneof value_type {
+    EnumStaticValues static_values = 1;
+    ReferEnum refer_enum = 2;
+  }
+}
+
+message EnumInOperator {
+  oneof values_type {
+    EnumStaticValues static_values = 1;
+    ReferEnum refer_enum = 2;
+  }
+}
+
+message EnumStaticValues {
+  repeated string values = 1;
+}
+
+message EnumNotInOperator {
+  oneof values_type {
+    EnumStaticValues static_values = 1;
+    ReferEnum refer_enum = 2;
+  }
+}
+
+message ReferEnum {
+  oneof refer_on_type {
+    ReferOnCurrentCard refer_on_current_card = 1;
+    ReferOnParameterCard refer_on_parameter_card = 2;
+    ReferOnMember refer_on_member = 3;
+    ReferOnContextualCard refer_on_contextual_card = 4;
+  }
+  string field_id = 5;
+}
+
+message EnumIsNullOperator {}
+
+message EnumIsNotNullOperator {}
+
+//==============================================================================
+// 关联卡片条件
+//==============================================================================
+message LinkSubject {
+  zgraph.common.Path path = 1;
+}
+
+message LinkConditionItem {
+  LinkSubject subject = 1;
+  LinkOperator operator = 2;
+}
+
+message LinkOperator {
+  oneof operator_type {
+    LinkEqualOperator equal = 1;
+    LinkNotEqualOperator not_equal = 2;
+    LinkInOperator in = 3;
+    LinkNotInOperator not_in = 4;
+    LinkIsNullOperator is_null = 5;
+    LinkIsNotNullOperator is_not_null = 6;
+  }
+}
+
+message LinkEqualOperator {
+  oneof value {
+    ReferLink refer_link = 1;
+    SpecialLink special_link = 2;
+  }
+}
+
+message LinkNotEqualOperator {
+  oneof value {
+    ReferLink refer_link = 1;
+    SpecialLink special_link = 2;
+  }
+}
+
+message LinkInOperator {
+  oneof value {
+    ReferLink refer_link = 1;
+    SpecialLink special_link = 2;
+  }
+}
+
+message LinkNotInOperator {
+  oneof value {
+    ReferLink refer_link = 1;
+    SpecialLink special_link = 2;
+  }
+}
+
+message LinkIsNullOperator {}
+
+message LinkIsNotNullOperator {}
+
+// 引用链接
+message ReferLink {
+  oneof refer_on_type {
+    ReferOnCurrentCard refer_on_current_card = 1;
+    ReferOnParameterCard refer_on_parameter_card = 2;
+    ReferOnMember refer_on_member = 3;
+    ReferOnContextualCard refer_on_contextual_card = 4;
+  }
+}
+
+// 引用自当前卡片
+message ReferOnCurrentCard {
+  zgraph.common.Path path = 1;
+}
+
+// 引用自参数卡片
+message ReferOnParameterCard {
+  zgraph.common.Path path = 1;
+  string parameter_card_type_id = 2;
+}
+
+// 引用自当前成员
+message ReferOnMember {
+  zgraph.common.Path path = 1;
+}
+
+// 引用自上下文卡片
+message ReferOnContextualCard {
+  zgraph.common.Path path = 1;
+  uint64 contextual_card_id = 2;  // 卡片ID，作为唯一标识符
+}
+
+// 具体的关联卡片值
+message SpecialLink {
+  repeated uint64 card_ids = 1;  // 卡片ID列表
+  bool contains_discard = 2;
+}
+
+// 引用自相对卡片
+message ReferOnRelativeCard {
+  zgraph.common.Path path = 1;
+}
+
+//==============================================================================
+// 链接属性条件
+//==============================================================================
+message WebLinkSubject {
+  zgraph.common.Path path = 1;
+  string field_id = 2;
+  string name = 3;
+}
+
+message WebLinkConditionItem {
+  WebLinkSubject subject = 1;
+  WebLinkOperator operator = 2;
+}
+
+message WebLinkOperator {
+  oneof operator_type {
+    WebLinkEqualOperator equal = 1;
+    WebLinkContainsOperator contains = 2;
+    WebLinkNotContainsOperator not_contains = 3;
+    WebLinkIsNullOperator is_null = 4;
+    WebLinkIsNotNullOperator is_not_null = 5;
+  }
+}
+
+message WebLinkEqualOperator {
+  string value = 1;
+}
+
+message WebLinkContainsOperator {
+  string value = 1;
+}
+
+message WebLinkNotContainsOperator {
+  string value = 1;
+}
+
+message WebLinkIsNullOperator {}
+
+message WebLinkIsNotNullOperator {}
+
+//==============================================================================
+// 关键词条件
+//==============================================================================
+message KeywordConditionItem {
+  string value = 1;
+}

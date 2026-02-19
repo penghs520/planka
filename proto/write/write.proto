@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package zgraph.write;
+
+import "common/enums.proto";
+import "common/path.proto";
+import "model/card.proto";
+import "model/link.proto";
+import "field/field_value.proto";
+import "query/condition.proto";
+
+option java_package = "planka.graph.driver.proto.write";
+option java_multiple_files = true;
+
+message BatchCreateCardRequest {
+  repeated model.Card cards = 1;
+}
+
+
+//批量更新卡片请求
+message BatchUpdateCardRequest {
+  repeated model.Card cards = 1;
+}
+
+//批量部分更新卡片请求
+message BatchUpdateCardFieldRequest {
+  repeated UpdateCardFieldRequest requests = 1;
+}
+
+//卡片价值流状态
+message ValueStreamStatus {
+  string stream_id = 1;
+  string status_id = 2;
+}
+
+//支持更新卡片的指定属性
+message UpdateCardFieldRequest {
+  uint64 card_id = 1;  // 卡片ID，使用u64类型
+  optional model.Title title = 2;
+  optional string description = 3;
+  optional zgraph.common.CardState state = 4;
+  // 价值流状态作为一个整体
+  optional ValueStreamStatus value_stream_status = 5;
+  // 更多可选的更新属性
+  optional string custom_code = 6;
+  optional string container_id = 7;
+  optional int64 position = 8;
+  optional int64 discarded_at = 9;
+  optional int64 archived_at = 10;
+  optional int64 updated_at = 11;
+  optional string discard_reason = 12;
+  optional string restore_reason = 13;
+
+  repeated string tags = 14;
+  // 自定义属性值，如果map中含有某个字段，则更新该字段，否则保持原值
+  map<string, zgraph.field.FieldValue> custom_field_value_map = 15;
+
+}
+
+//批量更新卡片标题
+message BatchUpdateCardTitleRequest {
+  repeated UpdateCardTitleRequest requests = 1;
+}
+
+message UpdateCardTitleRequest{
+  uint64 card_id = 1;  // 卡片ID，使用u64类型
+  model.Title title = 2;
+}
+
+//更新卡片周期状态
+message BatchUpdateCardStateRequest {
+  repeated uint64 card_ids = 1;  // 卡片ID列表
+  zgraph.common.CardState state = 2;
+}
+
+//更新卡片价值流状态
+message BatchUpdateCardValueStreamStatusRequest {
+  repeated uint64 card_ids = 1;  // 卡片ID列表
+  string stream_id = 2;
+  string status_id = 3;
+}
+
+//批量操作卡片通用的返回结构
+message BatchCardCommonResponse {
+  //成功数量
+  int32 success = 1;
+  //更新失败的卡片id
+  repeated uint64 failed_ids = 2;  // 卡片ID列表
+}
+
+message BatchCreateLinkRequest {
+  repeated model.Link links = 1;
+}
+
+message BatchUpdateLinkRequest {
+  repeated model.Link links = 1;
+}
+
+message BatchLinkCommonResponse {
+  //成功数量
+  int32 success = 1;
+  //更新失败的关联关系
+  repeated model.Link failed_links = 2;
+}
+
+message BatchDeleteLinkRequest {
+  repeated model.Link links = 1;
+}

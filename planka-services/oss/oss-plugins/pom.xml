@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.planka</groupId>
+        <artifactId>oss</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>oss-plugins</artifactId>
+    <packaging>pom</packaging>
+    <name>OSS Plugins</name>
+    <description>对象存储插件集合</description>
+
+    <modules>
+        <module>oss-plugin-api</module>
+        <module>oss-plugin-local</module>
+        <module>oss-plugin-minio</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 插件 API -->
+            <dependency>
+                <groupId>dev.planka</groupId>
+                <artifactId>oss-plugin-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- 所有插件共同依赖 -->
+        <dependency>
+            <groupId>dev.planka</groupId>
+            <artifactId>planka-common</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- SLF4J API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
+</project>
