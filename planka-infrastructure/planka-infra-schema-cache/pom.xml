@@ -13,7 +13,7 @@
     <artifactId>planka-infra-schema-cache</artifactId>
     <packaging>jar</packaging>
 
-    <name>Kanban Infrastructure - Schema Cache</name>
+    <name>planka Infrastructure - Schema Cache</name>
     <description>Schema 二级缓存服务（L1 Caffeine + L2 Redis）</description>
 
     <dependencies>

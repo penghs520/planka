@@ -13,7 +13,7 @@
     <artifactId>planka-infrastructure</artifactId>
     <packaging>pom</packaging>
 
-    <name>Kanban Infrastructure</name>
+    <name>planka Infrastructure</name>
     <description>基础设施模块 - schema缓存模块、卡片数据缓存模块、事件的具体实现</description>
 
     <modules>

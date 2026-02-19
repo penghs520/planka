@@ -13,7 +13,7 @@ import lombok.Data;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = ListViewDataResponse.class, name = "LIST"),
         // 未来扩展：
-        // @JsonSubTypes.Type(value = KanbanViewDataResponse.class, name = "KANBAN"),
+        // @JsonSubTypes.Type(value = plankaViewDataResponse.class, name = "planka"),
         // @JsonSubTypes.Type(value = GanttViewDataResponse.class, name = "GANTT"),
 })
 public abstract class ViewDataResponse {

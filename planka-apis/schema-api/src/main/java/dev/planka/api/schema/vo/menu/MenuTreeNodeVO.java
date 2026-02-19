@@ -33,7 +33,7 @@ public class MenuTreeNodeVO {
     private String icon;
 
     /**
-     * 视图类型（视图专用，如 LIST, KANBAN）
+     * 视图类型（视图专用，如 LIST, planka）
      */
     private String viewType;
 

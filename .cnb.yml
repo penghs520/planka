@@ -1,8 +1,0 @@
-"**":
-  push:
-    lark_bot:
-      imports:
-        - https://cnb.cool/agilean/agilean-configuration/-/blob/main/push-event-to-lark.yaml
-
-include:
-  - https://cnb.cool/agilean/codeup-webhook-adapter/-/blob/main/push-event-template.yml

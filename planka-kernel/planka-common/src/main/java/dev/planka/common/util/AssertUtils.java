@@ -2,7 +2,7 @@ package dev.planka.common.util;
 
 import dev.planka.common.exception.CommonErrorCode;
 import dev.planka.common.exception.ErrorCode;
-import dev.planka.common.exception.KanbanException;
+import dev.planka.common.exception.BizException;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * 断言工具类
  * <p>
- * 用于参数校验，校验失败时抛出KanbanException
+ * 用于参数校验，校验失败时抛出plankaException
  */
 public final class AssertUtils {
 
@@ -24,7 +24,7 @@ public final class AssertUtils {
      */
     public static void notNull(Object obj, String message) {
         if (obj == null) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
     }
 
@@ -33,7 +33,7 @@ public final class AssertUtils {
      */
     public static <T> T requireNotNull(T obj, String message) {
         if (obj == null) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
         return obj;
     }
@@ -43,7 +43,7 @@ public final class AssertUtils {
      */
     public static void notNull(Object obj, ErrorCode errorCode, Object... args) {
         if (obj == null) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
     }
 
@@ -52,7 +52,7 @@ public final class AssertUtils {
      */
     public static <T> T requireNotNull(T obj, ErrorCode errorCode, Object... args) {
         if (obj == null) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
         return obj;
     }
@@ -62,7 +62,7 @@ public final class AssertUtils {
      */
     public static void notBlank(String str, String message) {
         if (StringUtils.isBlank(str)) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
     }
 
@@ -71,7 +71,7 @@ public final class AssertUtils {
      */
     public static String requireNotBlank(String str, String message) {
         if (StringUtils.isBlank(str)) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
         return str;
     }
@@ -81,7 +81,7 @@ public final class AssertUtils {
      */
     public static void notBlank(String str, ErrorCode errorCode, Object... args) {
         if (StringUtils.isBlank(str)) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
     }
 
@@ -90,7 +90,7 @@ public final class AssertUtils {
      */
     public static String requireNotBlank(String str, ErrorCode errorCode, Object... args) {
         if (StringUtils.isBlank(str)) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
         return str;
     }
@@ -100,7 +100,7 @@ public final class AssertUtils {
      */
     public static void notEmpty(Collection<?> collection, String message) {
         if (collection == null || collection.isEmpty()) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
     }
 
@@ -109,7 +109,7 @@ public final class AssertUtils {
      */
     public static <T> Collection<T> requireNotEmpty(Collection<T> collection, String message) {
         if (collection == null || collection.isEmpty()) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
         return collection;
     }
@@ -119,7 +119,7 @@ public final class AssertUtils {
      */
     public static <T> List<T> requireNotEmpty(List<T> collection, String message) {
         if (collection == null || collection.isEmpty()) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
         return collection;
     }
@@ -129,7 +129,7 @@ public final class AssertUtils {
      */
     public static void notEmpty(Collection<?> collection, ErrorCode errorCode, Object... args) {
         if (collection == null || collection.isEmpty()) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
     }
 
@@ -138,7 +138,7 @@ public final class AssertUtils {
      */
     public static <T> Collection<T> requireNotEmpty(Collection<T> collection, ErrorCode errorCode, Object... args) {
         if (collection == null || collection.isEmpty()) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
         return collection;
     }
@@ -148,7 +148,7 @@ public final class AssertUtils {
      */
     public static void isTrue(boolean condition, String message) {
         if (!condition) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
     }
 
@@ -157,7 +157,7 @@ public final class AssertUtils {
      */
     public static void isTrue(boolean condition, ErrorCode errorCode, Object... args) {
         if (!condition) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
     }
 
@@ -166,7 +166,7 @@ public final class AssertUtils {
      */
     public static void isFalse(boolean condition, String message) {
         if (condition) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
     }
 
@@ -175,7 +175,7 @@ public final class AssertUtils {
      */
     public static void isFalse(boolean condition, ErrorCode errorCode, Object... args) {
         if (condition) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
     }
 
@@ -184,7 +184,7 @@ public final class AssertUtils {
      */
     public static void equals(Object obj1, Object obj2, String message) {
         if (!Objects.equals(obj1, obj2)) {
-            throw new KanbanException(CommonErrorCode.BAD_REQUEST, message);
+            throw new BizException(CommonErrorCode.BAD_REQUEST, message);
         }
     }
 
@@ -193,7 +193,7 @@ public final class AssertUtils {
      */
     public static void equals(Object obj1, Object obj2, ErrorCode errorCode, Object... args) {
         if (!Objects.equals(obj1, obj2)) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
     }
 
@@ -202,7 +202,7 @@ public final class AssertUtils {
      */
     public static <T> T requireFound(T obj, String entityName) {
         if (obj == null) {
-            throw new KanbanException(CommonErrorCode.DATA_NOT_FOUND, entityName);
+            throw new BizException(CommonErrorCode.DATA_NOT_FOUND, entityName);
         }
         return obj;
     }
@@ -212,7 +212,7 @@ public final class AssertUtils {
      */
     public static <T> T requireFound(T obj, ErrorCode errorCode, Object... args) {
         if (obj == null) {
-            throw new KanbanException(errorCode, args);
+            throw new BizException(errorCode, args);
         }
         return obj;
     }

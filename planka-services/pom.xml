@@ -13,7 +13,7 @@
     <artifactId>planka-services</artifactId>
     <packaging>pom</packaging>
 
-    <name>Kanban Services</name>
+    <name>planka Services</name>
     <description>应用服务模块 - 数据服务（卡片以及记录的存储查询、权限控制）、视图服务、Schema服务、操作历史服务、通知服务、业务规则服务等</description>
 
     <modules>

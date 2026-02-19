@@ -4,11 +4,11 @@
 -- ============================================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS kanban_schema
+CREATE DATABASE IF NOT EXISTS planka_schema
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE kanban_schema;
+USE planka_schema;
 
 -- ============================================================
 -- 1. schema_definition 主表

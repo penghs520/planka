@@ -11,7 +11,7 @@ echo "🔍 Running pre-commit checks..."
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 
 # 检查是否有前端文件变更
-FRONTEND_CHANGED=$(git diff --cached --name-only | grep -E "^kanban-ui/" || true)
+FRONTEND_CHANGED=$(git diff --cached --name-only | grep -E "^planka-ui/" || true)
 
 # 检查是否有后端文件变更
 BACKEND_CHANGED=$(git diff --cached --name-only | grep -E "\.java$" || true)
@@ -20,7 +20,7 @@ BACKEND_CHANGED=$(git diff --cached --name-only | grep -E "\.java$" || true)
 if [ -n "$FRONTEND_CHANGED" ]; then
     echo ""
     echo "📦 Frontend files changed, running TypeScript check..."
-    cd "$ROOT_DIR/kanban-ui"
+    cd "$ROOT_DIR/planka-ui"
 
     # TypeScript 类型检查
     if ! npx vue-tsc --noEmit; then
@@ -75,10 +75,10 @@ if [ -n "$BACKEND_CHANGED" ]; then
     
     for file in $BACKEND_CHANGED; do
         # 从文件路径中提取模块路径
-        # 例如: kanban-services/schema-service/src/main/java/... -> kanban-services/schema-service
+        # 例如: planka-services/schema-service/src/main/java/... -> planka-services/schema-service
         # 或者: zgraph-driver/src/test/java/... -> zgraph-driver
         
-        # 检查是否是多层模块结构 (如 kanban-services/schema-service)
+        # 检查是否是多层模块结构 (如 planka-services/schema-service)
         if [[ "$file" =~ ^([^/]+/[^/]+)/src/ ]]; then
             module="${BASH_REMATCH[1]}"
         elif [[ "$file" =~ ^([^/]+)/src/ ]]; then

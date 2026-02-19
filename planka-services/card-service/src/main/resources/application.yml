@@ -1,5 +1,5 @@
 server:
-  port: 8101
+  port: 7001
 
 spring:
   application:
@@ -9,20 +9,20 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:18848
+        server-addr: localhost:28848
         namespace: public
 
   # Redis配置
   data:
     redis:
       host: localhost
-      port: 16379
+      port: 26379
       database: 0
       timeout: 3000ms
 
   # Kafka配置
   kafka:
-    bootstrap-servers: localhost:19092
+    bootstrap-servers: localhost:29092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -50,7 +50,7 @@ spring:
 
   # MySQL数据源配置
   datasource:
-    url: jdbc:mysql://localhost:13306/kanban_card?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:23306/planka_card?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver

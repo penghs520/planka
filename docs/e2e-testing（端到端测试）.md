@@ -5,7 +5,7 @@
 ## 目录结构
 
 ```
-kanban-ui/e2e/
+planka-ui/e2e/
 ├── playwright.config.ts        # Playwright 配置
 ├── global-setup.ts             # 全局前置：登录 + 创建测试组织
 ├── global-teardown.ts          # 全局后置：删除测试组织
@@ -36,7 +36,7 @@ kanban-ui/e2e/
 ## 运行测试
 
 ```bash
-cd kanban-ui
+cd planka-ui
 
 # 运行全部 e2e 测试
 pnpm e2e
@@ -69,7 +69,7 @@ pnpm e2e --project=chromium
 ### 前置条件
 
 - 前端 `pnpm dev` 运行在 `localhost:3000`（配置了 `webServer` 会自动启动，也可手动启动后复用）
-- 后端网关运行在 `localhost:8000`
+- 后端网关运行在 `localhost:7000`
 
 ## 测试 Project
 
@@ -83,7 +83,7 @@ pnpm e2e --project=chromium
 
 ### global-setup
 
-1. 使用 `E2E_EMAIL` / `E2E_PASSWORD` 登录（默认 `super@agilean.cn` / `changeme`）
+1. 使用 `E2E_EMAIL` / `E2E_PASSWORD` 登录（默认 `super@planka.dev` / `changeme`）
 2. 创建唯一测试组织 `E2E_{timestamp}`
 3. 切换到该组织，写入 localStorage（token、orgId 等）
 4. 保存浏览器 storageState 到 `.auth/user.json`，后续测试复用登录态
@@ -157,7 +157,7 @@ tests/visual/{testFileName}-snapshots/{arg}-{projectName}{ext}
 
 | 变量             | 默认值              | 说明                       |
 | ---------------- | ------------------- | -------------------------- |
-| `E2E_EMAIL`      | `super@agilean.cn`  | 登录邮箱                   |
+| `E2E_EMAIL`      | `super@planka.dev`  | 登录邮箱                   |
 | `E2E_PASSWORD`   | `changeme`          | 登录密码                   |
 | `E2E_KEEP_DATA`  | -                   | 设为 `true` 跳过 teardown  |
 | `CI`             | -                   | CI 环境标识，启用 Firefox   |

@@ -18,7 +18,7 @@ public interface ViewExecutor<T extends AbstractViewDefinition, R extends ViewDa
     /**
      * 获取支持的视图类型
      *
-     * @return 视图类型标识，如 "LIST", "KANBAN", "GANTT"
+     * @return 视图类型标识，如 "LIST", "planka", "GANTT"
      */
     String getViewType();
 

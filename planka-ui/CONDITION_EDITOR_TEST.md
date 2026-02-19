@@ -27,7 +27,7 @@
 开发服务器已启动在：**http://localhost:3001/**
 
 ```bash
-cd kanban-ui
+cd planka-ui
 npm run dev
 ```
 

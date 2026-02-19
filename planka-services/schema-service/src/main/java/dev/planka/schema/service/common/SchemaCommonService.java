@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Service
 public class SchemaCommonService {
 
-    private static final String KAFKA_TOPIC = "kanban-schema-events";
+    private static final String KAFKA_TOPIC = "planka-schema-events";
 
     private final SchemaRepository schemaRepository;
     private final SchemaReferenceMapper referenceMapper;

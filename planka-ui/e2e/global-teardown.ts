@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const GATEWAY = 'http://localhost:8000'
+const GATEWAY = 'http://localhost:7000'
 
 async function globalTeardown() {
   // 设置 E2E_KEEP_DATA=true 可跳过清理，方便调试

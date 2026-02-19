@@ -1,5 +1,5 @@
 server:
-  port: 8103
+  port: 7006
   # Tomcat 连接管理配置
   tomcat:
     connection-timeout: 20000
@@ -18,20 +18,20 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:18848
+        server-addr: localhost:28848
         namespace: public
 
   # Redis配置
   data:
     redis:
       host: localhost
-      port: 16379
+      port: 26379
       database: 0
       timeout: 3000ms
 
   # Kafka配置
   kafka:
-    bootstrap-servers: localhost:19092
+    bootstrap-servers: localhost:29092
 
 # OpenFeign 配置
 feign:

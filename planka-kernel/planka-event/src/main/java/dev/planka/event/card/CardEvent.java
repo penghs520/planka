@@ -57,7 +57,7 @@ public abstract class CardEvent extends DomainEvent {
         return operationSource != null ? operationSource : UserOperationSource.INSTANCE;
     }
 
-    private static final String TOPIC = "kanban-card-events";
+    private static final String TOPIC = "planka-card-events";
 
     @Override
     public String getPartitionKey() {

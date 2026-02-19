@@ -51,20 +51,20 @@ planka 是一个企业级敏捷研发管理平台，采用零代码架构设计�
 
 ```
 planka/
-├── kanban-kernel/                  # 微内核核心
-│   ├── kanban-common/              # 公共工具、常量、异常、Result
-│   ├── kanban-domain/              # 领域模型：Schema定义、Card、Field、Link等
-│   └── kanban-event/               # 领域事件定义
+├── planka-kernel/                  # 微内核核心
+│   ├── planka-common/              # 公共工具、常量、异常、Result
+│   ├── planka-domain/              # 领域模型：Schema定义、Card、Field、Link等
+│   └── planka-event/               # 领域事件定义
 │
-├── kanban-infrastructure/          # 公共基础设施
-│   ├── kanban-infra-schema-cache/  # Schema 缓存实现，除了schema-service服务之外的模块，要求使用缓存进行查询schema，避免使用FeignClient进行远程调用
-│   └── kanban-infra-card-cache/    # 卡片数据（简单卡片信息）缓存实现
+├── planka-infrastructure/          # 公共基础设施
+│   ├── planka-infra-schema-cache/  # Schema 缓存实现，除了schema-service服务之外的模块，要求使用缓存进行查询schema，避免使用FeignClient进行远程调用
+│   └── planka-infra-card-cache/    # 卡片数据（简单卡片信息）缓存实现
 │
-├── kanban-apis/                    # 服务 API Client（OpenFeign）
+├── planka-apis/                    # 服务 API Client（OpenFeign）
 │   ├── schema-api/                 # Schema 服务 API
 │   ├── card-api/                   # Card 服务 API
 │
-├── kanban-services/                # 应用服务
+├── planka-services/                # 应用服务
 │   ├── schema-service/             # Schema 定义服务
 │   ├── card-service/               # 卡片数据服务
 │   ├── view-service/               # 视图数据服务
@@ -72,14 +72,14 @@ planka/
 │   ├── gateway-service/            # API 网关
 │   └── extension-service/          # 扩展服务（操作历史等）
 │
-├── kanban-starters/                # Spring Boot Starters
-├── kanban-integration-test/        # 集成测试
+├── planka-starters/                # Spring Boot Starters
+├── planka-integration-test/        # 集成测试
 │
 ├── zgraph-driver/                  # 图数据库 Java 驱动
 ├── zgraph/                         # 图数据库（Rust 实现）
 ├── proto/                          # Protobuf 协议定义
 │
-├── kanban-ui/                      # 前端应用（Vue 3 + TypeScript）
+├── planka-ui/                      # 前端应用（Vue 3 + TypeScript）
 └── docs/                           # 项目文档
 ```
 
@@ -141,10 +141,10 @@ planka/
 
 ---
 
-## 前端模块结构（kanban-ui）
+## 前端模块结构（planka-ui）
 
 ```
-kanban-ui/src/
+planka-ui/src/
 ├── api/              # API 接口封装
 ├── components/       # 公共组件
 ├── composables/      # Composition API 复用逻辑

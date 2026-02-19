@@ -4,8 +4,8 @@
 
 
 **访问地址**：
-- 前端访问界面: http://localhost:3000 (`cd kanban-ui && pnpm dev`)
-- Nacos: http://localhost:18848/nacos (nacos/nacos)
+- 前端访问界面: http://localhost:3000 (`cd planka-ui && pnpm dev`)
+- Nacos: http://localhost:28848/nacos (nacos/nacos)
 
 ---
 
@@ -14,13 +14,13 @@
 ```
 planka/
 ├── docs/                   # 放置功能设计文档，禁止存放过程文档，如缺陷修复过程、优化过程等
-├── kanban-ui/              # 前端 (Vue 3 + Arco Design + UnoCSS)
-├── kanban-kernel/          # 核心领域模型
-├── kanban-services/        # 微服务模块
-├── kanban-apis/            # API 定义
-├── kanban-infrastructure/  # 基础设施
-├── kanban-starters/        # Spring Boot Starters
-├── kanban-integration-test/# 集成测试
+├── planka-ui/              # 前端 (Vue 3 + Arco Design + UnoCSS)
+├── planka-kernel/          # 核心领域模型
+├── planka-services/        # 微服务模块
+├── planka-apis/            # API 定义
+├── planka-infrastructure/  # 基础设施
+├── planka-starters/        # Spring Boot Starters
+├── planka-integration-test/# 集成测试
 ├── zgraph/                 # 图数据库
 ├── zgraph-driver/          # 图数据库驱动
 ├── docker/                 # Docker 配置
@@ -83,8 +83,8 @@ planka/
 
 ### 技术栈
 - **UI 框架**: Arco Design Vue
-- **原子化 CSS**: UnoCSS（配置见 `kanban-ui/uno.config.ts`）
-- **主题变量**: `kanban-ui/src/styles/theme.css`
+- **原子化 CSS**: UnoCSS（配置见 `planka-ui/uno.config.ts`）
+- **主题变量**: `planka-ui/src/styles/theme.css`
 
 ### 配色
 | 用途 | 变量 | 色值 |

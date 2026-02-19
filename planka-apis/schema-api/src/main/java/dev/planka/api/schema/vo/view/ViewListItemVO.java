@@ -36,7 +36,7 @@ public class ViewListItemVO {
     private String description;
 
     /**
-     * 视图类型（LIST、KANBAN 等）
+     * 视图类型（LIST、planka 等）
      */
     private String viewType;
 

@@ -7,7 +7,7 @@ import enUS from './locales/en-US'
 
 export type SupportedLocale = 'zh-CN' | 'en-US'
 
-const LOCALE_STORAGE_KEY = 'kanban-locale'
+const LOCALE_STORAGE_KEY = 'planka-locale'
 
 /**
  * 获取存储的语言设置

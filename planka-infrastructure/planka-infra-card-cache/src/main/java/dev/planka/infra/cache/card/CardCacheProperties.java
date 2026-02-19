@@ -13,7 +13,7 @@ import java.time.Duration;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "kanban.cache.card")
+@ConfigurationProperties(prefix = "planka.cache.card")
 public class CardCacheProperties {
 
     /**

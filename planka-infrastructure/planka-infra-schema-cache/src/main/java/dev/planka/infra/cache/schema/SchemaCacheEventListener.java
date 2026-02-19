@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SchemaCacheEventListener {
 
-    private static final String SCHEMA_EVENTS_TOPIC = "kanban-schema-events";
+    private static final String SCHEMA_EVENTS_TOPIC = "planka-schema-events";
 
     private final SchemaCacheService schemaCacheService;
     private final SecondaryIndexCache secondaryIndexCache;

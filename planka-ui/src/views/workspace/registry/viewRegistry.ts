@@ -5,7 +5,7 @@
 import type { Component } from 'vue'
 
 /** 支持的视图类型 */
-export type ViewType = 'LIST' | 'KANBAN' | 'GANTT'
+export type ViewType = 'LIST' | 'planka' | 'GANTT'
 
 /** View config */
 export interface ViewConfig {
@@ -28,10 +28,10 @@ viewRegistry.set('LIST', {
 })
 
 // 未来扩展：注册看板视图
-// viewRegistry.set('KANBAN', {
-//   type: 'KANBAN',
+// viewRegistry.set('planka', {
+//   type: 'planka',
 //   name: '看板视图',
-//   component: () => import('../components/kanban/KanbanViewPanel.vue'),
+//   component: () => import('../components/planka/plankaViewPanel.vue'),
 // })
 
 // 未来扩展：注册甘特图视图

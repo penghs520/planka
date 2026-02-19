@@ -35,7 +35,7 @@ public class CardEventListener {
     /**
      * 统一监听卡片事件，根据事件类型分发处理
      */
-    @KafkaListener(topics = "kanban-card-events", groupId = "card-flow-record",
+    @KafkaListener(topics = "planka-card-events", groupId = "card-flow-record",
             containerFactory = "cardEventListenerContainerFactory")
     public void handleCardEvent(CardEvent event) {
         logger.debug("Received CardEvent: type={}, cardId={}", event.getEventType(), event.getCardId());

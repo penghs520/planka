@@ -2,7 +2,7 @@
  * 本地存储工具
  */
 
-const PREFIX = 'kanban_'
+const PREFIX = 'planka_'
 
 /**
  * 设置存储项

@@ -426,7 +426,7 @@ export default {
   // 视图类型名称
   viewTypeName: {
     list: '列表视图',
-    kanban: '看板视图',
+    planka: '看板视图',
     gantt: '甘特图视图',
   },
 

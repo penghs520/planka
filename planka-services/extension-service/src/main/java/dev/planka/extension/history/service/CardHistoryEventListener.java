@@ -33,7 +33,7 @@ public class CardHistoryEventListener {
     /**
      * 监听卡片事件
      */
-    @KafkaListener(topics = "kanban-card-events", groupId = "history-service")
+    @KafkaListener(topics = "planka-card-events", groupId = "history-service")
     public void handleCardEvent(CardEvent event) {
         try {
             if (event instanceof CardCreatedEvent e) {

@@ -21,7 +21,7 @@ import lombok.Setter;
 })
 public abstract class SchemaEvent extends DomainEvent {
 
-    private static final String SCHEMA_EVENTS_TOPIC = "kanban-schema-events";
+    private static final String SCHEMA_EVENTS_TOPIC = "planka-schema-events";
     private static final String KEY = "Schema.Event";
 
 

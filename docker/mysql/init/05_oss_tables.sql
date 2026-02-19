@@ -4,11 +4,11 @@
 -- ============================================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS kanban_oss
+CREATE DATABASE IF NOT EXISTS planka_oss
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE kanban_oss;
+USE planka_oss;
 
 -- ============================================================
 -- 1. sys_file_meta 文件元数据表

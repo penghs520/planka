@@ -53,7 +53,7 @@ public abstract class AbstractViewDefinition extends AbstractSchemaDefinition<Vi
 
     /**
      * 获取视图类型字符串
-     * 子类实现以返回具体的视图类型标识（如 "LIST", "KANBAN" 等）
+     * 子类实现以返回具体的视图类型标识（如 "LIST", "planka" 等）
      *
      * @return 视图类型字符串
      */

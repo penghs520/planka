@@ -108,7 +108,7 @@ export interface ViewListItemVO {
   /** 视图描述 */
   description?: string
 
-  /** 视图类型（LIST、KANBAN 等） */
+  /** 视图类型（LIST、planka 等） */
   viewType: string
 
   /** Schema 子类型标识 */

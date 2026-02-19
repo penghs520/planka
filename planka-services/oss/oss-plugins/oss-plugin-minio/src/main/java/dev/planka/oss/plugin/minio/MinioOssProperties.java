@@ -33,7 +33,7 @@ public class MinioOssProperties {
     /**
      * 存储桶名称
      */
-    private String bucket = "kanban";
+    private String bucket = "planka";
 
     /**
      * 预签名 URL 过期时间（秒）

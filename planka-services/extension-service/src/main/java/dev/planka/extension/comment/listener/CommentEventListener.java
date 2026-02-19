@@ -27,7 +27,7 @@ public class CommentEventListener {
     /**
      * 监听评论创建请求事件
      */
-    @KafkaListener(topics = "kanban-comment-events", groupId = "comment-service")
+    @KafkaListener(topics = "planka-comment-events", groupId = "comment-service")
     public void handleCommentEvent(CommentEvent event) {
         try {
             if (event instanceof CommentCreationRequestedEvent e) {

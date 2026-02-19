@@ -3,16 +3,16 @@ package dev.planka.common.constant;
 /**
  * 系统全局常量定义
  */
-public final class KanbanConstants {
+public final class PlankaConstants {
 
-    private KanbanConstants() {
+    private PlankaConstants() {
         throw new UnsupportedOperationException("Constants class cannot be instantiated");
     }
 
     // ==================== 系统标识 ====================
 
     /** 系统名称 */
-    public static final String SYSTEM_NAME = "ValueKanban";
+    public static final String SYSTEM_NAME = "Valueplanka";
 
     /** 系统版本 */
     public static final String SYSTEM_VERSION = "1.0.0";
@@ -56,7 +56,7 @@ public final class KanbanConstants {
     // ==================== 缓存相关 ====================
 
     /** 缓存键前缀 */
-    public static final String CACHE_KEY_PREFIX = "kanban:";
+    public static final String CACHE_KEY_PREFIX = "planka:";
 
     /** 默认缓存过期时间（秒） */
     public static final long DEFAULT_CACHE_TTL = 3600L;
@@ -64,7 +64,7 @@ public final class KanbanConstants {
     // ==================== 消息相关 ====================
 
     /** Kafka主题前缀 */
-    public static final String KAFKA_TOPIC_PREFIX = "kanban.";
+    public static final String KAFKA_TOPIC_PREFIX = "planka.";
 
     /** 卡片事件主题 */
     public static final String TOPIC_CARD_EVENT = KAFKA_TOPIC_PREFIX + "card.event";

@@ -71,7 +71,7 @@ export interface MenuTreeNodeVO {
   name: string
   /** 图标（分组专用） */
   icon?: string
-  /** 视图类型（视图专用，如 LIST, KANBAN） */
+  /** 视图类型（视图专用，如 LIST, planka） */
   viewType?: string
   /** 关联的卡片类型ID（视图专用） */
   cardTypeId?: string

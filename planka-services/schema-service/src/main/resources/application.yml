@@ -1,5 +1,5 @@
 server:
-  port: 8100
+  port: 7002
   # Tomcat 连接管理配置
   tomcat:
     # 连接超时（毫秒）
@@ -24,12 +24,12 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:18848
+        server-addr: localhost:28848
         namespace: public
 
   # 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:13306/kanban_schema?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:23306/planka_schema?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -54,13 +54,13 @@ spring:
   data:
     redis:
       host: localhost
-      port: 16379
+      port: 26379
       database: 0
       timeout: 3000ms
 
   # Kafka配置
   kafka:
-    bootstrap-servers: 127.0.0.1:19092
+    bootstrap-servers: 127.0.0.1:29092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

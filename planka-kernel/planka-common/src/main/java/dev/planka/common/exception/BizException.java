@@ -5,30 +5,30 @@ package dev.planka.common.exception;
  * <p>
  * 所有业务异常的基类，支持错误码和国际化消息
  */
-public class KanbanException extends RuntimeException {
+public class BizException extends RuntimeException {
 
     private final ErrorCode errorCode;
     private final Object[] args;
 
-    public KanbanException(ErrorCode errorCode) {
+    public BizException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
         this.args = new Object[0];
     }
 
-    public KanbanException(ErrorCode errorCode, Object... args) {
+    public BizException(ErrorCode errorCode, Object... args) {
         super(formatMessage(errorCode.getMessage(), args));
         this.errorCode = errorCode;
         this.args = args;
     }
 
-    public KanbanException(ErrorCode errorCode, Throwable cause) {
+    public BizException(ErrorCode errorCode, Throwable cause) {
         super(errorCode.getMessage(), cause);
         this.errorCode = errorCode;
         this.args = new Object[0];
     }
 
-    public KanbanException(ErrorCode errorCode, Throwable cause, Object... args) {
+    public BizException(ErrorCode errorCode, Throwable cause, Object... args) {
         super(formatMessage(errorCode.getMessage(), args), cause);
         this.errorCode = errorCode;
         this.args = args;

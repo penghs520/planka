@@ -21,7 +21,7 @@ planka 是一个企业级敏捷研发管理平台，采用微服务架构和零�
 ### 后端
 | 技术 | 版本 | 说明 |
 |------|------|------|
-| Java | 17+ | 运行时环境（kanban-apis 使用 Java 21） |
+| Java | 17+ | 运行时环境（planka-apis 使用 Java 21） |
 | Spring Boot | 3.4.6 | 应用框架 |
 | Spring Cloud | 2024.0.1 | 微服务框架 |
 | Spring Cloud Alibaba | 2023.0.3.3 | 微服务组件（Nacos） |
@@ -56,22 +56,22 @@ planka 是一个企业级敏捷研发管理平台，采用微服务架构和零�
 planka/
 ├── pom.xml                         # 根 POM，依赖版本管理
 │
-├── kanban-kernel/                  # 微内核核心
-│   ├── kanban-common/              # 公共工具、常量、异常、Result
-│   ├── kanban-domain/              # 领域模型：Schema定义、Card、Field、Link等
-│   └── kanban-event/               # 领域事件定义
+├── planka-kernel/                  # 微内核核心
+│   ├── planka-common/              # 公共工具、常量、异常、Result
+│   ├── planka-domain/              # 领域模型：Schema定义、Card、Field、Link等
+│   └── planka-event/               # 领域事件定义
 │
-├── kanban-infrastructure/          # 公共基础设施
-│   ├── kanban-infra-schema-cache/  # Schema 缓存实现
-│   └── kanban-infra-card-cache/    # 卡片数据缓存实现
+├── planka-infrastructure/          # 公共基础设施
+│   ├── planka-infra-schema-cache/  # Schema 缓存实现
+│   └── planka-infra-card-cache/    # 卡片数据缓存实现
 │
-├── kanban-apis/                    # 服务 API Client（OpenFeign）
+├── planka-apis/                    # 服务 API Client（OpenFeign）
 │   ├── schema-api/                 # Schema 服务 API
 │   ├── user-api/                   # User 服务 API
 │   ├── card-api/                   # Card 服务 API
 │   └── view-api/                   # View 服务 API
 │
-├── kanban-services/                # 应用服务
+├── planka-services/                # 应用服务
 │   ├── schema-service/             # Schema 定义服务
 │   ├── card-service/               # 卡片数据服务
 │   ├── view-service/               # 视图数据服务
@@ -85,14 +85,14 @@ planka/
 │           ├── notification-plugin-api/
 │           └── notification-plugin-dingding/
 │
-├── kanban-starters/                # Spring Boot Starters（预留）
-├── kanban-integration-test/        # 集成测试
+├── planka-starters/                # Spring Boot Starters（预留）
+├── planka-integration-test/        # 集成测试
 │
 ├── zgraph-driver/                  # 图数据库 Java 驱动
 ├── zgraph/                         # 图数据库（Rust 实现）
 ├── proto/                          # Protobuf 协议定义
 │
-├── kanban-ui/                      # 前端应用（Vue 3 + TypeScript）
+├── planka-ui/                      # 前端应用（Vue 3 + TypeScript）
 │   ├── src/
 │   │   ├── api/                    # API 接口封装
 │   │   ├── components/             # 公共组件
@@ -129,7 +129,7 @@ mvn clean compile
 mvn test
 
 # 运行指定模块测试
-mvn test -pl kanban-services/card-service -am
+mvn test -pl planka-services/card-service -am
 
 # 打包
 mvn clean package
@@ -144,7 +144,7 @@ mvn clean package -DskipTests
 ### 前端（pnpm）
 
 ```bash
-cd kanban-ui
+cd planka-ui
 
 # 安装依赖
 pnpm install
@@ -182,12 +182,12 @@ docker-compose down
 
 | 服务 | 端口 |
 |------|------|
-| Nacos | 18848 (HTTP), 19848 (gRPC) |
-| MySQL | 13306 |
-| Redis | 16379 |
-| Kafka | 19092 |
+| Nacos | 28848 (HTTP), 29848 (gRPC) |
+| MySQL | 23306 |
+| Redis | 26379 |
+| Kafka | 29092 |
 | 前端开发服务器 | 3000 |
-| 网关服务 | 8000 |
+| 网关服务 | 7000 |
 
 ---
 
@@ -362,7 +362,7 @@ docs: 更新 API 文档
 
 - 除 `schema-service` 外的模块，**必须使用缓存**查询 Schema
 - **禁止**使用 FeignClient 进行远程调用获取 Schema
-- 使用 `kanban-infra-schema-cache` 模块提供的缓存能力
+- 使用 `planka-infra-schema-cache` 模块提供的缓存能力
 
 ---
 
@@ -383,7 +383,7 @@ chmod +x .githooks/setup-hooks.sh
 
 1. 启动基础设施: `docker-compose up -d`
 2. 启动后端服务（从 gateway-service 开始）
-3. 启动前端: `cd kanban-ui && pnpm dev`
+3. 启动前端: `cd planka-ui && pnpm dev`
 4. 访问: http://localhost:3000
 
 ---

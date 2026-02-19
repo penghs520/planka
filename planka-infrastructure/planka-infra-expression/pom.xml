@@ -13,7 +13,7 @@
     <artifactId>planka-infra-expression</artifactId>
     <packaging>jar</packaging>
 
-    <name>Kanban Infrastructure - Expression</name>
+    <name>planka Infrastructure - Expression</name>
     <description>公共表达式模板解析模块</description>
 
     <dependencies>

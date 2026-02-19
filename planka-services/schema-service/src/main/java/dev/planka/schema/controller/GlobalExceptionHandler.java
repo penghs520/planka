@@ -1,7 +1,7 @@
 package dev.planka.schema.controller;
 
 import dev.planka.common.exception.CommonErrorCode;
-import dev.planka.common.exception.KanbanException;
+import dev.planka.common.exception.BizException;
 import dev.planka.common.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,9 @@ public class GlobalExceptionHandler {
     /**
      * 处理业务异常
      */
-    @ExceptionHandler(KanbanException.class)
+    @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.OK)
-    public Result<Void> handleKanbanException(KanbanException e) {
+    public Result<Void> handleplankaException(BizException e) {
         log.warn("Business exception: {}", e.getMessage());
         return Result.failure(e.getErrorCode(), e.getMessage());
     }
@@ -73,10 +73,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        KanbanException kanbanException = extractKanbanException(e);
-        if (kanbanException != null) {
-            log.warn("Business exception during deserialization: {}", kanbanException.getMessage());
-            return Result.failure(kanbanException.getErrorCode(), kanbanException.getMessage());
+        BizException BizException = extractplankaException(e);
+        if (BizException != null) {
+            log.warn("Business exception during deserialization: {}", BizException.getMessage());
+            return Result.failure(BizException.getErrorCode(), BizException.getMessage());
         }
         Throwable cause = e.getMostSpecificCause();
         String message = cause != null ? cause.getMessage() : e.getMessage();
@@ -84,10 +84,10 @@ public class GlobalExceptionHandler {
         return Result.failure(CommonErrorCode.BAD_REQUEST, message);
     }
 
-    private KanbanException extractKanbanException(Throwable e) {
+    private BizException extractplankaException(Throwable e) {
         Throwable current = e;
         while (current != null) {
-            if (current instanceof KanbanException ke) {
+            if (current instanceof BizException ke) {
                 return ke;
             }
             current = current.getCause();

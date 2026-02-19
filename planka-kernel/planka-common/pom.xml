@@ -13,7 +13,7 @@
     <artifactId>planka-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>Kanban Common</name>
+    <name>planka Common</name>
     <description>公共模块 - 工具类、常量、异常定义</description>
 
     <dependencies>

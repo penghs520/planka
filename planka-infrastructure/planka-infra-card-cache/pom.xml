@@ -13,7 +13,7 @@
     <artifactId>planka-infra-card-cache</artifactId>
     <packaging>jar</packaging>
 
-    <name>Kanban Infrastructure - Card Cache</name>
+    <name>planka Infrastructure - Card Cache</name>
     <description>Card 二级缓存服务（L1 Caffeine + L2 Redis）</description>
 
     <dependencies>

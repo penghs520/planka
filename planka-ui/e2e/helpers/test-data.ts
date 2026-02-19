@@ -17,7 +17,7 @@ export function getE2EContext(): { orgId: string; token: string } {
  */
 export const TEST_USERS = {
   admin: {
-    email: process.env.E2E_EMAIL || 'super@agilean.cn',
+    email: process.env.E2E_EMAIL || 'super@planka.dev',
     password: process.env.E2E_PASSWORD || 'changeme',
   },
 } as const

@@ -38,7 +38,7 @@ public class BizRuleEventListener {
     /**
      * 监听卡片事件
      */
-    @KafkaListener(topics = "kanban-card-events", groupId = "biz-rule-trigger",
+    @KafkaListener(topics = "planka-card-events", groupId = "biz-rule-trigger",
             containerFactory = "cardEventListenerContainerFactory")
     public void handleCardEvent(CardEvent event) {
         log.debug("收到卡片事件: type={}, cardId={}", event.getEventType(), event.getCardId());

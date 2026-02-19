@@ -31,7 +31,7 @@ public record CardBasicInfo(
     /**
      * 从 CardDTO 转换
      * <p>
-     * 注意：此方法需要 CardDTO 参数，但 kanban-infra-card-cache 模块不依赖 card-api 模块。
+     * 注意：此方法需要 CardDTO 参数，但 planka-infra-card-cache 模块不依赖 card-api 模块。
      * 因此，此方法的实际实现应该在使用方（如 card-service）中提供。
      * 这里提供一个静态方法签名作为约定。
      */

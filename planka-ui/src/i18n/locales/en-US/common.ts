@@ -96,7 +96,7 @@ export default {
 
   // Login
   login: {
-    title: 'Kanban Management System',
+    title: 'planka Management System',
     orgId: 'Organization ID',
     orgIdPlaceholder: 'Enter or select organization ID',
     enterAdmin: 'Enter Admin Panel',
@@ -423,7 +423,7 @@ export default {
   // View type names
   viewTypeName: {
     list: 'List View',
-    kanban: 'Kanban View',
+    planka: 'planka View',
     gantt: 'Gantt View',
   },
 

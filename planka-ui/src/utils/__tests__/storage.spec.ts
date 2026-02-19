@@ -17,7 +17,7 @@ describe('storage utils', () => {
   describe('setItem', () => {
     it('should save data to localStorage with prefix', () => {
       setItem(TEST_KEY, TEST_VALUE)
-      expect(localStorage.getItem(`kanban_${TEST_KEY}`)).toBe(JSON.stringify(TEST_VALUE))
+      expect(localStorage.getItem(`planka_${TEST_KEY}`)).toBe(JSON.stringify(TEST_VALUE))
     })
 
     it('should handle errors gracefully', () => {
@@ -35,7 +35,7 @@ describe('storage utils', () => {
 
   describe('getItem', () => {
     it('should retrieve data from localStorage', () => {
-      localStorage.setItem(`kanban_${TEST_KEY}`, JSON.stringify(TEST_VALUE))
+      localStorage.setItem(`planka_${TEST_KEY}`, JSON.stringify(TEST_VALUE))
       const result = getItem(TEST_KEY)
       expect(result).toEqual(TEST_VALUE)
     })
@@ -52,7 +52,7 @@ describe('storage utils', () => {
     })
 
     it('should handle JSON parse errors gracefully', () => {
-      localStorage.setItem(`kanban_${TEST_KEY}`, 'invalid json')
+      localStorage.setItem(`planka_${TEST_KEY}`, 'invalid json')
       const result = getItem(TEST_KEY, 'default')
       expect(result).toBe('default')
       expect(console.error).toHaveBeenCalled()
@@ -61,22 +61,22 @@ describe('storage utils', () => {
 
   describe('removeItem', () => {
     it('should remove item from localStorage', () => {
-      localStorage.setItem(`kanban_${TEST_KEY}`, JSON.stringify(TEST_VALUE))
+      localStorage.setItem(`planka_${TEST_KEY}`, JSON.stringify(TEST_VALUE))
       removeItem(TEST_KEY)
-      expect(localStorage.getItem(`kanban_${TEST_KEY}`)).toBeNull()
+      expect(localStorage.getItem(`planka_${TEST_KEY}`)).toBeNull()
     })
   })
 
   describe('clear', () => {
-    it('should remove only kanban prefixed items', () => {
-      localStorage.setItem('kanban_1', '1')
-      localStorage.setItem('kanban_2', '2')
+    it('should remove only planka prefixed items', () => {
+      localStorage.setItem('planka_1', '1')
+      localStorage.setItem('planka_2', '2')
       localStorage.setItem('other_1', '1')
 
       clear()
 
-      expect(localStorage.getItem('kanban_1')).toBeNull()
-      expect(localStorage.getItem('kanban_2')).toBeNull()
+      expect(localStorage.getItem('planka_1')).toBeNull()
+      expect(localStorage.getItem('planka_2')).toBeNull()
       expect(localStorage.getItem('other_1')).toBe('1')
     })
   })

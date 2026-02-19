@@ -13,7 +13,7 @@ import java.time.Duration;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "kanban.cache.schema")
+@ConfigurationProperties(prefix = "planka.cache.schema")
 public class SchemaCacheProperties {
 
     /**

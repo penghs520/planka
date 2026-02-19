@@ -188,7 +188,7 @@ public class RetryConfig {
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌─────────────────────┐                                        │
-│  │  BizRuleEventListener │  ◄─── Kafka: kanban-card-events     │
+│  │  BizRuleEventListener │  ◄─── Kafka: planka-card-events     │
 │  └──────────┬──────────┘                                        │
 │             │ 事件分发                                            │
 │             ▼                                                    │
@@ -615,7 +615,7 @@ CardTypeFormDrawer.vue
 
 ### 10.2 类型定义
 
-详见 `kanban-ui/src/types/biz-rule.ts`
+详见 `planka-ui/src/types/biz-rule.ts`
 
 ---
 

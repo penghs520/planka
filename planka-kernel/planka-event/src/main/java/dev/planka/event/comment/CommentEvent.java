@@ -17,7 +17,7 @@ import lombok.Setter;
 })
 public abstract class CommentEvent extends DomainEvent {
 
-    private static final String TOPIC = "kanban-comment-events";
+    private static final String TOPIC = "planka-comment-events";
 
     protected CommentEvent(String orgId, String operatorId, String sourceIp, String traceId) {
         super(orgId, operatorId, sourceIp, traceId);

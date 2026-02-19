@@ -9,7 +9,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>agilean kanban</name>
+    <name>agilean planka</name>
     <description>敏捷看板系统</description>
 
     <!-- 模块定义 -->

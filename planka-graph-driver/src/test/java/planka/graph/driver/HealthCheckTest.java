@@ -76,7 +76,7 @@ public class HealthCheckTest {
 
                 // 等待一段时间让健康检查运行
                 logger.info("等待健康检查运行...");
-                Thread.sleep(8000); // 等待8秒，让健康检查有足够时间检测
+                Thread.sleep(7000); // 等待8秒，让健康检查有足够时间检测
 
                 // 由于我们无法直接访问内部的负载均衡器，这里主要测试客户端是否正常工作
                 logger.info("健康检查应该已经完成初始检测");
@@ -163,7 +163,7 @@ public class HealthCheckTest {
                                 initialActive, initialTotal, initialIdle);
 
                 // 等待健康检查运行
-                Thread.sleep(8000);
+                Thread.sleep(7000);
 
                 // 检查连接状态
                 int afterHealthCheckActive = client.getActiveConnectionCount();

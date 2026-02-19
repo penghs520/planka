@@ -13,7 +13,7 @@
     <artifactId>planka-domain</artifactId>
     <packaging>jar</packaging>
 
-    <name>Kanban Domain</name>
+    <name>planka Domain</name>
     <description>领域核心模块 - 纯Java实现，无框架依赖</description>
 
     <dependencies>

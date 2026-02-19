@@ -13,7 +13,7 @@
     <artifactId>planka-kernel</artifactId>
     <packaging>pom</packaging>
 
-    <name>Kanban Kernel</name>
+    <name>planka Kernel</name>
     <description>微内核核心模块 - 领域核心、API契约、事件定义</description>
 
     <modules>

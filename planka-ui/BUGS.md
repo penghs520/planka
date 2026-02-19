@@ -10,7 +10,7 @@
 的记录。
 
 **当前实现**：
-- 文件：`kanban-ui/src/api/attendance.ts`
+- 文件：`planka-ui/src/api/attendance.ts`
 - 方法：`getPendingApprovals()`
 - 已实现：通过 LINK 条件过滤审批人=当前用户
 - 已实现：前端过滤 `approvalStatus === 'PENDING'`
@@ -26,5 +26,5 @@
 - 可能需要在后端查询时就过滤审批状态，而不是在前端过滤
 
 **相关代码**：
-- `kanban-ui/src/api/attendance.ts` - `getPendingApprovals()` 方法
-- `kanban-ui/src/api/attendance.ts` - `convertToApplicationRecords()` 方法
+- `planka-ui/src/api/attendance.ts` - `getPendingApprovals()` 方法
+- `planka-ui/src/api/attendance.ts` - `convertToApplicationRecords()` 方法

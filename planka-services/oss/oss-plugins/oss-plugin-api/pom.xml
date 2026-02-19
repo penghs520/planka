@@ -16,6 +16,6 @@
     <description>对象存储插件 API</description>
 
     <dependencies>
-        <!-- 无额外依赖，仅依赖父模块的 kanban-common -->
+        <!-- 无额外依赖，仅依赖父模块的 planka-common -->
     </dependencies>
 </project>

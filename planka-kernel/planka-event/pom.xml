@@ -13,7 +13,7 @@
     <artifactId>planka-event</artifactId>
     <packaging>jar</packaging>
 
-    <name>Kanban Event</name>
+    <name>planka Event</name>
     <description>事件模块 - 领域事件定义和发布接口</description>
 
     <dependencies>

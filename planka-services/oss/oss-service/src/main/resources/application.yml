@@ -1,5 +1,5 @@
 server:
-  port: 8104
+  port: 7004
 
 spring:
   application:
@@ -9,12 +9,12 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:18848
+        server-addr: localhost:28848
         namespace: public
 
   # MySQL数据源配置
   datasource:
-    url: jdbc:mysql://localhost:13306/kanban_oss?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:23306/planka_oss?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -54,7 +54,7 @@ oss:
 
   local:
     enabled: true
-    base-path: ~/kanban-data/oss
+    base-path: ~/planka-data/oss
     base-url: /api/v1/files/static
 
   minio:
@@ -62,7 +62,7 @@ oss:
     endpoint: http://localhost:9000
     access-key: minioadmin
     secret-key: minioadmin
-    bucket: kanban
+    bucket: planka
 
 # 日志配置
 logging:

@@ -5,7 +5,7 @@ export default {
   // Login page
   login: {
     welcome: 'Welcome',
-    subtitle: 'Enterprise Agile Kanban Management Platform',
+    subtitle: 'Enterprise Agile planka Management Platform',
     brandTitle: 'Efficient Collaboration, Agile Delivery',
     brandSubtitle: 'Let your team focus on creating value',
     email: 'Email',

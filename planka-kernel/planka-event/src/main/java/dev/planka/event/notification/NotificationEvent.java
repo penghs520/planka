@@ -17,7 +17,7 @@ public abstract class NotificationEvent extends DomainEvent {
 
     private static final String EVENT_TYPE = "card.changed";
 
-    private static final String TOPIC = "kanban-notification-events";
+    private static final String TOPIC = "planka-notification-events";
 
     protected NotificationEvent(String orgId, String operatorId, String sourceIp, String traceId) {
         super(orgId, operatorId, sourceIp, traceId);
