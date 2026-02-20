@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package zgraph.model;
+package pgraph.model;
 
 import "field/field_value.proto";
 import "common/enums.proto";
@@ -27,7 +27,7 @@ message Card {
   string status_id = 10;                  // 价值流状态ID  无需记录价值流阶段ID
 
   // ==================== 属性值 ====================
-  map<string, zgraph.field.FieldValue> custom_field_value_map = 11;
+  map<string, pgraph.field.FieldValue> custom_field_value_map = 11;
 
   // ==================== 关联卡片 ====================
   map<string, CardList> link_card_map = 12;

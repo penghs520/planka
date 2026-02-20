@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package zgraph.query;
+package pgraph.query;
 
 import "common/enums.proto";
 import "common/path.proto";
@@ -101,7 +101,7 @@ message CodeConditionItem {
 // 文本条件
 //==============================================================================
 message TextSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
   string field_id = 2;
   string name = 3;
 }
@@ -156,7 +156,7 @@ message TextIsNotBlankOperator {}
 // 价值流状态条件
 //==============================================================================
 message StatusSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
 }
 
 message StatusConditionItem {
@@ -199,7 +199,7 @@ message StatusNotInOperator {
 // 卡片生命周期状态条件
 //==============================================================================
 message StateSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
 }
 
 message StateConditionItem {
@@ -236,7 +236,7 @@ message StateNotInOperator {
 // 卡片类型条件
 //==============================================================================
 message CardTypeSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
 }
 
 message CardTypeConditionItem {
@@ -263,7 +263,7 @@ message CardTypeInOperator {
 // 数字条件
 //==============================================================================
 message NumberSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
   string field_id = 2;
   string name = 3;
 }
@@ -330,7 +330,7 @@ message NumberIsNotNullOperator {}
 // 日期条件
 //==============================================================================
 message DateSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
   string field_id = 2;
   string name = 3;
 }
@@ -427,7 +427,7 @@ message ReferDate {
 // 枚举条件
 //==============================================================================
 message EnumSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
   string field_id = 2;
   string name = 3;
 }
@@ -498,7 +498,7 @@ message EnumIsNotNullOperator {}
 // 关联卡片条件
 //==============================================================================
 message LinkSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
 }
 
 message LinkConditionItem {
@@ -561,23 +561,23 @@ message ReferLink {
 
 // 引用自当前卡片
 message ReferOnCurrentCard {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
 }
 
 // 引用自参数卡片
 message ReferOnParameterCard {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
   string parameter_card_type_id = 2;
 }
 
 // 引用自当前成员
 message ReferOnMember {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
 }
 
 // 引用自上下文卡片
 message ReferOnContextualCard {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
   uint64 contextual_card_id = 2;  // 卡片ID，作为唯一标识符
 }
 
@@ -589,14 +589,14 @@ message SpecialLink {
 
 // 引用自相对卡片
 message ReferOnRelativeCard {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
 }
 
 //==============================================================================
 // 链接属性条件
 //==============================================================================
 message WebLinkSubject {
-  zgraph.common.Path path = 1;
+  pgraph.common.Path path = 1;
   string field_id = 2;
   string name = 3;
 }

@@ -28,7 +28,7 @@ public class PlankaGraphClientTest {
                 ZgraphClientConfig config = ZgraphClientConfig.builder()
                                 .serverAddresses(
                                                 // new ZgraphClientConfig.ServerAddress("127.0.0.1", 3895),
-                                                new ZgraphClientConfig.ServerAddress("127.0.0.1", 3897)
+                                                new ZgraphClientConfig.ServerAddress("127.0.0.1", 7009)
                                 // new ZgraphClientConfig.ServerAddress("127.0.0.1", 3896)
                                 )
                                 .username("zgraph")

@@ -36,7 +36,7 @@ class RetryConfigTest {
             assertThat(config.calculateDelay(1)).isEqualTo(1000);  // 1000 * 2^0
             assertThat(config.calculateDelay(2)).isEqualTo(2000);  // 1000 * 2^1
             assertThat(config.calculateDelay(3)).isEqualTo(4000);  // 1000 * 2^2
-            assertThat(config.calculateDelay(4)).isEqualTo(7000);  // 1000 * 2^3
+            assertThat(config.calculateDelay(4)).isEqualTo(9000);  // 1000 * 2^3
         }
 
         @Test

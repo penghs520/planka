@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package zgraph.write;
+package pgraph.write;
 
 import "common/enums.proto";
 import "common/path.proto";
@@ -38,7 +38,7 @@ message UpdateCardFieldRequest {
   uint64 card_id = 1;  // 卡片ID，使用u64类型
   optional model.Title title = 2;
   optional string description = 3;
-  optional zgraph.common.CardState state = 4;
+  optional pgraph.common.CardState state = 4;
   // 价值流状态作为一个整体
   optional ValueStreamStatus value_stream_status = 5;
   // 更多可选的更新属性
@@ -53,7 +53,7 @@ message UpdateCardFieldRequest {
 
   repeated string tags = 14;
   // 自定义属性值，如果map中含有某个字段，则更新该字段，否则保持原值
-  map<string, zgraph.field.FieldValue> custom_field_value_map = 15;
+  map<string, pgraph.field.FieldValue> custom_field_value_map = 15;
 
 }
 
@@ -70,7 +70,7 @@ message UpdateCardTitleRequest{
 //更新卡片周期状态
 message BatchUpdateCardStateRequest {
   repeated uint64 card_ids = 1;  // 卡片ID列表
-  zgraph.common.CardState state = 2;
+  pgraph.common.CardState state = 2;
 }
 
 //更新卡片价值流状态

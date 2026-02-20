@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package zgraph.model;
+package pgraph.model;
 
 import "common/enums.proto";
 import "field/field_value.proto";
@@ -23,7 +23,7 @@ message Link {
   uint64 destId = 4;
 
   // 关联关系上的属性：衍生属性
-  repeated zgraph.field.FieldValueOnLink field_values = 5;
+  repeated pgraph.field.FieldValueOnLink field_values = 5;
 }
 
 // 卡片间的关联关系单元

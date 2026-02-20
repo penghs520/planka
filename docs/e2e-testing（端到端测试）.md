@@ -69,7 +69,7 @@ pnpm e2e --project=chromium
 ### 前置条件
 
 - 前端 `pnpm dev` 运行在 `localhost:3000`（配置了 `webServer` 会自动启动，也可手动启动后复用）
-- 后端网关运行在 `localhost:7000`
+- 后端网关运行在 `localhost:9000`
 
 ## 测试 Project
 

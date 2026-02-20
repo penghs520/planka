@@ -7,18 +7,18 @@
 #
 # 环境变量覆盖：
 # - ZGRAPH_HOST: 服务器地址（默认: localhost）
-# - ZGRAPH_PORT: 服务器端口（默认: 3897）
+# - ZGRAPH_PORT: 服务器端口（默认: 7009）
 # - ZGRAPH_USERNAME: 用户名（默认: zgraph）
 # - ZGRAPH_PASSWORD: 密码（默认: zgraph）
 # - ZGRAPH_MAX_POOL_SIZE: 最大连接池大小（默认: 10）
 # - ZGRAPH_ACQUIRE_TIMEOUT: 获取连接超时时间，单位毫秒（默认: 5000）
 
 zgraph:
-  # 服务器地址列表（可选，默认 localhost:3897）
+  # 服务器地址列表（可选，默认 localhost:7009）
   # 支持配置多个地址实现负载均衡
   servers:
     - host: ${ZGRAPH_HOST:localhost}
-      port: ${ZGRAPH_PORT:3897}
+      port: ${ZGRAPH_PORT:7009}
   
   # 认证信息（可选，默认 zgraph/zgraph）
   username: ${ZGRAPH_USERNAME:zgraph}

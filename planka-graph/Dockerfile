@@ -1,8 +1,8 @@
 # 构建命令 docker build  --platform linux/amd64 -t pgraph:latest-ubuntu-amd64 .
 # 不带缓存 docker build  --no-cache --platform linux/amd64 -t pgraph:latest-ubuntu-amd64 .
 
-# 运行命令 docker run -d --name pgraph -p 3897:3897 -v /host/path/to/data:/app/data -v /host/path/to/graph.conf:/etc/graph.conf pgraph:latest-ubuntu-amd64
-# 例如 docker run -d --name pgraph -p 3897:3897 -v /tmp/pgraph/data:/app/data -v /tmp/pgraph/logs:/app/logs  -v /tmp/graph.conf:/etc/graph.conf pgraph:latest-ubuntu-amd64
+# 运行命令 docker run -d --name pgraph -p 7009:7009 -v /host/path/to/data:/app/data -v /host/path/to/graph.conf:/etc/graph.conf pgraph:latest-ubuntu-amd64
+# 例如 docker run -d --name pgraph -p 7009:7009 -v /tmp/pgraph/data:/app/data -v /tmp/pgraph/logs:/app/logs  -v /tmp/graph.conf:/etc/graph.conf pgraph:latest-ubuntu-amd64
 
 
 # 第一阶段：构建阶段

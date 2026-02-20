@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package zgraph.common;
+package pgraph.common;
 
 import "common/enums.proto";
 

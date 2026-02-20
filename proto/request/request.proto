@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package zgraph.request;
+package pgraph.request;
 
 import "auth/auth.proto";
 import "query/query.proto";

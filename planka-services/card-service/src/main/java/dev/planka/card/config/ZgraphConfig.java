@@ -35,7 +35,7 @@ public class ZgraphConfig {
             }
         } else {
             // 默认地址
-            serverAddresses.add(new ZgraphClientConfig.ServerAddress("127.0.0.1", 3897));
+            serverAddresses.add(new ZgraphClientConfig.ServerAddress("127.0.0.1", 7009));
         }
         builder.serverAddresses(serverAddresses);
 
@@ -122,7 +122,7 @@ public class ZgraphConfig {
 
         public static class ServerAddress {
             private String host = "127.0.0.1";
-            private int port = 3897;
+            private int port = 7009;
 
             public String getHost() {
                 return host;

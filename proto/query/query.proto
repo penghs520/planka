@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package zgraph.query;
+package pgraph.query;
 
 import "common/enums.proto";
 import "common/path.proto";
@@ -67,7 +67,7 @@ message Page {
 // 排序项
 message Sort {
   SortField sort_field = 1;
-  zgraph.common.SortWay sort_way = 2;
+  pgraph.common.SortWay sort_way = 2;
 }
 
 // 排序字段

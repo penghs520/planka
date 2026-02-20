@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package zgraph.linkquery;
+package pgraph.linkquery;
 
 import "common/enums.proto";
 import "model/link.proto";
@@ -22,7 +22,7 @@ message LinkFetchRequest {
 
 // 查询关联关系响应
 message LinkQueryResponse {
-  repeated zgraph.model.Link links = 1;
+  repeated pgraph.model.Link links = 1;
 }
 
 // 关联关系+方向

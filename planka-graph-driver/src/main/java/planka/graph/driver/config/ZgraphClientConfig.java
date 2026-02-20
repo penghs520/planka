@@ -170,7 +170,7 @@ public class ZgraphClientConfig {
 
     public static ZgraphClientConfig defaultConfig() {
         return new ZgraphClientConfig(
-                List.of(new ServerAddress("127.0.0.1", 3897)),
+                List.of(new ServerAddress("127.0.0.1", 7009)),
                 "zgraph", 
                 "zgraph",
                 60 * 1000,
@@ -261,7 +261,7 @@ public class ZgraphClientConfig {
      */
     public static class Builder {
         // 默认值
-        private List<ServerAddress> serverAddresses = Arrays.asList(new ServerAddress("127.0.0.1", 3897));
+        private List<ServerAddress> serverAddresses = Arrays.asList(new ServerAddress("127.0.0.1", 7009));
         private String username = "zgraph";
         private String password = "zgraph";
         private int handleTimeoutMillis = 60 * 1000;

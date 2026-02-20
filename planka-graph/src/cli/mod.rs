@@ -942,7 +942,7 @@ pub async fn start_cli() -> Result<()> {
         Some(h) => h,
         None => Input::new()
             .with_prompt("Please enter server address")
-            .default("127.0.0.1:3897".to_string())
+            .default("127.0.0.1:7009".to_string())
             .interact_text()
             .context("Failed to read server address")?,
     };

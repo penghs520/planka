@@ -20,7 +20,7 @@ pgraph 使用 YAML 格式的配置文件进行配置。默认配置文件路径�
 | 配置项 | 类型 | 说明 | 默认值 |
 |--------|------|------|--------|
 | listen_address | 字符串 | 服务器监听地址 | "127.0.0.1" |
-| listen_port | 整数 | 服务器监听端口 | 3897 |
+| listen_port | 整数 | 服务器监听端口 | 7009 |
 | allowed_clients | 字符串数组 | 允许连接的客户端地址列表 | ["127.0.0.1"] |
 | db_path | 字符串 | 数据库文件存储路径 | "/tmp/rdb_test" |
 | db_snapshot_path | 字符串 | 快照目录路径，建议配置到共享目录下，各服务共享快照文件 | "/tmp/rdb_test/snapshots" |
@@ -101,7 +101,7 @@ pgraph 使用 YAML 格式的配置文件进行配置。默认配置文件路径�
 
 ```yaml
 listen_address: 127.0.0.1
-listen_port: 3897
+listen_port: 7009
 allowed_clients:
   - 127.0.0.1
   - 0.0.0.0
@@ -169,7 +169,7 @@ cargo run --release /path/to/config.conf
 node1.conf
 ```yaml
 listen_address: 127.0.0.1
-listen_port: 3897
+listen_port: 7009
 allowed_clients:
   - 127.0.0.1
   - 0.0.0.0
@@ -347,7 +347,7 @@ pgraph 支持自动快照管理功能：
 配置内容参考上面
 2. 启动
 ```shell
-docker run -d -p 3897:3897 -p 13897:13897 -v /etc/graph.conf:/etc/graph.conf -v /var/pgraph/data:/app/data -v /var/log/pgraph:/app/logs --name pgraph pgraph:latest-ubuntu-amd64
+docker run -d -p 7009:7009 -p 13897:13897 -v /etc/graph.conf:/etc/graph.conf -v /var/pgraph/data:/app/data -v /var/log/pgraph:/app/logs --name pgraph pgraph:latest-ubuntu-amd64
 ```
 
 ### 使用systemctl管理

@@ -6,7 +6,7 @@ import type { APIRequestContext } from '@playwright/test'
 export class ApiClient {
   constructor(
     private request: APIRequestContext,
-    private baseURL = 'http://localhost:7000',
+    private baseURL = 'http://localhost:9000',
   ) {}
 
   private getHeaders(token: string, orgId: string) {
