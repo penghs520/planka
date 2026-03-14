@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.agilean.kanban</groupId>
+        <artifactId>agilean-kanban2</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>kanban-kernel</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Kanban Kernel</name>
+    <description>微内核核心模块 - 领域核心、API契约、事件定义</description>
+
+    <modules>
+        <module>kanban-common</module>
+        <module>kanban-domain</module>
+        <module>kanban-event</module>
+    </modules>
+
+</project>

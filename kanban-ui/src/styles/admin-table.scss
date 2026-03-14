@@ -1,0 +1,280 @@
+// 管理后台表格通用样式
+
+// 表格紧凑样式
+.arco-table {
+  font-size: 12px;
+}
+
+// 隐藏固定列阴影
+.arco-table-col-fixed-left-last::after,
+.arco-table-col-fixed-right-first::after {
+  box-shadow: none !important;
+}
+
+.arco-table-th {
+  padding: 4px 8px !important;
+  font-size: 12px;
+  line-height: 20px;
+  background-color: #f9f9f9 !important;
+}
+
+.arco-table-th-title {
+  white-space: nowrap;
+}
+
+.arco-table-td {
+  padding: 6px 12px !important;
+  font-size: 13px;
+
+  // 单元格内容不穿透，长文本换行显示
+  .arco-table-td-content {
+    overflow: hidden;
+    word-break: break-word;
+    white-space: normal;
+    text-overflow: clip;
+  }
+
+  // 表格内标签样式
+  .arco-tag {
+    font-size: 12px;
+  }
+}
+
+// 排序图标样式
+.arco-table-cell-with-sorter:hover {
+  background: transparent !important;
+}
+
+.arco-table-sorter {
+  margin-left: 4px;
+}
+
+.arco-table-sorter .arco-table-sorter-icon {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.arco-table-sorter .arco-table-sorter-icon.arco-table-sorter-icon-active {
+  opacity: 1;
+  color: rgb(var(--primary-6));
+}
+
+.arco-table-sorter:has(.arco-table-sorter-icon-active) .arco-table-sorter-icon {
+  opacity: 0.4;
+}
+
+.arco-table-sorter:has(.arco-table-sorter-icon-active) .arco-table-sorter-icon.arco-table-sorter-icon-active {
+  opacity: 1;
+}
+
+.arco-table-cell-with-sorter:hover .arco-table-sorter:not(:has(.arco-table-sorter-icon-active)) .arco-table-sorter-icon {
+  opacity: 0.4;
+}
+
+// 按钮样式
+.arco-btn-size-small {
+  font-size: 12px;
+  padding: 0 8px;
+  height: 24px;
+}
+
+.arco-btn-size-mini {
+  font-size: 11px;
+  padding: 0 6px;
+  height: 20px;
+}
+
+// 新建按钮样式
+.create-btn {
+  background-color: #3350EB !important;
+  border-color: #3350EB !important;
+  color: #fff !important;
+  border-radius: var(--radius-md, 6px) !important;
+  font-weight: 500 !important;
+
+  &:hover {
+    background-color: #4E83FD !important;
+    border-color: #4E83FD !important;
+  }
+}
+
+// 链接样式
+.arco-link {
+  font-size: 13px;
+  color: rgb(var(--primary-5));
+}
+
+// 搜索框样式
+.arco-input-search {
+  font-size: 12px;
+}
+
+// 表单输入框样式
+.arco-input-wrapper,
+.arco-textarea-wrapper,
+.arco-select-view-single,
+.arco-select-view-multiple,
+.arco-input-number {
+  background-color: #fff;
+  border: 1px solid #e5e6eb;
+}
+
+.arco-input::placeholder,
+.arco-textarea::placeholder,
+.arco-input-number-input::placeholder {
+  color: #c9cdd4;
+}
+
+.arco-select-view-value-placeholder,
+.arco-select-view-placeholder {
+  color: #c9cdd4 !important;
+}
+
+.arco-input-wrapper:hover,
+.arco-textarea-wrapper:hover,
+.arco-select-view-single:hover,
+.arco-select-view-multiple:hover,
+.arco-input-number:hover {
+  border-color: #c9cdd4;
+}
+
+.arco-input-wrapper.arco-input-focus,
+.arco-textarea-wrapper.arco-textarea-focus,
+.arco-select-view-single.arco-select-view-focus,
+.arco-select-view-multiple.arco-select-view-focus,
+.arco-input-number.arco-input-number-focused {
+  border-color: rgb(var(--primary-6));
+}
+
+// 通用辅助类
+.nowrap {
+  white-space: nowrap;
+}
+
+.danger-option {
+  color: rgb(var(--danger-6)) !important;
+}
+
+// ========================================
+// AdminTable 组件样式
+// ========================================
+
+// 表格容器
+.admin-table-container {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-2);
+  padding: 0 12px 12px;
+}
+
+// 加载状态容器
+.admin-table-spin {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .arco-spin {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .arco-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .arco-table-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .arco-table-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .arco-table-content-scroll {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  // arco-scrollbar 包装器（表体区域）
+  .arco-table-content>.arco-scrollbar:last-child {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .arco-scrollbar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .arco-table-body {
+    flex: 1;
+    overflow-y: auto !important;
+  }
+}
+
+// 移除表格行之间的横线
+.arco-table-tr {
+  border-bottom: none !important;
+}
+
+.arco-table-th,
+.arco-table-td {
+  border-bottom: none !important;
+}
+
+// 表头底部只保留一条细线
+.arco-table-header {
+  border-bottom: 1px solid var(--color-border-1);
+}
+
+// 管理后台菜单样式
+.arco-menu-inner {
+  padding: 4px 4px !important;
+}
+
+.arco-menu-item {
+  padding: 0px 4px !important;
+  margin: 1px 0 !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  border-radius: 6px !important;
+
+  &.arco-menu-selected {
+    background-color: #eff1fe !important;
+    color: #415aeb !important;
+
+    .arco-icon {
+      color: #415aeb !important;
+    }
+  }
+}
+
+// 表格头部工具栏（各页面自行使用此样式类）
+.admin-table-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0 8px;
+}
+
+.admin-table-header-spacer {
+  flex: 1;
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.agilean.kanban</groupId>
+        <artifactId>agilean-kanban2</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>kanban-starters</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Kanban Starters</name>
+    <description>Spring Boot Starters - 自动配置模块</description>
+
+    <!-- 子模块将在后续阶段添加 -->
+    <!--
+    <modules>
+        <module>kanban-cache-starter</module>
+        <module>kanban-event-starter</module>
+    </modules>
+    -->
+
+</project>
