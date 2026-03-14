@@ -52,14 +52,14 @@ SERVICE_NAMES=(
 )
 
 SERVICE_PORTS=(
-    "8000"
-    "8100"
-    "8101"
-    "8102"
-    "8103"
-    "8104"
-    "8105"
-    "8107"
+    "18000"
+    "18100"
+    "18101"
+    "18102"
+    "18103"
+    "18104"
+    "18105"
+    "18107"
 )
 
 RED='\033[0;31m'
@@ -117,7 +117,7 @@ start_docker() {
     docker-compose up -d
     sleep 5
     
-    local services=("kanban-nacos" "kanban-mysql" "kanban-redis" "kanban-kafka")
+    local services=("planka-nacos" "planka-mysql" "planka-redis" "planka-kafka")
     for service in "${services[@]}"; do
         if docker ps | grep -q "$service"; then
             log_success "$service 运行中"
@@ -334,8 +334,8 @@ show_status() {
     done
     
     echo -e "\n${CYAN}访问地址:${NC}"
-    echo -e "  应用: ${GREEN}http://localhost:8000${NC}"
-    echo -e "  Nacos: ${GREEN}http://localhost:18848/nacos${NC}"
+    echo -e "  应用: ${GREEN}http://localhost:18000${NC}"
+    echo -e "  Nacos: ${GREEN}http://localhost:28848/nacos${NC}"
 }
 
 # ============================================

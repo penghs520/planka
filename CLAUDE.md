@@ -16,8 +16,8 @@
 ```
 
 **访问地址**：
-- 前端访问界面: http://localhost:3000 (`cd kanban-ui && pnpm dev`)
-- Nacos: http://localhost:18848/nacos (nacos/nacos)
+- 前端访问界面: http://localhost:13000 (`cd kanban-ui && pnpm dev`)
+- Nacos: http://localhost:28848/nacos (nacos/nacos)
 
 ---
 

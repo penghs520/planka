@@ -1,8 +1,8 @@
 # 构建命令 docker build  --platform linux/amd64 -t zgraph:latest-ubuntu-amd64 .
 # 不带缓存 docker build  --no-cache --platform linux/amd64 -t zgraph:latest-ubuntu-amd64 .
 
-# 运行命令 docker run -d --name zgraph -p 3897:3897 -v /host/path/to/data:/app/data -v /host/path/to/zgraph.conf:/etc/zgraph.conf zgraph:latest-ubuntu-amd64
-# 例如 docker run -d --name zgraph -p 3897:3897 -v /tmp/zgraph/data:/app/data -v /tmp/zgraph/logs:/app/logs  -v /tmp/zgraph.conf:/etc/zgraph.conf zgraph:latest-ubuntu-amd64
+# 运行命令 docker run -d --name zgraph -p 13897:13897 -v /host/path/to/data:/app/data -v /host/path/to/zgraph.conf:/etc/zgraph.conf zgraph:latest-ubuntu-amd64
+# 例如 docker run -d --name zgraph -p 13897:13897 -v /tmp/zgraph/data:/app/data -v /tmp/zgraph/logs:/app/logs  -v /tmp/zgraph.conf:/etc/zgraph.conf zgraph:latest-ubuntu-amd64
 
 
 # 第一阶段：构建阶段

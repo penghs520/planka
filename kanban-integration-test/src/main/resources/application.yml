@@ -1,5 +1,5 @@
 server:
-  port: 8099
+  port: 18099
 
 spring:
   application:
@@ -9,7 +9,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: ${NACOS_SERVER_ADDR:localhost:18848}
+        server-addr: ${NACOS_SERVER_ADDR:localhost:28848}
         namespace: ${NACOS_NAMESPACE:public}
         # 集成测试不需要注册到 Nacos
         register-enabled: false
@@ -31,4 +31,4 @@ logging:
 
 # 测试用配置
 gateway:
-  base-url: http://localhost:8080
+  base-url: http://localhost:18000

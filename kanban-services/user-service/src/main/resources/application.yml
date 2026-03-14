@@ -1,5 +1,5 @@
 server:
-  port: 8102
+  port: 18102
   # Tomcat 连接管理配置
   tomcat:
     # 连接超时（毫秒）
@@ -23,10 +23,10 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: ${NACOS_SERVER_ADDR:localhost:18848}
+        server-addr: ${NACOS_SERVER_ADDR:localhost:28848}
         namespace: ${NACOS_NAMESPACE:public}
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:13306}/kanban_user?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:23306}/kanban_user?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: ${MYSQL_USERNAME:root}
     password: ${MYSQL_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
