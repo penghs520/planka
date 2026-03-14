@@ -188,7 +188,7 @@ public class RetryConfig {
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌─────────────────────┐                                        │
-│  │  BizRuleEventListener │  ◄─── Kafka: planka-card-events     │
+│  │  BizRuleEventListener │  ◄─── Kafka: kanban-card-events     │
 │  └──────────┬──────────┘                                        │
 │             │ 事件分发                                            │
 │             ▼                                                    │
@@ -252,7 +252,7 @@ public class RetryConfig {
 ### 4.1 领域模型包
 
 ```
-dev.planka.domain.schema.definition.rule/
+cn.agilean.kanban.domain.schema.definition.rule/
 ├── BizRuleDefinition.java           # 规则定义主类
 ├── RuleExecutionLog.java            # 执行日志实体
 ├── RetryConfig.java                 # 重试配置
@@ -279,7 +279,7 @@ dev.planka.domain.schema.definition.rule/
 ### 4.2 服务层包
 
 ```
-dev.planka.card.service.rule/
+cn.agilean.kanban.card.service.rule/
 ├── trigger/
 │   ├── BizRuleEventListener.java    # 事件监听器
 │   └── BizRuleTriggerService.java   # 规则触发服务
@@ -615,7 +615,7 @@ CardTypeFormDrawer.vue
 
 ### 10.2 类型定义
 
-详见 `planka-ui/src/types/biz-rule.ts`
+详见 `kanban-ui/src/types/biz-rule.ts`
 
 ---
 

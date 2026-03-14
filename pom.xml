@@ -4,21 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.planka</groupId>
-    <artifactId>planka</artifactId>
+    <groupId>cn.agilean.kanban</groupId>
+    <artifactId>agilean-kanban2</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>agilean planka</name>
+    <name>agilean kanban</name>
     <description>敏捷看板系统</description>
 
     <!-- 模块定义 -->
     <modules>
-        <module>planka-kernel</module>
-        <module>planka-infrastructure</module>
-        <module>planka-services</module>
-        <module>planka-graph-driver</module>
-        <module>planka-apis</module>
+        <module>kanban-kernel</module>
+        <module>kanban-infrastructure</module>
+        <module>kanban-starters</module>
+        <module>kanban-services</module>
+        <module>kanban-integration-test</module>
+        <module>zgraph-driver</module>
+        <module>kanban-apis</module>
     </modules>
 
     <!-- 版本管理 -->
@@ -63,6 +65,9 @@
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+
+        <!-- 插件框架版本 -->
+        <pf4j.version>3.12.0</pf4j.version>
     </properties>
 
     <!-- 依赖管理 -->
@@ -97,92 +102,87 @@
 
             <!-- 项目内部模块 -->
             <dependency>
-                <groupId>dev.planka</groupId>
-                <artifactId>planka-common</artifactId>
+                <groupId>cn.agilean.kanban</groupId>
+                <artifactId>kanban-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
-                <artifactId>planka-domain</artifactId>
+                <groupId>cn.agilean.kanban</groupId>
+                <artifactId>kanban-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
-                <artifactId>planka-event</artifactId>
+                <groupId>cn.agilean.kanban</groupId>
+                <artifactId>kanban-event</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>schema-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>user-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>card-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>view-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
-                <artifactId>workload-api</artifactId>
+                <groupId>cn.agilean.kanban</groupId>
+                <artifactId>kanban-infra-schema-cache</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
-                <artifactId>planka-infra-schema-cache</artifactId>
+                <groupId>cn.agilean.kanban</groupId>
+                <artifactId>kanban-infra-card-cache</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
-                <artifactId>planka-infra-card-cache</artifactId>
+                <groupId>cn.agilean.kanban</groupId>
+                <artifactId>kanban-infra-expression</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
-                <artifactId>planka-infra-expression</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>oss-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>comment-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>oss-plugin-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>oss-plugin-local</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>oss-plugin-minio</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>notification-plugin-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>dev.planka</groupId>
+                <groupId>cn.agilean.kanban</groupId>
                 <artifactId>notification-plugin-builtin</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -224,6 +224,12 @@
                 <version>${protobuf.version}</version>
             </dependency>
 
+            <!-- 插件框架 -->
+            <dependency>
+                <groupId>org.pf4j</groupId>
+                <artifactId>pf4j</artifactId>
+                <version>${pf4j.version}</version>
+            </dependency>
             <!-- 数据库 -->
             <dependency>
                 <groupId>com.mysql</groupId>

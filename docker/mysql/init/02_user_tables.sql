@@ -4,11 +4,11 @@
 -- ============================================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS planka_user
+CREATE DATABASE IF NOT EXISTS kanban_user
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE planka_user;
+USE kanban_user;
 
 -- ============================================================
 -- 1. sys_user 用户表
@@ -53,7 +53,6 @@ CREATE TABLE IF NOT EXISTS sys_organization (
     logo VARCHAR(500) NULL COMMENT '组织Logo URL',
 
     member_card_type_id VARCHAR(64) NULL COMMENT '成员卡片类型ID',
-    attendance_enabled TINYINT(1) NOT NULL DEFAULT 0 COMMENT '考勤功能是否启用',
     status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '状态(ACTIVE/DISABLED/DELETED)',
 
     created_by VARCHAR(64) NOT NULL COMMENT '创建人ID',

@@ -4,11 +4,11 @@
 -- ============================================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS planka_extension
+CREATE DATABASE IF NOT EXISTS kanban_extension
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE planka_extension;
+USE kanban_extension;
 
 -- ============================================================
 -- 1. card_history_meta 卡片历史表元数据

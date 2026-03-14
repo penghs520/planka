@@ -206,7 +206,7 @@ public sealed interface FixedValue
 ## 3. 包结构设计
 
 ```
-dev.planka.domain.schema.definition.action/
+cn.agilean.kanban.domain.schema.definition.action/
 ├── CardActionConfigDefinition.java    # 主配置类
 ├── CardActionId.java                  # 动作ID值对象
 ├── ActionCategory.java                # 动作类别枚举
@@ -233,8 +233,8 @@ dev.planka.domain.schema.definition.action/
 ```
 
 > **注意**：
-> - `FixedValue` 与 `field.dev.planka.domain.FieldValue` 区分，这里是用于动作赋值的固定值配置
-> - `ReferenceFieldAssignment` 复用现有的 `link.dev.planka.domain.Path` 类
+> - `FixedValue` 与 `cn.agilean.kanban.domain.field.FieldValue` 区分，这里是用于动作赋值的固定值配置
+> - `ReferenceFieldAssignment` 复用现有的 `cn.agilean.kanban.domain.link.Path` 类
 > - `LinkValue` 同时用于卡片关联和人员字段（人员也是一种关联）
 
 ---
@@ -305,9 +305,9 @@ CardDetailPage.vue
 
 | 动作 | 显示条件 | 执行行为 |
 |------|----------|----------|
-| 丢弃 | 卡片状态为 ACTIVE | 设置 cardStyle=DISCARDED |
-| 归档 | 卡片状态为 ACTIVE | 设置 cardStyle=ARCHIVED |
-| 还原 | 卡片状态为 DISCARDED 或 ARCHIVED | 设置 cardStyle=ACTIVE |
+| 丢弃 | 卡片状态为 ACTIVE | 设置 cardCycle=DISCARDED |
+| 归档 | 卡片状态为 ACTIVE | 设置 cardCycle=ARCHIVED |
+| 还原 | 卡片状态为 DISCARDED 或 ARCHIVED | 设置 cardCycle=ACTIVE |
 
 ### 6.2 切换类动作
 

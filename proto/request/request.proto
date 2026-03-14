@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package pgraph.request;
+package zgraph.request;
 
 import "auth/auth.proto";
 import "query/query.proto";
@@ -8,7 +8,7 @@ import "linkquery/linkquery.proto";
 import "write/write.proto";
 import "admin/admin.proto";
 
-option java_package = "planka.graph.driver.proto.request";
+option java_package = "zgraph.driver.proto.request";
 option java_multiple_files = true;
 
 message Request {

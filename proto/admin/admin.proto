@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package pgraph.admin;
+package zgraph.admin;
 
-option java_package = "planka.graph.driver.proto.admin";
+option java_package = "zgraph.driver.proto.admin";
 option java_multiple_files = true;
 
 // 更新日志级别请求

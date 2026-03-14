@@ -1,10 +1,10 @@
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS planka_extension
+CREATE DATABASE IF NOT EXISTS kanban_extension
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE planka_extension;
+USE kanban_extension;
 
 -- 评论主表
 CREATE TABLE IF NOT EXISTS comment (

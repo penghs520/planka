@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package pgraph.model;
+package zgraph.model;
 
 import "field/field_value.proto";
 import "common/enums.proto";
 
-option java_package = "planka.graph.driver.proto.model";
+option java_package = "zgraph.driver.proto.model";
 option java_multiple_files = true;
 
 // 卡片
@@ -27,7 +27,7 @@ message Card {
   string status_id = 10;                  // 价值流状态ID  无需记录价值流阶段ID
 
   // ==================== 属性值 ====================
-  map<string, pgraph.field.FieldValue> custom_field_value_map = 11;
+  map<string, zgraph.field.FieldValue> custom_field_value_map = 11;
 
   // ==================== 关联卡片 ====================
   map<string, CardList> link_card_map = 12;
