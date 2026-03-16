@@ -70,7 +70,7 @@ async function handleLogout() {
     <!-- 顶部 Logo -->
     <div class="top-bar">
       <img src="/favicon.svg" alt="Logo" class="top-logo" />
-      <span class="top-title">Planka planka</span>
+      <span class="top-title">planka</span>
     </div>
 
     <div class="select-org-card">

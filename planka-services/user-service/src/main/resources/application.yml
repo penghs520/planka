@@ -57,7 +57,7 @@ mybatis-plus:
 
 # JWT配置
 jwt:
-  secret: ${JWT_SECRET:planka-planka-jwt-secret-key-must-be-at-least-256-bits-long-for-hs256}
+  secret: ${JWT_SECRET:planka-jwt-secret-key-must-be-at-least-256-bits-long-for-hs256}
   access-token-expiration: 900      # 15分钟（秒）
   refresh-token-expiration: 604800  # 7天（秒）
 
