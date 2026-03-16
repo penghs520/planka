@@ -1,6 +1,6 @@
 # planka 开发规则
 
-> 系统架构详见 [docs/architecture（系统整体架构设计）.md](docs/architecture（系统整体架构设计）.md)
+> 系统架构详见 [docs/architecture（系统整体架构设计）.md](docs/系统整体架构设计)
 
 ## Quick Start
 
