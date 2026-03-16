@@ -9,7 +9,7 @@ import org.pf4j.ExtensionPoint;
  * 保持向后兼容，现有代码无需修改
  * </p>
  *
- * @author Agilean
+ * @author Planka
  * @since 2.0.0
  */
 public interface NotificationChannelPlugin extends NotificationChannel, ExtensionPoint {

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 停止 Agilean planka 所有 Java 服务
+# 停止 Planka planka 所有 Java 服务
 # 支持按端口或按应用名称停止
 
 # 服务端口号列表

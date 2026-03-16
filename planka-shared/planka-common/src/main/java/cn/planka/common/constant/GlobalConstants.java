@@ -3,9 +3,9 @@ package cn.planka.common.constant;
 /**
  * 系统全局常量定义
  */
-public final class KanbanConstants {
+public final class GlobalConstants {
 
-    private KanbanConstants() {
+    private GlobalConstants() {
         throw new UnsupportedOperationException("Constants class cannot be instantiated");
     }
 

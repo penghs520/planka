@@ -33,7 +33,7 @@ public class BuiltinNotificationChannel implements NotificationChannelPlugin {
                 .name("系统通知")
                 .description("系统内置站内信通知，用户可在通知中心查看")
                 .version(version())
-                .provider("Agilean")
+                .provider("Planka")
                 .supportsRichContent(true)
                 .supportsAttachment(false)
                 .configFields(List.of())  // 无需额外配置

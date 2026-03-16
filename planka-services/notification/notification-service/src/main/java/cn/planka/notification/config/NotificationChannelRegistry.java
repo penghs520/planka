@@ -16,7 +16,7 @@ import java.util.Optional;
  * 保持向后兼容
  * </p>
  *
- * @author Agilean
+ * @author Planka
  * @since 1.0.0
  * @deprecated 使用 {@link HybridPluginManager} 替代
  */

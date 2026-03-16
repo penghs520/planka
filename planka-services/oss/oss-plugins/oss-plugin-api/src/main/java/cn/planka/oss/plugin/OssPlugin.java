@@ -27,7 +27,7 @@ public interface OssPlugin {
      * 插件提供者
      */
     default String provider() {
-        return "Agilean";
+        return "Planka";
     }
 
     /**

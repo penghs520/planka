@@ -38,7 +38,7 @@
 //                .pluginId("email")
 //                .pluginState("STARTED")
 //                .version("1.0.0")
-//                .provider("Agilean")
+//                .provider("Planka")
 //                .build();
 //        when(pluginManager.getAllPlugins()).thenReturn(List.of(pluginInfo));
 //

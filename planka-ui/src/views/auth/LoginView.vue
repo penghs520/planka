@@ -92,7 +92,7 @@ function goToActivate() {
     <!-- 顶部 Logo -->
     <div class="top-bar">
       <img src="/favicon.svg" alt="Logo" class="top-logo" />
-      <span class="top-title">Agilean planka</span>
+      <span class="top-title">Planka planka</span>
     </div>
 
     <!-- 左侧：登录表单区 -->

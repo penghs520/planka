@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * 优先从 PF4J 加载，回退到 Spring Bean
  * </p>
  *
- * @author Agilean
+ * @author Planka
  * @since 2.0.0
  */
 @Slf4j

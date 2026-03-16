@@ -1,4 +1,4 @@
-# agilean-planka 开发规则
+# planka-planka 开发规则
 
 > 系统架构详见 [docs/architecture（系统整体架构设计）.md](docs/architecture（系统整体架构设计）.md)
 
@@ -24,7 +24,7 @@
 ## 项目结构
 
 ```
-agilean-planka2/
+planka/
 ├── docs/                   # 放置功能设计文档，禁止存放过程文档，如缺陷修复过程、优化过程等
 ├── planka-ui/              # 前端 (Vue 3 + Arco Design + UnoCSS)
 ├── planka-kernel/          # 核心领域模型

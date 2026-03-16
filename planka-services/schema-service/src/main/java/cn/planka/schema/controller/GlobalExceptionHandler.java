@@ -1,7 +1,7 @@
 package cn.planka.schema.controller;
 
 import cn.planka.common.exception.CommonErrorCode;
-import cn.planka.common.exception.KanbanException;
+import cn.planka.common.exception.BizException;
 import cn.planka.common.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,9 @@ public class GlobalExceptionHandler {
     /**
      * 处理业务异常
      */
-    @ExceptionHandler(KanbanException.class)
+    @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.OK)
-    public Result<Void> handleKanbanException(KanbanException e) {
+    public Result<Void> handleBizException(BizException e) {
         log.warn("Business exception: {}", e.getMessage());
         return Result.failure(e.getErrorCode(), e.getMessage());
     }
@@ -67,16 +67,16 @@ public class GlobalExceptionHandler {
     /**
      * 处理请求体反序列化异常（如JSON格式错误、必填字段缺失等）
      * <p>
-     * 当构造函数中抛出 KanbanException 时，会被 Jackson 包装为 HttpMessageNotReadableException，
-     * 此处从异常链中提取原始 KanbanException 并按业务异常处理。
+     * 当构造函数中抛出 BizException 时，会被 Jackson 包装为 HttpMessageNotReadableException，
+     * 此处从异常链中提取原始 BizException 并按业务异常处理。
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        KanbanException KanbanException = extractKanbanException(e);
-        if (KanbanException != null) {
-            log.warn("Business exception during deserialization: {}", KanbanException.getMessage());
-            return Result.failure(KanbanException.getErrorCode(), KanbanException.getMessage());
+        BizException BizException = extractBizException(e);
+        if (BizException != null) {
+            log.warn("Business exception during deserialization: {}", BizException.getMessage());
+            return Result.failure(BizException.getErrorCode(), BizException.getMessage());
         }
         Throwable cause = e.getMostSpecificCause();
         String message = cause != null ? cause.getMessage() : e.getMessage();
@@ -84,10 +84,10 @@ public class GlobalExceptionHandler {
         return Result.failure(CommonErrorCode.BAD_REQUEST, message);
     }
 
-    private KanbanException extractKanbanException(Throwable e) {
+    private BizException extractBizException(Throwable e) {
         Throwable current = e;
         while (current != null) {
-            if (current instanceof KanbanException ke) {
+            if (current instanceof BizException ke) {
                 return ke;
             }
             current = current.getCause();

@@ -15,7 +15,7 @@
 ///**
 // * 通知插件管理 REST API
 // *
-// * @author Agilean
+// * @author Planka
 // * @since 2.0.0
 // */
 //@Slf4j

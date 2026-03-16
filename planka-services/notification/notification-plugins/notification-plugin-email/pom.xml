@@ -20,7 +20,7 @@
         <plugin.id>email</plugin.id>
         <plugin.class>cn.planka.notification.plugin.email.EmailPluginDef</plugin.class>
         <plugin.version>${project.version}</plugin.version>
-        <plugin.provider>Agilean</plugin.provider>
+        <plugin.provider>Planka</plugin.provider>
     </properties>
 
     <dependencies>

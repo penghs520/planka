@@ -18,7 +18,7 @@ import java.util.*;
  * 支持纯文本和 HTML 富文本
  * </p>
  *
- * @author Agilean
+ * @author Planka
  * @since 2.0.0
  */
 @Slf4j
@@ -40,7 +40,7 @@ public class EmailChannel implements NotificationChannelPlugin {
                 .name("邮件通知")
                 .description("通过 SMTP 发送邮件通知")
                 .version(version())
-                .provider("Agilean")
+                .provider("Planka")
                 .supportsRichContent(true)
                 .supportsAttachment(true)
                 .configFields(buildConfigFields())

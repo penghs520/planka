@@ -36,7 +36,7 @@ describe('NotificationPlugins', () => {
         pluginName: 'Email Plugin',
         pluginState: 'STARTED',
         version: '1.0.0',
-        provider: 'Agilean',
+        provider: 'Planka',
       },
     ]
 

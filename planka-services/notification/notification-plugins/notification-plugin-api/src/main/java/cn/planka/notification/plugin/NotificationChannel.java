@@ -33,7 +33,7 @@ public interface NotificationChannel {
      * 渠道提供者
      */
     default String provider() {
-        return "Agilean";
+        return "Planka";
     }
 
     /**

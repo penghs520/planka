@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const BASE_URL = 'http://localhost:3000'
 const GATEWAY = 'http://localhost:8000'
-const E2E_EMAIL = process.env.E2E_EMAIL || 'super@agilean.cn'
+const E2E_EMAIL = process.env.E2E_EMAIL || 'super@planka.cn'
 const E2E_PASSWORD = process.env.E2E_PASSWORD || 'changeme'
 
 async function globalSetup(_config: FullConfig) {

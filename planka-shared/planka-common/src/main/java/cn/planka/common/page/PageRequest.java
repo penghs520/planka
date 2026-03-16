@@ -1,6 +1,6 @@
 package cn.planka.common.page;
 
-import cn.planka.common.constant.KanbanConstants;
+import cn.planka.common.constant.GlobalConstants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,10 +16,10 @@ public class PageRequest{
 
 
     /** 页码（从0开始） */
-    private int page = KanbanConstants.DEFAULT_PAGE;
+    private int page = GlobalConstants.DEFAULT_PAGE;
 
     /** 每页大小 */
-    private int size = KanbanConstants.DEFAULT_PAGE_SIZE;
+    private int size = GlobalConstants.DEFAULT_PAGE_SIZE;
 
     /** 排序字段 */
     private List<SortField> sorts;
@@ -30,7 +30,7 @@ public class PageRequest{
 
     public PageRequest(int page, int size) {
         this.page = Math.max(0, page);
-        this.size = Math.min(Math.max(1, size), KanbanConstants.MAX_PAGE_SIZE);
+        this.size = Math.min(Math.max(1, size), GlobalConstants.MAX_PAGE_SIZE);
         this.sorts = new ArrayList<>();
     }
 

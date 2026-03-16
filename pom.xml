@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.planka</groupId>
-    <artifactId>agilean-planka2</artifactId>
+    <artifactId>planka</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>agilean planka</name>
+    <name>planka planka</name>
     <description>敏捷看板系统</description>
 
     <!-- 模块定义 -->

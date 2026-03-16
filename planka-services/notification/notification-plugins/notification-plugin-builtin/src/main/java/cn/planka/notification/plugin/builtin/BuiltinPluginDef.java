@@ -10,7 +10,7 @@ import org.pf4j.PluginWrapper;
  * PF4J 插件入口，管理插件生命周期
  * </p>
  *
- * @author Agilean
+ * @author Planka
  * @since 2.0.0
  */
 @Slf4j

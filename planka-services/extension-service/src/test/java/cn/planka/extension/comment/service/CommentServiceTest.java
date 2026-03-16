@@ -1,7 +1,6 @@
 package cn.planka.extension.comment.service;
 
 import cn.planka.api.comment.dto.CommentDTO;
-import cn.planka.api.comment.dto.CommentListResponse;
 import cn.planka.api.comment.request.CreateCommentRequest;
 import cn.planka.api.comment.request.UpdateCommentRequest;
 import cn.planka.event.comment.UserOperationSource;

@@ -57,14 +57,14 @@ mybatis-plus:
 
 # JWT配置
 jwt:
-  secret: ${JWT_SECRET:agilean-planka-jwt-secret-key-must-be-at-least-256-bits-long-for-hs256}
+  secret: ${JWT_SECRET:planka-planka-jwt-secret-key-must-be-at-least-256-bits-long-for-hs256}
   access-token-expiration: 900      # 15分钟（秒）
   refresh-token-expiration: 604800  # 7天（秒）
 
 # 用户服务配置
 user:
   super-admin:
-    email: super@agilean.cn
+    email: super@planka.cn
     default-password: ${SUPER_ADMIN_PASSWORD:changeme}
   login:
     max-fail-count: 5

@@ -43,7 +43,7 @@ class EmailChannelTest {
 
         assertThat(def.getId()).isEqualTo("email");
         assertThat(def.getName()).isEqualTo("邮件通知");
-        assertThat(def.getProvider()).isEqualTo("Agilean");
+        assertThat(def.getProvider()).isEqualTo("Planka");
         assertThat(def.isSupportsRichContent()).isTrue();
         assertThat(def.isSupportsAttachment()).isTrue();
         assertThat(def.getConfigFields()).hasSize(6);

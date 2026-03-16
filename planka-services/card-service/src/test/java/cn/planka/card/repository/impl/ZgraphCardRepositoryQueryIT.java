@@ -2071,16 +2071,16 @@ class ZgraphCardRepositoryQueryIT {
 
         // Given
         CardId cardId1 = createTestCardWithField(testCaseId, orgId, cardTypeId, "卡片A",
-                urlValue(fieldId, "https://agilean.com/page1", "页面1"));
+                urlValue(fieldId, "https://planka.com/page1", "页面1"));
         CardId cardId2 = createTestCardWithField(testCaseId, orgId, cardTypeId, "卡片B",
-                urlValue(fieldId, "https://agilean.com/page2", "页面2"));
+                urlValue(fieldId, "https://planka.com/page2", "页面2"));
         createTestCardWithField(testCaseId, orgId, cardTypeId, "卡片C",
                 urlValue(fieldId, "https://other.com/page", "其他页面"));
 
         // When
         WebUrlConditionItem condition = new WebUrlConditionItem(
                 new WebUrlConditionItem.WebUrlSubject(null, fieldId),
-                new WebUrlConditionItem.WebUrlOperator.Contains("agilean.com")
+                new WebUrlConditionItem.WebUrlOperator.Contains("planka.com")
         );
         CardQueryRequest request = createQueryRequest(orgId, cardTypeId, condition);
         List<CardDTO> result = repository.query(request);
@@ -2103,14 +2103,14 @@ class ZgraphCardRepositoryQueryIT {
 
         // Given
         createTestCardWithField(testCaseId, orgId, cardTypeId, "卡片A",
-                urlValue(fieldId, "https://agilean.com/page1", "页面1"));
+                urlValue(fieldId, "https://planka.com/page1", "页面1"));
         CardId cardId2 = createTestCardWithField(testCaseId, orgId, cardTypeId, "卡片B",
                 urlValue(fieldId, "https://other.com/page", "其他页面"));
 
         // When
         WebUrlConditionItem condition = new WebUrlConditionItem(
                 new WebUrlConditionItem.WebUrlSubject(null, fieldId),
-                new WebUrlConditionItem.WebUrlOperator.NotContains("agilean.com")
+                new WebUrlConditionItem.WebUrlOperator.NotContains("planka.com")
         );
         CardQueryRequest request = createQueryRequest(orgId, cardTypeId, condition);
         List<CardDTO> result = repository.query(request);

@@ -116,7 +116,7 @@ spring:
 
 # JWT 配置
 jwt:
-  secret: ${JWT_SECRET:agilean-planka-jwt-secret-key-must-be-at-least-256-bits-long-for-hs256}
+  secret: ${JWT_SECRET:planka-planka-jwt-secret-key-must-be-at-least-256-bits-long-for-hs256}
   # 白名单路径（不需要认证）
   white-list:
     - /api/v1/auth/login

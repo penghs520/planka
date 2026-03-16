@@ -46,7 +46,7 @@
                         <manifestEntries>
                             <Plugin-Id>builtin</Plugin-Id>
                             <Plugin-Version>1.0.0</Plugin-Version>
-                            <Plugin-Provider>Agilean</Plugin-Provider>
+                            <Plugin-Provider>Planka</Plugin-Provider>
                             <Plugin-Class>cn.planka.notification.plugin.builtin.BuiltinPluginDef</Plugin-Class>
                         </manifestEntries>
                     </archive>

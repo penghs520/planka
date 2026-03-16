@@ -334,6 +334,6 @@ public class SchemaReferenceAnalyzer {
         }
         // 只递归分析项目内的类型
         String packageName = clazz.getPackageName();
-        return packageName.startsWith("cn.agilean");
+        return packageName.startsWith("cn.planka");
     }
 }

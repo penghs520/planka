@@ -69,7 +69,7 @@ public class CardCacheConfig {
      * 实现二级缓存：L1 (Caffeine) + L2 (Redis)
      *
      * @param loader        卡片基础信息加载器
-     * @param redisTemplate Redis 模板
+     * @param cardBasicInfoRedisTemplate Redis 模板
      * @param properties    缓存配置属性
      * @return 卡片缓存服务
      */
