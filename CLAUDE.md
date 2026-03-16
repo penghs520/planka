@@ -1,4 +1,4 @@
-# agilean-kanban 开发规则
+# agilean-planka 开发规则
 
 > 系统架构详见 [docs/architecture（系统整体架构设计）.md](docs/architecture（系统整体架构设计）.md)
 
@@ -6,17 +6,17 @@
 
 ```bash
 # 构建前后端
-./scripts/kanban-dev.sh build
+./scripts/planka-dev.sh build
 
 # 启动所有服务（Docker + 后端）
-./scripts/kanban-dev.sh up
+./scripts/planka-dev.sh up
 
 # 停止所有服务
-./scripts/kanban-dev.sh down
+./scripts/planka-dev.sh down
 ```
 
 **访问地址**：
-- 前端访问界面: http://localhost:13000 (`cd kanban-ui && pnpm dev`)
+- 前端访问界面: http://localhost:13000 (`cd planka-ui && pnpm dev`)
 - Nacos: http://localhost:28848/nacos (nacos/nacos)
 
 ---
@@ -24,15 +24,15 @@
 ## 项目结构
 
 ```
-agilean-kanban2/
+agilean-planka2/
 ├── docs/                   # 放置功能设计文档，禁止存放过程文档，如缺陷修复过程、优化过程等
-├── kanban-ui/              # 前端 (Vue 3 + Arco Design + UnoCSS)
-├── kanban-kernel/          # 核心领域模型
-├── kanban-services/        # 微服务模块
-├── kanban-apis/            # API 定义
-├── kanban-infrastructure/  # 基础设施
-├── kanban-starters/        # Spring Boot Starters
-├── kanban-integration-test/# 集成测试
+├── planka-ui/              # 前端 (Vue 3 + Arco Design + UnoCSS)
+├── planka-kernel/          # 核心领域模型
+├── planka-services/        # 微服务模块
+├── planka-apis/            # API 定义
+├── planka-infrastructure/  # 基础设施
+├── planka-starters/        # Spring Boot Starters
+├── planka-integration-test/# 集成测试
 ├── zgraph/                 # 图数据库
 ├── zgraph-driver/          # 图数据库驱动
 ├── docker/                 # Docker 配置
@@ -80,7 +80,7 @@ agilean-kanban2/
 
 ## 命名规范
 
-- 包名: `cn.agilean.kanban.{module}`
+- 包名: `cn.planka.{module}`
 - 类名后缀参考：`Id`, `Definition`, `Config`, `Entity`, `Event`, `DTO`, `Request`, `Response`, `Client`, `Service`, `Repository`, `Mapper`, `Converter`
 
 ---
@@ -104,8 +104,8 @@ agilean-kanban2/
 
 ### 技术栈
 - **UI 框架**: Arco Design Vue
-- **原子化 CSS**: UnoCSS（配置见 `kanban-ui/uno.config.ts`）
-- **主题变量**: `kanban-ui/src/styles/theme.css`
+- **原子化 CSS**: UnoCSS（配置见 `planka-ui/uno.config.ts`）
+- **主题变量**: `planka-ui/src/styles/theme.css`
 
 ### 配色
 | 用途 | 变量 | 色值 |
@@ -173,11 +173,11 @@ font-family: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", -apple-syste
 
 | 工具 | 路径 | 适用场景 | 详细文档 |
 |------|------|----------|----------|
-| `AssertUtils` | `kanban-common/util/AssertUtils.java` | 参数校验、前置条件检查 | [查看详情](docs/dev/tools.md#assertutils---参数校验断言) |
+| `AssertUtils` | `planka-common/util/AssertUtils.java` | 参数校验、前置条件检查 | [查看详情](docs/dev/tools.md#assertutils---参数校验断言) |
 | `ConditionYieldBuilder` | `card-api/util/ConditionYieldBuilder.java` | 从条件中提取字段构建 Yield | [查看详情](docs/dev/tools.md#conditionyieldbuilder---条件-yield-构建器) |
-| `TextExpressionTemplateResolver` | `kanban-infra-expression/TextExpressionTemplateResolver.java` | 解析模板变量生成动态文本 | [查看详情](docs/dev/tools.md#textexpressiontemplateresolver---模板表达式解析器) |
-| `CardCacheService` | `kanban-infra-card-cache/` | 卡片基础信息二级缓存 | [查看详情](docs/dev/tools.md#cardcacheservice---卡片缓存) |
-| `SchemaCacheService` | `kanban-infra-schema-cache/` | Schema 定义二级缓存 | [查看详情](docs/dev/tools.md#schemacacheservice---schema-缓存) |
+| `TextExpressionTemplateResolver` | `planka-infra-expression/TextExpressionTemplateResolver.java` | 解析模板变量生成动态文本 | [查看详情](docs/dev/tools.md#textexpressiontemplateresolver---模板表达式解析器) |
+| `CardCacheService` | `planka-infra-card-cache/` | 卡片基础信息二级缓存 | [查看详情](docs/dev/tools.md#cardcacheservice---卡片缓存) |
+| `SchemaCacheService` | `planka-infra-schema-cache/` | Schema 定义二级缓存 | [查看详情](docs/dev/tools.md#schemacacheservice---schema-缓存) |
 | `FieldConfigQueryService` | `schema-api/service/FieldConfigQueryService.java` | 获取卡片类型字段配置（含继承解析） | [查看详情](docs/dev/tools.md#fieldconfigqueryservice---字段配置查询) |
 
 ### 具体类型的Schema 缓存查询类

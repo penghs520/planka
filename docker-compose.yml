@@ -29,7 +29,7 @@ services:
       - "23306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: kanban_schema
+      MYSQL_DATABASE: planka_schema
       TZ: Asia/Shanghai
     volumes:
       - mysql-data:/var/lib/mysql

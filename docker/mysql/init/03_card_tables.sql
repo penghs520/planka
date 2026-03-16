@@ -4,11 +4,11 @@
 -- ============================================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS kanban_card
+CREATE DATABASE IF NOT EXISTS planka_card
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE kanban_card;
+USE planka_card;
 
 -- ============================================================
 -- 1. sequence_segment 号段分配表

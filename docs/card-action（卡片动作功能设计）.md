@@ -206,7 +206,7 @@ public sealed interface FixedValue
 ## 3. 包结构设计
 
 ```
-cn.agilean.kanban.domain.schema.definition.action/
+cn.planka.domain.schema.definition.action/
 ├── CardActionConfigDefinition.java    # 主配置类
 ├── CardActionId.java                  # 动作ID值对象
 ├── ActionCategory.java                # 动作类别枚举
@@ -233,8 +233,8 @@ cn.agilean.kanban.domain.schema.definition.action/
 ```
 
 > **注意**：
-> - `FixedValue` 与 `cn.agilean.kanban.domain.field.FieldValue` 区分，这里是用于动作赋值的固定值配置
-> - `ReferenceFieldAssignment` 复用现有的 `cn.agilean.kanban.domain.link.Path` 类
+> - `FixedValue` 与 `field.cn.planka.domain.FieldValue` 区分，这里是用于动作赋值的固定值配置
+> - `ReferenceFieldAssignment` 复用现有的 `link.cn.planka.domain.Path` 类
 > - `LinkValue` 同时用于卡片关联和人员字段（人员也是一种关联）
 
 ---

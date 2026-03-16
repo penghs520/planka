@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 停止 Agilean Kanban 所有 Java 服务
+# 停止 Agilean planka 所有 Java 服务
 # 支持按端口或按应用名称停止
 
 # 服务端口号列表
@@ -72,7 +72,7 @@ stop_by_name() {
 
 # 停止所有服务
 stop_all() {
-  echo "=== Stopping all Kanban services ==="
+  echo "=== Stopping all planka services ==="
   local stopped=0
 
   for port in "${PORTS[@]}"; do
@@ -120,7 +120,7 @@ EOF
 
 # 列出所有服务
 list_services() {
-  echo "=== Kanban Services ==="
+  echo "=== planka Services ==="
   printf "%-25s %s\n" "Service Name" "Port"
   echo "----------------------------------------"
   for i in "${!SERVICE_NAMES[@]}"; do

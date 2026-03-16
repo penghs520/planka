@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# kanban-dev.sh - 敏捷看板开发环境一键管理脚本（简化版）
+# planka-dev.sh - 敏捷看板开发环境一键管理脚本（简化版）
 #
 # 命令:
 #   build       - 构建前端和后端（不启动服务）
@@ -26,18 +26,18 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 LOGS_DIR="${PROJECT_ROOT}/logs"
 MVN_CMD="${PROJECT_ROOT}/mvnw"
 
-FRONTEND_DIR="${PROJECT_ROOT}/kanban-ui"
+FRONTEND_DIR="${PROJECT_ROOT}/planka-ui"
 FRONTEND_DIST="${FRONTEND_DIR}/dist"
 
 SERVICES=(
-    "kanban-services/gateway-service"
-    "kanban-services/card-service"
-    "kanban-services/user-service"
-    "kanban-services/view-service"
-    "kanban-services/oss/oss-service"
-    "kanban-services/extension-service"
-    "kanban-services/notification/notification-service"
-    "kanban-services/schema-service"
+    "planka-services/gateway-service"
+    "planka-services/card-service"
+    "planka-services/user-service"
+    "planka-services/view-service"
+    "planka-services/oss/oss-service"
+    "planka-services/extension-service"
+    "planka-services/notification/notification-service"
+    "planka-services/schema-service"
 )
 
 SERVICE_NAMES=(
@@ -364,7 +364,7 @@ cmd_e2e() {
     # 检查后端服务是否全部运行
     for port in "${SERVICE_PORTS[@]}"; do
         if ! check_port "$port"; then
-            log_error "后端服务未全部启动，请先执行: ./kanban-dev.sh up"
+            log_error "后端服务未全部启动，请先执行: ./planka-dev.sh up"
             exit 1
         fi
     done
@@ -445,10 +445,10 @@ main() {
 
 show_help() {
     cat << 'EOF'
-kanban-dev.sh - 敏捷看板开发环境管理脚本
+planka-dev.sh - 敏捷看板开发环境管理脚本
 
 用法:
-  ./kanban-dev.sh <command> [options]
+  ./planka-dev.sh <command> [options]
 
 命令:
   build       构建前端和后端（不启动服务）
@@ -464,13 +464,13 @@ kanban-dev.sh - 敏捷看板开发环境管理脚本
   -h, --help             显示帮助
 
 示例:
-  ./kanban-dev.sh build              # 完整构建（前端使用 Docker）
-  ./kanban-dev.sh build --local      # 使用本地 pnpm 构建前端
-  ./kanban-dev.sh build -st          # 构建（跳过测试）
-  ./kanban-dev.sh build -sf -sb      # 仅复制前端制品到网关
-  ./kanban-dev.sh up                 # 启动所有服务
-  ./kanban-dev.sh down               # 停止所有服务
-  ./kanban-dev.sh e2e                # 运行 E2E 测试
+  ./planka-dev.sh build              # 完整构建（前端使用 Docker）
+  ./planka-dev.sh build --local      # 使用本地 pnpm 构建前端
+  ./planka-dev.sh build -st          # 构建（跳过测试）
+  ./planka-dev.sh build -sf -sb      # 仅复制前端制品到网关
+  ./planka-dev.sh up                 # 启动所有服务
+  ./planka-dev.sh down               # 停止所有服务
+  ./planka-dev.sh e2e                # 运行 E2E 测试
 
 EOF
 }

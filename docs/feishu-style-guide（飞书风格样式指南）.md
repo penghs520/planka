@@ -2,10 +2,10 @@
 
 > 本项目前端采用飞书（Lark/Feishu）视觉风格，基于 **Arco Design Vue** 框架进行主题覆盖。
 > 样式实现分布在以下文件中：
-> - 主题变量：`kanban-ui/src/styles/theme.css`
-> - UnoCSS 配置：`kanban-ui/uno.config.ts`
-> - 全局组件覆盖：`kanban-ui/src/style.css`
-> - 管理表格样式：`kanban-ui/src/styles/admin-table.scss`
+> - 主题变量：`planka-ui/src/styles/theme.css`
+> - UnoCSS 配置：`planka-ui/uno.config.ts`
+> - 全局组件覆盖：`planka-ui/src/style.css`
+> - 管理表格样式：`planka-ui/src/styles/admin-table.scss`
 
 ---
 

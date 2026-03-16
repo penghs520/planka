@@ -32,7 +32,7 @@ docker-compose down -v
 
 - Host: localhost
 - Port: 13306
-- Database: kanban_schema
+- Database: planka_schema
 - Username: root
 - Password: root
 
@@ -46,7 +46,7 @@ mysql -h localhost -P 13306 -u root -proot -e "SHOW DATABASES;"
 redis-cli -p 16379 ping
 
 # 验证 Kafka
-docker exec kanban-kafka kafka-topics --bootstrap-server localhost:9092 --list
+docker exec planka-kafka kafka-topics --bootstrap-server localhost:9092 --list
 ```
 
 ## 运行集成测试
@@ -58,8 +58,8 @@ docker-compose up -d
 # 2. 等待服务就绪（约30秒）
 
 # 3. 启动 schema-service（使用 docker profile）
-mvn spring-boot:run -pl kanban-services/schema-service -Dspring-boot.run.profiles=docker
+mvn spring-boot:run -pl planka-services/schema-service -Dspring-boot.run.profiles=docker
 
 # 4. 运行集成测试（新终端）
-mvn test -pl kanban-integration-test -Pintegration-test
+mvn test -pl planka-integration-test -Pintegration-test
 ```

@@ -1,4 +1,4 @@
-    Checking zgraph v1.0.0 (/Users/penghongsi/workspaces/sources/agilean/viber-coding/agilean-kanban2/zgraph)
+    Checking zgraph v1.0.0 (/Users/penghongsi/workspaces/sources/agilean/viber-coding/agilean-planka2/zgraph)
 error[E0432]: unresolved import `crate::proto::zgraph::common::ValueUnitState`
  --> src/cli/query_converter.rs:5:23
   |

@@ -8,8 +8,8 @@
 
 ```
 scripts/
-├── kanban-dev.sh      # 主脚本 (Linux/Mac)
-├── kanban-dev.bat     # 主脚本 (Windows)
+├── planka-dev.sh      # 主脚本 (Linux/Mac)
+├── planka-dev.bat     # 主脚本 (Windows)
 ├── build.sh           # 构建前后端
 ├── start-all.sh       # 快捷启动所有后端服务 + docker
 └── stop-all.sh        # 快捷停止所有后端服务 + docker
@@ -31,18 +31,18 @@ scripts/
 cd scripts
 
 # 构建
-./kanban-dev.sh build
+./planka-dev.sh build
 
 # 构建（跳过测试）
-./kanban-dev.sh build -st
+./planka-dev.sh build -st
 
 # 启动所有服务
-./kanban-dev.sh up
+./planka-dev.sh up
 # 或快捷方式
 ./start-all.sh
 
 # 停止所有服务
-./kanban-dev.sh down
+./planka-dev.sh down
 # 或快捷方式
 ./stop-all.sh
 ```

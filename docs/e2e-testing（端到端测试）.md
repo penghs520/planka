@@ -5,7 +5,7 @@
 ## 目录结构
 
 ```
-kanban-ui/e2e/
+planka-ui/e2e/
 ├── playwright.config.ts        # Playwright 配置
 ├── global-setup.ts             # 全局前置：登录 + 创建测试组织
 ├── global-teardown.ts          # 全局后置：删除测试组织
@@ -36,7 +36,7 @@ kanban-ui/e2e/
 ## 运行测试
 
 ```bash
-cd kanban-ui
+cd planka-ui
 
 # 运行全部 e2e 测试
 pnpm e2e

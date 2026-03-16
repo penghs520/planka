@@ -3,7 +3,7 @@
 ## 1. 接收 Kafka 事件入口
 
 ### 1.1 Kafka 消费者配置
-- **Topic**: `kanban-notification-events`
+- **Topic**: `planka-notification-events`
 - **Consumer Group**: `notification-service-group`
 - **并发消费**: 支持多分区并发处理
 
@@ -11,7 +11,7 @@
 ```java
 @Component
 public class NotificationEventListener {
-    @KafkaListener(topics = "kanban-notification-events")
+    @KafkaListener(topics = "planka-notification-events")
     public void handleEvent(NotificationEvent event) {
         // 委托给事件分发器
         eventDispatcher.dispatch(event);

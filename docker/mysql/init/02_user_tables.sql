@@ -4,11 +4,11 @@
 -- ============================================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS kanban_user
+CREATE DATABASE IF NOT EXISTS planka_user
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE kanban_user;
+USE planka_user;
 
 -- ============================================================
 -- 1. sys_user 用户表

@@ -33,13 +33,13 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 # 获取服务信息的函数
 get_service_info() {
     case "$1" in
-        schema-service) echo "kanban-services/schema-service:8081" ;;
-        user-service) echo "kanban-services/user-service:8082" ;;
-        card-service) echo "kanban-services/card-service:8083" ;;
-        view-service) echo "kanban-services/view-service:8084" ;;
-        extension-service) echo "kanban-services/extension-service:8085" ;;
-        oss-service) echo "kanban-services/oss/oss-service:8088" ;;
-        gateway-service) echo "kanban-services/gateway-service:8000" ;;
+        schema-service) echo "planka-services/schema-service:8081" ;;
+        user-service) echo "planka-services/user-service:8082" ;;
+        card-service) echo "planka-services/card-service:8083" ;;
+        view-service) echo "planka-services/view-service:8084" ;;
+        extension-service) echo "planka-services/extension-service:8085" ;;
+        oss-service) echo "planka-services/oss/oss-service:8088" ;;
+        gateway-service) echo "planka-services/gateway-service:8000" ;;
         *) echo "" ;;
     esac
 }

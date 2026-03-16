@@ -4,11 +4,11 @@
 -- ============================================================
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS kanban_notification
+CREATE DATABASE IF NOT EXISTS planka_notification
     DEFAULT CHARACTER SET utf8mb4
     DEFAULT COLLATE utf8mb4_unicode_ci;
 
-USE kanban_notification;
+USE planka_notification;
 
 -- ============================================================
 -- 1. system_notification 系统通知表（站内信）
