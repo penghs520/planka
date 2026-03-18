@@ -1,9 +1,9 @@
 import request from './request'
 import type {
-  dto.cn.planka.api.comment.CommentDTO,
-  dto.cn.planka.api.comment.CommentListResponse,
-  request.cn.planka.api.comment.CreateCommentRequest,
-  request.cn.planka.api.comment.UpdateCommentRequest,
+  CommentDTO,
+  CommentListResponse,
+  CreateCommentRequest,
+  UpdateCommentRequest,
   MemberSuggestion,
   CardSuggestion,
 } from '@/types/comment'
@@ -18,7 +18,7 @@ export const commentApi = {
   /**
    * 获取卡片评论列表
    */
-  listComments(cardId: string, page = 1, size = 10): Promise<dto.cn.planka.api.comment.CommentListResponse> {
+  listComments(cardId: string, page = 1, size = 10): Promise<CommentListResponse> {
     return request.get(BASE_URL, {
       params: { cardId, page, size },
     })
@@ -27,21 +27,21 @@ export const commentApi = {
   /**
    * 创建评论
    */
-  createComment(data: request.cn.planka.api.comment.CreateCommentRequest): Promise<dto.cn.planka.api.comment.CommentDTO> {
+  createComment(data: CreateCommentRequest): Promise<CommentDTO> {
     return request.post(BASE_URL, data)
   },
 
   /**
    * 更新评论（撤回后重编辑）
    */
-  updateComment(id: string, data: request.cn.planka.api.comment.UpdateCommentRequest): Promise<dto.cn.planka.api.comment.CommentDTO> {
+  updateComment(id: string, data: UpdateCommentRequest): Promise<CommentDTO> {
     return request.put(`${BASE_URL}/${id}`, data)
   },
 
   /**
    * 撤回评论
    */
-  withdrawComment(id: string): Promise<dto.cn.planka.api.comment.CommentDTO> {
+  withdrawComment(id: string): Promise<CommentDTO> {
     return request.post(`${BASE_URL}/${id}/withdraw`)
   },
 

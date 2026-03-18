@@ -7,7 +7,7 @@ import { ref, onMounted, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Message } from '@arco-design/web-vue'
 import { commentApi } from '@/api/comment'
-import type { dto.cn.planka.api.comment.CommentDTO, dto.cn.planka.api.comment.CommentListResponse } from '@/types/comment'
+import type { CommentDTO, CommentListResponse } from '@/types/comment'
 import CommentList from './CommentList.vue'
 import CommentEditor from './CommentEditor.vue'
 
@@ -21,7 +21,7 @@ const props = defineProps<{
 }>()
 
 // 评论列表
-const comments = ref<dto.cn.planka.api.comment.CommentDTO[]>([])
+const comments = ref<CommentDTO[]>([])
 const loading = ref(false)
 const hasMore = ref(false)
 const page = ref(0)
@@ -35,7 +35,7 @@ const isLoadingMore = ref(false)
 const SCROLL_THRESHOLD = 50
 
 // 正在回复的评论
-const replyingTo = ref<dto.cn.planka.api.comment.CommentDTO | null>(null)
+const replyingTo = ref<CommentDTO | null>(null)
 
 // 滚动到底部
 const scrollToBottom = () => {
@@ -73,7 +73,7 @@ const loadComments = async (reset = false) => {
 
   loading.value = true
   try {
-    const response: dto.cn.planka.api.comment.CommentListResponse = await commentApi.listComments(
+    const response: CommentListResponse = await commentApi.listComments(
       props.cardId,
       page.value,
       pageSize
@@ -133,7 +133,7 @@ const handleSubmit = async (content: string, parentId?: string, replyToMemberId?
 
     // 如果是回复，将其添加到对应的评论下
     if (parentId) {
-      const updateReplies = (list: dto.cn.planka.api.comment.CommentDTO[]): dto.cn.planka.api.comment.CommentDTO[] => {
+      const updateReplies = (list: CommentDTO[]): CommentDTO[] => {
         return list.map((comment) => {
           if (comment.id === parentId || comment.id === newComment.rootId) {
             return {
@@ -162,7 +162,7 @@ const handleSubmit = async (content: string, parentId?: string, replyToMemberId?
 }
 
 // 撤回评论
-const handleWithdraw = async (comment: dto.cn.planka.api.comment.CommentDTO) => {
+const handleWithdraw = async (comment: CommentDTO) => {
   try {
     const updatedComment = await commentApi.withdrawComment(comment.id)
     updateCommentInList(updatedComment)
@@ -174,7 +174,7 @@ const handleWithdraw = async (comment: dto.cn.planka.api.comment.CommentDTO) => 
 }
 
 // 删除评论
-const handleDelete = async (comment: dto.cn.planka.api.comment.CommentDTO) => {
+const handleDelete = async (comment: CommentDTO) => {
   try {
     await commentApi.deleteComment(comment.id)
     removeCommentFromList(comment.id)
@@ -186,7 +186,7 @@ const handleDelete = async (comment: dto.cn.planka.api.comment.CommentDTO) => {
 }
 
 // 开始回复
-const handleReply = (comment: dto.cn.planka.api.comment.CommentDTO) => {
+const handleReply = (comment: CommentDTO) => {
   replyingTo.value = comment
 }
 
@@ -196,8 +196,8 @@ const handleCancelReply = () => {
 }
 
 // 更新列表中的评论
-const updateCommentInList = (updatedComment: dto.cn.planka.api.comment.CommentDTO) => {
-  const updateInList = (list: dto.cn.planka.api.comment.CommentDTO[]): dto.cn.planka.api.comment.CommentDTO[] => {
+const updateCommentInList = (updatedComment: CommentDTO) => {
+  const updateInList = (list: CommentDTO[]): CommentDTO[] => {
     return list.map((comment) => {
       if (comment.id === updatedComment.id) {
         return updatedComment
@@ -216,7 +216,7 @@ const updateCommentInList = (updatedComment: dto.cn.planka.api.comment.CommentDT
 
 // 从列表中移除评论
 const removeCommentFromList = (commentId: string) => {
-  const removeFromList = (list: dto.cn.planka.api.comment.CommentDTO[]): dto.cn.planka.api.comment.CommentDTO[] => {
+  const removeFromList = (list: CommentDTO[]): CommentDTO[] => {
     return list
       .filter((comment) => comment.id !== commentId)
       .map((comment) => ({

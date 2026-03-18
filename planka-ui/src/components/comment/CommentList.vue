@@ -2,18 +2,18 @@
 /**
  * 评论列表组件
  */
-import type { dto.cn.planka.api.comment.CommentDTO } from '@/types/comment'
+import type { CommentDTO } from '@/types/comment'
 import CommentItem from './CommentItem.vue'
 
 defineProps<{
   /** 评论列表 */
-  comments: dto.cn.planka.api.comment.CommentDTO[]
+  comments: CommentDTO[]
 }>()
 
 const emit = defineEmits<{
-  reply: [comment: dto.cn.planka.api.comment.CommentDTO]
-  withdraw: [comment: dto.cn.planka.api.comment.CommentDTO]
-  delete: [comment: dto.cn.planka.api.comment.CommentDTO]
+  reply: [comment: CommentDTO]
+  withdraw: [comment: CommentDTO]
+  delete: [comment: CommentDTO]
 }>()
 </script>
 

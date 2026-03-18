@@ -5,7 +5,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useOrgStore } from '@/stores/org'
-import type { dto.cn.planka.api.comment.CommentDTO } from '@/types/comment'
+import type { CommentDTO } from '@/types/comment'
 import { formatRelativeTime } from '@/utils/date'
 import { marked } from 'marked'
 
@@ -14,15 +14,15 @@ const orgStore = useOrgStore()
 
 const props = defineProps<{
   /** 评论数据 */
-  comment: dto.cn.planka.api.comment.CommentDTO
+  comment: CommentDTO
   /** 是否为回复 */
   isReply?: boolean
 }>()
 
 const emit = defineEmits<{
-  reply: [comment: dto.cn.planka.api.comment.CommentDTO]
-  withdraw: [comment: dto.cn.planka.api.comment.CommentDTO]
-  delete: [comment: dto.cn.planka.api.comment.CommentDTO]
+  reply: [comment: CommentDTO]
+  withdraw: [comment: CommentDTO]
+  delete: [comment: CommentDTO]
 }>()
 
 // 是否是当前用户的评论

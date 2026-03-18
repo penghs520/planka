@@ -21,7 +21,7 @@ export interface OperationSource {
 /**
  * @提及 DTO
  */
-export interface dto.cn.planka.api.comment.MentionDTO {
+export interface MentionDTO {
   id: string
   commentId: string
   mentionedMemberId: string
@@ -33,7 +33,7 @@ export interface dto.cn.planka.api.comment.MentionDTO {
 /**
  * #卡片引用 DTO
  */
-export interface dto.cn.planka.api.comment.CardRefDTO {
+export interface CardRefDTO {
   id: string
   commentId: string
   refCardId: string
@@ -46,7 +46,7 @@ export interface dto.cn.planka.api.comment.CardRefDTO {
 /**
  * 评论 DTO
  */
-export interface dto.cn.planka.api.comment.CommentDTO {
+export interface CommentDTO {
   id: string
   orgId: string
   cardId: string
@@ -64,17 +64,17 @@ export interface dto.cn.planka.api.comment.CommentDTO {
   authorAvatar: string | null
   createdAt: string
   updatedAt: string
-  mentions: dto.cn.planka.api.comment.MentionDTO[]
-  cardRefs: dto.cn.planka.api.comment.CardRefDTO[]
-  replies: dto.cn.planka.api.comment.CommentDTO[]
+  mentions: MentionDTO[]
+  cardRefs: CardRefDTO[]
+  replies: CommentDTO[]
   operationSource: OperationSource | null
 }
 
 /**
  * 评论列表响应
  */
-export interface dto.cn.planka.api.comment.CommentListResponse {
-  comments: dto.cn.planka.api.comment.CommentDTO[]
+export interface CommentListResponse {
+  comments: CommentDTO[]
   total: number
   page: number
   size: number
@@ -103,7 +103,7 @@ export interface CardRefInput {
 /**
  * 创建评论请求
  */
-export interface request.cn.planka.api.comment.CreateCommentRequest {
+export interface CreateCommentRequest {
   cardId: string
   cardTypeId: string
   parentId?: string
@@ -116,7 +116,7 @@ export interface request.cn.planka.api.comment.CreateCommentRequest {
 /**
  * 更新评论请求
  */
-export interface request.cn.planka.api.comment.UpdateCommentRequest {
+export interface UpdateCommentRequest {
   content: string
   mentions?: MentionInput[]
   cardRefs?: CardRefInput[]

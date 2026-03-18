@@ -19,7 +19,7 @@ import { ossApi } from '@/api/oss'
 import { FileCategory } from '@/types/oss'
 import type { FileDTO } from '@/types/oss'
 import { useOrgStore } from '@/stores/org'
-import type { dto.cn.planka.api.comment.CommentDTO } from '@/types/comment'
+import type { CommentDTO } from '@/types/comment'
 
 const { t } = useI18n()
 const orgStore = useOrgStore()
@@ -29,7 +29,7 @@ const uploadedImages = ref<Map<string, string>>(new Map())
 
 const props = defineProps<{
   /** 正在回复的评论 */
-  replyingTo?: dto.cn.planka.api.comment.CommentDTO | null
+  replyingTo?: CommentDTO | null
 }>()
 
 const emit = defineEmits<{
