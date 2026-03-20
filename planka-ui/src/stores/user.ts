@@ -5,6 +5,7 @@ import type { LoginRequest, LoginResponse, ActivateRequest } from '@/types/auth'
 import type { OrganizationDTO } from '@/types/member'
 import { authApi } from '@/api/auth'
 import { userApi } from '@/api/user'
+import { setLocale, type SupportedLocale } from '@/i18n'
 
 const TOKEN_KEY = 'token'
 const REFRESH_TOKEN_KEY = 'refreshToken'
@@ -140,6 +141,10 @@ export const useUserStore = defineStore('user', () => {
   async function fetchMe(): Promise<UserDTO> {
     const userData = await userApi.getMe()
     user.value = userData
+    // 同步后台的语言偏好到前端
+    if (userData.locale && (userData.locale === 'zh-CN' || userData.locale === 'en-US')) {
+      setLocale(userData.locale as SupportedLocale)
+    }
     return userData
   }
 

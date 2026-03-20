@@ -22,6 +22,7 @@ public class UserEntity {
     private String nickname;
     private String avatar;
     private String phone;
+    private String locale;
 
     private boolean superAdmin;
     private String status;

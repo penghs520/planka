@@ -156,6 +156,23 @@
   --radius-xl: 12px;
 
   /* ========================================
+     Admin Sidebar（SaaS 风格）
+     ======================================== */
+  --sidebar-bg: #FAFBFC;
+  --sidebar-border: #EDEEF0;
+  --menu-item-height: 32px;
+  --menu-item-radius: 6px;
+  --menu-item-hover-bg: #F0F1F3;
+  --menu-item-active-bg: #EEF0FF;
+  --menu-item-active-color: #3B5BDB;
+  --menu-item-text-color: #4B5563;
+  --menu-group-label-color: #9CA3AF;
+  --menu-group-label-size: 11px;
+  --page-title-size: 20px;
+  --page-title-weight: 600;
+  --page-description-color: #6B7280;
+
+  /* ========================================
      Arco Design 覆盖
      ======================================== */
   --border-radius-small: 4px;

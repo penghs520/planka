@@ -4,7 +4,6 @@ import { useRoute } from 'vue-router'
 import { useOrgStore } from '@/stores/org'
 import { useUserStore } from '@/stores/user'
 import Sidebar from './Sidebar.vue'
-import Header from './Header.vue'
 import ChangePasswordModal from '@/components/auth/ChangePasswordModal.vue'
 import OrgSwitchDetector from '@/components/common/OrgSwitchDetector.vue'
 
@@ -36,15 +35,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <a-layout class="layout">
+  <div class="admin-layout">
     <Sidebar v-if="!hideMenu" :collapsed="collapsed" @update:collapsed="handleCollapse" />
-    <a-layout>
-      <Header v-if="!hideMenu" :collapsed="collapsed" @toggle-collapse="collapsed = !collapsed" />
-      <a-layout-content class="layout-content">
-        <router-view />
-      </a-layout-content>
-    </a-layout>
-  </a-layout>
+    <main class="admin-main">
+      <router-view />
+    </main>
+  </div>
 
   <!-- 修改密码弹窗 -->
   <ChangePasswordModal ref="changePasswordModalRef" />
@@ -54,14 +50,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.layout {
+.admin-layout {
+  display: flex;
   height: 100vh;
   overflow: hidden;
+  background-color: var(--color-bg-1);
 }
 
-.layout-content {
-  padding: 0;
-  background-color: var(--color-bg-1);
+.admin-main {
+  flex: 1;
   overflow: auto;
+  background-color: var(--color-bg-1);
 }
 </style>

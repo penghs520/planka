@@ -32,6 +32,7 @@ export interface UserDTO {
   nickname: string
   avatar: string | null
   phone: string | null
+  locale: string | null
   superAdmin: boolean
   status: UserStatus
   usingDefaultPassword: boolean
@@ -46,6 +47,7 @@ export interface UpdateUserRequest {
   nickname?: string
   avatar?: string
   phone?: string
+  locale?: string
 }
 
 /**

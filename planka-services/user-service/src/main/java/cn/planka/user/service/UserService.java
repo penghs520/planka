@@ -63,6 +63,9 @@ public class UserService {
         if (request.phone() != null) {
             user.setPhone(request.phone());
         }
+        if (request.locale() != null) {
+            user.setLocale(request.locale());
+        }
 
         userRepository.save(user);
         return Result.success(toUserDTO(user));
@@ -115,6 +118,7 @@ public class UserService {
                 user.getNickname(),
                 user.getAvatar(),
                 user.getPhone(),
+                user.getLocale(),
                 user.isSuperAdmin(),
                 user.getStatus(),
                 user.isUsingDefaultPassword(),

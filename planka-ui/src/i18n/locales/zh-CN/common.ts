@@ -387,6 +387,7 @@ export default {
     passwordMismatch: '两次输入的密码不一致',
     confirmChange: '确认修改',
     passwordChanged: '密码修改成功',
+    language: '语言',
   },
 
   // 组织设置

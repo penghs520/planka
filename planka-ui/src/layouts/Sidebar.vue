@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { computed, type Component, ref, onMounted, onUnmounted } from 'vue'
+import { computed, type Component, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useUserStore } from '@/stores/user'
+import { useOrgStore } from '@/stores/org'
 import { IconSettings } from '@arco-design/web-vue/es/icon'
+import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-vue/es/icon'
 import IconAuditLog from '@/components/icons/IconAuditLog.vue'
 import IconMember from '@/components/icons/IconMember.vue'
 import IconStructure from '@/components/icons/IconStructure.vue'
@@ -14,6 +17,7 @@ import IconMenuConfig from '@/components/icons/IconMenuConfig.vue'
 import IconNotification from '@/components/icons/IconNotification.vue'
 import { usePermission } from '@/hooks/usePermission'
 import OrgSelector from '@/components/auth/OrgSelector.vue'
+import UserDropdown from '@/components/auth/UserDropdown.vue'
 
 const { t } = useI18n()
 
@@ -21,29 +25,33 @@ const props = defineProps<{
   collapsed: boolean
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   'update:collapsed': [value: boolean]
 }>()
 
 const route = useRoute()
 const router = useRouter()
 const { isAdmin } = usePermission()
+const userStore = useUserStore()
+const orgStore = useOrgStore()
 
-const selectedKeys = computed(() => {
+// 当前选中菜单
+const activeKey = computed(() => {
   const activeMenu = route.meta.activeMenu as string | undefined
-  return activeMenu ? [activeMenu] : []
+  return activeMenu || ''
 })
 
-// 侧边栏宽度配置
-const DEFAULT_WIDTH = 200
-const MIN_WIDTH = 160
+// ========================================
+// 侧边栏宽度拖拽调整
+// ========================================
+const DEFAULT_WIDTH = 240
+const MIN_WIDTH = 200
 const MAX_WIDTH = 400
 const SIDEBAR_WIDTH_KEY = 'sidebar-width'
 
 const sidebarWidth = ref(DEFAULT_WIDTH)
 const isResizing = ref(false)
 
-// 从本地存储读取保存的宽度
 onMounted(() => {
   const savedWidth = localStorage.getItem(SIDEBAR_WIDTH_KEY)
   if (savedWidth) {
@@ -51,7 +59,6 @@ onMounted(() => {
   }
 })
 
-// 开始拖拽
 function startResize(e: MouseEvent) {
   if (props.collapsed) return
   isResizing.value = true
@@ -75,11 +82,9 @@ function startResize(e: MouseEvent) {
   document.addEventListener('mouseup', handleMouseUp)
 }
 
-onUnmounted(() => {
-  document.removeEventListener('mousemove', () => {})
-  document.removeEventListener('mouseup', () => {})
-})
-
+// ========================================
+// 菜单分组定义
+// ========================================
 interface MenuItem {
   key: string
   titleKey: string
@@ -88,182 +93,295 @@ interface MenuItem {
   visible?: () => boolean
 }
 
-const menuItems: MenuItem[] = [
+interface MenuGroup {
+  key: string
+  labelKey: string
+  items: MenuItem[]
+  visible?: () => boolean
+}
+
+const menuGroups: MenuGroup[] = [
   {
-    key: 'card-type',
-    titleKey: 'admin.menu.cardType',
-    icon: IconCardType,
-    path: '/admin/card-type',
+    key: 'schema',
+    labelKey: 'admin.menuGroup.schemaDefinition',
+    items: [
+      { key: 'card-type', titleKey: 'admin.menu.cardType', icon: IconCardType, path: '/admin/card-type' },
+      { key: 'link-type', titleKey: 'admin.menu.linkType', icon: IconLinkType, path: '/admin/link-type' },
+      { key: 'formula-definition', titleKey: 'admin.menu.formulaDefinition', icon: IconFormulaDefinition, path: '/admin/formula-definition' },
+      { key: 'structure', titleKey: 'admin.menu.structure', icon: IconStructure, path: '/admin/structure' },
+    ],
   },
   {
-    key: 'link-type',
-    titleKey: 'admin.menu.linkType',
-    icon: IconLinkType,
-    path: '/admin/link-type',
+    key: 'config',
+    labelKey: 'admin.menuGroup.configuration',
+    items: [
+      { key: 'view', titleKey: 'admin.menu.view', icon: IconView, path: '/admin/view' },
+      { key: 'menu', titleKey: 'admin.menu.menuConfig', icon: IconMenuConfig, path: '/admin/menu' },
+    ],
   },
   {
-    key: 'formula-definition',
-    titleKey: 'admin.menu.formulaDefinition',
-    icon: IconFormulaDefinition,
-    path: '/admin/formula-definition',
+    key: 'operations',
+    labelKey: 'admin.menuGroup.operations',
+    items: [
+      { key: 'audit-log', titleKey: 'admin.menu.auditLog', icon: IconAuditLog, path: '/admin/audit-log' },
+      { key: 'notification-settings', titleKey: 'admin.menu.notificationSettings', icon: IconNotification, path: '/admin/notification-settings' },
+    ],
   },
   {
-    key: 'structure',
-    titleKey: 'admin.menu.structure',
-    icon: IconStructure,
-    path: '/admin/structure',
-  },
-  {
-    key: 'view',
-    titleKey: 'admin.menu.view',
-    icon: IconView,
-    path: '/admin/view',
-  },
-  {
-    key: 'menu',
-    titleKey: 'admin.menu.menuConfig',
-    icon: IconMenuConfig,
-    path: '/admin/menu',
-  },
-  {
-    key: 'audit-log',
-    titleKey: 'admin.menu.auditLog',
-    icon: IconAuditLog,
-    path: '/admin/audit-log',
-  },
-  {
-    key: 'notification-settings',
-    titleKey: 'admin.menu.notificationSettings',
-    icon: IconNotification,
-    path: '/admin/notification-settings',
-  },
-  {
-    key: 'members',
-    titleKey: 'admin.menu.members',
-    icon: IconMember,
-    path: '/admin/members',
+    key: 'admin',
+    labelKey: 'admin.menuGroup.administration',
     visible: () => isAdmin.value,
-  },
-  {
-    key: 'org-settings',
-    titleKey: 'admin.menu.orgSettings',
-    icon: IconSettings,
-    path: '/admin/org-settings',
-    visible: () => isAdmin.value,
+    items: [
+      { key: 'members', titleKey: 'admin.menu.members', icon: IconMember, path: '/admin/members' },
+      { key: 'org-settings', titleKey: 'admin.menu.orgSettings', icon: IconSettings, path: '/admin/org-settings' },
+    ],
   },
 ]
 
-const visibleMenuItems = computed(() => {
-  return menuItems.filter((item) => !item.visible || item.visible())
+const visibleGroups = computed(() => {
+  return menuGroups
+    .filter(g => !g.visible || g.visible())
+    .map(g => ({
+      ...g,
+      items: g.items.filter(item => !item.visible || item.visible()),
+    }))
+    .filter(g => g.items.length > 0)
 })
 
-function handleMenuClick(key: string) {
-  const item = menuItems.find((m) => m.key === key)
-  if (item) {
-    router.push(item.path)
-  }
+function navigateTo(item: MenuItem) {
+  router.push(item.path)
 }
+
+// ========================================
+// 数据获取（从 Header.vue 移入）
+// ========================================
+onMounted(async () => {
+  if (userStore.isLoggedIn && !userStore.user) {
+    try { await userStore.fetchMe() } catch { /* interceptor handles */ }
+  }
+  if (userStore.isLoggedIn && orgStore.myOrgs.length === 0) {
+    try { await orgStore.fetchMyOrganizations() } catch { /* interceptor handles */ }
+  }
+})
 </script>
 
 <template>
-  <a-layout-sider
-    :collapsed="collapsed"
-    :width="sidebarWidth"
-    :collapsed-width="48"
-    collapsible
-    hide-trigger
-    breakpoint="lg"
-    class="resizable-sidebar"
-    @collapse="$emit('update:collapsed', $event)"
+  <aside
+    class="admin-sidebar"
+    :style="{ width: collapsed ? '64px' : sidebarWidth + 'px' }"
   >
-    <div class="logo" :class="{ 'is-collapsed': collapsed }">
+    <!-- 顶部：组织选择器 -->
+    <div class="sidebar-top">
       <OrgSelector :collapsed="collapsed" />
     </div>
 
-    <a-menu
-      :selected-keys="selectedKeys"
-      :collapsed="collapsed"
-      @menu-item-click="handleMenuClick"
-    >
-      <a-menu-item v-for="item in visibleMenuItems" :key="item.key">
-        <template #icon>
-          <component :is="item.icon" />
-        </template>
-        {{ t(item.titleKey) }}
-      </a-menu-item>
-    </a-menu>
+    <!-- 中间：可滚动的菜单分组 -->
+    <nav class="sidebar-nav">
+      <template v-for="group in visibleGroups" :key="group.key">
+        <div v-if="!collapsed" class="sidebar-group-label">
+          {{ t(group.labelKey) }}
+        </div>
+        <a-tooltip
+          v-for="item in group.items"
+          :key="item.key"
+          :content="collapsed ? t(item.titleKey) : ''"
+          position="right"
+          :disabled="!collapsed"
+          mini
+        >
+          <div
+            class="sidebar-item"
+            :class="{
+              'sidebar-item--active': activeKey === item.key,
+              'sidebar-item--collapsed': collapsed,
+            }"
+            @click="navigateTo(item)"
+          >
+            <component :is="item.icon" class="sidebar-item-icon" />
+            <span v-if="!collapsed" class="sidebar-item-text">
+              {{ t(item.titleKey) }}
+            </span>
+          </div>
+        </a-tooltip>
+      </template>
+    </nav>
 
-    <!-- 拖拽调整宽度的手柄 -->
+    <!-- 底部：用户控件 -->
+    <div class="sidebar-bottom">
+      <div class="sidebar-controls">
+        <button
+          class="sidebar-collapse-btn"
+          @click="emit('update:collapsed', !collapsed)"
+        >
+          <IconMenuFold v-if="!collapsed" />
+          <IconMenuUnfold v-else />
+        </button>
+      </div>
+      <div v-if="!collapsed" class="sidebar-user">
+        <UserDropdown />
+      </div>
+    </div>
+
+    <!-- 拖拽调整宽度手柄 -->
     <div
       v-if="!collapsed"
       class="resize-handle"
       :class="{ 'is-resizing': isResizing }"
       @mousedown="startResize"
     />
-  </a-layout-sider>
+  </aside>
 </template>
 
 <style scoped>
-.logo {
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--sidebar-bg, #FAFBFC);
+  border-right: 1px solid var(--sidebar-border, #EDEEF0);
+  position: relative;
+  transition: width 0.2s ease;
+  flex-shrink: 0;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* 顶部区域 */
+.sidebar-top {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--sidebar-border, #EDEEF0);
+  flex-shrink: 0;
+}
+
+/* 菜单导航区域 */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 0;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 2px;
+}
+
+.sidebar-nav:hover::-webkit-scrollbar-thumb {
+  background: var(--color-fill-3, #DEE0E3);
+}
+
+/* 分组标签 */
+.sidebar-group-label {
+  font-size: var(--menu-group-label-size, 11px);
+  color: var(--menu-group-label-color, #9CA3AF);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 16px 16px 4px;
+  line-height: 1;
+}
+
+/* 菜单项 */
+.sidebar-item {
   display: flex;
   align-items: center;
-  height: 48px;
+  gap: 10px;
+  height: var(--menu-item-height, 32px);
   padding: 0 12px;
-  border-bottom: 1px solid var(--color-border);
-  overflow: hidden;
-  transition: all 0.2s;
+  margin: 1px 8px;
+  border-radius: var(--menu-item-radius, 6px);
+  color: var(--menu-item-text-color, #4B5563);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.logo.is-collapsed {
-  padding: 0;
+.sidebar-item:hover {
+  background: var(--menu-item-hover-bg, #F0F1F3);
+}
+
+.sidebar-item--active {
+  background: var(--menu-item-active-bg, #EEF0FF);
+  color: var(--menu-item-active-color, #3B5BDB);
+  font-weight: 500;
+}
+
+.sidebar-item--active .sidebar-item-icon {
+  color: var(--menu-item-active-color, #3B5BDB);
+}
+
+.sidebar-item--collapsed {
   justify-content: center;
+  padding: 0;
+  margin: 1px 8px;
 }
 
-/* 菜单样式调整 */
-:deep(.arco-menu-inner) {
-  font-size: 14px;
-  padding: 0 8px;
+.sidebar-item-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--color-text-3, #8F959E);
+  transition: color 0.15s ease;
 }
 
-:deep(.arco-menu-item) {
-  font-size: 14px;
-  height: 40px;
-  padding: 0 8px 0 4px;
-  margin: 4px 0;
-  border-radius: 8px;
+.sidebar-item:hover .sidebar-item-icon {
+  color: var(--color-text-2, #646A73);
 }
 
-:deep(.arco-menu-item .arco-icon) {
-  font-size: 17px;
-  margin-right: 4px;
-  margin-left: 14px;
+.sidebar-item--active .sidebar-item-icon {
+  color: var(--menu-item-active-color, #3B5BDB);
 }
 
-/* 选中状态样式 */
-:deep(.arco-menu-item.arco-menu-selected) {
-  background-color: #eff6ff !important;
-  color: #3370FF !important;
+.sidebar-item-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-:deep(.arco-menu-item.arco-menu-selected .arco-icon) {
-  color: #3370FF !important;
+/* 底部区域 */
+.sidebar-bottom {
+  border-top: 1px solid var(--sidebar-border, #EDEEF0);
+  padding: 8px 12px;
+  flex-shrink: 0;
 }
 
-/* 确保选中时的文字颜色为蓝色 */
-:deep(.arco-menu-item.arco-menu-selected .arco-menu-title) {
-  color: #3370FF !important;
+.sidebar-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 4px;
 }
 
-/* 悬停状态 */
-:deep(.arco-menu-item:not(.arco-menu-selected):hover) {
-  background-color: #F5F6F7;
+.sidebar-collapse-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-3, #8F959E);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 16px;
 }
 
-/* 可调整宽度的侧边栏 */
-.resizable-sidebar {
-  position: relative;
+.sidebar-collapse-btn:hover {
+  background: var(--menu-item-hover-bg, #F0F1F3);
+  color: var(--color-text-1, #1F2329);
 }
 
+.sidebar-user {
+  margin-top: 4px;
+}
+
+/* 拖拽手柄 */
 .resize-handle {
   position: absolute;
   right: 0;
@@ -278,6 +396,6 @@ function handleMenuClick(key: string) {
 
 .resize-handle:hover,
 .resize-handle.is-resizing {
-  background-color: #3370FF;
+  background-color: var(--color-primary, #3370FF);
 }
 </style>

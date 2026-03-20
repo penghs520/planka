@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user'
 import { useAuth } from '@/hooks/useAuth'
 
+const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 const { logout } = useAuth()
 
 const user = computed(() => userStore.user)
-const displayName = computed(() => user.value?.nickname || user.value?.email || '用户')
+const displayName = computed(() => user.value?.nickname || user.value?.email || '')
 const avatarText = computed(() => displayName.value.charAt(0).toUpperCase())
 
 // 判断是否在管理后台
@@ -40,14 +42,14 @@ async function handleLogout() {
         <template #icon>
           <icon-user />
         </template>
-        个人设置
+        {{ t('common.layout.profile') }}
       </a-doption>
       <a-divider :margin="4" />
       <a-doption @click="handleLogout">
         <template #icon>
           <icon-export />
         </template>
-        退出登录
+        {{ t('common.layout.logout') }}
       </a-doption>
     </template>
   </a-dropdown>

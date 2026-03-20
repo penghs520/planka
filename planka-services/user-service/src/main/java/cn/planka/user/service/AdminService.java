@@ -105,6 +105,7 @@ public class AdminService {
                 user.getNickname(),
                 user.getAvatar(),
                 user.getPhone(),
+                user.getLocale(),
                 user.isSuperAdmin(),
                 user.getStatus(),
                 user.isUsingDefaultPassword(),

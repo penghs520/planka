@@ -387,6 +387,7 @@ export default {
     passwordMismatch: 'Passwords do not match',
     confirmChange: 'Confirm',
     passwordChanged: 'Password changed successfully',
+    language: 'Language',
   },
 
   // Organization settings

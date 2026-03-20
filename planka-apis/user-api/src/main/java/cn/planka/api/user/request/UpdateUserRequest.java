@@ -12,6 +12,9 @@ public record UpdateUserRequest(
         String avatar,
 
         @Size(max = 20, message = "手机号不能超过20个字符")
-        String phone
+        String phone,
+
+        @Size(max = 20, message = "语言标识不能超过20个字符")
+        String locale
 ) {
 }

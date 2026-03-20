@@ -2,6 +2,14 @@
  * 管理后台 - 中文语言包
  */
 export default {
+  // 侧边栏菜单分组
+  menuGroup: {
+    schemaDefinition: '定义管理',
+    configuration: '配置',
+    operations: '运营',
+    administration: '管理',
+  },
+
   // 侧边栏菜单
   menu: {
     cardType: '卡片类型',

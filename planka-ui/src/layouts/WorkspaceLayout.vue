@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, provide, watch } from 'vue'
+import { ref, computed, provide, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user'
@@ -15,7 +15,6 @@ import {
 } from '@arco-design/web-vue/es/icon'
 import WorkspaceMenu from './WorkspaceMenu.vue'
 import { CardDetailView } from '@/views/workspace/components/card-detail'
-import LocaleSwitcher from '@/components/common/LocaleSwitcher.vue'
 import OrgSwitchDetector from '@/components/common/OrgSwitchDetector.vue'
 import logoImg from '@/assets/logo.png'
 import type { ColumnMeta } from '@/types/view-data'
@@ -105,9 +104,18 @@ function handleUserMenuClick(key: string) {
 }
 
 // 当切换视图时，关闭抽屉
-// 当切换视图时，关闭抽屉
 watch(selectedViewId, () => {
   cardTabsStore.closeAllTabs()
+})
+
+// 获取用户信息和组织列表（同步语言设置）
+onMounted(async () => {
+  if (userStore.isLoggedIn && !userStore.user) {
+    try { await userStore.fetchMe() } catch { /* interceptor handles */ }
+  }
+  if (userStore.isLoggedIn && orgStore.myOrgs.length === 0) {
+    try { await orgStore.fetchMyOrganizations() } catch { /* interceptor handles */ }
+  }
 })
 </script>
 
@@ -147,10 +155,6 @@ watch(selectedViewId, () => {
           </a-tag>
         </div>
         <div class="header-right">
-          <LocaleSwitcher />
-
-          <a-divider direction="vertical" style="margin: 0 8px" />
-
           <a-dropdown trigger="click" @select="handleUserMenuClick">
             <div class="user-avatar">
               {{ avatarText }}

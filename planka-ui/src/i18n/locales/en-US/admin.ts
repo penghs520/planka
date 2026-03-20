@@ -2,6 +2,14 @@
  * Admin Backend - English Language Pack
  */
 export default {
+  // Sidebar menu groups
+  menuGroup: {
+    schemaDefinition: 'DEFINITIONS',
+    configuration: 'CONFIGURATION',
+    operations: 'OPERATIONS',
+    administration: 'ADMINISTRATION',
+  },
+
   // Sidebar menu
   menu: {
     cardType: 'Card Types',

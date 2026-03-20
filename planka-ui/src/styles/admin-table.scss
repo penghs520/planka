@@ -12,10 +12,13 @@
 }
 
 .arco-table-th {
-  padding: 4px 8px !important;
+  padding: 8px 12px !important;
   font-size: 12px;
+  font-weight: 600;
   line-height: 20px;
-  background-color: #f9f9f9 !important;
+  color: var(--color-text-3, #8F959E);
+  background-color: #FAFBFC !important;
+  letter-spacing: 0.02em;
 }
 
 .arco-table-th-title {
@@ -23,7 +26,7 @@
 }
 
 .arco-table-td {
-  padding: 6px 12px !important;
+  padding: 10px 12px !important;
   font-size: 13px;
 
   // 单元格内容不穿透，长文本换行显示
@@ -86,15 +89,21 @@
 
 // 新建按钮样式
 .create-btn {
-  background-color: #3350EB !important;
-  border-color: #3350EB !important;
+  background-color: var(--color-primary, #3370FF) !important;
+  border-color: var(--color-primary, #3370FF) !important;
   color: #fff !important;
   border-radius: var(--radius-md, 6px) !important;
   font-weight: 500 !important;
+  font-size: 13px !important;
+  height: 32px !important;
+  padding: 0 14px !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 2px rgba(51, 112, 255, 0.2) !important;
 
   &:hover {
-    background-color: #4E83FD !important;
-    border-color: #4E83FD !important;
+    background-color: var(--color-primary-hover, #4E83FD) !important;
+    border-color: var(--color-primary-hover, #4E83FD) !important;
+    box-shadow: 0 2px 6px rgba(51, 112, 255, 0.3) !important;
   }
 }
 
@@ -233,6 +242,12 @@
 // 移除表格行之间的横线
 .arco-table-tr {
   border-bottom: none !important;
+  transition: background-color 0.15s ease;
+}
+
+// 行悬停效果
+.arco-table-tr:hover .arco-table-td {
+  background-color: #FAFBFC !important;
 }
 
 .arco-table-th,
@@ -245,27 +260,8 @@
   border-bottom: 1px solid var(--color-border-1);
 }
 
-// 管理后台菜单样式
-.arco-menu-inner {
-  padding: 4px 4px !important;
-}
-
-.arco-menu-item {
-  padding: 0px 4px !important;
-  margin: 1px 0 !important;
-  height: 36px !important;
-  line-height: 36px !important;
-  border-radius: 6px !important;
-
-  &.arco-menu-selected {
-    background-color: #eff1fe !important;
-    color: #415aeb !important;
-
-    .arco-icon {
-      color: #415aeb !important;
-    }
-  }
-}
+// 管理后台菜单样式（已迁移至 Sidebar.vue scoped styles）
+// 以下 .arco-menu 覆盖样式已移除，避免全局泄漏
 
 // 表格头部工具栏（各页面自行使用此样式类）
 .admin-table-header {

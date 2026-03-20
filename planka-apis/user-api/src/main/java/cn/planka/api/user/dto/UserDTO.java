@@ -11,6 +11,7 @@ public record UserDTO(
         String nickname,
         String avatar,
         String phone,
+        String locale,
         boolean superAdmin,
         String status,
         boolean usingDefaultPassword,

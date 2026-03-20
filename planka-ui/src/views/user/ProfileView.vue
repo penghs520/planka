@@ -6,6 +6,7 @@ import { useUserStore } from '@/stores/user'
 import { Message } from '@arco-design/web-vue'
 import type { UpdateUserRequest } from '@/types/user'
 import SaveButton from '@/components/common/SaveButton.vue'
+import { setLocale, getLocale, supportedLocales, type SupportedLocale } from '@/i18n'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -15,10 +16,11 @@ const loading = ref(false)
 const saving = ref(false)
 const formRef = ref()
 
-const formData = reactive<UpdateUserRequest>({
+const formData = reactive<UpdateUserRequest & { locale: SupportedLocale }>({
   nickname: '',
   avatar: '',
   phone: '',
+  locale: getLocale(),
 })
 
 const rules = computed(() => ({
@@ -34,6 +36,7 @@ onMounted(async () => {
       formData.nickname = userStore.user.nickname
       formData.avatar = userStore.user.avatar || ''
       formData.phone = userStore.user.phone || ''
+      formData.locale = (userStore.user.locale as SupportedLocale) || getLocale()
     }
   } finally {
     loading.value = false
@@ -50,7 +53,10 @@ async function handleSave() {
       nickname: formData.nickname || undefined,
       avatar: formData.avatar || undefined,
       phone: formData.phone || undefined,
+      locale: formData.locale,
     })
+    // 保存成功后应用语言切换
+    setLocale(formData.locale)
     Message.success(t('common.user.profileUpdated'))
   } catch {
     // 错误已在拦截器处理
@@ -122,6 +128,22 @@ function goBack() {
               :placeholder="t('common.user.phonePlaceholder')"
               :max-length="20"
             />
+          </a-form-item>
+
+          <a-divider />
+
+          <a-form-item :label="t('common.user.language')">
+            <a-select
+              v-model="formData.locale"
+              :style="{ width: '200px' }"
+            >
+              <a-option
+                v-for="loc in supportedLocales"
+                :key="loc.value"
+                :value="loc.value"
+                :label="loc.label"
+              />
+            </a-select>
           </a-form-item>
 
           <a-divider />
