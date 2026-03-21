@@ -68,9 +68,11 @@ onMounted(async () => {
     <!-- 侧边栏 -->
     <AppSidebar @open-command-palette="openCommandPalette" />
 
-    <!-- 主内容区域 -->
+    <!-- 主内容区域：壳层留白 + 圆角白卡片 -->
     <main class="app-main">
-      <router-view />
+      <div class="app-main-panel">
+        <router-view />
+      </div>
     </main>
 
     <!-- 组织切换检测 -->
@@ -103,14 +105,35 @@ onMounted(async () => {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  background: var(--color-bg-1);
+  background: var(--planka-c1);
 }
 
 .app-main {
   flex: 1;
-  overflow: auto;
-  background: var(--color-bg-1);
-  border-left: 1px solid var(--color-border-3);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 10px 8px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.app-main-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-main-panel);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+/* router-view 根节点参与高度传递（overflow 由各页自行控制） */
+.app-main-panel > :deep(*) {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
 }
 </style>
 

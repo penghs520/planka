@@ -193,6 +193,9 @@
   --color-bg-3: color-mix(in srgb, var(--color-bg-2) 94%, var(--color-text-1) 6%);
   --color-bg-4: color-mix(in srgb, var(--color-bg-2) 88%, var(--color-text-1) 12%);
   --color-bg-5: color-mix(in srgb, var(--color-bg-2) 80%, var(--color-text-1) 20%);
+
+  /* AppLayout 右侧圆角主内容卡片内表面（与 planka-c6 一致） */
+  --color-main-panel: var(--planka-c6);
 }
 
 /*

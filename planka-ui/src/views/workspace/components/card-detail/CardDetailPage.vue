@@ -24,7 +24,7 @@ const cardId = computed(() => route.params.cardId as string)
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
   overflow: hidden;
 }
 
@@ -33,7 +33,7 @@ const cardId = computed(() => route.params.cardId as string)
   max-width: 1100px;
   margin: 0 auto;
   height: 100%;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
   overflow: hidden;
 }
 </style>

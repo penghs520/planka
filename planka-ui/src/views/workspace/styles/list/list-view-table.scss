@@ -9,7 +9,7 @@
   top: 0;
   bottom: 0;
   width: 4px; // 与左侧padding相同
-  background: var(--color-bg-1); // 与面板背景色一致
+  background: var(--color-main-panel); // 与主内容卡片表面一致
   z-index: 30; // 确保在表头固定列之上
   pointer-events: none; // 不阻挡点击事件
 }
@@ -59,7 +59,7 @@
   // 使用 Arco 原生的固定表头（通过 scroll.y），确保表头 z-index 正确
   :deep(thead) {
     z-index: 20;
-    background: var(--color-bg-1);
+    background: var(--color-main-panel);
   }
 
   // 表头固定列 z-index 更高，防止被数据行固定列覆盖
@@ -94,7 +94,7 @@
     // 选中行的固定列需要保持不透明背景，防止水平滚动时内容穿透
     &.arco-table-tr-checked:not(:hover) td.arco-table-col-fixed-left,
     &.arco-table-tr-checked:not(:hover) td.arco-table-col-fixed-right {
-      background-color: var(--color-bg-1) !important;
+      background-color: var(--color-main-panel) !important;
     }
   }
 
@@ -112,7 +112,7 @@
   // 固定列常态背景色 - 防止水平滚动时内容穿透
   :deep(.arco-table-col-fixed-left),
   :deep(.arco-table-col-fixed-right) {
-    background-color: var(--color-bg-1);
+    background-color: var(--color-main-panel);
   }
 
   // 单元格通用样式

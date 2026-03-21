@@ -41,7 +41,7 @@ watch(
 .workspace-page {
   height: 100%;
   overflow: hidden;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
 }
 
 .empty-state {

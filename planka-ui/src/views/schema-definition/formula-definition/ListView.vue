@@ -440,7 +440,7 @@ onMounted(async () => {
 
 .formula-type-sidebar {
   width: 200px;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
   border-right: 1px solid var(--color-border);
   padding: 12px;
   overflow-y: auto;

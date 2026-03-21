@@ -45,7 +45,7 @@ onMounted(load)
   padding: 20px 24px;
   height: 100%;
   overflow: auto;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
 }
 
 .page-title {

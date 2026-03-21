@@ -446,7 +446,7 @@ onMounted(() => {
 .menu-config-page {
   display: flex;
   height: 100%;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
 }
 
 // 左侧待选视图面板
@@ -499,7 +499,7 @@ onMounted(() => {
   gap: 8px;
   padding: 10px 12px;
   margin-bottom: 4px;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
   border-radius: 6px;
   cursor: default;
   transition: all 0.2s;
@@ -557,7 +557,7 @@ onMounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
 
   .panel-header {
     padding: 16px 24px;

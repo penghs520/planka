@@ -270,7 +270,7 @@ onMounted(() => {
 .template-list-page {
   display: flex;
   height: 100%;
-  background: var(--color-bg-1);
+  background: var(--color-main-panel);
   font-size: 12px;
   overflow: hidden;
 }
