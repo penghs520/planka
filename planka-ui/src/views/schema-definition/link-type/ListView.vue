@@ -744,7 +744,7 @@ onMounted(async () => {
 }
 
 .setting-item:hover {
-  border-color: #3370FF;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(51, 112, 255, 0.1);
 }
 
@@ -974,13 +974,13 @@ onMounted(async () => {
 
 /* 卡片类型名称高亮 */
 .type-highlight {
-  color: #3370FF;
+  color: var(--color-primary);
   font-weight: 500;
 }
 
 /* 关联名称高亮 */
 .link-highlight {
-  color: #3370FF;
+  color: var(--color-primary);
   font-weight: 500;
 }
 

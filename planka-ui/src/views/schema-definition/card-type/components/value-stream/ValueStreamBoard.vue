@@ -562,7 +562,7 @@ async function handleMigrationConfirm(migrationMap: Record<string, string>) {
 .insert-step-btn:hover {
   background-color: #e0e7ff !important;
   border-color: #c7d5ff !important;
-  color: #3370FF !important;
+  color: var(--color-primary) !important;
 }
 
 .empty-board {

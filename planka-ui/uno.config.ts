@@ -11,13 +11,12 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      // 飞书风格主色
       primary: {
-        DEFAULT: '#3370FF',
-        hover: '#4E83FD',
-        active: '#245BDB',
-        light: '#E8F3FF',
-        lighter: '#F0F5FF',
+        DEFAULT: '#0083E0',
+        hover: '#1A9EFF',
+        active: '#0F4974',
+        light: '#D7E7F1',
+        lighter: '#EBF4FA',
       },
       // 成功色
       success: {
@@ -42,23 +41,21 @@ export default defineConfig({
       },
       // 中性色 - 文本
       text: {
-        1: '#1F2329',      // 主文本
-        2: '#646A73',      // 次要文本
-        3: '#8F959E',      // 辅助文本
-        4: '#BBBFC4',      // 禁用文本
+        1: '#1A1A1C',
+        2: '#3D3F42',
+        3: '#5C5E62',
+        4: '#8E9094',
       },
-      // 中性色 - 填充/背景
       fill: {
-        1: '#F5F6F7',      // 页面背景
-        2: '#F0F1F2',      // 容器背景
-        3: '#DEE0E3',      // 悬停背景
-        4: '#C9CDD4',      // 禁用背景
+        1: '#EBEBEB',
+        2: '#E0E0E0',
+        3: '#D5D5D5',
+        4: '#C8C8C8',
       },
-      // 中性色 - 边框
       border: {
-        1: '#E5E6EB',      // 常规边框
-        2: '#C9CDD4',      // 深边框
-        3: '#F2F3F5',      // 浅边框
+        1: '#DDDDDD',
+        2: '#CCCCCC',
+        3: '#E8E8E8',
       },
       // 白色
       white: '#FFFFFF',
@@ -98,11 +95,11 @@ export default defineConfig({
     // 阴影 - 飞书风格柔和
     boxShadow: {
       'none': 'none',
-      'sm': '0 1px 2px rgba(31, 35, 41, 0.05)',
-      'DEFAULT': '0 2px 8px rgba(31, 35, 41, 0.08)',
-      'md': '0 4px 14px rgba(31, 35, 41, 0.1)',
-      'lg': '0 8px 24px rgba(31, 35, 41, 0.12)',
-      'xl': '0 16px 48px rgba(31, 35, 41, 0.16)',
+      'sm': '0 1px 2px rgba(26, 26, 28, 0.06)',
+      'DEFAULT': '0 2px 8px rgba(26, 26, 28, 0.08)',
+      'md': '0 4px 14px rgba(26, 26, 28, 0.1)',
+      'lg': '0 8px 24px rgba(26, 26, 28, 0.12)',
+      'xl': '0 16px 48px rgba(26, 26, 28, 0.16)',
     },
     // 间距
     spacing: {

@@ -396,6 +396,6 @@ onMounted(async () => {
 
 .resize-handle:hover,
 .resize-handle.is-resizing {
-  background-color: var(--color-primary, #3370FF);
+  background-color: var(--color-primary, #0083E0);
 }
 </style>

@@ -30,15 +30,15 @@
   padding-top: 12px !important;
 }
 
-/* 按钮样式 - 使用蓝色主题色 */
+/* 按钮样式 - 使用主题主色 */
 .compact-modal .arco-modal-footer .arco-btn {
-  background-color: #3370FF !important;
-  border-color: #3370FF !important;
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
   color: #fff !important;
 }
 
 .compact-modal .arco-modal-footer .arco-btn:hover {
-  background-color: #4E83FD !important;
-  border-color: #4E83FD !important;
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
 }
 </style>

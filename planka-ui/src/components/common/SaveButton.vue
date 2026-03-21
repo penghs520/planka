@@ -24,7 +24,7 @@ defineEmits<{
 .save-btn {
   border-radius: 6px !important;
   padding: 0 16px !important;
-  background: #3350EB !important;
+  background: var(--color-primary) !important;
   border: none !important;
   box-shadow: none !important;
   height: 28px !important;
@@ -35,11 +35,11 @@ defineEmits<{
 }
 
 .save-btn:hover {
-  background: #4E83FD !important;
+  background: var(--color-primary-hover) !important;
 }
 
 .save-btn:active {
-  background: #245BDB !important;
+  background: var(--color-primary-active) !important;
 }
 
 /* 小尺寸 */

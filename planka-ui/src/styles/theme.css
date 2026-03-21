@@ -1,5 +1,5 @@
 /**
- * 飞书风格主题变量
+ * 浅色主题：浅灰底 + 亮蓝主色（#F5F5F5 / #0083E0 / #0F4974 / #D7E7F1）
  * 用于覆盖 Arco Design 默认主题
  */
 
@@ -10,37 +10,38 @@
   --font-family: -apple-system, system-ui, "Segoe UI", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
 
   /* ========================================
-     主色 - 飞书蓝
+     主色 - #0083E0，浅底 #D7E7F1，深色 #0F4974
      ======================================== */
-  --color-primary: #3370FF;
-  --color-primary-hover: #4E83FD;
-  --color-primary-active: #245BDB;
-  --color-primary-light: #E8F3FF;
-  --color-primary-lighter: #F0F5FF;
+  --color-primary: #0083E0;
+  --color-primary-hover: #1A9EFF;
+  --color-primary-active: #0F4974;
+  --color-primary-light: #D7E7F1;
+  --color-primary-lighter: #EBF4FA;
+  --color-primary-rgb: 0, 131, 224;
 
   /* Arco Design RGB 格式变量覆盖 */
-  --primary-1: 240, 245, 255;
-  --primary-2: 232, 243, 255;
-  --primary-3: 194, 218, 255;
-  --primary-4: 148, 191, 255;
-  --primary-5: 78, 131, 253;
-  --primary-6: 51, 112, 255;
-  --primary-7: 36, 91, 219;
-  --primary-8: 26, 72, 184;
-  --primary-9: 18, 55, 148;
-  --primary-10: 12, 40, 112;
+  --primary-1: 235, 245, 252;
+  --primary-2: 215, 231, 241;
+  --primary-3: 183, 218, 242;
+  --primary-4: 102, 187, 255;
+  --primary-5: 26, 159, 255;
+  --primary-6: 0, 131, 224;
+  --primary-7: 0, 108, 190;
+  --primary-8: 0, 88, 156;
+  --primary-9: 15, 73, 116;
+  --primary-10: 10, 52, 86;
 
-  /* 同步 arcoblue */
-  --arcoblue-1: 240, 245, 255;
-  --arcoblue-2: 232, 243, 255;
-  --arcoblue-3: 194, 218, 255;
-  --arcoblue-4: 148, 191, 255;
-  --arcoblue-5: 78, 131, 253;
-  --arcoblue-6: 51, 112, 255;
-  --arcoblue-7: 36, 91, 219;
-  --arcoblue-8: 26, 72, 184;
-  --arcoblue-9: 18, 55, 148;
-  --arcoblue-10: 12, 40, 112;
+  /* 同步 arcoblue（Arco 主色链路与 primary 一致） */
+  --arcoblue-1: 235, 245, 252;
+  --arcoblue-2: 215, 231, 241;
+  --arcoblue-3: 183, 218, 242;
+  --arcoblue-4: 102, 187, 255;
+  --arcoblue-5: 26, 159, 255;
+  --arcoblue-6: 0, 131, 224;
+  --arcoblue-7: 0, 108, 190;
+  --arcoblue-8: 0, 88, 156;
+  --arcoblue-9: 15, 73, 116;
+  --arcoblue-10: 10, 52, 86;
 
   /* ========================================
      成功色
@@ -111,41 +112,41 @@
   --danger-10: 92, 27, 25;
 
   /* ========================================
-     中性色 - 文本
+     中性色 - 文本 #1A1A1C
      ======================================== */
-  --color-text-1: #1F2329;
-  --color-text-2: #646A73;
-  --color-text-3: #8F959E;
-  --color-text-4: #BBBFC4;
+  --color-text-1: #1A1A1C;
+  --color-text-2: #3D3F42;
+  --color-text-3: #5C5E62;
+  --color-text-4: #8E9094;
 
   /* ========================================
-     中性色 - 填充/背景
+     中性色 - 填充/背景（页 #F5F5F5，表面 #FFFFFF）
      ======================================== */
-  --color-fill-1: #F5F6F7;
-  --color-fill-2: #F0F1F2;
-  --color-fill-3: #DEE0E3;
-  --color-fill-4: #C9CDD4;
+  --color-fill-1: #EBEBEB;
+  --color-fill-2: #E0E0E0;
+  --color-fill-3: #D5D5D5;
+  --color-fill-4: #C8C8C8;
 
-  --color-bg-1: #FFFFFF;
-  --color-bg-2: #F5F6F7;
-  --color-bg-3: #F0F1F2;
-  --color-bg-4: #E5E6EB;
-  --color-bg-5: #C9CDD4;
+  --color-bg-1: #F5F5F5;
+  --color-bg-2: #FFFFFF;
+  --color-bg-3: #EBEBEB;
+  --color-bg-4: #E0E0E0;
+  --color-bg-5: #D0D0D0;
 
   /* ========================================
      中性色 - 边框
      ======================================== */
-  --color-border-1: #E5E6EB;
-  --color-border-2: #C9CDD4;
-  --color-border-3: #F2F3F5;
+  --color-border-1: #DDDDDD;
+  --color-border-2: #CCCCCC;
+  --color-border-3: #E8E8E8;
 
   /* ========================================
      阴影
      ======================================== */
-  --shadow-sm: 0 1px 2px rgba(31, 35, 41, 0.05);
-  --shadow-md: 0 2px 8px rgba(31, 35, 41, 0.08);
-  --shadow-lg: 0 4px 14px rgba(31, 35, 41, 0.1);
-  --shadow-xl: 0 8px 24px rgba(31, 35, 41, 0.12);
+  --shadow-sm: 0 1px 2px rgba(26, 26, 28, 0.06);
+  --shadow-md: 0 2px 8px rgba(26, 26, 28, 0.08);
+  --shadow-lg: 0 4px 14px rgba(26, 26, 28, 0.1);
+  --shadow-xl: 0 8px 24px rgba(26, 26, 28, 0.12);
 
   /* ========================================
      圆角
@@ -162,7 +163,7 @@
   --menu-item-radius: 6px;
   --page-title-size: 20px;
   --page-title-weight: 600;
-  --page-description-color: #6B7280;
+  --page-description-color: #3D3F42;
 
   /* ========================================
      Arco Design 覆盖
@@ -192,14 +193,14 @@
    Rosé Pine Dawn 风格
    ======================================== */
 [data-sidebar-theme="light"] {
-  --sidebar-bg: #FFFAF3;
-  --sidebar-bg-hover: #FAF4ED;
-  --sidebar-bg-active: #F4EDE8;
-  --sidebar-text-primary: #575279;
-  --sidebar-text-secondary: #797593;
-  --sidebar-text-muted: rgba(121, 117, 147, 0.45);
-  --sidebar-accent: #286983;
-  --sidebar-border: rgba(87, 82, 121, 0.1);
+  --sidebar-bg: #F5F5F5;
+  --sidebar-bg-hover: #EBEBEB;
+  --sidebar-bg-active: #E0E0E0;
+  --sidebar-text-primary: #1A1A1C;
+  --sidebar-text-secondary: #3D3F42;
+  --sidebar-text-muted: rgba(26, 26, 28, 0.45);
+  --sidebar-accent: #0083E0;
+  --sidebar-border: rgba(26, 26, 28, 0.1);
 }
 
 /* ========================================
@@ -246,38 +247,38 @@ body {
 
 /* Modal 确认弹窗按钮样式 */
 .arco-modal-footer .arco-btn-primary {
-  background: #3350EB !important;
-  border-color: #3350EB !important;
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
   border-radius: 6px !important;
   font-weight: 500 !important;
 }
 
 .arco-modal-footer .arco-btn-primary:hover {
-  background: #4E83FD !important;
-  border-color: #4E83FD !important;
+  background: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
 }
 
 .arco-modal-footer .arco-btn-primary:active {
-  background: #245BDB !important;
-  border-color: #245BDB !important;
+  background: var(--color-primary-active) !important;
+  border-color: var(--color-primary-active) !important;
 }
 
 .arco-modal-footer .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger) {
-  background: #F2F3F5 !important;
+  background: var(--color-fill-2) !important;
   border: none !important;
   border-radius: 6px !important;
-  color: var(--color-text-1, #1F2329) !important;
+  color: var(--color-text-1) !important;
   font-weight: 500 !important;
 }
 
 .arco-modal-footer .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger):hover {
-  background: #E5E6EB !important;
+  background: var(--color-fill-3) !important;
   box-shadow: none !important;
-  color: var(--color-text-1, #1F2329) !important;
+  color: var(--color-text-1) !important;
 }
 
 .arco-modal-footer .arco-btn:not(.arco-btn-primary):not(.arco-btn-status-danger):active {
-  background: #C9CDD4 !important;
+  background: var(--color-fill-4) !important;
 }
 
 .arco-drawer-content {
@@ -311,18 +312,18 @@ body {
    按钮渐变优化
    ======================================== */
 .arco-btn-primary:not(.arco-btn-disabled) {
-  background: linear-gradient(135deg, #4E83FD 0%, #3370FF 100%);
+  background: linear-gradient(135deg, #1A9EFF 0%, #0083E0 100%);
   border: none;
   transition: all 0.2s ease;
 }
 
 .arco-btn-primary:not(.arco-btn-disabled):hover {
-  background: linear-gradient(135deg, #5C8FFE 0%, #4580FF 100%);
-  box-shadow: 0 4px 12px rgba(51, 112, 255, 0.3);
+  background: linear-gradient(135deg, #33B0FF 0%, #0A94FF 100%);
+  box-shadow: 0 4px 12px rgba(0, 131, 224, 0.35);
 }
 
 .arco-btn-primary:not(.arco-btn-disabled):active {
-  background: linear-gradient(135deg, #3370FF 0%, #245BDB 100%);
+  background: linear-gradient(135deg, #0083E0 0%, #0F4974 100%);
 }
 
 /* ========================================
@@ -378,15 +379,15 @@ body {
    ======================================== */
 .arco-select-tag-blue.arco-select-view-multiple {
   background-color: #fff;
-  border: 1px solid #e5e6eb;
+  border: 1px solid var(--color-border-1);
   min-height: 32px;
   padding: 2px 4px;
 }
 
 .arco-select-tag-blue .arco-tag {
-  background-color: #d6e9f8 !important;
+  background-color: rgba(var(--color-primary-rgb), 0.18) !important;
   border: none !important;
-  color: #1f2329 !important;
+  color: var(--color-text-1) !important;
   border-radius: 4px;
   margin: 2px;
   padding: 0 8px;
@@ -401,7 +402,7 @@ body {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background-color: #9dc5e0;
+  background-color: rgba(var(--color-primary-rgb), 0.45);
   align-items: center;
   justify-content: center;
 }
@@ -417,7 +418,7 @@ body {
 }
 
 .arco-select-tag-blue .arco-tag .arco-tag-close-btn:hover {
-  background-color: #6a9ec4 !important;
+  background-color: rgba(var(--color-primary-rgb), 0.55) !important;
 }
 
 /* 移除图标 hover 高亮效果 */
@@ -440,7 +441,7 @@ body {
 
 /* 占位符样式 */
 .arco-select-tag-blue .arco-select-view-value-placeholder {
-  color: #c9cdd4 !important;
+  color: var(--color-text-4) !important;
 }
 
 /* ========================================
