@@ -93,7 +93,9 @@ public class SortAndPageConverter {
             if (isInnerField(fieldId)) {
                 builder.setInnerField(SortInnerField.newBuilder().setFieldId(fieldId).build());
             } else {
-                // 自定义文本字段（如成员邮箱）走文本排序；非文本字段由 zgraph 侧校验
+                // 自定义文本字段走文本排序；
+                // 自定义时间字段走日期排序  TODO 暂未支持
+                // TODO 其他类型字段，暂未支持
                 builder.setTextField(SortTextField.newBuilder().setFieldId(fieldId).build());
             }
         }
