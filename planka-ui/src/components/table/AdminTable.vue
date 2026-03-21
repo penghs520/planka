@@ -95,9 +95,8 @@ function handleRowClick(record: unknown) {
   }
 }
 
-/* 表头样式 */
 :deep(.arco-table-th) {
-  color: var(--color-text-1);
+  color: var(--color-text-2);
 }
 
 /* 表格单元格 padding 调整 */
