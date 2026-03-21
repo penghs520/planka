@@ -163,7 +163,7 @@ async function handleDeleteFieldConfig(config: FieldConfig) {
             type="text"
             size="mini"
             status="danger"
-            @click="handleDeleteFieldConfig(record)"
+            @click.stop="handleDeleteFieldConfig(record)"
           >
             {{ t('admin.action.delete') }}
           </a-button>
