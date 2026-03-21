@@ -7,15 +7,15 @@ import { ListViewPanel } from './components/list'
 const { t } = useI18n()
 const route = useRoute()
 
-// 当前选中的视图 ID
 const selectedViewId = ref<string>('')
 
-// 从路由参数初始化视图选择
 watch(
   () => route.query.viewId,
   (viewId) => {
     if (viewId && typeof viewId === 'string') {
       selectedViewId.value = viewId
+    } else {
+      selectedViewId.value = ''
     }
   },
   { immediate: true },

@@ -19,6 +19,8 @@ export default {
   issues: 'Issues',
   projects: 'Projects',
   views: 'Views',
+  expandViewsMenu: 'Expand views menu',
+  collapseViewsMenu: 'Collapse views menu',
   members: 'Members',
   createTeam: 'Create team',
   newTeamDefaultName: 'New team',

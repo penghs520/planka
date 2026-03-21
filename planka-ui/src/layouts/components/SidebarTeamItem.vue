@@ -42,11 +42,11 @@ function teamSubActive(segment: 'issues' | 'projects') {
       class="team-header"
       @click="toggle"
     >
+      <span class="team-name">{{ getCardTitle(team) }}</span>
       <IconDown
         class="chevron"
         :class="{ 'chevron--collapsed': !expanded }"
       />
-      <span class="team-name">{{ getCardTitle(team) }}</span>
     </button>
     <div
       v-show="expanded"
@@ -120,9 +120,12 @@ function teamSubActive(segment: 'issues' | 'projects') {
 }
 
 .team-name {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: left;
 }
 
 .team-children {
@@ -133,7 +136,7 @@ function teamSubActive(segment: 'issues' | 'projects') {
   display: block;
   height: 26px;
   line-height: 26px;
-  padding: 0 8px 0 22px;
+  padding: 0 8px 0 12px;
   border-radius: 5px;
   font-family: var(--sidebar-nav-font-family);
   font-size: var(--sidebar-nav-font-size);
@@ -154,6 +157,6 @@ function teamSubActive(segment: 'issues' | 'projects') {
 }
 
 .nav-row--project {
-  padding-left: 28px;
+  padding-left: 20px;
 }
 </style>

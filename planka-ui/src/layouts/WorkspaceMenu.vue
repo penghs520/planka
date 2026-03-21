@@ -13,9 +13,14 @@ import MenuNode from './components/MenuNode.vue'
 const { t } = useI18n()
 const route = useRoute()
 
-const props = defineProps<{
-  modelValue?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string
+    /** 嵌入 App 侧栏时使用：隐藏分区标题、紧凑样式、随侧栏滚动 */
+    variant?: 'default' | 'sidebar'
+  }>(),
+  { variant: 'default' },
+)
 
 const emit = defineEmits<{
   (e: 'update:modelValue', viewId: string): void
@@ -130,9 +135,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="workspace-menu">
-    <!-- 搜索框 -->
-    <div class="search-box">
+  <div
+    class="workspace-menu"
+    :class="{ 'workspace-menu--sidebar': props.variant === 'sidebar' }"
+  >
+    <!-- 搜索框（仅独立面板；侧栏嵌入不展示） -->
+    <div v-if="props.variant === 'default'" class="search-box">
       <a-input
         v-model="searchKeyword"
         size="small"
@@ -146,10 +154,10 @@ onMounted(() => {
 
     <!-- 菜单树 -->
     <a-spin :loading="loading" class="menu-tree-container">
-      <div class="menu-tree">
+      <div class="menu-tree" :class="{ 'menu-tree--sidebar': props.variant === 'sidebar' }">
         <!-- 置顶菜单 -->
         <div v-if="pinnedMenus.length > 0" class="menu-section">
-          <div class="section-header">
+          <div v-if="props.variant === 'default'" class="section-header">
             <span class="section-title">{{ t('common.layout.pinnedMenus') }}</span>
           </div>
           <div class="section-content">
@@ -165,9 +173,9 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- 全部菜单 -->
+        <!-- 全部菜单（侧栏嵌入时不重复「全部菜单」标题，节点紧跟在「视图」项下） -->
         <div class="menu-section">
-          <div class="section-header">
+          <div v-if="props.variant === 'default'" class="section-header">
             <span class="section-title">{{ t('common.layout.allMenus') }}</span>
           </div>
           <div class="section-content">
@@ -345,4 +353,21 @@ onMounted(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.workspace-menu--sidebar {
+  flex: none;
+  overflow: visible;
+  min-height: 0;
+
+  .menu-tree-container {
+    overflow: visible;
+  }
+
+  .menu-tree--sidebar {
+    overflow: visible;
+    max-height: none;
+    padding: 2px 0 4px;
+  }
+}
+
 </style>

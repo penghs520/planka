@@ -7,14 +7,12 @@ export class WorkspacePage {
   readonly sidebar: Locator
   readonly content: Locator
   readonly header: Locator
-  readonly menuSearch: Locator
   readonly settingsIcon: Locator
 
   constructor(private page: Page) {
-    this.sidebar = page.locator('.workspace-sidebar')
-    this.content = page.locator('.workspace-content')
-    this.header = page.locator('.workspace-header')
-    this.menuSearch = page.locator('.search-box input')
+    this.sidebar = page.locator('.nav-views-embed')
+    this.content = page.locator('.workspace-page')
+    this.header = page.locator('.app-sidebar')
     this.settingsIcon = page.locator('.header-right .icon-settings, .header-right [class*="settings"]')
   }
 
@@ -23,15 +21,11 @@ export class WorkspacePage {
   }
 
   async waitForLoaded() {
-    await this.header.waitFor({ state: 'visible' })
+    await this.sidebar.waitFor({ state: 'visible' })
   }
 
   async clickMenuItem(name: string) {
-    await this.page.locator(`.menu-item:has-text("${name}")`).click()
-  }
-
-  async searchMenu(keyword: string) {
-    await this.menuSearch.fill(keyword)
+    await this.page.locator(`.nav-views-embed .menu-item:has-text("${name}")`).click()
   }
 
   async navigateToAdmin() {

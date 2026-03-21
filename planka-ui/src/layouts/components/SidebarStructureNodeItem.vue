@@ -71,16 +71,16 @@ const childPad = computed(() => `${8 + Math.min(props.depth, 6) * 8}px`)
       :style="{ paddingLeft: childPad }"
       @click="toggle"
     >
-      <IconDown
-        class="chevron"
-        :class="{ 'chevron--collapsed': !expanded }"
-      />
       <span class="node-name">{{ node.name }}</span>
       <span
         v-if="node.levelName"
         class="level-tag"
         :title="node.levelName"
       >{{ node.levelName }}</span>
+      <IconDown
+        class="chevron"
+        :class="{ 'chevron--collapsed': !expanded }"
+      />
     </button>
     <div
       v-show="expanded"
@@ -195,7 +195,7 @@ const childPad = computed(() => `${8 + Math.min(props.depth, 6) * 8}px`)
   display: block;
   height: 26px;
   line-height: 26px;
-  padding: 0 8px 0 22px;
+  padding: 0 8px 0 12px;
   border-radius: 5px;
   font-family: var(--sidebar-nav-font-family);
   font-size: var(--sidebar-nav-font-size);
@@ -216,6 +216,6 @@ const childPad = computed(() => `${8 + Math.min(props.depth, 6) * 8}px`)
 }
 
 .nav-row--project {
-  padding-left: 28px;
+  padding-left: 20px;
 }
 </style>

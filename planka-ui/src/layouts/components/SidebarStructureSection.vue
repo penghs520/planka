@@ -49,11 +49,11 @@ function toggle(structureId: string) {
           :title="s.description || undefined"
           @click="toggle(String(s.id))"
         >
+          <span class="section-title">{{ s.name }}</span>
           <IconDown
             class="chevron"
             :class="{ 'chevron--collapsed': !isExpanded(String(s.id)) }"
           />
-          <span class="section-title">{{ s.name }}</span>
         </button>
         <div
           v-show="isExpanded(String(s.id))"
@@ -116,9 +116,12 @@ function toggle(structureId: string) {
 }
 
 .section-title {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: left;
 }
 
 .section-body {
@@ -126,6 +129,6 @@ function toggle(structureId: string) {
   flex-direction: column;
   gap: 1px;
   padding-top: 2px;
-  padding-left: 14px;
+  padding-left: 8px;
 }
 </style>

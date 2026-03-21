@@ -19,6 +19,8 @@ export default {
   issues: 'Issues',
   projects: 'Projects',
   views: '视图',
+  expandViewsMenu: '展开视图菜单',
+  collapseViewsMenu: '收起视图菜单',
   members: '成员',
   createTeam: '创建团队',
   newTeamDefaultName: '新团队',

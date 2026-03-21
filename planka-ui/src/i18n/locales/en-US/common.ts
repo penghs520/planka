@@ -419,7 +419,7 @@ export default {
 
   // Workspace
   workspace: {
-    selectViewHint: 'Please select a view from the left',
+    selectViewHint: 'Select a view under Workspace → Views in the sidebar',
   },
 
   // Card operations

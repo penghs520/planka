@@ -59,11 +59,11 @@ async function handleCreateTeam() {
       class="section-header"
       @click="expanded = !expanded"
     >
+      <span class="section-title">{{ t('sidebar.yourTeamsSection') }}</span>
       <IconDown
         class="chevron"
         :class="{ 'chevron--collapsed': !expanded }"
       />
-      <span class="section-title">{{ t('sidebar.yourTeamsSection') }}</span>
     </button>
     <div
       v-show="expanded"
@@ -128,6 +128,15 @@ async function handleCreateTeam() {
   transform: rotate(-90deg);
 }
 
+.section-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
 .section-body {
   padding-top: 4px;
 }
@@ -138,7 +147,7 @@ async function handleCreateTeam() {
   width: 100%;
   height: 28px;
   margin-top: 4px;
-  padding: 0 8px 0 22px;
+  padding: 0 8px 0 8px;
   border: none;
   border-radius: 5px;
   background: transparent;

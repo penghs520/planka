@@ -419,7 +419,7 @@ export default {
 
   // 工作区
   workspace: {
-    selectViewHint: '请从左侧选择一个视图',
+    selectViewHint: '请在左侧栏「工作空间 → 视图」下选择具体视图',
   },
 
   // 卡片操作

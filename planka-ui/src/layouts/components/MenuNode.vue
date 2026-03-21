@@ -20,14 +20,14 @@ const emit = defineEmits<{
   <div v-if="node.type === 'GROUP'" class="menu-group">
     <div
       class="group-header"
-      :style="{ paddingLeft: `${level * 12 + 8}px` }"
+      :style="{ paddingLeft: `${level * 12 + 8}px`, paddingRight: '8px' }"
       @click="emit('toggle-group', node.id)"
     >
+      <span class="group-name">{{ node.name }}</span>
       <component
         :is="isExpanded(node.id) ? IconDown : IconRight"
         class="expand-icon"
       />
-      <span class="group-name">{{ node.name }}</span>
     </div>
     <div v-show="isExpanded(node.id)" class="group-children">
       <MenuNode
@@ -80,9 +80,12 @@ const emit = defineEmits<{
 }
 
 .group-name {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: var(--sidebar-nav-font-weight-active, 600);
 }
 
 .menu-item {

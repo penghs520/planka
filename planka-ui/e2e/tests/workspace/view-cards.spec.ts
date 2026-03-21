@@ -19,9 +19,7 @@ test.describe('工作区视图', () => {
     await expect(page).toHaveURL(/\/workspace/)
   })
 
-  test('侧边栏菜单搜索', async ({ page }) => {
-    await workspace.searchMenu('测试')
-    // 搜索后菜单应过滤
-    await page.waitForTimeout(300) // 等待搜索防抖
+  test('侧栏视图菜单树可见', async () => {
+    await expect(workspace.sidebar.locator('.menu-tree')).toBeVisible()
   })
 })
