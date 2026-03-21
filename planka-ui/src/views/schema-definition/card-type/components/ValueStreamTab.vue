@@ -213,7 +213,7 @@ defineExpose({
         <!-- 看板 -->
         <ValueStreamBoard
           :step-list="localStepList"
-          :value-stream="valueStream"
+          :value-stream="valueStream ?? undefined"
           @update:step-list="handleStepListUpdate"
         />
       </template>

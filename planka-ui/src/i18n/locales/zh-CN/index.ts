@@ -8,6 +8,7 @@ import comment from './comment'
 import history from './history'
 import oss from './oss'
 import sidebar from './sidebar'
+import workspaceList from './workspaceList'
 
 export default {
   admin,
@@ -17,4 +18,5 @@ export default {
   history,
   oss,
   sidebar,
+  workspaceList,
 }

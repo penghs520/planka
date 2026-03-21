@@ -2,6 +2,8 @@
  * 卡片相关类型定义
  */
 
+import type { Condition } from './condition'
+
 // ==================== 基础类型 ====================
 
 /**
@@ -491,16 +493,6 @@ export interface QueryScope {
 }
 
 /**
- * 查询条件（简化版，支持 LINK 类型）
- */
-export interface QueryCondition {
-  type: 'LINK' | 'AND' | 'OR' | 'NOT'
-  linkFieldId?: string
-  targetCardIds?: string[]
-  conditions?: QueryCondition[]
-}
-
-/**
  * 排序配置
  */
 export interface SortConfig {
@@ -530,7 +522,8 @@ export interface SortAndPage {
 export interface CardQueryRequest {
   queryContext: QueryContext
   queryScope: QueryScope
-  condition?: QueryCondition
+  /** 与后端 {@link cn.planka.domain.schema.definition.condition.Condition} 一致 */
+  condition?: Condition
   yield?: Yield
 }
 

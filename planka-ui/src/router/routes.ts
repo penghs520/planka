@@ -47,13 +47,69 @@ export const routes: RouteRecordRaw[] = [
         path: '',
         redirect: '/workspace',
       },
-      // 工作区
+      {
+        path: 'workspace/issues',
+        name: 'WorkspaceIssues',
+        component: () => import('@/views/workspace/WorkspaceIssuesView.vue'),
+        meta: {
+          titleKey: 'sidebar.issues',
+        },
+      },
+      {
+        path: 'workspace/projects',
+        name: 'WorkspaceProjects',
+        component: () => import('@/views/workspace/WorkspaceProjectsView.vue'),
+        meta: {
+          titleKey: 'sidebar.projects',
+        },
+      },
+      {
+        path: 'workspace/teams',
+        name: 'WorkspaceTeams',
+        component: () => import('@/views/workspace/WorkspaceTeamsView.vue'),
+        meta: {
+          titleKey: 'sidebar.teams',
+        },
+      },
+      // 工作区（视图列表）
       {
         path: 'workspace',
         name: 'Workspace',
         component: () => import('@/views/workspace/WorkspacePage.vue'),
         meta: {
           titleKey: 'common.route.workspace',
+        },
+      },
+      {
+        path: 'team/:teamId',
+        redirect: (to) => ({ path: `/team/${to.params.teamId}/issues` }),
+      },
+      {
+        path: 'team/:teamId/issues',
+        name: 'TeamIssues',
+        component: () => import('@/views/team/TeamIssuesView.vue'),
+        meta: {
+          titleKey: 'sidebar.teamIssues',
+        },
+      },
+      {
+        path: 'team/:teamId/projects',
+        name: 'TeamProjects',
+        component: () => import('@/views/team/TeamProjectsView.vue'),
+        meta: {
+          titleKey: 'sidebar.teamProjects',
+        },
+      },
+      {
+        path: 'project/:projectId',
+        redirect: (to) => ({ path: `/project/${to.params.projectId}/issues` }),
+      },
+      {
+        path: 'project/:projectId/issues',
+        name: 'ProjectIssues',
+        component: () => import('@/views/project/ProjectIssuesView.vue'),
+        meta: {
+          titleKey: 'sidebar.issues',
         },
       },
       // TODO: Phase 4 - Inbox

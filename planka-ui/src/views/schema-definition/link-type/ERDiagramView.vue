@@ -438,20 +438,22 @@ function buildGraph() {
 function applyFilter() {
   if (!isFilterMode.value) {
     // No filter - show all nodes and edges
-    nodes.value = allNodes.value.map(node => ({
+    const showAllNodes: any[] = (allNodes.value as any[]).map((node: any) => ({
       ...node,
       hidden: false,
       data: { ...node.data, isHighlighted: false },
     }))
-    edges.value = allEdges.value.map(edge => ({
+    nodes.value = showAllNodes as Node[]
+    const showAllEdges: any[] = (allEdges.value as any[]).map((edge: any) => ({
       ...edge,
       hidden: false,
     }))
+    edges.value = showAllEdges as Edge[]
   } else {
     // Apply filter
     const visibleNodeIds = filteredNodeIds.value
 
-    nodes.value = allNodes.value.map(node => ({
+    const filteredNodes: any[] = (allNodes.value as any[]).map((node: any) => ({
       ...node,
       hidden: !visibleNodeIds.has(node.id),
       data: {
@@ -459,11 +461,13 @@ function applyFilter() {
         isHighlighted: isNodeHighlighted(node.id, node.data),
       },
     }))
+    nodes.value = filteredNodes as Node[]
 
-    edges.value = allEdges.value.map(edge => ({
+    const filteredEdges: any[] = (allEdges.value as any[]).map((edge: any) => ({
       ...edge,
       hidden: !visibleNodeIds.has(edge.source) || !visibleNodeIds.has(edge.target),
     }))
+    edges.value = filteredEdges as Edge[]
   }
 }
 
@@ -507,7 +511,7 @@ function updateEdgeHandles() {
   let hasChanges = false
 
   // Check and update handles
-  const updatedEdges = edges.value.map(edge => {
+  const updatedEdges = (edges.value as any[]).map((edge: any) => {
     const sourcePos = nodePositions.get(edge.source)
     const targetPos = nodePositions.get(edge.target)
 
@@ -583,7 +587,7 @@ async function loadFieldConfigs(cardTypeId: string) {
 
 // Update node's data helper
 function updateNodeData(cardTypeId: string, dataUpdater: (data: Record<string, unknown>) => Record<string, unknown>) {
-  const updateMapper = (node: Node) => {
+  const updateMapper = (node: any) => {
     if (node.data?.entityId === cardTypeId) {
       return {
         ...node,
@@ -594,10 +598,10 @@ function updateNodeData(cardTypeId: string, dataUpdater: (data: Record<string, u
   }
 
   // Update allNodes (source of truth)
-  allNodes.value = allNodes.value.map(updateMapper)
+  allNodes.value = (allNodes.value as any[]).map(updateMapper) as Node[]
 
   // Update visible nodes
-  const updatedNodes = nodes.value.map(updateMapper)
+  const updatedNodes = (nodes.value as any[]).map(updateMapper) as Node[]
 
   // Use vue-flow API in focus mode to avoid state sync issues
   if (isFocusMode.value && vueFlowRef.value) {
@@ -1002,7 +1006,7 @@ function enterFocusMode(nodeId: string) {
   })
 
   // Update nodes: hide non-related, reposition related
-  const updatedNodes = allNodes.value.map(node => {
+  const updatedNodes = (allNodes.value as any[]).map((node: any) => {
     const isRelated = relatedNodeIds.has(node.id)
     const newPos = newPositions.get(node.id)
 
@@ -1015,10 +1019,10 @@ function enterFocusMode(nodeId: string) {
         isHighlighted: node.id === nodeId,
       },
     }
-  })
+  }) as Node[]
 
   // Update edges: recalculate handles and hide non-related
-  const updatedEdges = allEdges.value.map(edge => {
+  const updatedEdges = (allEdges.value as any[]).map((edge: any) => {
     const isVisible = relatedNodeIds.has(edge.source) && relatedNodeIds.has(edge.target)
 
     if (!isVisible) {
@@ -1044,7 +1048,7 @@ function enterFocusMode(nodeId: string) {
       sourceHandle,
       targetHandle,
     }
-  })
+  }) as Edge[]
 
   // Update via vue-flow API if available, otherwise use v-model
   if (vueFlowRef.value) {
@@ -1071,7 +1075,7 @@ function exitFocusMode() {
   focusedNodeId.value = null
 
   // Restore original positions
-  const restoredNodes = allNodes.value.map(node => {
+  const restoredNodes = (allNodes.value as any[]).map((node: any) => {
     const savedPos = savedNodePositions.value.get(node.id)
     return {
       ...node,
@@ -1082,7 +1086,7 @@ function exitFocusMode() {
         isHighlighted: false,
       },
     }
-  })
+  }) as Node[]
 
   // Update via v-model bound ref
   nodes.value = restoredNodes
@@ -1091,7 +1095,7 @@ function exitFocusMode() {
   const nodeWidth = 280
   const nodeHeight = 200
 
-  const restoredEdges = allEdges.value.map(edge => {
+  const restoredEdges = (allEdges.value as any[]).map((edge: any) => {
     const sourcePos = savedNodePositions.value.get(edge.source)
     const targetPos = savedNodePositions.value.get(edge.target)
 
@@ -1110,7 +1114,7 @@ function exitFocusMode() {
       sourceHandle,
       targetHandle,
     }
-  })
+  }) as Edge[]
 
   // Update via vue-flow API if available, otherwise use v-model
   if (vueFlowRef.value) {

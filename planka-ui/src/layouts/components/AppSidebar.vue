@@ -5,6 +5,8 @@ import SidebarHeader from './SidebarHeader.vue'
 import SidebarQuickActions from './SidebarQuickActions.vue'
 import SidebarAdmin from './SidebarAdmin.vue'
 import SidebarFooter from './SidebarFooter.vue'
+import SidebarWorkspace from './SidebarWorkspace.vue'
+import SidebarYourTeams from './SidebarYourTeams.vue'
 import { useSidebarTheme } from '@/composables/useSidebarTheme'
 
 // 初始化主题（确保 DOM 属性同步）
@@ -70,7 +72,10 @@ function startResize(e: MouseEvent) {
 
     <!-- 可滚动的主内容区 -->
     <nav class="sidebar-scroll">
-      <!-- TODO: Phase 3 - SidebarTeams 占位 -->
+      <template v-if="!showAdminNav">
+        <SidebarWorkspace />
+        <SidebarYourTeams />
+      </template>
 
       <!-- 管理菜单：需从头像进入 /admin 后才显示 -->
       <SidebarAdmin v-if="showAdminNav" />

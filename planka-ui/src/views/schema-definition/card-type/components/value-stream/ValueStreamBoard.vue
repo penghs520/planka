@@ -144,7 +144,7 @@ const migrationModalVisible = ref(false)
 const migrationMode = ref<'single' | 'multiple'>('single')
 const deletingStatuses = ref<StatusConfig[]>([])
 const deletingStepId = ref<string | null>(null)
-const { loading: migrationLoading, withLoading: withMigrationLoading } = useLoading()
+const { withLoading: withMigrationLoading } = useLoading()
 
 // 获取所有可用的目标状态（排除被删除的状态）
 const availableTargetStatuses = computed(() => {
@@ -310,25 +310,26 @@ function handleStatusInsertHover(hovered: boolean) {
 // 处理迁移确认
 async function handleMigrationConfirm(migrationMap: Record<string, string>) {
   if (!props.valueStream) return
+  const streamId = props.valueStream.id
+  if (streamId == null) return
 
   await withMigrationLoading(async () => {
     try {
       if (migrationMode.value === 'single') {
         // 单个状态删除
         const status = deletingStatuses.value[0]
-        const targetStatusId = migrationMap[status.id!]
+        const statusId = status?.id
+        if (statusId == null) return
+        const targetStatusId = migrationMap[statusId]
+        if (targetStatusId == null) return
 
-        await valueStreamApi.deleteStatusWithMigration(
-          props.valueStream!.id,
-          status.id!,
-          targetStatusId,
-        )
+        await valueStreamApi.deleteStatusWithMigration(streamId, statusId, targetStatusId)
 
         // 从本地状态中删除该状态
         if (props.stepList) {
           const newStepList = props.stepList.map((step) => ({
             ...step,
-            statusList: step.statusList.filter((s) => s.id !== status.id),
+            statusList: step.statusList.filter((s) => s.id !== statusId),
           }))
           emit('update:stepList', newStepList)
         }
@@ -336,15 +337,13 @@ async function handleMigrationConfirm(migrationMap: Record<string, string>) {
         Message.success(t('admin.cardType.valueStream.statusMigration.migrationSuccess'))
       } else {
         // 阶段删除
-        await valueStreamApi.deleteStepWithMigration(
-          props.valueStream!.id,
-          deletingStepId.value!,
-          migrationMap,
-        )
+        const stepId = deletingStepId.value
+        if (stepId == null) return
+        await valueStreamApi.deleteStepWithMigration(streamId, stepId, migrationMap)
 
         // 从本地状态中删除该阶段
         if (props.stepList) {
-          const newStepList = props.stepList.filter((s) => s.id !== deletingStepId.value)
+          const newStepList = props.stepList.filter((s) => s.id !== stepId)
           emit('update:stepList', newStepList)
         }
 

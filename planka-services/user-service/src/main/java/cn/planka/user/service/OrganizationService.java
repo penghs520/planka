@@ -25,9 +25,8 @@ public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
     private final UserOrganizationRepository userOrganizationRepository;
-    private final MemberCardTypeService memberCardTypeService;
     private final MemberCardService memberCardService;
-    private final RootCardTypeService rootCardTypeService;
+    private final BuiltinCardTypeService builtinCardTypeService;
 
     /**
      * 创建组织
@@ -44,19 +43,22 @@ public class OrganizationService {
         org.setCreatedBy(userId);
 
         // 2. 创建成员属性集（包含用户名、邮箱、电话字段定义）
-        String memberAbstractCardTypeId = memberCardTypeService.createMemberAbstractCardType(org.getId());
+        String memberAbstractCardTypeId = builtinCardTypeService.createMemberAbstractCardType(org.getId());
 
         // 3. 创建成员实体类型（继承属性集）
-        String memberCardTypeId = memberCardTypeService.createMemberCardType(org.getId(), memberAbstractCardTypeId);
+        String memberCardTypeId = builtinCardTypeService.createMemberCardType(org.getId(), memberAbstractCardTypeId);
         org.setMemberCardTypeId(memberCardTypeId);
 
         // 4. 创建任意卡属性集及关联（创建人/归档人/丢弃人，关联目标为成员属性集）
-        rootCardTypeService.createRootCardType(org.getId());
+        builtinCardTypeService.createAnyTraitAndSystemMemberLinks(org.getId());
+
+        // 5. 内置 Team / Project / Issue 及业务关联
+        builtinCardTypeService.initBuiltinTypes(org.getId());
 
         organizationRepository.save(org);
         log.info("Organization created: {} by user {}", org.getId(), userId);
 
-        // 5. 创建创建人的成员关系（OWNER）
+        // 6. 创建创建人的成员关系（OWNER）
         UserOrganizationEntity userOrg = new UserOrganizationEntity();
         userOrg.setId(SnowflakeIdGenerator.generateStr());
         userOrg.setUserId(userId);
@@ -66,7 +68,7 @@ public class OrganizationService {
         userOrg.setInvitedBy(null); // 自己创建的
         userOrganizationRepository.save(userOrg);
 
-        // 6. 创建成员卡片（预留接口）
+        // 7. 创建成员卡片（预留接口）
         String memberCardId = memberCardService.createMemberCard(org.getId(), memberCardTypeId, userId);
         if (memberCardId != null) {
             userOrg.setMemberCardId(memberCardId);

@@ -8,7 +8,7 @@
 
 1. **统一为一套布局** — 管理后台嵌入主布局侧边栏，不再需要独立的 DefaultLayout
 2. **侧边栏支持深色/浅色切换** — Rosé Pine 配色方案，默认深色
-3. **新建独立 Team 表** — `sys_team` + `sys_team_member`，不依赖 Schema 系统
+3. **Team / Project / Issue 为内置卡片类型** — 复用 Schema + 图存储，不建 `sys_team` 表
 
 ## 实施顺序
 
@@ -141,75 +141,49 @@ Response: PageResult<{ id, title, code, cardTypeName, status }>
 
 ---
 
-## Phase 3: 多团队模式（待实施）
+## Phase 3: 多团队模式（已改为内置卡片类型）
 
-### 数据模型
-```sql
-CREATE TABLE sys_team (
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  org_id BIGINT NOT NULL COMMENT '所属组织',
-  name VARCHAR(100) NOT NULL COMMENT '团队名称',
-  identifier VARCHAR(20) COMMENT '团队标识(如 ENG, DESIGN)',
-  icon VARCHAR(50) COMMENT '图标',
-  color VARCHAR(20) DEFAULT '#5E6AD2' COMMENT '主题色',
-  sort_order INT DEFAULT 0 COMMENT '排序',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  KEY idx_org_id (org_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='团队';
+### 数据模型（无独立 Team 表）
 
-CREATE TABLE sys_team_member (
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  team_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  role VARCHAR(20) DEFAULT 'MEMBER' COMMENT 'LEADER/MEMBER',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-  UNIQUE KEY uk_team_user (team_id, user_id),
-  KEY idx_user_id (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='团队成员';
-```
+- **Team / Project / Issue**：各为 `EntityCardType`（`systemType=true`），**不**在 schema 上显式 `parentTypeIds` 继承 `{orgId}:any-trait`（由运行时/模型隐式视为任意卡）；字段直接挂在实体类型上。
+- **内置字段**（名称统一用**卡片标题**，不单独建 name/title 字段）：Team（identifier、color）；Project（identifier、status 枚举）；Issue（priority、status 枚举）。产品用语为 **Issue**，不使用「工单」。
+- **内置关联**：`team-member`（团队 ↔ 成员属性集）、`team-lead`（团队 → 成员，**负责人**，单选）、`project-lead`（项目 → 成员，**负责人**，单选）、`team-project`（团队 → 项目，项目侧单选可空）、`project-issue`（项目 → 工作项，工作项侧单选可空）。
+- **卡片类型显示名（中文）**：团队、项目、工作项（`code` 仍为 `team` / `project` / `issue`）。
 
-### 后端 API
-user-service 新增 TeamController：
-```
-GET    /api/v1/teams              — 获取当前组织的团队列表
-POST   /api/v1/teams              — 创建团队
-PUT    /api/v1/teams/{id}         — 更新团队
-DELETE /api/v1/teams/{id}         — 删除团队
-GET    /api/v1/teams/{id}/members — 获取团队成员
-POST   /api/v1/teams/{id}/members — 添加成员
-DELETE /api/v1/teams/{id}/members/{userId} — 移除成员
-GET    /api/v1/teams/my           — 获取我所在的团队
-```
+组织创建时由 user-service `BuiltinCardTypeService` 写入 schema；存量组织由 `BuiltinCardTypeMigrationRunner` 在启动时补建（以 `{orgId}:team` 是否存在为判据）。
 
-### 侧边栏展示
-```
-SidebarTeams.vue
-└── SidebarTeamSection.vue (v-for team in myTeams)
-    ├── 团队标识色块 + 团队名（可折叠）
-    └── 团队成员数 + 简要信息
-```
+### 后端
 
-### 文件清单
+- `planka-common`：`SystemSchemaIds` 扩展 Team/Project/Issue 及 link、field ID。
+- `user-service`：`BuiltinCardTypeService.java`（合并原成员属性集/成员类型、任意卡属性集与创建人/归档人/丢弃人、Team/Project/Issue）；`OrganizationService.createOrganization` 中按序调用；`BuiltinCardTypeMigrationRunner.java`。
+- **不新增** `TeamController` / `sys_team` 表；列表与 CRUD 走现有 **card-service** 分页查询与卡片 API。
 
-**新增：**
-- `docker/mysql/init/09_team_tables.sql` — 建表
-- 后端: `TeamController.java`, `TeamService.java`, `TeamRepository.java`, `TeamEntity.java`, `TeamMemberEntity.java`, `TeamDTO.java`
-- `src/api/team.ts` — Team API
-- `src/stores/team.ts` — Team Store
-- `src/layouts/components/SidebarTeams.vue` — 团队列表
-- `src/layouts/components/SidebarTeamSection.vue` — 团队区块
-- `src/views/admin/team/TeamListView.vue` — 团队管理页
-- `src/views/admin/team/components/TeamFormModal.vue` — 编辑弹窗
-- `src/i18n/locales/zh-CN/team.ts`
-- `src/i18n/locales/en-US/team.ts`
+### 前端（Linear 式侧栏）
 
-**修改：**
-- `src/router/routes.ts` — 新增 /admin/team 路由
-- `src/layouts/components/SidebarAdmin.vue` — 新增团队管理菜单项
-- `gateway-service application.yml` — 新增 team 路由
+- **工作空间**：`/workspace/issues`、`/workspace/projects`、`/workspace/teams`（组织级聚合）；成员入口 `/admin/members`；视图入口仍为 `/workspace`。
+- **你的团队**：`SidebarYourTeams` + `SidebarTeamItem`；`/team/:teamId/issues|projects`；`/project/:projectId/issues`；`+ 创建团队` 调用卡片创建并写 `team-member` 关联。
+- **API**：`src/api/team.ts`（基于 `cardApi.pageQuery` + `LinkCondition`）；`src/constants/systemSchemaIds.ts`；`src/stores/teamNav.ts`。
+
+### 文件清单（实现）
+
+**后端新增/修改：**
+
+- `planka-shared/planka-common/.../SystemSchemaIds.java`
+- `planka-services/user-service/.../BuiltinCardTypeService.java`
+- `planka-services/user-service/.../BuiltinCardTypeMigrationRunner.java`
+- `OrganizationService.java`、`OrganizationRepository.java`
+
+**前端新增/修改：**
+
+- `planka-ui/src/api/team.ts`、`src/constants/systemSchemaIds.ts`、`src/utils/card-query.ts`
+- `planka-ui/src/stores/teamNav.ts`
+- `planka-ui/src/layouts/components/SidebarWorkspace.vue`、`SidebarYourTeams.vue`、`SidebarTeamItem.vue`
+- `planka-ui/src/layouts/components/AppSidebar.vue`
+- `planka-ui/src/views/workspace/WorkspaceIssuesView.vue`、`WorkspaceProjectsView.vue`、`WorkspaceTeamsView.vue`、`EntityCardTable.vue`
+- `planka-ui/src/views/team/TeamIssuesView.vue`、`TeamProjectsView.vue`
+- `planka-ui/src/views/project/ProjectIssuesView.vue`
+- `planka-ui/src/router/routes.ts`、`src/types/card.ts`（查询条件使用完整 `Condition`）
+- i18n：`sidebar`、`workspaceList`
 
 ---
 

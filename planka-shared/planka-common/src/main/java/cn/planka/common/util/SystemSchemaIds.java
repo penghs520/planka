@@ -62,6 +62,44 @@ public final class SystemSchemaIds {
         return orgId + ":any-trait";
     }
 
+    // ---------- Team / Project / Issue 实体类型 ----------
+
+    public static String teamCardTypeId(String orgId) {
+        return orgId + ":team";
+    }
+
+    public static String projectCardTypeId(String orgId) {
+        return orgId + ":project";
+    }
+
+    public static String issueCardTypeId(String orgId) {
+        return orgId + ":issue";
+    }
+
+    public static String teamIdentifierFieldId(String orgId) {
+        return orgId + ":team:identifier";
+    }
+
+    public static String teamColorFieldId(String orgId) {
+        return orgId + ":team:color";
+    }
+
+    public static String projectIdentifierFieldId(String orgId) {
+        return orgId + ":project:identifier";
+    }
+
+    public static String projectStatusFieldId(String orgId) {
+        return orgId + ":project:status";
+    }
+
+    public static String issuePriorityFieldId(String orgId) {
+        return orgId + ":issue:priority";
+    }
+
+    public static String issueStatusFieldId(String orgId) {
+        return orgId + ":issue:status";
+    }
+
     // ======================= 关联类型 ID =======================
 
     /** 关联类型 ID 模式：创建人 */
@@ -107,6 +145,41 @@ public final class SystemSchemaIds {
      */
     public static String discarderLinkTypeId(String orgId) {
         return orgId + LINK_DISCARDER_PATTERN.substring(0, LINK_DISCARDER_PATTERN.length() - 1);
+    }
+
+    /**
+     * 团队 ↔ 成员
+     */
+    public static String teamMemberLinkTypeId(String orgId) {
+        return orgId + ":link:team-member";
+    }
+
+    /**
+     * 团队 ↔ 项目
+     */
+    public static String teamProjectLinkTypeId(String orgId) {
+        return orgId + ":link:team-project";
+    }
+
+    /**
+     * 项目 ↔ Issue
+     */
+    public static String projectIssueLinkTypeId(String orgId) {
+        return orgId + ":link:project-issue";
+    }
+
+    /**
+     * 团队 → 负责人（成员）
+     */
+    public static String teamLeadLinkTypeId(String orgId) {
+        return orgId + ":link:team-lead";
+    }
+
+    /**
+     * 项目 → 负责人（成员）
+     */
+    public static String projectLeadLinkTypeId(String orgId) {
+        return orgId + ":link:project-lead";
     }
 
     // ======================= 辅助方法 =======================

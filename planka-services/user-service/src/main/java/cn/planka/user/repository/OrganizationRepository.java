@@ -59,4 +59,13 @@ public class OrganizationRepository {
         }
         return organizationMapper.selectBatchIds(ids);
     }
+
+    /**
+     * 所有未软删除的组织（用于启动时补丁）
+     */
+    public List<OrganizationEntity> findAllActive() {
+        LambdaQueryWrapper<OrganizationEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.isNull(OrganizationEntity::getDeletedAt);
+        return organizationMapper.selectList(wrapper);
+    }
 }

@@ -2,7 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { FormInstance } from '@arco-design/web-vue'
-import type { StatusConfig, StepConfig, ValueStreamDefinition } from '@/types/value-stream'
+import type { StatusConfig, ValueStreamDefinition } from '@/types/value-stream'
 import { StepStatusKindConfig } from '@/types/value-stream'
 import { valueStreamApi } from '@/api/value-stream'
 import { useLoading } from '@/hooks/useLoading'
@@ -73,15 +73,19 @@ async function loadStatusInfo() {
   migrationMap.value = {}
 
   await withLoading(async () => {
+    const streamId = props.valueStream.id
     const promises = props.deletingStatuses.map(async (status) => {
       // 查询卡片数量
       let cardCount = 0
+      const sid = status.id
       try {
-        cardCount = await valueStreamApi.getCardCountByStatus(
-          status.id!,
-          props.valueStream.id,
-          props.valueStream.cardTypeId,
-        )
+        if (sid != null && streamId != null) {
+          cardCount = await valueStreamApi.getCardCountByStatus(
+            sid,
+            streamId,
+            props.valueStream.cardTypeId,
+          )
+        }
       } catch (error) {
         console.error('Failed to get card count:', error)
       }
@@ -103,7 +107,9 @@ async function loadStatusInfo() {
 
     // 初始化迁移映射
     props.deletingStatuses.forEach((status) => {
-      migrationMap.value[status.id!] = ''
+      if (status.id != null) {
+        migrationMap.value[status.id] = ''
+      }
     })
   })
 }
@@ -146,8 +152,8 @@ async function handleConfirm() {
           :wrapper-col-props="{ span: 16 }"
         >
           <div
-            v-for="status in statusesWithInfo"
-            :key="status.id"
+            v-for="(status, idx) in statusesWithInfo"
+            :key="status.id ?? `migration-${idx}`"
             class="status-migration-item"
           >
             <div class="status-info">

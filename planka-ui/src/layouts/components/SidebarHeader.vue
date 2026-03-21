@@ -11,7 +11,6 @@ import type { OrganizationDTO } from '@/types/member'
 import CreateOrgModal from '@/views/org/CreateOrgModal.vue'
 
 const { t } = useI18n()
-const defaultLogo = '/favicon.svg'
 
 const router = useRouter()
 const orgStore = useOrgStore()
