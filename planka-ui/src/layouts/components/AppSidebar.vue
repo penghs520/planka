@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import SidebarHeader from './SidebarHeader.vue'
 import SidebarQuickActions from './SidebarQuickActions.vue'
 import SidebarAdmin from './SidebarAdmin.vue'
@@ -8,6 +9,10 @@ import { useSidebarTheme } from '@/composables/useSidebarTheme'
 
 // 初始化主题（确保 DOM 属性同步）
 useSidebarTheme()
+
+const route = useRoute()
+/** 仅管理后台路由展示定义/配置等菜单；工作区侧栏不与管理菜单同屏 */
+const showAdminNav = computed(() => route.path.startsWith('/admin'))
 
 defineEmits<{
   'open-command-palette': []
@@ -67,8 +72,8 @@ function startResize(e: MouseEvent) {
     <nav class="sidebar-scroll">
       <!-- TODO: Phase 3 - SidebarTeams 占位 -->
 
-      <!-- 管理入口 -->
-      <SidebarAdmin />
+      <!-- 管理菜单：需从头像进入 /admin 后才显示 -->
+      <SidebarAdmin v-if="showAdminNav" />
     </nav>
 
     <!-- 底部：用户 + 设置 -->

@@ -17,7 +17,8 @@ import IconNotification from '@/components/icons/IconNotification.vue'
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const { isAdmin } = usePermission()
+const { isAdmin, isSuperAdmin } = usePermission()
+const showAdminSidebar = computed(() => isAdmin.value || isSuperAdmin.value)
 
 const activeKey = computed(() => {
   const activeMenu = route.meta.activeMenu as string | undefined
@@ -93,7 +94,7 @@ function navigateTo(item: MenuItem) {
 </script>
 
 <template>
-  <div v-if="isAdmin" class="sidebar-admin">
+  <div v-if="showAdminSidebar" class="sidebar-admin">
     <template v-for="section in visibleSections" :key="section.key">
       <div class="section-label">{{ t(section.labelKey) }}</div>
       <div

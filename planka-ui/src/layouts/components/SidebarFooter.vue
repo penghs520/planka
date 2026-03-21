@@ -4,17 +4,21 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user'
 import { useAuth } from '@/hooks/useAuth'
+import { usePermission } from '@/hooks/usePermission'
 import { useSidebarTheme, THEME_OPTIONS, type UiThemeId } from '@/composables/useSidebarTheme'
 import {
   IconBgColors,
   IconExport,
   IconCheck,
+  IconSettings,
 } from '@arco-design/web-vue/es/icon'
 
 const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const { logout } = useAuth()
+const { isAdmin, isSuperAdmin } = usePermission()
+const canEnterAdminPanel = computed(() => isAdmin.value || isSuperAdmin.value)
 const { theme, setTheme } = useSidebarTheme()
 
 const user = computed(() => userStore.user)
@@ -23,6 +27,10 @@ const avatarText = computed(() => displayName.value.charAt(0).toUpperCase())
 
 function goToProfile() {
   router.push('/profile')
+}
+
+function goToAdminPanel() {
+  router.push('/admin/card-type')
 }
 
 async function handleLogout() {
@@ -67,6 +75,11 @@ function pickTheme(id: UiThemeId) {
         <span class="sidebar-user-name">{{ displayName }}</span>
       </div>
       <template #content>
+        <a-doption v-if="canEnterAdminPanel" @click="goToAdminPanel">
+          <template #icon><IconSettings /></template>
+          {{ t('common.layout.adminPanel') }}
+        </a-doption>
+        <a-divider v-if="canEnterAdminPanel" :margin="4" />
         <a-doption @click="goToProfile">
           <template #icon><icon-user /></template>
           {{ t('common.layout.profile') }}

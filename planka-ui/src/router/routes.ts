@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 /**
  * 路由配置
- * 统一使用 AppLayout 作为主布局，工作区和管理后台共享同一侧边栏
+ * 统一使用 AppLayout：工作区侧栏仅快捷入口；管理菜单仅在 /admin 下显示，经头像菜单进入
  */
 export const routes: RouteRecordRaw[] = [
   // 认证相关页面（不需要登录）

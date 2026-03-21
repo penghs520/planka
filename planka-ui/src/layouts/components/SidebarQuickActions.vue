@@ -6,6 +6,7 @@ import {
   IconSearch,
   IconNotification,
   IconUser,
+  IconArrowLeft,
 } from '@arco-design/web-vue/es/icon'
 
 const { t } = useI18n()
@@ -13,6 +14,8 @@ const router = useRouter()
 const route = useRoute()
 
 const isMac = navigator.platform.toUpperCase().includes('MAC')
+
+const isAdminRoute = computed(() => route.path.startsWith('/admin'))
 
 defineEmits<{
   'open-command-palette': []
@@ -42,26 +45,42 @@ function isActive(path: string) {
 function navigateTo(path: string) {
   router.push(path)
 }
+
+function goWorkspace() {
+  router.push('/workspace')
+}
 </script>
 
 <template>
   <div class="quick-actions">
-    <div
-      v-for="item in items"
-      :key="item.key"
-      class="quick-action-item"
-      :class="{ active: isActive(item.path) }"
-      @click="navigateTo(item.path)"
-    >
-      <component :is="item.icon" class="quick-action-icon" />
-      <span class="quick-action-label">{{ item.label }}</span>
-      <span
-        v-if="item.badge && item.badge > 0"
-        class="quick-action-badge"
+    <!-- 管理后台：先回工作区，不展示工作区快捷入口 -->
+    <template v-if="isAdminRoute">
+      <div
+        class="quick-action-item quick-action-item--back"
+        @click="goWorkspace"
       >
-        {{ item.badge > 99 ? '99+' : item.badge }}
-      </span>
-    </div>
+        <IconArrowLeft class="quick-action-icon" />
+        <span class="quick-action-label">{{ t('sidebar.backToWorkspace') }}</span>
+      </div>
+    </template>
+    <template v-else>
+      <div
+        v-for="item in items"
+        :key="item.key"
+        class="quick-action-item"
+        :class="{ active: isActive(item.path) }"
+        @click="navigateTo(item.path)"
+      >
+        <component :is="item.icon" class="quick-action-icon" />
+        <span class="quick-action-label">{{ item.label }}</span>
+        <span
+          v-if="item.badge && item.badge > 0"
+          class="quick-action-badge"
+        >
+          {{ item.badge > 99 ? '99+' : item.badge }}
+        </span>
+      </div>
+    </template>
 
     <!-- 搜索触发器 -->
     <div
