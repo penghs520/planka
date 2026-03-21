@@ -100,7 +100,6 @@ function goToActivate() {
       <div class="login-form-wrapper">
         <div class="login-header">
           <h1 class="login-title">{{ t('auth.login.welcome') }}</h1>
-          <p class="login-subtitle">{{ t('auth.login.subtitle') }}</p>
         </div>
 
         <a-form :model="formData" :rules="rules" layout="vertical" @submit-success="handleLogin">
@@ -206,17 +205,11 @@ function goToActivate() {
 }
 
 .login-title {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 28px;
   font-weight: 600;
   color: var(--color-text-1);
   letter-spacing: -0.5px;
-}
-
-.login-subtitle {
-  margin: 0;
-  font-size: 14px;
-  color: var(--color-text-3);
 }
 
 .login-button {

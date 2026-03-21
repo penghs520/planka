@@ -5,7 +5,6 @@ export default {
   // 登录页
   login: {
     welcome: '欢迎登录',
-    subtitle: '企业级敏捷看板管理平台',
     brandTitle: '高效协作 敏捷交付',
     brandSubtitle: '让团队专注于创造价值',
     email: '邮箱',
