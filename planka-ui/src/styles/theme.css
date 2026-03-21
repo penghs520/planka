@@ -156,18 +156,10 @@
   --radius-xl: 12px;
 
   /* ========================================
-     Admin Sidebar（SaaS 风格）
+     Admin Sidebar（SaaS 风格 - 保留兼容）
      ======================================== */
-  --sidebar-bg: #FAFBFC;
-  --sidebar-border: #EDEEF0;
   --menu-item-height: 32px;
   --menu-item-radius: 6px;
-  --menu-item-hover-bg: #F0F1F3;
-  --menu-item-active-bg: #EEF0FF;
-  --menu-item-active-color: #3B5BDB;
-  --menu-item-text-color: #4B5563;
-  --menu-group-label-color: #9CA3AF;
-  --menu-group-label-size: 11px;
   --page-title-size: 20px;
   --page-title-weight: 600;
   --page-description-color: #6B7280;
@@ -178,6 +170,36 @@
   --border-radius-small: 4px;
   --border-radius-medium: 6px;
   --border-radius-large: 8px;
+}
+
+/* ========================================
+   侧边栏主题 - 深色（默认）
+   Rosé Pine Moon 风格
+   ======================================== */
+[data-sidebar-theme="dark"] {
+  --sidebar-bg: #1B1E28;
+  --sidebar-bg-hover: #232633;
+  --sidebar-bg-active: #2A2E3D;
+  --sidebar-text-primary: #A6ACCD;
+  --sidebar-text-secondary: rgba(166, 172, 205, 0.6);
+  --sidebar-text-muted: rgba(166, 172, 205, 0.3);
+  --sidebar-accent: #ADD7FF;
+  --sidebar-border: rgba(166, 172, 205, 0.1);
+}
+
+/* ========================================
+   侧边栏主题 - 浅色
+   Rosé Pine Dawn 风格
+   ======================================== */
+[data-sidebar-theme="light"] {
+  --sidebar-bg: #FFFAF3;
+  --sidebar-bg-hover: #FAF4ED;
+  --sidebar-bg-active: #F4EDE8;
+  --sidebar-text-primary: #575279;
+  --sidebar-text-secondary: #797593;
+  --sidebar-text-muted: rgba(121, 117, 147, 0.45);
+  --sidebar-accent: #286983;
+  --sidebar-border: rgba(87, 82, 121, 0.1);
 }
 
 /* ========================================

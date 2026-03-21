@@ -7,6 +7,7 @@ import common from './common'
 import comment from './comment'
 import history from './history'
 import oss from './oss'
+import sidebar from './sidebar'
 
 export default {
   admin,
@@ -15,4 +16,5 @@ export default {
   comment,
   history,
   oss,
+  sidebar,
 }
