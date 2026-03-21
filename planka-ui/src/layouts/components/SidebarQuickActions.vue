@@ -108,7 +108,9 @@ function goWorkspace() {
   padding: 0 8px;
   border-radius: 5px;
   color: var(--sidebar-text-secondary);
-  font-size: 13px;
+  font-family: var(--sidebar-nav-font-family);
+  font-size: var(--sidebar-nav-font-size);
+  font-weight: var(--sidebar-nav-font-weight);
   cursor: pointer;
   transition: all 0.1s ease;
   position: relative;
@@ -142,6 +144,7 @@ function goWorkspace() {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font: inherit;
 }
 
 .quick-action-badge {
@@ -158,6 +161,7 @@ function goWorkspace() {
 
 .quick-action-shortcut {
   font-size: 11px;
+  font-weight: 400;
   color: var(--sidebar-text-muted);
   background: none;
   border: 1px solid var(--sidebar-border);

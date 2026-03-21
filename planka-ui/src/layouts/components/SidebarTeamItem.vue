@@ -96,7 +96,9 @@ function teamSubActive(segment: 'issues' | 'projects') {
   border-radius: 5px;
   background: transparent;
   color: var(--sidebar-text-primary);
-  font-size: 13px;
+  font-family: var(--sidebar-nav-font-family);
+  font-size: var(--sidebar-nav-font-size);
+  font-weight: 600;
   cursor: pointer;
   text-align: left;
 }
@@ -133,7 +135,9 @@ function teamSubActive(segment: 'issues' | 'projects') {
   line-height: 26px;
   padding: 0 8px 0 22px;
   border-radius: 5px;
-  font-size: 13px;
+  font-family: var(--sidebar-nav-font-family);
+  font-size: var(--sidebar-nav-font-size);
+  font-weight: var(--sidebar-nav-font-weight);
   color: var(--sidebar-text-secondary);
   text-decoration: none;
 }
@@ -150,6 +154,5 @@ function teamSubActive(segment: 'issues' | 'projects') {
 
 .nav-row--project {
   padding-left: 28px;
-  font-size: 12px;
 }
 </style>

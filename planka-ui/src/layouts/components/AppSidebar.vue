@@ -104,6 +104,9 @@ function startResize(e: MouseEvent) {
   overflow: hidden;
   user-select: none;
   transition: background-color 0.2s ease;
+  font-family: var(--sidebar-nav-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .sidebar-scroll {

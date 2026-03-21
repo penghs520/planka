@@ -103,6 +103,7 @@ async function handleCreateTeam() {
   border-radius: 5px;
   background: transparent;
   color: var(--sidebar-text-secondary);
+  font-family: var(--sidebar-nav-font-family);
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
@@ -141,7 +142,9 @@ async function handleCreateTeam() {
   border: none;
   border-radius: 5px;
   background: transparent;
-  font-size: 13px;
+  font-family: var(--sidebar-nav-font-family);
+  font-size: var(--sidebar-nav-font-size);
+  font-weight: var(--sidebar-nav-font-weight);
   color: var(--sidebar-text-secondary);
   cursor: pointer;
   text-align: left;

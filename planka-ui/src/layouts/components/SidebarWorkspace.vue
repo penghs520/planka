@@ -2,18 +2,56 @@
 import { ref, computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { IconDown } from '@arco-design/web-vue/es/icon'
+import {
+  IconDown,
+  IconCheckSquare,
+  IconFolder,
+  IconUserGroup,
+  IconIdcard,
+  IconLayout,
+} from '@arco-design/web-vue/es/icon'
 
 const { t } = useI18n()
 const route = useRoute()
 const expanded = ref(true)
 
+/** 与快捷入口一致：Arco 线性图标，语义贴近 Linear / 项目管理 */
 const links = computed(() => [
-  { to: '/workspace/issues', labelKey: 'sidebar.issues' as const, match: 'exact' as const, path: '/workspace/issues' },
-  { to: '/workspace/projects', labelKey: 'sidebar.projects' as const, match: 'exact' as const, path: '/workspace/projects' },
-  { to: '/workspace/teams', labelKey: 'sidebar.teams' as const, match: 'exact' as const, path: '/workspace/teams' },
-  { to: '/admin/members', labelKey: 'sidebar.members' as const, match: 'prefix' as const, path: '/admin/members' },
-  { to: '/workspace', labelKey: 'sidebar.views' as const, match: 'workspaceRoot' as const, path: '/workspace' },
+  {
+    to: '/workspace/issues',
+    labelKey: 'sidebar.issues' as const,
+    match: 'exact' as const,
+    path: '/workspace/issues',
+    icon: IconCheckSquare,
+  },
+  {
+    to: '/workspace/projects',
+    labelKey: 'sidebar.projects' as const,
+    match: 'exact' as const,
+    path: '/workspace/projects',
+    icon: IconFolder,
+  },
+  {
+    to: '/workspace/teams',
+    labelKey: 'sidebar.teams' as const,
+    match: 'exact' as const,
+    path: '/workspace/teams',
+    icon: IconUserGroup,
+  },
+  {
+    to: '/admin/members',
+    labelKey: 'sidebar.members' as const,
+    match: 'prefix' as const,
+    path: '/admin/members',
+    icon: IconIdcard,
+  },
+  {
+    to: '/workspace',
+    labelKey: 'sidebar.views' as const,
+    match: 'workspaceRoot' as const,
+    path: '/workspace',
+    icon: IconLayout,
+  },
 ])
 
 function isActive(
@@ -54,7 +92,8 @@ function isActive(
         class="nav-row"
         :class="{ active: isActive(item.path, item.match) }"
       >
-        {{ t(item.labelKey) }}
+        <component :is="item.icon" class="nav-icon" />
+        <span class="nav-label">{{ t(item.labelKey) }}</span>
       </RouterLink>
     </div>
   </div>
@@ -77,6 +116,7 @@ function isActive(
   border-radius: 5px;
   background: transparent;
   color: var(--sidebar-text-secondary);
+  font-family: var(--sidebar-nav-font-family);
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
@@ -101,23 +141,49 @@ function isActive(
   transform: rotate(-90deg);
 }
 
+/* 与分区标题（chevron + 文案）错层：整体右移，避免与一级 chevron 纵向对齐 */
 .section-body {
   display: flex;
   flex-direction: column;
   gap: 1px;
   padding-top: 2px;
+  padding-left: 14px;
 }
 
 .nav-row {
   display: flex;
   align-items: center;
+  gap: 8px;
   height: 28px;
-  padding: 0 8px 0 22px;
+  padding: 0 8px;
   border-radius: 5px;
-  font-size: 13px;
+  font-family: var(--sidebar-nav-font-family);
+  font-size: var(--sidebar-nav-font-size);
+  font-weight: var(--sidebar-nav-font-weight);
   color: var(--sidebar-text-secondary);
   text-decoration: none;
   transition: background 0.1s ease, color 0.1s ease;
+}
+
+.nav-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.nav-row:hover .nav-icon,
+.nav-row.active .nav-icon {
+  color: var(--sidebar-text-active);
+  opacity: 1;
+}
+
+.nav-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .nav-row:hover {

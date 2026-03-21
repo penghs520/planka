@@ -166,7 +166,8 @@ function handleCreateSuccess() {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 13px;
+  font-family: var(--sidebar-nav-font-family);
+  font-size: var(--sidebar-nav-font-size);
   font-weight: 600;
   color: var(--sidebar-text-primary);
 }

@@ -117,9 +117,12 @@ function navigateTo(item: MenuItem) {
 }
 
 .section-label {
-  font-size: 11px;
+  font-family: var(--sidebar-nav-font-family);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   color: var(--sidebar-section-label);
-  font-weight: 500;
   padding: 14px 16px 4px;
   line-height: 1;
 }
@@ -137,7 +140,9 @@ function navigateTo(item: MenuItem) {
   margin: 0 8px;
   border-radius: 5px;
   color: var(--sidebar-text-secondary);
-  font-size: 13px;
+  font-family: var(--sidebar-nav-font-family);
+  font-size: var(--sidebar-nav-font-size);
+  font-weight: var(--sidebar-nav-font-weight);
   cursor: pointer;
   transition: all 0.1s ease;
 }
@@ -176,5 +181,6 @@ function navigateTo(item: MenuItem) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font: inherit;
 }
 </style>

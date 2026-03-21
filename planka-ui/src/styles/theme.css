@@ -182,6 +182,11 @@
   --sidebar-accent: #0083E0;
   --sidebar-border: rgba(26, 26, 28, 0.12);
 
+  /* 侧栏列表项字体（与工作空间 nav-row 一致，全侧栏菜单共用） */
+  --sidebar-nav-font-family: var(--font-family);
+  --sidebar-nav-font-size: 13px;
+  --sidebar-nav-font-weight: 500;
+
   /* 背景阶：仅依赖 --planka-c1 / --planka-c6 / --color-text-1 */
   --color-bg-1: var(--planka-c1);
   --color-bg-2: color-mix(in srgb, var(--planka-c1) 58%, var(--planka-c6) 42%);
