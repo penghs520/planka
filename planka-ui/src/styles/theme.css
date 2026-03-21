@@ -291,7 +291,7 @@ html[data-ui-theme="ash"] {
   --color-text-2: #5C6165;
   --color-text-3: #75797D;
   --color-text-4: #909498;
-  --planka-c1: #FFFFFF;
+  --planka-c1: #edeef4;
   --planka-c6: #FFFFFF;
   --color-fill-1: #F5F6F8;
   --color-fill-2: #EDEEF3;
@@ -348,7 +348,7 @@ html[data-ui-theme="notion-light"] {
   --color-text-2: #5A564E;
   --color-text-3: #78736A;
   --color-text-4: #9A958C;
-  --planka-c1: #FFFFFF;
+  --planka-c1: #f7f6f3;
   --planka-c6: #FFFFFF;
   --color-fill-1: #F7F6F3;
   --color-fill-2: #ECEBE7;
@@ -363,8 +363,8 @@ html[data-ui-theme="notion-light"] {
   --shadow-xl: 0 8px 24px rgba(55, 53, 47, 0.12);
   --page-description-color: #5A564E;
   --sidebar-bg: var(--planka-c1);
-  --sidebar-bg-hover: #F7F6F3;
-  --sidebar-bg-active: #F7F6F3;
+  --sidebar-bg-hover: var(--color-fill-2);
+  --sidebar-bg-active: var(--color-fill-3);
   --sidebar-text-primary: #37352F;
   --sidebar-text-secondary: #5A564E;
   --sidebar-text-muted: rgba(55, 53, 47, 0.45);
