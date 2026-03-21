@@ -4,21 +4,18 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores/user'
 import { useAuth } from '@/hooks/useAuth'
-import { useSidebarTheme } from '@/composables/useSidebarTheme'
+import { useSidebarTheme, THEME_OPTIONS, type UiThemeId } from '@/composables/useSidebarTheme'
 import {
-  IconSun,
-  IconMoon,
+  IconBgColors,
   IconExport,
+  IconCheck,
 } from '@arco-design/web-vue/es/icon'
 
 const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const { logout } = useAuth()
-const { theme, toggleTheme } = useSidebarTheme()
-
-/** 在 script 中用 .value 判断，避免模板里 ref 与字面量比较的边缘情况 */
-const isSidebarDark = computed(() => theme.value === 'dark')
+const { theme, setTheme } = useSidebarTheme()
 
 const user = computed(() => userStore.user)
 const displayName = computed(() => user.value?.nickname || user.value?.email || '')
@@ -31,20 +28,35 @@ function goToProfile() {
 async function handleLogout() {
   await logout()
 }
+
+function pickTheme(id: UiThemeId) {
+  setTheme(id)
+}
 </script>
 
 <template>
   <div class="sidebar-footer">
-    <!-- 主题切换按钮 -->
-    <button
-      type="button"
-      class="theme-toggle-btn"
-      :title="t('sidebar.themeToggle')"
-      @click="toggleTheme"
-    >
-      <IconSun v-if="isSidebarDark" :size="16" />
-      <IconMoon v-else :size="16" />
-    </button>
+    <a-dropdown trigger="click" position="tr">
+      <button
+        type="button"
+        class="theme-menu-btn"
+        :title="t('sidebar.uiThemeMenu')"
+      >
+        <IconBgColors :size="16" />
+      </button>
+      <template #content>
+        <a-doption
+          v-for="opt in THEME_OPTIONS"
+          :key="opt.id"
+          @click="pickTheme(opt.id)"
+        >
+          <template #icon>
+            <IconCheck v-if="theme === opt.id" :size="14" />
+          </template>
+          {{ t(opt.labelKey) }}
+        </a-doption>
+      </template>
+    </a-dropdown>
 
     <!-- 用户信息 -->
     <a-dropdown trigger="click" position="tr">
@@ -78,8 +90,7 @@ async function handleLogout() {
   gap: 4px;
 }
 
-.theme-toggle-btn {
-  /* 覆盖全局 button 的 padding，否则 content-box 下内容区被挤没，图标不可见 */
+.theme-menu-btn {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -99,7 +110,7 @@ async function handleLogout() {
   line-height: 1;
 }
 
-.theme-toggle-btn:hover {
+.theme-menu-btn:hover {
   background: var(--sidebar-bg-hover);
   color: var(--sidebar-text-primary);
 }

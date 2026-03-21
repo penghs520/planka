@@ -1,6 +1,27 @@
 <!doctype html>
 <html lang="zh-CN">
   <head>
+    <script>
+      (function () {
+        try {
+          var k = 'planka-ui-theme'
+          var ids = ['pine-light', 'rose-pine-dawn', 'ash', 'notion-light']
+          var v = localStorage.getItem(k)
+          if (v && ids.indexOf(v) >= 0) {
+            document.documentElement.setAttribute('data-ui-theme', v)
+          } else {
+            if (localStorage.getItem('sidebar-theme') === 'dark' || localStorage.getItem('sidebar-theme') === 'light') {
+              localStorage.removeItem('sidebar-theme')
+              localStorage.setItem(k, 'pine-light')
+            }
+            document.documentElement.setAttribute('data-ui-theme', 'pine-light')
+          }
+          document.documentElement.removeAttribute('data-sidebar-theme')
+        } catch (e) {
+          document.documentElement.setAttribute('data-ui-theme', 'pine-light')
+        }
+      })()
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

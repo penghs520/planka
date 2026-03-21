@@ -117,7 +117,7 @@ function navigateTo(item: MenuItem) {
 
 .section-label {
   font-size: 11px;
-  color: var(--sidebar-text-muted);
+  color: var(--sidebar-section-label);
   font-weight: 500;
   padding: 14px 16px 4px;
   line-height: 1;
@@ -148,7 +148,7 @@ function navigateTo(item: MenuItem) {
 
 .menu-item--active {
   background: var(--sidebar-bg-active);
-  color: var(--sidebar-text-primary);
+  color: var(--sidebar-text-active);
 }
 
 .menu-item-icon {
@@ -166,7 +166,7 @@ function navigateTo(item: MenuItem) {
 }
 
 .menu-item--active .menu-item-icon {
-  color: var(--sidebar-text-primary);
+  color: var(--sidebar-text-active);
   opacity: 1;
 }
 

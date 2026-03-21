@@ -102,7 +102,7 @@ function navigateTo(path: string) {
 
 .quick-action-item.active {
   background: var(--sidebar-bg-active);
-  color: var(--sidebar-text-primary);
+  color: var(--sidebar-text-active);
 }
 
 .quick-action-icon {
@@ -114,6 +114,7 @@ function navigateTo(path: string) {
 
 .quick-action-item:hover .quick-action-icon,
 .quick-action-item.active .quick-action-icon {
+  color: var(--sidebar-text-active);
   opacity: 1;
 }
 

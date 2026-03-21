@@ -171,36 +171,262 @@
   --border-radius-small: 4px;
   --border-radius-medium: 6px;
   --border-radius-large: 8px;
-}
 
-/* ========================================
-   侧边栏主题 - 深色（默认）
-   Rosé Pine Moon 风格
-   ======================================== */
-[data-sidebar-theme="dark"] {
-  --sidebar-bg: #1B1E28;
-  --sidebar-bg-hover: #232633;
-  --sidebar-bg-active: #2A2E3D;
-  --sidebar-text-primary: #A6ACCD;
-  --sidebar-text-secondary: rgba(166, 172, 205, 0.6);
-  --sidebar-text-muted: rgba(166, 172, 205, 0.3);
-  --sidebar-accent: #ADD7FF;
-  --sidebar-border: rgba(166, 172, 205, 0.1);
-}
-
-/* ========================================
-   侧边栏主题 - 浅色
-   Rosé Pine Dawn 风格
-   ======================================== */
-[data-sidebar-theme="light"] {
+  /* 侧栏语义色（默认 PINE Light，与 html[data-ui-theme="pine-light"] 一致） */
   --sidebar-bg: #F5F5F5;
   --sidebar-bg-hover: #EBEBEB;
-  --sidebar-bg-active: #E0E0E0;
+  --sidebar-bg-active: #D7E7F1;
   --sidebar-text-primary: #1A1A1C;
   --sidebar-text-secondary: #3D3F42;
   --sidebar-text-muted: rgba(26, 26, 28, 0.45);
+  --sidebar-text-active: #0F4974;
+  --sidebar-section-label: #0083E0;
   --sidebar-accent: #0083E0;
-  --sidebar-border: rgba(26, 26, 28, 0.1);
+  --sidebar-border: rgba(26, 26, 28, 0.12);
+}
+
+/*
+ * 整站 + 侧栏主题（六色语义：1 壳层底 2 主字 3 选中底 4 选中字 5 分组标题/品牌 6 强调/表面参考）
+ * 由 data-ui-theme 切换；:root 为无属性时的回退（等同 pine-light）
+ */
+html[data-ui-theme="pine-light"] {
+  --color-primary: #0083E0;
+  --color-primary-hover: #1A9EFF;
+  --color-primary-active: #0F4974;
+  --color-primary-light: #D7E7F1;
+  --color-primary-lighter: #EBF4FA;
+  --color-primary-rgb: 0, 131, 224;
+  --primary-1: 235, 245, 252;
+  --primary-2: 215, 231, 241;
+  --primary-3: 183, 218, 242;
+  --primary-4: 102, 187, 255;
+  --primary-5: 26, 159, 255;
+  --primary-6: 0, 131, 224;
+  --primary-7: 0, 108, 190;
+  --primary-8: 0, 88, 156;
+  --primary-9: 15, 73, 116;
+  --primary-10: 10, 52, 86;
+  --arcoblue-1: 235, 245, 252;
+  --arcoblue-2: 215, 231, 241;
+  --arcoblue-3: 183, 218, 242;
+  --arcoblue-4: 102, 187, 255;
+  --arcoblue-5: 26, 159, 255;
+  --arcoblue-6: 0, 131, 224;
+  --arcoblue-7: 0, 108, 190;
+  --arcoblue-8: 0, 88, 156;
+  --arcoblue-9: 15, 73, 116;
+  --arcoblue-10: 10, 52, 86;
+  --color-text-1: #1A1A1C;
+  --color-text-2: #3D3F42;
+  --color-text-3: #5C5E62;
+  --color-text-4: #8E9094;
+  --color-fill-1: #EBEBEB;
+  --color-fill-2: #E0E0E0;
+  --color-fill-3: #D5D5D5;
+  --color-fill-4: #C8C8C8;
+  --color-bg-1: #F5F5F5;
+  --color-bg-2: #FFFFFF;
+  --color-bg-3: #EBEBEB;
+  --color-bg-4: #E0E0E0;
+  --color-bg-5: #D0D0D0;
+  --color-border-1: #DDDDDD;
+  --color-border-2: #CCCCCC;
+  --color-border-3: #E8E8E8;
+  --shadow-sm: 0 1px 2px rgba(26, 26, 28, 0.06);
+  --shadow-md: 0 2px 8px rgba(26, 26, 28, 0.08);
+  --shadow-lg: 0 4px 14px rgba(26, 26, 28, 0.1);
+  --shadow-xl: 0 8px 24px rgba(26, 26, 28, 0.12);
+  --page-description-color: #3D3F42;
+  --sidebar-bg: #F5F5F5;
+  --sidebar-bg-hover: #EBEBEB;
+  --sidebar-bg-active: #D7E7F1;
+  --sidebar-text-primary: #1A1A1C;
+  --sidebar-text-secondary: #3D3F42;
+  --sidebar-text-muted: rgba(26, 26, 28, 0.45);
+  --sidebar-text-active: #0F4974;
+  --sidebar-section-label: #0083E0;
+  --sidebar-accent: #0083E0;
+  --sidebar-border: rgba(26, 26, 28, 0.12);
+}
+
+html[data-ui-theme="rose-pine-dawn"] {
+  --color-primary: #286983;
+  --color-primary-hover: #3A7F9A;
+  --color-primary-active: #1E566B;
+  --color-primary-light: #FAF4ED;
+  --color-primary-lighter: #FCF8F4;
+  --color-primary-rgb: 40, 105, 131;
+  --primary-1: 232, 245, 248;
+  --primary-2: 210, 234, 240;
+  --primary-3: 168, 210, 222;
+  --primary-4: 115, 175, 195;
+  --primary-5: 72, 145, 168;
+  --primary-6: 40, 105, 131;
+  --primary-7: 35, 90, 112;
+  --primary-8: 28, 74, 92;
+  --primary-9: 22, 58, 72;
+  --primary-10: 16, 44, 55;
+  --arcoblue-1: 232, 245, 248;
+  --arcoblue-2: 210, 234, 240;
+  --arcoblue-3: 168, 210, 222;
+  --arcoblue-4: 115, 175, 195;
+  --arcoblue-5: 72, 145, 168;
+  --arcoblue-6: 40, 105, 131;
+  --arcoblue-7: 35, 90, 112;
+  --arcoblue-8: 28, 74, 92;
+  --arcoblue-9: 22, 58, 72;
+  --arcoblue-10: 16, 44, 55;
+  --color-text-1: #797593;
+  --color-text-2: #8E8A9E;
+  --color-text-3: #A39EAF;
+  --color-text-4: #B8B4C2;
+  --color-fill-1: #F4EDE8;
+  --color-fill-2: #EDE5DC;
+  --color-fill-3: #E5DCD2;
+  --color-fill-4: #DDD3C8;
+  --color-bg-1: #FFFAF3;
+  --color-bg-2: #FFFFFF;
+  --color-bg-3: #F4EDE8;
+  --color-bg-4: #EDE5DC;
+  --color-bg-5: #E5DCD2;
+  --color-border-1: #E8E0D5;
+  --color-border-2: #D9D0C5;
+  --color-border-3: #F0EAE2;
+  --shadow-sm: 0 1px 2px rgba(87, 82, 121, 0.06);
+  --shadow-md: 0 2px 8px rgba(87, 82, 121, 0.08);
+  --shadow-lg: 0 4px 14px rgba(87, 82, 121, 0.1);
+  --shadow-xl: 0 8px 24px rgba(87, 82, 121, 0.12);
+  --page-description-color: #8E8A9E;
+  --sidebar-bg: #FFFAF3;
+  --sidebar-bg-hover: #FCF6EE;
+  --sidebar-bg-active: #FAF4ED;
+  --sidebar-text-primary: #797593;
+  --sidebar-text-secondary: #8E8A9E;
+  --sidebar-text-muted: rgba(121, 117, 147, 0.45);
+  --sidebar-text-active: #575279;
+  --sidebar-section-label: #286983;
+  --sidebar-accent: #286983;
+  --sidebar-border: rgba(87, 82, 121, 0.14);
+}
+
+html[data-ui-theme="ash"] {
+  --color-primary: #475BA1;
+  --color-primary-hover: #5C6FB0;
+  --color-primary-active: #3A4C8A;
+  --color-primary-light: #EDEEF3;
+  --color-primary-lighter: #F5F6F9;
+  --color-primary-rgb: 71, 91, 161;
+  --primary-1: 238, 240, 248;
+  --primary-2: 222, 226, 242;
+  --primary-3: 190, 198, 228;
+  --primary-4: 140, 152, 200;
+  --primary-5: 100, 118, 178;
+  --primary-6: 71, 91, 161;
+  --primary-7: 58, 76, 138;
+  --primary-8: 48, 63, 115;
+  --primary-9: 38, 50, 92;
+  --primary-10: 28, 38, 68;
+  --arcoblue-1: 238, 240, 248;
+  --arcoblue-2: 222, 226, 242;
+  --arcoblue-3: 190, 198, 228;
+  --arcoblue-4: 140, 152, 200;
+  --arcoblue-5: 100, 118, 178;
+  --arcoblue-6: 71, 91, 161;
+  --arcoblue-7: 58, 76, 138;
+  --arcoblue-8: 48, 63, 115;
+  --arcoblue-9: 38, 50, 92;
+  --arcoblue-10: 28, 38, 68;
+  --color-text-1: #44494D;
+  --color-text-2: #5C6165;
+  --color-text-3: #75797D;
+  --color-text-4: #909498;
+  --color-fill-1: #F5F6F8;
+  --color-fill-2: #EDEEF3;
+  --color-fill-3: #E2E4EA;
+  --color-fill-4: #D5D8E0;
+  --color-bg-1: #FFFFFF;
+  --color-bg-2: #FFFFFF;
+  --color-bg-3: #F5F6F8;
+  --color-bg-4: #EDEEF3;
+  --color-bg-5: #E2E4EA;
+  --color-border-1: #E2E4EA;
+  --color-border-2: #CED1D8;
+  --color-border-3: #F0F1F4;
+  --shadow-sm: 0 1px 2px rgba(68, 73, 77, 0.06);
+  --shadow-md: 0 2px 8px rgba(68, 73, 77, 0.08);
+  --shadow-lg: 0 4px 14px rgba(68, 73, 77, 0.1);
+  --shadow-xl: 0 8px 24px rgba(68, 73, 77, 0.12);
+  --page-description-color: #5C6165;
+  --sidebar-bg: #FFFFFF;
+  --sidebar-bg-hover: #F5F6F8;
+  --sidebar-bg-active: #EDEEF3;
+  --sidebar-text-primary: #44494D;
+  --sidebar-text-secondary: #5C6165;
+  --sidebar-text-muted: rgba(68, 73, 77, 0.45);
+  --sidebar-text-active: #44494D;
+  --sidebar-section-label: #475BA1;
+  --sidebar-accent: #475BA1;
+  --sidebar-border: rgba(68, 73, 77, 0.12);
+}
+
+html[data-ui-theme="notion-light"] {
+  --color-primary: #000000;
+  --color-primary-hover: #3D3D3D;
+  --color-primary-active: #1A1A1A;
+  --color-primary-light: #F7F6F3;
+  --color-primary-lighter: #FBFAF8;
+  --color-primary-rgb: 0, 0, 0;
+  --primary-1: 247, 247, 247;
+  --primary-2: 235, 235, 235;
+  --primary-3: 210, 210, 210;
+  --primary-4: 165, 165, 165;
+  --primary-5: 100, 100, 100;
+  --primary-6: 0, 0, 0;
+  --primary-7: 0, 0, 0;
+  --primary-8: 0, 0, 0;
+  --primary-9: 0, 0, 0;
+  --primary-10: 0, 0, 0;
+  --arcoblue-1: 247, 247, 247;
+  --arcoblue-2: 235, 235, 235;
+  --arcoblue-3: 210, 210, 210;
+  --arcoblue-4: 165, 165, 165;
+  --arcoblue-5: 100, 100, 100;
+  --arcoblue-6: 0, 0, 0;
+  --arcoblue-7: 0, 0, 0;
+  --arcoblue-8: 0, 0, 0;
+  --arcoblue-9: 0, 0, 0;
+  --arcoblue-10: 0, 0, 0;
+  --color-text-1: #37352F;
+  --color-text-2: #5A564E;
+  --color-text-3: #78736A;
+  --color-text-4: #9A958C;
+  --color-fill-1: #F7F6F3;
+  --color-fill-2: #ECEBE7;
+  --color-fill-3: #E3E2DD;
+  --color-fill-4: #D8D7D2;
+  --color-bg-1: #FFFFFF;
+  --color-bg-2: #FFFFFF;
+  --color-bg-3: #F7F6F3;
+  --color-bg-4: #ECEBE7;
+  --color-bg-5: #E3E2DD;
+  --color-border-1: #E8E7E3;
+  --color-border-2: #D3D1CD;
+  --color-border-3: #F1F0ED;
+  --shadow-sm: 0 1px 2px rgba(55, 53, 47, 0.06);
+  --shadow-md: 0 2px 8px rgba(55, 53, 47, 0.08);
+  --shadow-lg: 0 4px 14px rgba(55, 53, 47, 0.1);
+  --shadow-xl: 0 8px 24px rgba(55, 53, 47, 0.12);
+  --page-description-color: #5A564E;
+  --sidebar-bg: #FFFFFF;
+  --sidebar-bg-hover: #F7F6F3;
+  --sidebar-bg-active: #F7F6F3;
+  --sidebar-text-primary: #37352F;
+  --sidebar-text-secondary: #5A564E;
+  --sidebar-text-muted: rgba(55, 53, 47, 0.45);
+  --sidebar-text-active: #85837E;
+  --sidebar-section-label: #9A958C;
+  --sidebar-accent: #000000;
+  --sidebar-border: rgba(55, 53, 47, 0.12);
 }
 
 /* ========================================
@@ -312,18 +538,30 @@ body {
    按钮渐变优化
    ======================================== */
 .arco-btn-primary:not(.arco-btn-disabled) {
-  background: linear-gradient(135deg, #1A9EFF 0%, #0083E0 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-hover) 0%,
+    var(--color-primary) 100%
+  );
   border: none;
   transition: all 0.2s ease;
 }
 
 .arco-btn-primary:not(.arco-btn-disabled):hover {
-  background: linear-gradient(135deg, #33B0FF 0%, #0A94FF 100%);
-  box-shadow: 0 4px 12px rgba(0, 131, 224, 0.35);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-primary-hover) 88%, #ffffff) 0%,
+    color-mix(in srgb, var(--color-primary) 85%, #ffffff) 100%
+  );
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.35);
 }
 
 .arco-btn-primary:not(.arco-btn-disabled):active {
-  background: linear-gradient(135deg, #0083E0 0%, #0F4974 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-active) 100%
+  );
 }
 
 /* ========================================
