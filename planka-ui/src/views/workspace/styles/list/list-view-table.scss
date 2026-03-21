@@ -27,6 +27,11 @@
     flex: none;
   }
 
+  // 拆表模式下表头外层容器自带灰色底；非固定列 th 透明时会透出，右侧填充列区域尤其明显
+  :deep(.arco-table-header) {
+    background-color: transparent !important;
+  }
+
   // 覆盖 Arco Table 默认的 min-width: 100%，防止列数少时列宽被拉伸
   :deep(.arco-table .arco-table-element) {
     min-width: auto !important;
@@ -59,23 +64,30 @@
   // 使用 Arco 原生的固定表头（通过 scroll.y），确保表头 z-index 正确
   :deep(thead) {
     z-index: 20;
-    background: var(--color-main-panel);
+    background: transparent;
   }
 
-  // 表头固定列 z-index 更高，防止被数据行固定列覆盖
+  // 表头固定列 z-index 更高，防止被数据行固定列覆盖；背景与主面板一致，避免横向滚动穿透
   :deep(thead .arco-table-col-fixed-left),
   :deep(thead .arco-table-col-fixed-right) {
     z-index: 21 !important;
+    background-color: var(--color-main-panel) !important;
   }
 
-  // 表头样式
+  // 表头：全列统一加粗 + 略浅字色（与行内单元格区分）
   :deep(.arco-table-th) {
-    background: var(--color-fill-1) !important;
+    background: transparent !important;
     height: 32px !important;
     line-height: 32px !important;
-    font-weight: normal !important;
+    font-weight: 600 !important;
+    color: var(--color-text-2) !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+
+  :deep(.arco-table-th .arco-table-th-title) {
+    font-weight: 600 !important;
+    color: var(--color-text-2) !important;
   }
 
   // 表格行样式
