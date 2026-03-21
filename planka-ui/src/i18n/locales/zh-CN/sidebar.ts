@@ -6,6 +6,7 @@ export default {
   admin: '管理',
   settings: '设置',
   uiThemeMenu: '界面主题',
+  themeSettings: '主题设置',
   themePineLight: 'PINE Light',
   themeAsh: 'Ash',
   themeNotionLight: 'Notion Light',

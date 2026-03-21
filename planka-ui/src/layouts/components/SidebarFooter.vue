@@ -11,6 +11,8 @@ import {
   IconExport,
   IconCheck,
   IconSettings,
+  IconUser,
+  IconRight,
 } from '@arco-design/web-vue/es/icon'
 
 const { t } = useI18n()
@@ -45,29 +47,6 @@ function pickTheme(id: UiThemeId) {
 <template>
   <div class="sidebar-footer">
     <a-dropdown trigger="click" position="tr">
-      <button
-        type="button"
-        class="theme-menu-btn"
-        :title="t('sidebar.uiThemeMenu')"
-      >
-        <IconBgColors :size="16" />
-      </button>
-      <template #content>
-        <a-doption
-          v-for="opt in THEME_OPTIONS"
-          :key="opt.id"
-          @click="pickTheme(opt.id)"
-        >
-          <template #icon>
-            <IconCheck v-if="theme === opt.id" :size="14" />
-          </template>
-          {{ t(opt.labelKey) }}
-        </a-doption>
-      </template>
-    </a-dropdown>
-
-    <!-- 用户信息 -->
-    <a-dropdown trigger="click" position="tr">
       <div class="sidebar-user">
         <a-avatar :size="22" :image-url="user?.avatar || undefined" class="sidebar-user-avatar">
           {{ avatarText }}
@@ -81,9 +60,28 @@ function pickTheme(id: UiThemeId) {
         </a-doption>
         <a-divider v-if="canEnterAdminPanel" :margin="4" />
         <a-doption @click="goToProfile">
-          <template #icon><icon-user /></template>
+          <template #icon><IconUser /></template>
           {{ t('common.layout.profile') }}
         </a-doption>
+        <a-dropdown trigger="hover" position="rt">
+          <a-doption class="theme-submenu-trigger">
+            <template #icon><IconBgColors /></template>
+            <span class="theme-submenu-label">{{ t('sidebar.themeSettings') }}</span>
+            <IconRight class="theme-submenu-arrow" />
+          </a-doption>
+          <template #content>
+            <a-doption
+              v-for="opt in THEME_OPTIONS"
+              :key="opt.id"
+              @click="pickTheme(opt.id)"
+            >
+              <template #icon>
+                <IconCheck v-if="theme === opt.id" :size="14" />
+              </template>
+              {{ t(opt.labelKey) }}
+            </a-doption>
+          </template>
+        </a-dropdown>
         <a-divider :margin="4" />
         <a-doption @click="handleLogout">
           <template #icon><IconExport /></template>
@@ -100,32 +98,6 @@ function pickTheme(id: UiThemeId) {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 4px;
-}
-
-.theme-menu-btn {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  width: 28px;
-  height: 28px;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: var(--sidebar-text-secondary);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  flex-shrink: 0;
-  font-size: 16px;
-  line-height: 1;
-}
-
-.theme-menu-btn:hover {
-  background: var(--sidebar-bg-hover);
-  color: var(--sidebar-text-primary);
 }
 
 .sidebar-user {
@@ -159,5 +131,25 @@ function pickTheme(id: UiThemeId) {
   font-size: var(--sidebar-nav-font-size);
   font-weight: 400;
   color: var(--sidebar-text-secondary);
+}
+
+/* 嵌套下拉：与 Arco doption 行高对齐，右侧箭头 */
+.theme-submenu-trigger {
+  display: flex !important;
+  align-items: center;
+  width: 100%;
+  gap: 0;
+}
+
+.theme-submenu-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-submenu-arrow {
+  flex-shrink: 0;
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--color-text-3);
 }
 </style>
