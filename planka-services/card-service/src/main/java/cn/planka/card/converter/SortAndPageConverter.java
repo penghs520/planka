@@ -1,7 +1,5 @@
 package cn.planka.card.converter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import zgraph.driver.proto.common.SortWay;
 import zgraph.driver.proto.query.*;
 import zgraph.driver.proto.query.Page;
@@ -14,8 +12,6 @@ import zgraph.driver.proto.query.SortField;
  * 将 card-api 的 SortAndPage 转换为 zgraph protobuf 的 SortAndPage
  */
 public class SortAndPageConverter {
-
-    private static final Logger log = LoggerFactory.getLogger(SortAndPageConverter.class);
 
     private SortAndPageConverter() {
     }
@@ -83,8 +79,7 @@ public class SortAndPageConverter {
     }
 
     /**
-     * 转换排序字段
-     * 注意：目前简化处理，仅支持内置字段排序
+     * 转换排序字段：内置字段走 inner；其余字段按文本字段排序（需与 zgraph 字段类型一致）
      */
     private static SortField toProtoSortField(cn.planka.api.card.request.SortField sortField) {
         if (sortField == null) {
@@ -93,15 +88,13 @@ public class SortAndPageConverter {
 
         SortField.Builder builder = SortField.newBuilder();
 
-        // 根据字段类型转换
-        // TODO 暂不支持非内置属性的排序
         String fieldId = sortField.getFieldId();
         if (fieldId != null) {
-            // 判断是否是内置属性
             if (isInnerField(fieldId)) {
                 builder.setInnerField(SortInnerField.newBuilder().setFieldId(fieldId).build());
             } else {
-                log.debug("暂不支持非内置属性的排序，需要接入Schema查询功能后判断属性类型后才支持");
+                // 自定义文本字段（如成员邮箱）走文本排序；非文本字段由 zgraph 侧校验
+                builder.setTextField(SortTextField.newBuilder().setFieldId(fieldId).build());
             }
         }
 

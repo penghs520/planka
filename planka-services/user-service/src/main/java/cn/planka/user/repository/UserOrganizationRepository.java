@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,20 @@ public class UserOrganizationRepository {
 
     public List<UserOrganizationEntity> findByOrgId(String orgId) {
         return userOrganizationMapper.selectByOrgId(orgId);
+    }
+
+    /**
+     * 按组织与成员卡片 ID 列表查询活跃关系（用于工作区成员目录补齐）
+     */
+    public List<UserOrganizationEntity> findActiveByOrgIdAndMemberCardIds(String orgId, List<String> memberCardIds) {
+        if (memberCardIds == null || memberCardIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        LambdaQueryWrapper<UserOrganizationEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserOrganizationEntity::getOrgId, orgId);
+        wrapper.eq(UserOrganizationEntity::getStatus, "ACTIVE");
+        wrapper.in(UserOrganizationEntity::getMemberCardId, memberCardIds);
+        return userOrganizationMapper.selectList(wrapper);
     }
 
     public Page<UserOrganizationEntity> findByOrgId(String orgId, int page, int size) {

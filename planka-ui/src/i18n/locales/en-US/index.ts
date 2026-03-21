@@ -9,6 +9,7 @@ import history from './history'
 import oss from './oss'
 import sidebar from './sidebar'
 import workspaceList from './workspaceList'
+import workspaceMembers from './workspaceMembers'
 
 export default {
   admin,
@@ -19,4 +20,5 @@ export default {
   oss,
   sidebar,
   workspaceList,
+  workspaceMembers,
 }

@@ -39,10 +39,10 @@ const links = computed(() => [
     icon: IconUserGroup,
   },
   {
-    to: '/admin/members',
+    to: '/workspace/members',
     labelKey: 'sidebar.members' as const,
-    match: 'prefix' as const,
-    path: '/admin/members',
+    match: 'exact' as const,
+    path: '/workspace/members',
     icon: IconIdcard,
   },
   {

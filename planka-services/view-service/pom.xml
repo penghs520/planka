@@ -40,6 +40,10 @@
         </dependency>
         <dependency>
             <groupId>cn.planka</groupId>
+            <artifactId>user-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.planka</groupId>
             <artifactId>schema-cache-infra</artifactId>
         </dependency>
 

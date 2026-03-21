@@ -2,11 +2,13 @@ package cn.planka.user.service;
 
 import cn.planka.api.card.CardServiceClient;
 import cn.planka.api.card.dto.CardDTO;
+import cn.planka.api.user.dto.MemberCardDirectoryEnrichmentDTO;
 import cn.planka.api.user.dto.MemberDTO;
 import cn.planka.api.user.dto.MemberOptionDTO;
 import cn.planka.api.user.enums.OrganizationRole;
 import cn.planka.api.user.enums.UserStatus;
 import cn.planka.api.user.request.AddMemberRequest;
+import cn.planka.api.user.request.MemberCardIdsRequest;
 import cn.planka.api.user.request.UpdateMemberRoleRequest;
 import cn.planka.common.result.PageResult;
 import cn.planka.common.result.Result;
@@ -35,6 +37,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -355,6 +358,44 @@ public class MemberService {
 
         UserEntity user = userRepository.findById(userOrg.getUserId()).orElse(null);
         return Result.success(toMemberDTO(userOrg, user));
+    }
+
+    /**
+     * 按成员卡片 ID 批量补齐组织角色与用户上次登录时间（仅返回属于当前组织的记录）
+     */
+    public Result<List<MemberCardDirectoryEnrichmentDTO>> enrichByMemberCards(String orgId, MemberCardIdsRequest request) {
+        List<String> ids = request.memberCardIds();
+        if (ids == null || ids.isEmpty()) {
+            return Result.success(List.of());
+        }
+
+        List<UserOrganizationEntity> rows =
+                userOrganizationRepository.findActiveByOrgIdAndMemberCardIds(orgId, ids);
+
+        Set<String> userIds = rows.stream()
+                .map(UserOrganizationEntity::getUserId)
+                .collect(Collectors.toSet());
+        Map<String, UserEntity> userMap = userRepository.findByIds(new ArrayList<>(userIds)).stream()
+                .collect(Collectors.toMap(UserEntity::getId, u -> u));
+
+        Map<String, UserOrganizationEntity> byMemberCardId = rows.stream()
+                .filter(r -> r.getMemberCardId() != null && !r.getMemberCardId().isBlank())
+                .collect(Collectors.toMap(UserOrganizationEntity::getMemberCardId, r -> r, (a, b) -> a));
+
+        List<MemberCardDirectoryEnrichmentDTO> result = ids.stream()
+                .map(cardId -> {
+                    UserOrganizationEntity uo = byMemberCardId.get(cardId);
+                    if (uo == null) {
+                        return new MemberCardDirectoryEnrichmentDTO(cardId, null, null);
+                    }
+                    UserEntity user = userMap.get(uo.getUserId());
+                    return new MemberCardDirectoryEnrichmentDTO(
+                            cardId,
+                            uo.getRole(),
+                            user != null ? user.getLastLoginAt() : null);
+                })
+                .toList();
+        return Result.success(result);
     }
 
     private MemberDTO toMemberDTO(UserOrganizationEntity userOrg, UserEntity user) {

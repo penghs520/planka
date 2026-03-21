@@ -1,9 +1,11 @@
 package cn.planka.api.user;
 
 import cn.planka.api.user.dto.LoginResponse;
+import cn.planka.api.user.dto.MemberCardDirectoryEnrichmentDTO;
 import cn.planka.api.user.dto.MemberDTO;
 import cn.planka.api.user.dto.OrganizationDTO;
 import cn.planka.api.user.dto.UserDTO;
+import cn.planka.api.user.feign.UserServiceFeignConfig;
 import cn.planka.api.user.request.*;
 import cn.planka.common.result.PageResult;
 import cn.planka.common.result.Result;
@@ -17,7 +19,11 @@ import java.util.List;
  * <p>
  * 定义用户服务的所有API接口，供其他服务通过Feign调用
  */
-@FeignClient(name = "user-service", path = "/api/v1")
+@FeignClient(
+        name = "user-service",
+        path = "/api/v1",
+        contextId = "userServiceClient",
+        configuration = UserServiceFeignConfig.class)
 public interface UserServiceContract {
 
     // ==================== 认证 API ====================
@@ -113,6 +119,14 @@ public interface UserServiceContract {
             @RequestHeader("X-Org-Id") String orgId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size);
+
+    /**
+     * 按成员卡片 ID 批量补齐目录字段
+     */
+    @PostMapping("/members/by-member-cards")
+    Result<List<MemberCardDirectoryEnrichmentDTO>> enrichMembersByMemberCards(
+            @RequestHeader("X-Org-Id") String orgId,
+            @RequestBody MemberCardIdsRequest request);
 
     /**
      * 添加成员

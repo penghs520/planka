@@ -71,6 +71,14 @@ export const routes: RouteRecordRaw[] = [
           titleKey: 'sidebar.teams',
         },
       },
+      {
+        path: 'workspace/members',
+        name: 'WorkspaceMembers',
+        component: () => import('@/views/workspace/WorkspaceMembersView.vue'),
+        meta: {
+          titleKey: 'sidebar.members',
+        },
+      },
       // 工作区（视图列表）
       {
         path: 'workspace',

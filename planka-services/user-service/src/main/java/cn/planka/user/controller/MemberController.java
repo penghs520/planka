@@ -1,8 +1,10 @@
 package cn.planka.user.controller;
 
+import cn.planka.api.user.dto.MemberCardDirectoryEnrichmentDTO;
 import cn.planka.api.user.dto.MemberDTO;
 import cn.planka.api.user.dto.MemberOptionDTO;
 import cn.planka.api.user.request.AddMemberRequest;
+import cn.planka.api.user.request.MemberCardIdsRequest;
 import cn.planka.api.user.request.UpdateMemberRoleRequest;
 import cn.planka.common.result.PageResult;
 import cn.planka.common.result.Result;
@@ -10,6 +12,8 @@ import cn.planka.user.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 成员控制器
@@ -46,6 +50,16 @@ public class MemberController {
             @RequestParam(name = "size", defaultValue = "50") int size,
             @RequestParam(name = "keyword", required = false) String keyword) {
         return memberService.getMemberOptions(orgId, page, size, keyword);
+    }
+
+    /**
+     * 按成员卡片 ID 批量补齐目录展示字段（角色、上次登录时间）
+     */
+    @PostMapping("/by-member-cards")
+    public Result<List<MemberCardDirectoryEnrichmentDTO>> enrichByMemberCards(
+            @RequestHeader(name = "X-Org-Id") String orgId,
+            @Valid @RequestBody MemberCardIdsRequest request) {
+        return memberService.enrichByMemberCards(orgId, request);
     }
 
     /**
