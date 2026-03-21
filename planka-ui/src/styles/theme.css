@@ -120,18 +120,16 @@
   --color-text-4: #8E9094;
 
   /* ========================================
-     中性色 - 填充/背景（页 #F5F5F5，表面 #FFFFFF）
+     中性色 - 填充/背景
+     色板 c1/c6：各主题块覆盖；--color-bg-* 仅在 :root 用 color-mix 从 planka-c1 / planka-c6 / text-1 推导
      ======================================== */
+  --planka-c1: #F5F5F5;
+  --planka-c6: #FFFFFF;
+
   --color-fill-1: #EBEBEB;
   --color-fill-2: #E0E0E0;
   --color-fill-3: #D5D5D5;
   --color-fill-4: #C8C8C8;
-
-  --color-bg-1: #F5F5F5;
-  --color-bg-2: #FFFFFF;
-  --color-bg-3: #EBEBEB;
-  --color-bg-4: #E0E0E0;
-  --color-bg-5: #D0D0D0;
 
   /* ========================================
      中性色 - 边框
@@ -173,7 +171,7 @@
   --border-radius-large: 8px;
 
   /* 侧栏语义色（默认 PINE Light，与 html[data-ui-theme="pine-light"] 一致） */
-  --sidebar-bg: #F5F5F5;
+  --sidebar-bg: var(--planka-c1);
   --sidebar-bg-hover: #EBEBEB;
   --sidebar-bg-active: #D7E7F1;
   --sidebar-text-primary: #1A1A1C;
@@ -183,13 +181,23 @@
   --sidebar-section-label: #0083E0;
   --sidebar-accent: #0083E0;
   --sidebar-border: rgba(26, 26, 28, 0.12);
+
+  /* 背景阶：仅依赖 --planka-c1 / --planka-c6 / --color-text-1 */
+  --color-bg-1: var(--planka-c1);
+  --color-bg-2: color-mix(in srgb, var(--planka-c1) 58%, var(--planka-c6) 42%);
+  --color-bg-3: color-mix(in srgb, var(--color-bg-2) 94%, var(--color-text-1) 6%);
+  --color-bg-4: color-mix(in srgb, var(--color-bg-2) 88%, var(--color-text-1) 12%);
+  --color-bg-5: color-mix(in srgb, var(--color-bg-2) 80%, var(--color-text-1) 20%);
 }
 
 /*
  * 整站 + 侧栏主题（六色语义：1 壳层底 2 主字 3 选中底 4 选中字 5 分组标题/品牌 6 强调/表面参考）
- * 由 data-ui-theme 切换；:root 为无属性时的回退（等同 pine-light）
+ * 由 data-ui-theme 切换。壳层/主内容背景阶：各主题只写 --planka-c1（同 c1）、--planka-c6（同 c6 表面参考），
+ * --color-bg-1…5 在 :root 统一用 color-mix 推导，勿在各主题重复写 hex。
  */
 html[data-ui-theme="pine-light"] {
+  --planka-c1: #F5F5F5;
+  --planka-c6: #FFFFFF;
   --color-primary: #0083E0;
   --color-primary-hover: #1A9EFF;
   --color-primary-active: #0F4974;
@@ -224,11 +232,6 @@ html[data-ui-theme="pine-light"] {
   --color-fill-2: #E0E0E0;
   --color-fill-3: #D5D5D5;
   --color-fill-4: #C8C8C8;
-  --color-bg-1: #F5F5F5;
-  --color-bg-2: #FFFFFF;
-  --color-bg-3: #EBEBEB;
-  --color-bg-4: #E0E0E0;
-  --color-bg-5: #D0D0D0;
   --color-border-1: #DDDDDD;
   --color-border-2: #CCCCCC;
   --color-border-3: #E8E8E8;
@@ -237,7 +240,7 @@ html[data-ui-theme="pine-light"] {
   --shadow-lg: 0 4px 14px rgba(26, 26, 28, 0.1);
   --shadow-xl: 0 8px 24px rgba(26, 26, 28, 0.12);
   --page-description-color: #3D3F42;
-  --sidebar-bg: #F5F5F5;
+  --sidebar-bg: var(--planka-c1);
   --sidebar-bg-hover: #EBEBEB;
   --sidebar-bg-active: #D7E7F1;
   --sidebar-text-primary: #1A1A1C;
@@ -247,66 +250,6 @@ html[data-ui-theme="pine-light"] {
   --sidebar-section-label: #0083E0;
   --sidebar-accent: #0083E0;
   --sidebar-border: rgba(26, 26, 28, 0.12);
-}
-
-html[data-ui-theme="rose-pine-dawn"] {
-  --color-primary: #286983;
-  --color-primary-hover: #3A7F9A;
-  --color-primary-active: #1E566B;
-  --color-primary-light: #FAF4ED;
-  --color-primary-lighter: #FCF8F4;
-  --color-primary-rgb: 40, 105, 131;
-  --primary-1: 232, 245, 248;
-  --primary-2: 210, 234, 240;
-  --primary-3: 168, 210, 222;
-  --primary-4: 115, 175, 195;
-  --primary-5: 72, 145, 168;
-  --primary-6: 40, 105, 131;
-  --primary-7: 35, 90, 112;
-  --primary-8: 28, 74, 92;
-  --primary-9: 22, 58, 72;
-  --primary-10: 16, 44, 55;
-  --arcoblue-1: 232, 245, 248;
-  --arcoblue-2: 210, 234, 240;
-  --arcoblue-3: 168, 210, 222;
-  --arcoblue-4: 115, 175, 195;
-  --arcoblue-5: 72, 145, 168;
-  --arcoblue-6: 40, 105, 131;
-  --arcoblue-7: 35, 90, 112;
-  --arcoblue-8: 28, 74, 92;
-  --arcoblue-9: 22, 58, 72;
-  --arcoblue-10: 16, 44, 55;
-  --color-text-1: #797593;
-  --color-text-2: #8E8A9E;
-  --color-text-3: #A39EAF;
-  --color-text-4: #B8B4C2;
-  --color-fill-1: #F4EDE8;
-  --color-fill-2: #EDE5DC;
-  --color-fill-3: #E5DCD2;
-  --color-fill-4: #DDD3C8;
-  --color-bg-1: #FFFAF3;
-  --color-bg-2: #FFFFFF;
-  --color-bg-3: #F4EDE8;
-  --color-bg-4: #EDE5DC;
-  --color-bg-5: #E5DCD2;
-  --color-border-1: #E8E0D5;
-  --color-border-2: #D9D0C5;
-  --color-border-3: #F0EAE2;
-  --shadow-sm: 0 1px 2px rgba(87, 82, 121, 0.06);
-  --shadow-md: 0 2px 8px rgba(87, 82, 121, 0.08);
-  --shadow-lg: 0 4px 14px rgba(87, 82, 121, 0.1);
-  --shadow-xl: 0 8px 24px rgba(87, 82, 121, 0.12);
-  --page-description-color: #8E8A9E;
-  --sidebar-bg: #FFFAF3;
-  --sidebar-bg-hover: #FCF6EE;
-  --sidebar-bg-active: #FAF4ED;
-  --sidebar-text-primary: #797593;
-  --sidebar-text-secondary: #8E8A9E;
-  --sidebar-text-muted: rgba(121, 117, 147, 0.45);
-  --sidebar-text-active: #575279;
-  --sidebar-section-label: #286983;
-  --sidebar-accent: #286983;
-  --sidebar-border: rgba(87, 82, 121, 0.14);
 }
 
 html[data-ui-theme="ash"] {
@@ -340,15 +283,12 @@ html[data-ui-theme="ash"] {
   --color-text-2: #5C6165;
   --color-text-3: #75797D;
   --color-text-4: #909498;
+  --planka-c1: #FFFFFF;
+  --planka-c6: #FFFFFF;
   --color-fill-1: #F5F6F8;
   --color-fill-2: #EDEEF3;
   --color-fill-3: #E2E4EA;
   --color-fill-4: #D5D8E0;
-  --color-bg-1: #FFFFFF;
-  --color-bg-2: #FFFFFF;
-  --color-bg-3: #F5F6F8;
-  --color-bg-4: #EDEEF3;
-  --color-bg-5: #E2E4EA;
   --color-border-1: #E2E4EA;
   --color-border-2: #CED1D8;
   --color-border-3: #F0F1F4;
@@ -357,7 +297,7 @@ html[data-ui-theme="ash"] {
   --shadow-lg: 0 4px 14px rgba(68, 73, 77, 0.1);
   --shadow-xl: 0 8px 24px rgba(68, 73, 77, 0.12);
   --page-description-color: #5C6165;
-  --sidebar-bg: #FFFFFF;
+  --sidebar-bg: var(--planka-c1);
   --sidebar-bg-hover: #F5F6F8;
   --sidebar-bg-active: #EDEEF3;
   --sidebar-text-primary: #44494D;
@@ -400,15 +340,12 @@ html[data-ui-theme="notion-light"] {
   --color-text-2: #5A564E;
   --color-text-3: #78736A;
   --color-text-4: #9A958C;
+  --planka-c1: #FFFFFF;
+  --planka-c6: #FFFFFF;
   --color-fill-1: #F7F6F3;
   --color-fill-2: #ECEBE7;
   --color-fill-3: #E3E2DD;
   --color-fill-4: #D8D7D2;
-  --color-bg-1: #FFFFFF;
-  --color-bg-2: #FFFFFF;
-  --color-bg-3: #F7F6F3;
-  --color-bg-4: #ECEBE7;
-  --color-bg-5: #E3E2DD;
   --color-border-1: #E8E7E3;
   --color-border-2: #D3D1CD;
   --color-border-3: #F1F0ED;
@@ -417,7 +354,7 @@ html[data-ui-theme="notion-light"] {
   --shadow-lg: 0 4px 14px rgba(55, 53, 47, 0.1);
   --shadow-xl: 0 8px 24px rgba(55, 53, 47, 0.12);
   --page-description-color: #5A564E;
-  --sidebar-bg: #FFFFFF;
+  --sidebar-bg: var(--planka-c1);
   --sidebar-bg-hover: #F7F6F3;
   --sidebar-bg-active: #F7F6F3;
   --sidebar-text-primary: #37352F;
@@ -616,7 +553,7 @@ body {
    效果：蓝色胶囊标签，hover 显示关闭按钮
    ======================================== */
 .arco-select-tag-blue.arco-select-view-multiple {
-  background-color: #fff;
+  background-color: var(--color-bg-2);
   border: 1px solid var(--color-border-1);
   min-height: 32px;
   padding: 2px 4px;

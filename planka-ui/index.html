@@ -5,8 +5,12 @@
       (function () {
         try {
           var k = 'planka-ui-theme'
-          var ids = ['pine-light', 'rose-pine-dawn', 'ash', 'notion-light']
+          var ids = ['pine-light', 'ash', 'notion-light']
           var v = localStorage.getItem(k)
+          if (v === 'rose-pine-dawn') {
+            localStorage.setItem(k, 'pine-light')
+            v = 'pine-light'
+          }
           if (v && ids.indexOf(v) >= 0) {
             document.documentElement.setAttribute('data-ui-theme', v)
           } else {

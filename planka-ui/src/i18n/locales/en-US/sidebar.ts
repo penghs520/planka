@@ -7,7 +7,6 @@ export default {
   settings: 'Settings',
   uiThemeMenu: 'Interface theme',
   themePineLight: 'PINE Light',
-  themeRosePineDawn: 'Rose Pine Dawn',
   themeAsh: 'Ash',
   themeNotionLight: 'Notion Light',
   collapse: 'Collapse Sidebar',

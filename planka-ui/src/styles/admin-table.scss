@@ -17,7 +17,7 @@
   font-weight: 600;
   line-height: 20px;
   color: var(--color-text-3, #8F959E);
-  background-color: #FAFBFC !important;
+  background-color: var(--color-fill-1, #f5f5f5) !important;
   letter-spacing: 0.02em;
 }
 
@@ -28,6 +28,7 @@
 .arco-table-td {
   padding: 10px 12px !important;
   font-size: 13px;
+  background-color: var(--color-bg-2, #fff) !important;
 
   // 单元格内容不穿透，长文本换行显示
   .arco-table-td-content {
@@ -98,12 +99,12 @@
   height: 32px !important;
   padding: 0 14px !important;
   transition: all 0.2s ease !important;
-  box-shadow: 0 1px 2px rgba(0, 131, 224, 0.25) !important;
+  box-shadow: 0 1px 2px rgba(var(--color-primary-rgb), 0.25) !important;
 
   &:hover {
     background-color: var(--color-primary-hover, #1A9EFF) !important;
     border-color: var(--color-primary-hover, #1A9EFF) !important;
-    box-shadow: 0 2px 6px rgba(0, 131, 224, 0.35) !important;
+    box-shadow: 0 2px 6px rgba(var(--color-primary-rgb), 0.35) !important;
   }
 }
 
@@ -124,19 +125,19 @@
 .arco-select-view-single,
 .arco-select-view-multiple,
 .arco-input-number {
-  background-color: #fff;
-  border: 1px solid #e5e6eb;
+  background-color: var(--color-bg-2, #fff);
+  border: 1px solid var(--color-border-2, #e5e6eb);
 }
 
 .arco-input::placeholder,
 .arco-textarea::placeholder,
 .arco-input-number-input::placeholder {
-  color: #c9cdd4;
+  color: var(--color-text-4, #c9cdd4);
 }
 
 .arco-select-view-value-placeholder,
 .arco-select-view-placeholder {
-  color: #c9cdd4 !important;
+  color: var(--color-text-4, #c9cdd4) !important;
 }
 
 .arco-input-wrapper:hover,
@@ -144,7 +145,7 @@
 .arco-select-view-single:hover,
 .arco-select-view-multiple:hover,
 .arco-input-number:hover {
-  border-color: #c9cdd4;
+  border-color: var(--color-border-2, #c9cdd4);
 }
 
 .arco-input-wrapper.arco-input-focus,
@@ -247,7 +248,7 @@
 
 // 行悬停效果
 .arco-table-tr:hover .arco-table-td {
-  background-color: #FAFBFC !important;
+  background-color: var(--color-fill-1, #fafbfc) !important;
 }
 
 .arco-table-th,

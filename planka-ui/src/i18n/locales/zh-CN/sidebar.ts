@@ -7,7 +7,6 @@ export default {
   settings: '设置',
   uiThemeMenu: '界面主题',
   themePineLight: 'PINE Light',
-  themeRosePineDawn: 'Rose Pine Dawn',
   themeAsh: 'Ash',
   themeNotionLight: 'Notion Light',
   collapse: '收起侧边栏',

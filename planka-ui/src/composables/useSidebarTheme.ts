@@ -3,13 +3,12 @@ import { ref, watchEffect } from 'vue'
 const STORAGE_KEY = 'planka-ui-theme'
 const LEGACY_STORAGE_KEY = 'sidebar-theme'
 
-export const UI_THEME_IDS = ['pine-light', 'rose-pine-dawn', 'ash', 'notion-light'] as const
+export const UI_THEME_IDS = ['pine-light', 'ash', 'notion-light'] as const
 
 export type UiThemeId = (typeof UI_THEME_IDS)[number]
 
 export const THEME_OPTIONS: { id: UiThemeId; labelKey: string }[] = [
   { id: 'pine-light', labelKey: 'sidebar.themePineLight' },
-  { id: 'rose-pine-dawn', labelKey: 'sidebar.themeRosePineDawn' },
   { id: 'ash', labelKey: 'sidebar.themeAsh' },
   { id: 'notion-light', labelKey: 'sidebar.themeNotionLight' },
 ]
@@ -21,6 +20,10 @@ function isUiThemeId(value: string): value is UiThemeId {
 function readStoredTheme(): UiThemeId {
   try {
     const next = localStorage.getItem(STORAGE_KEY)
+    if (next === 'rose-pine-dawn') {
+      localStorage.setItem(STORAGE_KEY, 'pine-light')
+      return 'pine-light'
+    }
     if (next && isUiThemeId(next))
       return next
     if (next)
