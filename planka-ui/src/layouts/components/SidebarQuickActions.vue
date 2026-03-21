@@ -124,6 +124,7 @@ function goWorkspace() {
 .quick-action-item.active {
   background: var(--sidebar-bg-active);
   color: var(--sidebar-text-active);
+  font-weight: var(--sidebar-nav-font-weight-active);
 }
 
 .quick-action-icon {

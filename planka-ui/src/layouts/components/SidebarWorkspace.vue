@@ -194,5 +194,6 @@ function isActive(
 .nav-row.active {
   background: var(--sidebar-bg-active);
   color: var(--sidebar-text-active);
+  font-weight: var(--sidebar-nav-font-weight-active);
 }
 </style>

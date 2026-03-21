@@ -155,6 +155,7 @@ function navigateTo(item: MenuItem) {
 .menu-item--active {
   background: var(--sidebar-bg-active);
   color: var(--sidebar-text-active);
+  font-weight: var(--sidebar-nav-font-weight-active);
 }
 
 .menu-item-icon {

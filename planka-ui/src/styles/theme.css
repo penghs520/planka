@@ -186,6 +186,7 @@
   --sidebar-nav-font-family: var(--font-family);
   --sidebar-nav-font-size: 13px;
   --sidebar-nav-font-weight: 500;
+  --sidebar-nav-font-weight-active: 600;
 
   /* 背景阶：仅依赖 --planka-c1 / --planka-c6 / --color-text-1 */
   --color-bg-1: var(--planka-c1);
@@ -368,7 +369,7 @@ html[data-ui-theme="notion-light"] {
   --sidebar-text-primary: #37352F;
   --sidebar-text-secondary: #5A564E;
   --sidebar-text-muted: rgba(55, 53, 47, 0.45);
-  --sidebar-text-active: #85837E;
+  --sidebar-text-active: var(--sidebar-text-primary);
   --sidebar-section-label: #9A958C;
   --sidebar-accent: #000000;
   --sidebar-border: rgba(55, 53, 47, 0.12);
