@@ -1,6 +1,5 @@
 import request from './request'
 import type {
-  ViewDataRequest,
   ViewPreviewRequest,
   ViewDataResponse,
   GroupedCardData,
@@ -13,13 +12,10 @@ const VIEW_DATA_URL = '/api/v1/view-data'
  */
 export const viewDataApi = {
   /**
-   * 根据视图 ID 查询数据
-   *
-   * @param viewId 视图 ID
-   * @param request 查询请求
+   * 根据视图 ID 查询数据（body 与后端 ViewDataRequest 对齐）
    */
-  queryByViewId(viewId: string, dataRequest?: ViewDataRequest): Promise<ViewDataResponse> {
-    return request.post(`${VIEW_DATA_URL}/${viewId}`, dataRequest || {})
+  queryByViewId(viewId: string, body: Record<string, unknown> = {}): Promise<ViewDataResponse> {
+    return request.post(`${VIEW_DATA_URL}/${viewId}`, body)
   },
 
   /**
@@ -28,8 +24,8 @@ export const viewDataApi = {
    * @param viewId 视图 ID
    * @param request 查询请求
    */
-  queryGroups(viewId: string, dataRequest?: ViewDataRequest): Promise<GroupedCardData[]> {
-    return request.post(`${VIEW_DATA_URL}/${viewId}/groups`, dataRequest || {})
+  queryGroups(viewId: string, body: Record<string, unknown> = {}): Promise<GroupedCardData[]> {
+    return request.post(`${VIEW_DATA_URL}/${viewId}/groups`, body)
   },
 
   /**

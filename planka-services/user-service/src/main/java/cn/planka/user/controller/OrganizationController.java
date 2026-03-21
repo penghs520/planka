@@ -1,10 +1,13 @@
 package cn.planka.user.controller;
 
 import cn.planka.api.user.dto.OrganizationDTO;
+import cn.planka.api.user.dto.SidebarPreferencesDTO;
 import cn.planka.api.user.request.CreateOrganizationRequest;
 import cn.planka.api.user.request.UpdateOrganizationRequest;
+import cn.planka.api.user.request.UpdateSidebarPreferencesRequest;
 import cn.planka.common.result.Result;
 import cn.planka.user.service.OrganizationService;
+import cn.planka.user.service.OrganizationSidebarWorkspacePreferencesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrganizationController {
 
     private final OrganizationService organizationService;
+    private final OrganizationSidebarWorkspacePreferencesService organizationSidebarWorkspacePreferencesService;
 
     /**
      * 创建组织
@@ -56,5 +60,23 @@ public class OrganizationController {
             @PathVariable(name = "orgId") String orgId,
             @RequestHeader(name = "X-User-Id") String userId) {
         return organizationService.deleteOrganization(orgId, userId);
+    }
+
+    /**
+     * 工作空间侧栏默认（全体成员可读；仅管理员可更新）
+     */
+    @GetMapping("/{orgId}/sidebar-workspace-preferences")
+    public Result<SidebarPreferencesDTO> getSidebarWorkspacePreferences(
+            @PathVariable(name = "orgId") String orgId,
+            @RequestHeader(name = "X-User-Id") String userId) {
+        return organizationSidebarWorkspacePreferencesService.get(orgId, userId);
+    }
+
+    @PutMapping("/{orgId}/sidebar-workspace-preferences")
+    public Result<SidebarPreferencesDTO> updateSidebarWorkspacePreferences(
+            @PathVariable(name = "orgId") String orgId,
+            @RequestHeader(name = "X-User-Id") String userId,
+            @Valid @RequestBody UpdateSidebarPreferencesRequest request) {
+        return organizationSidebarWorkspacePreferencesService.update(orgId, userId, request);
     }
 }

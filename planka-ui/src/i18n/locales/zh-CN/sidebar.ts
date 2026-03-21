@@ -26,4 +26,21 @@ export default {
   teamProjects: 'Projects',
   teamViews: '视图',
   createTeamFailed: '创建团队失败',
+  editSidebar: '编辑侧栏',
+  sidebarSettingsSaved: '个人侧栏偏好已保存',
+  sidebarWorkspaceSettingsSaved: '工作空间侧栏默认已保存',
+  sidebarSettingsTabUser: '个人偏好设置',
+  sidebarSettingsTabWorkspace: '工作空间默认',
+  structureSidebarUserTitle: '选择需要显示到侧边栏的架构线',
+  structureSidebarUserHint:
+    '仅影响你的账号：勾选后出现在左侧；清空勾选则使用组织「工作空间默认」（若组织也未配置则侧栏不显示架构线）。',
+  workspaceSidebarEditorTitle: '选择需要显示到侧边栏的架构线',
+  workspaceSidebarEditorHint:
+    '作为组织内未单独设置侧栏的成员的默认：勾选后出现在其左侧；未勾选的不会出现在侧栏。仅组织拥有者和管理员可保存。',
+  workspaceSidebarReadonlyHint: '你不是组织拥有者或管理员，只能查看当前工作空间默认配置。',
+  structureSidebarEditorTitle: '侧栏显示的架构线',
+  structureSidebarEditorHint: '勾选要在左侧显示的架构线；未勾选的不出现在侧栏。',
+  structureSidebarEditorEmpty: '当前组织没有可用的架构线，请先在管理后台创建并启用。',
+  structureViewsHint: '以下为组织菜单中的视图；打开后若该视图为工作项类型，将仅显示当前架构节点下项目中的工作项。',
+  structureViewsEmpty: '当前组织暂无菜单视图',
 }

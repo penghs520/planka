@@ -12,7 +12,13 @@ import cn.planka.domain.schema.definition.fieldconfig.StructureFieldConfig;
 import cn.planka.domain.schema.definition.structure.StructureDefinition;
 import cn.planka.domain.schema.definition.structure.StructureLevel;
 import cn.planka.infra.cache.schema.SchemaCacheService;
-import cn.planka.api.card.request.*;
+import cn.planka.api.card.request.CardQueryRequest;
+import cn.planka.api.card.request.QueryContext;
+import cn.planka.api.card.request.QueryScope;
+import cn.planka.api.card.request.StructureOptionsRequest;
+import cn.planka.api.card.request.Yield;
+import cn.planka.api.card.request.YieldField;
+import cn.planka.api.card.request.YieldLink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -51,7 +57,11 @@ public class StructureOptionsService {
      */
     public Result<List<StructureNodeDTO>> queryOptions(StructureOptionsRequest request,
                                                         String orgId, String operatorId) {
-        String structureFieldId = request.getStructureFieldId();
+        if (request.getStructureId() != null && !request.getStructureId().isBlank()) {
+            return queryTreeByStructureDefinitionId(request.getStructureId().trim(), orgId, operatorId);
+        }
+
+        String structureFieldId = request.getStructureFieldId().trim();
 
         // 1. 获取架构属性定义
         Optional<SchemaDefinition<?>> defOpt = schemaCacheService.getById(structureFieldId);
@@ -60,23 +70,36 @@ public class StructureOptionsService {
         }
 
         // 2. 获取架构线定义
-        String structureId = structureFieldDef.getStructureId().value();
+        String sid = structureFieldDef.getStructureId().value();
+        Optional<SchemaDefinition<?>> structureDefOpt = schemaCacheService.getById(sid);
+        if (structureDefOpt.isEmpty() || !(structureDefOpt.get() instanceof StructureDefinition structureDef)) {
+            return Result.failure("STRUCTURE_NOT_FOUND", "架构线定义不存在: " + sid);
+        }
+
+        return buildTreeForStructure(structureDef, orgId, operatorId);
+    }
+
+    private Result<List<StructureNodeDTO>> queryTreeByStructureDefinitionId(String structureId,
+                                                                              String orgId,
+                                                                              String operatorId) {
         Optional<SchemaDefinition<?>> structureDefOpt = schemaCacheService.getById(structureId);
         if (structureDefOpt.isEmpty() || !(structureDefOpt.get() instanceof StructureDefinition structureDef)) {
             return Result.failure("STRUCTURE_NOT_FOUND", "架构线定义不存在: " + structureId);
         }
+        if (!orgId.equals(structureDef.getOrgId())) {
+            return Result.failure("STRUCTURE_ORG_MISMATCH", "架构线不属于当前组织");
+        }
+        return buildTreeForStructure(structureDef, orgId, operatorId);
+    }
 
+    private Result<List<StructureNodeDTO>> buildTreeForStructure(StructureDefinition structureDef,
+                                                                 String orgId, String operatorId) {
         List<StructureLevel> levels = structureDef.getLevels();
         if (levels == null || levels.isEmpty()) {
             return Result.success(List.of());
         }
-
-        // 3. 查询所有层级的卡片
         Map<Integer, List<CardDTO>> levelCards = queryAllLevelCards(levels, orgId, operatorId);
-
-        // 4. 构建树形结构
         List<StructureNodeDTO> tree = buildTree(levels, levelCards);
-
         return Result.success(tree);
     }
 

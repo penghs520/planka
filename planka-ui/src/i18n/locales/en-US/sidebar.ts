@@ -26,4 +26,22 @@ export default {
   teamProjects: 'Projects',
   teamViews: 'Views',
   createTeamFailed: 'Failed to create team',
+  editSidebar: 'Edit sidebar',
+  sidebarSettingsSaved: 'Personal sidebar preferences saved',
+  sidebarWorkspaceSettingsSaved: 'Workspace sidebar defaults saved',
+  sidebarSettingsTabUser: 'Personal preferences',
+  sidebarSettingsTabWorkspace: 'Workspace default',
+  structureSidebarUserTitle: 'Choose structure lines to show in the sidebar',
+  structureSidebarUserHint:
+    'Only for your account. If you clear all selections, the org workspace default is used (if any).',
+  workspaceSidebarEditorTitle: 'Choose structure lines to show in the sidebar',
+  workspaceSidebarEditorHint:
+    'Default for members who have not set personal sidebar preferences: checked lines appear on the left; unchecked lines are hidden. Only owners and admins can save.',
+  workspaceSidebarReadonlyHint: 'Only organization owners and admins can edit workspace defaults. You can view the current configuration.',
+  structureSidebarEditorTitle: 'Structure lines in sidebar',
+  structureSidebarEditorHint: 'Choose which structure lines appear in the sidebar.',
+  structureSidebarEditorEmpty: 'No structure lines in this org. Create and enable them in admin first.',
+  structureViewsHint:
+    'Views from the org menu. If the view targets issues, results are limited to issues in projects under this structure node.',
+  structureViewsEmpty: 'No views in the org menu',
 }

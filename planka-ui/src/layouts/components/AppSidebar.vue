@@ -7,6 +7,7 @@ import SidebarAdmin from './SidebarAdmin.vue'
 import SidebarFooter from './SidebarFooter.vue'
 import SidebarWorkspace from './SidebarWorkspace.vue'
 import SidebarYourTeams from './SidebarYourTeams.vue'
+import SidebarStructureSection from './SidebarStructureSection.vue'
 import { useSidebarTheme } from '@/composables/useSidebarTheme'
 
 // 初始化主题（确保 DOM 属性同步）
@@ -74,6 +75,7 @@ function startResize(e: MouseEvent) {
     <nav class="sidebar-scroll">
       <template v-if="!showAdminNav">
         <SidebarWorkspace />
+        <SidebarStructureSection />
         <SidebarYourTeams />
       </template>
 

@@ -89,6 +89,36 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'structure/:structureId/node/:nodeId',
+        redirect: (to) => ({
+          path: `/structure/${to.params.structureId}/node/${to.params.nodeId}/issues`,
+        }),
+      },
+      {
+        path: 'structure/:structureId/node/:nodeId/issues',
+        name: 'StructureNodeIssues',
+        component: () => import('@/views/structure-node/StructureNodeIssuesView.vue'),
+        meta: {
+          titleKey: 'sidebar.teamIssues',
+        },
+      },
+      {
+        path: 'structure/:structureId/node/:nodeId/projects',
+        name: 'StructureNodeProjects',
+        component: () => import('@/views/structure-node/StructureNodeProjectsView.vue'),
+        meta: {
+          titleKey: 'sidebar.teamProjects',
+        },
+      },
+      {
+        path: 'structure/:structureId/node/:nodeId/views',
+        name: 'StructureNodeViews',
+        component: () => import('@/views/structure-node/StructureNodeViewsView.vue'),
+        meta: {
+          titleKey: 'sidebar.teamViews',
+        },
+      },
+      {
         path: 'team/:teamId',
         redirect: (to) => ({ path: `/team/${to.params.teamId}/issues` }),
       },
@@ -127,6 +157,15 @@ export const routes: RouteRecordRaw[] = [
       //   component: () => import('@/views/inbox/InboxPage.vue'),
       //   meta: { titleKey: 'sidebar.inbox' },
       // },
+      // 侧栏与前台导航个性化（可扩展更多项）
+      {
+        path: 'settings/sidebar',
+        name: 'SidebarSettings',
+        component: () => import('@/views/sidebar/SidebarSettingsView.vue'),
+        meta: {
+          titleKey: 'common.route.sidebarSettings',
+        },
+      },
       // 个人设置
       {
         path: 'profile',

@@ -4,6 +4,7 @@ import type {
   CreateOrganizationRequest,
   UpdateOrganizationRequest,
 } from '@/types/member'
+import type { SidebarPreferencesDTO } from '@/api/sidebar-preferences'
 
 const BASE_URL = '/api/v1/organizations'
 
@@ -37,5 +38,16 @@ export const orgApi = {
    */
   delete(orgId: string): Promise<void> {
     return request.delete(`${BASE_URL}/${orgId}`)
+  },
+
+  getSidebarWorkspacePreferences(orgId: string): Promise<SidebarPreferencesDTO> {
+    return request.get(`${BASE_URL}/${orgId}/sidebar-workspace-preferences`)
+  },
+
+  updateSidebarWorkspacePreferences(
+    orgId: string,
+    body: { pinnedStructureIds: string[] },
+  ): Promise<SidebarPreferencesDTO> {
+    return request.put(`${BASE_URL}/${orgId}/sidebar-workspace-preferences`, body)
   },
 }

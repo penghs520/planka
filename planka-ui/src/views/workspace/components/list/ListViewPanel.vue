@@ -9,6 +9,7 @@
  * - 使用 CellEditorOverlay 浮层渲染编辑器，避免全表重渲染
  */
 import { ref, shallowRef, computed, watch, inject, onUnmounted, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // import { Message, Modal } from '@arco-design/web-vue'
 import { IconPlusCircle } from '@arco-design/web-vue/es/icon'
@@ -24,6 +25,12 @@ import type { Condition } from '@/types/condition'
 import { getCardId } from '@/types/card'
 import { createEmptyViewDataRequest } from '@/types/view-data'
 import { viewDataApi } from '@/api/view-data'
+import { viewApi } from '@/api/view'
+import { useOrgStore } from '@/stores/org'
+import { issueCardTypeId, projectIssueLinkTypeId } from '@/constants/systemSchemaIds'
+import { buildLinkFieldId } from '@/utils/link-field-utils'
+import { conditionLinkIn } from '@/utils/card-query'
+import { andMergeConditions, toViewDataQueryBody } from '@/utils/view-data-request'
 // import { cardApi } from '@/api/card'
 import CardCreateModal from '../shared/CardCreateModal.vue'
 import ListViewCell from './ListViewCell.vue'
@@ -40,6 +47,8 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const route = useRoute()
+const orgStore = useOrgStore()
 
 // Injections
 const setViewName = inject<(name: string) => void>('setViewName')
@@ -114,6 +123,53 @@ const {
 )
 
 // ==================== 数据加载 ====================
+function parseScopeProjectIds(): string[] {
+  const raw = route.query.scopeProjectIds
+  if (Array.isArray(raw)) {
+    return String(raw[0] ?? '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  }
+  if (typeof raw === 'string') {
+    return raw.split(',').map((s) => s.trim()).filter(Boolean)
+  }
+  return []
+}
+
+async function resolveScopeAdditionalCondition(): Promise<Condition | undefined> {
+  const scopeIds = parseScopeProjectIds()
+  if (scopeIds.length === 0 || !props.viewId) {
+    return undefined
+  }
+  const orgId = orgStore.currentOrgId
+  if (!orgId) {
+    return undefined
+  }
+  try {
+    const def = await viewApi.getById(props.viewId)
+    if (def.cardTypeId !== issueCardTypeId(orgId)) {
+      return undefined
+    }
+    const lf = buildLinkFieldId(projectIssueLinkTypeId(orgId), 'TARGET')
+    return conditionLinkIn(lf, scopeIds)
+  } catch {
+    return undefined
+  }
+}
+
+async function buildViewQueryBody(): Promise<Record<string, unknown>> {
+  const scope = await resolveScopeAdditionalCondition()
+  const merged = andMergeConditions(scope, request.value.userCondition)
+  return toViewDataQueryBody({
+    page: request.value.page,
+    size: request.value.size,
+    groupValue: request.value.groupValue,
+    userSorts: request.value.userSorts,
+    additionalCondition: merged,
+  })
+}
+
 async function fetchData() {
   if (!props.viewId) return
 
@@ -125,7 +181,8 @@ async function fetchData() {
   request.value.size = PAGE_SIZE
 
   try {
-    const response = await viewDataApi.queryByViewId(props.viewId, request.value) as ListViewDataResponse
+    const body = await buildViewQueryBody()
+    const response = await viewDataApi.queryByViewId(props.viewId, body) as ListViewDataResponse
     viewData.value = response
     accumulatedCards.value = response.cards || []
 
@@ -151,7 +208,8 @@ async function loadMore() {
   request.value.page = (request.value.page ?? 0) + 1
 
   try {
-    const response = await viewDataApi.queryByViewId(props.viewId, request.value) as ListViewDataResponse
+    const body = await buildViewQueryBody()
+    const response = await viewDataApi.queryByViewId(props.viewId, body) as ListViewDataResponse
     viewData.value = response
     accumulatedCards.value = [...accumulatedCards.value, ...(response.cards || [])]
 
@@ -284,15 +342,15 @@ function handleFilterClear() {
 
 // ==================== 生命周期 ====================
 watch(
-  () => props.viewId,
-  (newViewId) => {
+  () => [props.viewId, route.query.scopeProjectIds] as const,
+  ([newViewId]) => {
     if (newViewId) {
       unbindScrollEvent()
       request.value = createEmptyViewDataRequest()
-      fetchData()
+      void fetchData()
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 onUnmounted(() => {

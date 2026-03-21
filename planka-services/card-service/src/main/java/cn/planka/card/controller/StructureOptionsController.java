@@ -6,6 +6,7 @@ import cn.planka.card.service.structure.StructureOptionsService;
 import cn.planka.common.result.Result;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class StructureOptionsController {
     }
 
     /**
-     * 查询架构属性的树形可选项
+     * 查询架构树形可选项：{@code structureFieldId}（属性编辑器）与 {@code structureId}（侧栏等）二选一
      *
      * @param operatorId 操作人ID
      * @param orgId      组织ID

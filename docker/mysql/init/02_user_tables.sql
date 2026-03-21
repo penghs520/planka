@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS sys_organization (
     logo VARCHAR(500) NULL COMMENT '组织Logo URL',
 
     member_card_type_id VARCHAR(64) NULL COMMENT '成员卡片类型ID',
+
     status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '状态(ACTIVE/DISABLED/DELETED)',
 
     created_by VARCHAR(64) NOT NULL COMMENT '创建人ID',
@@ -88,6 +89,38 @@ CREATE TABLE IF NOT EXISTS sys_user_organization (
     INDEX idx_user_id (user_id),
     INDEX idx_role (role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户-组织关系表';
+
+-- ============================================================
+-- 3b. sys_user_sidebar_preference 用户侧栏偏好（每用户每组织一行，prefs JSON 存完整设置）
+-- ============================================================
+CREATE TABLE IF NOT EXISTS sys_user_sidebar_preference (
+    id VARCHAR(64) NOT NULL COMMENT '主键（雪花）',
+    user_id VARCHAR(64) NOT NULL COMMENT '用户ID',
+    org_id VARCHAR(64) NOT NULL COMMENT '组织ID',
+    prefs JSON NOT NULL COMMENT '侧栏偏好 JSON，如 pinnedStructureIds 等，可扩展字段',
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_user_org_sidebar (user_id, org_id),
+    KEY idx_usp_org (org_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户侧栏偏好';
+
+-- ============================================================
+-- 3c. sys_org_sidebar_workspace_preference 工作空间侧栏默认（每组织一行）
+-- ============================================================
+CREATE TABLE IF NOT EXISTS sys_org_sidebar_workspace_preference (
+    id VARCHAR(64) NOT NULL COMMENT '主键（雪花）',
+    org_id VARCHAR(64) NOT NULL COMMENT '组织ID',
+    prefs JSON NOT NULL COMMENT '工作空间侧栏默认 JSON，与用户对齐的可扩展结构',
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_org_workspace_sidebar (org_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='组织工作空间侧栏默认';
 
 -- ============================================================
 -- 4. sys_refresh_token 刷新令牌表

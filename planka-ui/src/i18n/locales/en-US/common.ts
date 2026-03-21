@@ -332,6 +332,7 @@ export default {
     activate: 'Activate Account',
     selectOrg: 'Select Organization',
     workspace: 'Workspace',
+    sidebarSettings: 'Sidebar settings',
     profile: 'Profile',
     changePassword: 'Change Password',
     linkTypeList: 'Link Type List',

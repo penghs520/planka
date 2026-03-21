@@ -13,6 +13,7 @@ import {
   IconSettings,
   IconUser,
   IconRight,
+  IconEdit,
 } from '@arco-design/web-vue/es/icon'
 
 const { t } = useI18n()
@@ -31,6 +32,10 @@ function goToProfile() {
   router.push('/profile')
 }
 
+function goSidebarSettings() {
+  router.push('/settings/sidebar')
+}
+
 function goToAdminPanel() {
   router.push('/admin/card-type')
 }
@@ -46,14 +51,19 @@ function pickTheme(id: UiThemeId) {
 
 <template>
   <div class="sidebar-footer">
-    <a-dropdown trigger="click" position="tr">
-      <div class="sidebar-user">
-        <a-avatar :size="22" :image-url="user?.avatar || undefined" class="sidebar-user-avatar">
-          {{ avatarText }}
-        </a-avatar>
-        <span class="sidebar-user-name">{{ displayName }}</span>
-      </div>
-      <template #content>
+    <div class="sidebar-footer-row">
+      <a-dropdown
+        trigger="click"
+        position="tr"
+        class="sidebar-user-dropdown"
+      >
+        <div class="sidebar-user">
+          <a-avatar :size="22" :image-url="user?.avatar || undefined" class="sidebar-user-avatar">
+            {{ avatarText }}
+          </a-avatar>
+          <span class="sidebar-user-name">{{ displayName }}</span>
+        </div>
+        <template #content>
         <a-doption v-if="canEnterAdminPanel" @click="goToAdminPanel">
           <template #icon><IconSettings /></template>
           {{ t('common.layout.adminPanel') }}
@@ -87,8 +97,18 @@ function pickTheme(id: UiThemeId) {
           <template #icon><IconExport /></template>
           {{ t('common.layout.logout') }}
         </a-doption>
-      </template>
-    </a-dropdown>
+        </template>
+      </a-dropdown>
+      <button
+        type="button"
+        class="sidebar-edit-btn"
+        :title="t('sidebar.editSidebar')"
+        :aria-label="t('sidebar.editSidebar')"
+        @click="goSidebarSettings"
+      >
+        <IconEdit class="sidebar-edit-icon" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -96,12 +116,21 @@ function pickTheme(id: UiThemeId) {
 .sidebar-footer {
   padding: 8px;
   flex-shrink: 0;
+}
+
+.sidebar-footer-row {
   display: flex;
   align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sidebar-user-dropdown {
+  flex: 1;
+  min-width: 0;
 }
 
 .sidebar-user {
-  flex: 1;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -151,5 +180,32 @@ function pickTheme(id: UiThemeId) {
   margin-left: 8px;
   font-size: 12px;
   color: var(--color-text-3);
+}
+
+.sidebar-edit-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--sidebar-text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.sidebar-edit-btn:hover {
+  background: var(--sidebar-bg-hover);
+  color: var(--sidebar-accent);
+}
+
+.sidebar-edit-icon {
+  width: 15px;
+  height: 15px;
 }
 </style>

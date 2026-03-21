@@ -332,6 +332,7 @@ export default {
     activate: '激活账号',
     selectOrg: '选择组织',
     workspace: '工作区',
+    sidebarSettings: '侧栏设置',
     profile: '个人设置',
     changePassword: '修改密码',
     linkTypeList: '关联类型列表',

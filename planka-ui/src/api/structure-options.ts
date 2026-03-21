@@ -19,36 +19,20 @@ export interface StructureNodeDTO {
 }
 
 /**
- * 架构属性可选项查询请求
+ * 架构树查询请求（须且仅能指定其一）
  */
-export interface StructureOptionsRequest {
-  /** 架构属性定义ID */
-  structureFieldId: string
-}
-
-/**
- * 根据架构线ID查询可选项请求
- */
-export interface StructureOptionsByIdRequest {
-  /** 架构线定义ID */
-  structureId: string
-}
+export type StructureOptionsRequest =
+  | { structureFieldId: string; structureId?: undefined }
+  | { structureId: string; structureFieldId?: undefined }
 
 /**
  * 架构属性可选项 API
  */
 export const structureOptionsApi = {
   /**
-   * 查询架构属性的树形可选项
+   * 查询架构树：按架构属性定义，或按架构线定义 ID
    */
   queryOptions(data: StructureOptionsRequest): Promise<StructureNodeDTO[]> {
     return request.post('/api/v1/structure-options', data)
-  },
-
-  /**
-   * 根据架构线ID查询树形可选项
-   */
-  queryByStructureId(data: StructureOptionsByIdRequest): Promise<StructureNodeDTO[]> {
-    return request.post('/api/v1/structure-options/by-structure', data)
   },
 }
