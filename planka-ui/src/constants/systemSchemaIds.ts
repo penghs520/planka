@@ -25,6 +25,10 @@ export function projectIssueLinkTypeId(orgId: string) {
   return `${orgId}:link:project-issue`
 }
 
+export function teamTimezoneFieldId(orgId: string) {
+  return `${orgId}:team:timezone`
+}
+
 export function teamLeadLinkTypeId(orgId: string) {
   return `${orgId}:link:team-lead`
 }

@@ -33,7 +33,8 @@ public class BuiltinCardTypeMigrationRunner implements ApplicationRunner {
             try {
                 boolean hasTeam = builtinCardTypeService.hasBuiltinTeamType(orgId);
                 boolean hasTeamLead = builtinCardTypeService.hasTeamLeadLinkType(orgId);
-                if (hasTeam && hasTeamLead) {
+                boolean hasTeamTz = builtinCardTypeService.hasTeamTimezoneField(orgId);
+                if (hasTeam && hasTeamLead && hasTeamTz) {
                     continue;
                 }
                 builtinCardTypeService.initBuiltinTypes(orgId);

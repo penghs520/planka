@@ -84,6 +84,11 @@ public final class SystemSchemaIds {
         return orgId + ":team:color";
     }
 
+    /** 团队默认工作区时区（IANA ID，枚举字段） */
+    public static String teamTimezoneFieldId(String orgId) {
+        return orgId + ":team:timezone";
+    }
+
     public static String projectIdentifierFieldId(String orgId) {
         return orgId + ":project:identifier";
     }

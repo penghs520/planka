@@ -20,8 +20,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * 组织创建时写入 schema-service 的内置定义：成员属性集与成员类型、任意卡属性集与系统关联、Team/Project/Issue。
@@ -164,6 +173,11 @@ public class BuiltinCardTypeService {
         return schemaExists(SystemSchemaIds.teamLeadLinkTypeId(orgId));
     }
 
+    /** 是否已创建团队时区枚举字段（存量组织补建） */
+    public boolean hasTeamTimezoneField(String orgId) {
+        return schemaExists(SystemSchemaIds.teamTimezoneFieldId(orgId));
+    }
+
     private boolean schemaExists(String schemaId) {
         Result<SchemaDefinition<?>> r = schemaServiceClient.getById(schemaId);
         return r.isSuccess() && r.getData() != null;
@@ -223,6 +237,14 @@ public class BuiltinCardTypeService {
         }
         ensureTextField(orgId, typeId, SystemSchemaIds.teamIdentifierFieldId(orgId), "标识", "identifier", "团队标识，如 ENG", false);
         ensureTextField(orgId, typeId, SystemSchemaIds.teamColorFieldId(orgId), "颜色", "color", "主题色", false);
+        ensureEnumField(
+                orgId,
+                typeId,
+                SystemSchemaIds.teamTimezoneFieldId(orgId),
+                "时区",
+                "timezone",
+                "团队工作区时区（IANA）",
+                teamTimezoneOptions(orgId));
     }
 
     private void createProjectType(String orgId) {
@@ -432,6 +454,104 @@ public class BuiltinCardTypeService {
                 new EnumFieldConfig.EnumOptionDefinition(p + "done", "Done", "DONE", true, null, 4),
                 new EnumFieldConfig.EnumOptionDefinition(p + "cancelled", "Cancelled", "CANCELLED", true, null, 5)
         );
+    }
+
+    /**
+     * 团队时区枚举：与常见时区选择器一致，展示为 {@code GMT±H:MM – 名称 [- 城市]}（连接号为 U+2013），
+     * 存储值仍为 IANA ZoneId 字符串。
+     */
+    private static List<EnumFieldConfig.EnumOptionDefinition> teamTimezoneOptions(String orgId) {
+        String prefix = orgId + ":team:tz:";
+        Instant now = Instant.now();
+        Locale en = Locale.ENGLISH;
+        List<TimezoneOptionRow> rows = new ArrayList<>();
+        for (String zoneId : ZoneId.getAvailableZoneIds()) {
+            if (shouldSkipZoneIdForTeamTimezone(zoneId)) {
+                continue;
+            }
+            try {
+                ZoneId z = ZoneId.of(zoneId);
+                ZoneOffset off = z.getRules().getOffset(now);
+                String gmt = formatGmtOffsetForTimezoneLabel(off);
+                String name = buildTimezoneEnglishLabel(zoneId, z, now, en);
+                String label = gmt + " – " + name;
+                rows.add(new TimezoneOptionRow(
+                        prefix + zoneId.replace('/', '_'),
+                        label,
+                        zoneId,
+                        off.getTotalSeconds()));
+            } catch (Exception ignored) {
+                // 跳过 JVM 不支持的 ZoneId
+            }
+        }
+        rows.sort(Comparator.comparingInt((TimezoneOptionRow r) -> r.offsetSeconds).thenComparing(r -> r.label));
+        dedupeTimezoneLabels(rows);
+        List<EnumFieldConfig.EnumOptionDefinition> out = new ArrayList<>(rows.size());
+        int order = 1;
+        for (TimezoneOptionRow r : rows) {
+            out.add(new EnumFieldConfig.EnumOptionDefinition(r.id, r.label, r.value, true, null, order++));
+        }
+        return List.copyOf(out);
+    }
+
+    private static boolean shouldSkipZoneIdForTeamTimezone(String zoneId) {
+        return zoneId.startsWith("SystemV/");
+    }
+
+    private static String formatGmtOffsetForTimezoneLabel(ZoneOffset offset) {
+        int totalSeconds = offset.getTotalSeconds();
+        if (totalSeconds == 0) {
+            return "GMT+0:00";
+        }
+        boolean negative = totalSeconds < 0;
+        int abs = Math.abs(totalSeconds);
+        int hours = abs / 3600;
+        int minutes = (abs % 3600) / 60;
+        return String.format("GMT%s%d:%02d", negative ? "-" : "+", hours, minutes);
+    }
+
+    private static String buildTimezoneEnglishLabel(String zoneId, ZoneId z, Instant now, Locale locale) {
+        TimeZone tz = TimeZone.getTimeZone(zoneId);
+        boolean dst = z.getRules().isDaylightSavings(now);
+        String longName = tz.getDisplayName(dst, TimeZone.LONG, locale);
+        if (longName == null || longName.isBlank()) {
+            longName = zoneId.replace('_', ' ');
+        }
+        longName = longName.replace(" Standard Time", " Time");
+        int slash = zoneId.indexOf('/');
+        if (slash >= 0) {
+            String city = zoneId.substring(slash + 1).replace('_', ' ');
+            if (!longName.contains(city)) {
+                return longName + " - " + city;
+            }
+        }
+        return longName;
+    }
+
+    private static void dedupeTimezoneLabels(List<TimezoneOptionRow> rows) {
+        Map<String, Integer> freq = new HashMap<>();
+        for (TimezoneOptionRow r : rows) {
+            freq.merge(r.label, 1, Integer::sum);
+        }
+        for (TimezoneOptionRow r : rows) {
+            if (freq.get(r.label) > 1) {
+                r.label = r.label + " (" + r.value + ")";
+            }
+        }
+    }
+
+    private static final class TimezoneOptionRow {
+        final String id;
+        String label;
+        final String value;
+        final int offsetSeconds;
+
+        TimezoneOptionRow(String id, String label, String value, int offsetSeconds) {
+            this.id = id;
+            this.label = label;
+            this.value = value;
+            this.offsetSeconds = offsetSeconds;
+        }
     }
 
     private void createSchema(String orgId, AbstractSchemaDefinition<?> definition) {
