@@ -1047,8 +1047,9 @@ targetFieldsRequired: 'Please select target fields',
     // Title template
     titleTemplate: {
       label: 'Title Template',
-      placeholder: 'Enter title template, e.g.: Subtask - ${$title}',
-      hint: 'Use ${fieldId} to reference field values',
+      // Show literal ${$title}; escape braces for Vue I18n message compiler
+      placeholder: 'Enter title template, e.g.: Subtask - $\\{$title\\}',
+      hint: 'Use $\\{fieldId\\} to reference field values',
       insertField: 'Insert Field',
       systemTitle: 'Card Title',
       systemId: 'Card ID',

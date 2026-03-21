@@ -1277,8 +1277,9 @@ targetFieldsRequired: '请选择目标属性',
     // 标题模板
     titleTemplate: {
       label: '标题模板',
-      placeholder: '输入标题模板，如：子任务 - ${$title}',
-      hint: '支持 ${fieldId} 引用字段值',
+      // 文案需展示 ${$title}，花括号须用 \\{ \\} 转义，否则 Vue I18n 会按占位符解析并报错
+      placeholder: '输入标题模板，如：子任务 - $\\{$title\\}',
+      hint: '支持 $\\{fieldId\\} 引用字段值',
       insertField: '插入字段',
       systemTitle: '卡片标题',
       systemId: '卡片 ID',
