@@ -274,16 +274,6 @@ export const routes: RouteRecordRaw[] = [
               titleKey: 'common.route.changePassword',
             },
           },
-          // 成员管理
-          {
-            path: 'members',
-            name: 'MemberManagement',
-            component: () => import('@/views/org/MemberManagementView.vue'),
-            meta: {
-              titleKey: 'admin.members.title',
-              activeMenu: 'members',
-            },
-          },
           // 组织设置
           {
             path: 'org-settings',

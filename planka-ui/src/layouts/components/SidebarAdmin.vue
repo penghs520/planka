@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n'
 import { usePermission } from '@/hooks/usePermission'
 import { IconSettings } from '@arco-design/web-vue/es/icon'
 import IconAuditLog from '@/components/icons/IconAuditLog.vue'
-import IconMember from '@/components/icons/IconMember.vue'
 import IconStructure from '@/components/icons/IconStructure.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
 import IconFormulaDefinition from '@/components/icons/IconFormulaDefinition.vue'
@@ -62,7 +61,6 @@ const sections: MenuSection[] = [
     labelKey: 'admin.menuGroup.administration',
     visible: () => isAdmin.value,
     items: [
-      { key: 'members', titleKey: 'admin.menu.members', icon: IconMember, path: '/admin/members' },
       { key: 'org-settings', titleKey: 'admin.menu.orgSettings', icon: IconSettings, path: '/admin/org-settings' },
     ],
   },

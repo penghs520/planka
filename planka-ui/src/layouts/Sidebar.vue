@@ -7,7 +7,6 @@ import { useOrgStore } from '@/stores/org'
 import { IconSettings } from '@arco-design/web-vue/es/icon'
 import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-vue/es/icon'
 import IconAuditLog from '@/components/icons/IconAuditLog.vue'
-import IconMember from '@/components/icons/IconMember.vue'
 import IconStructure from '@/components/icons/IconStructure.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
 import IconFormulaDefinition from '@/components/icons/IconFormulaDefinition.vue'
@@ -122,7 +121,6 @@ const menuGroups: MenuGroup[] = [
     labelKey: 'admin.menuGroup.administration',
     visible: () => isAdmin.value,
     items: [
-      { key: 'members', titleKey: 'admin.menu.members', icon: IconMember, path: '/admin/members' },
       { key: 'org-settings', titleKey: 'admin.menu.orgSettings', icon: IconSettings, path: '/admin/org-settings' },
     ],
   },
