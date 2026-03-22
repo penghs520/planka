@@ -545,7 +545,7 @@ public class SchemaCommonService {
                 return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置__PLANKA_EINST__不允许修改名称");
             }
             if (!Objects.equals(oldCardType.getCode(), newCardType.getCode())) {
-                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置__PLANKA_EINST__不允许修改编码");
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置__PLANKA_EINST__不允许修改标识");
             }
             if (!Objects.equals(oldCardType.getDescription(), newCardType.getDescription())) {
                 return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置__PLANKA_EINST__不允许修改描述");

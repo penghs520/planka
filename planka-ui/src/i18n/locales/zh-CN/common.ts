@@ -191,7 +191,7 @@ export default {
 
   // 条件操作符
   operator: {
-    // 文本/标题/关键词/编码
+    // 文本/标题/关键词/标识
     EQ: '等于',
     NE: '不等于',
     CONTAINS: '包含',

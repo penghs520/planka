@@ -53,7 +53,7 @@ public class CardTypeDiffStrategy implements SchemaDiffStrategy {
     static {
         STRING_FIELDS.put("name", "名称");
         STRING_FIELDS.put("description", "描述");
-        STRING_FIELDS.put("code", "编码");
+        STRING_FIELDS.put("code", "标识");
         STRING_FIELDS.put("icon", "图标");
         STRING_FIELDS.put("color", "颜色");
         STRING_FIELDS.put("valueStreamId", "价值流");

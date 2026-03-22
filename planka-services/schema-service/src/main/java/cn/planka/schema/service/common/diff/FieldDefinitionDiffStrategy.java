@@ -76,7 +76,7 @@ public class FieldDefinitionDiffStrategy implements SchemaDiffStrategy {
         // 通用字段
         COMMON_STRING_FIELDS.put("name", "名称");
         COMMON_STRING_FIELDS.put("description", "描述");
-        COMMON_STRING_FIELDS.put("code", "编码");
+        COMMON_STRING_FIELDS.put("code", "标识");
 
         COMMON_BOOLEAN_FIELDS.put("enabled", "启用状态");
         COMMON_BOOLEAN_FIELDS.put("systemField", "系统字段");
