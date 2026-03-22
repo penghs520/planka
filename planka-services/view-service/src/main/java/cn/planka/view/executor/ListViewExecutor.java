@@ -45,7 +45,6 @@ public class ListViewExecutor implements ViewExecutor<ListViewDefinition, ListVi
     private static final String VIEW_TYPE = "LIST";
     private static final String TITLE_FIELD_ID = "title";
     private static final String TITLE_FIELD_NAME = "标题";
-
     private final CardServiceClient cardServiceClient;
     private final FieldConfigQueryService fieldConfigQueryService;
     private final ViewToQueryConverter queryConverter;
@@ -206,7 +205,7 @@ public class ListViewExecutor implements ViewExecutor<ListViewDefinition, ListVi
 
         // 按配置构建额外列（跳过标题列，因为已经添加过了）
         for (ListViewDefinition.ColumnConfig config : viewDef.getColumnConfigs()) {
-            if (config.isVisible() && !TITLE_FIELD_ID.equals(config.getFieldId())) {
+            if (!TITLE_FIELD_ID.equals(config.getFieldId())) {
                 columns.add(toColumnMeta(config, fieldConfigMap));
             }
         }
@@ -222,9 +221,6 @@ public class ListViewExecutor implements ViewExecutor<ListViewDefinition, ListVi
                 .fieldId(TITLE_FIELD_ID)
                 .title(TITLE_FIELD_NAME)
                 .fieldType(FieldType.TEXT.getCode())
-                .width(200)
-                .frozen(true)
-                .visible(true)
                 .sortable(true)
                 .editable(true)
                 .required(true)
@@ -270,9 +266,6 @@ public class ListViewExecutor implements ViewExecutor<ListViewDefinition, ListVi
                 .fieldId(fieldId)
                 .title(fieldName)
                 .fieldType(fieldType)
-                .width(config.getWidth() != null ? config.getWidth() : 150)
-                .frozen(config.isFrozen())
-                .visible(config.isVisible())
                 .sortable(true)
                 .editable(editable)
                 .required(required)
@@ -294,9 +287,6 @@ public class ListViewExecutor implements ViewExecutor<ListViewDefinition, ListVi
                     .fieldId(fieldId)
                     .title(fieldId)
                     .fieldType(FieldType.TEXT.getCode())
-                    .width(config.getWidth() != null ? config.getWidth() : 150)
-                    .frozen(config.isFrozen())
-                    .visible(config.isVisible())
                     .sortable(true)
                     .editable(false)
                     .required(false)
@@ -308,9 +298,6 @@ public class ListViewExecutor implements ViewExecutor<ListViewDefinition, ListVi
                 .fieldId(fieldId)
                 .title(builtinField.getDisplayName())
                 .fieldType(builtinField.getFieldType().getCode())
-                .width(config.getWidth() != null ? config.getWidth() : 150)
-                .frozen(config.isFrozen())
-                .visible(config.isVisible())
                 .sortable(builtinField.isSortable())
                 .editable(builtinField.isEditable())
                 .required(false)

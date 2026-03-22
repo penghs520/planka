@@ -19,7 +19,7 @@ import java.util.Map;
  * <p>
  * 支持列表视图定义的差异比较，包括深层级字段：
  * <ul>
- *     <li>columnConfigs - 列配置（宽度、可见性、冻结等）</li>
+ *     <li>columnConfigs - 列字段与顺序</li>
  *     <li>sorts - 排序配置</li>
  *     <li>pageConfig - 分页配置</li>
  *     <li>condition - 过滤条件</li>

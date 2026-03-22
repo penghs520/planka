@@ -4,12 +4,7 @@ import { Message } from '@arco-design/web-vue'
 import {
   IconPlus,
   IconDelete,
-  IconUp,
   IconDown,
-  IconEye,
-  IconEyeInvisible,
-  IconLock,
-  IconUnlock,
 } from '@arco-design/web-vue/es/icon'
 import { cardTypeApi } from '@/api'
 import { createEmptyColumnConfig, type ColumnConfig } from '@/types/view'
@@ -126,17 +121,6 @@ function handleRemoveField(index: number) {
   emitChange()
 }
 
-// 上移
-function handleMoveUp(index: number) {
-  if (index === 0) return
-  const current = localColumnConfigs.value[index]
-  const previous = localColumnConfigs.value[index - 1]
-  if (!current || !previous) return
-  localColumnConfigs.value[index] = previous
-  localColumnConfigs.value[index - 1] = current
-  emitChange()
-}
-
 // 下移
 function handleMoveDown(index: number) {
   if (index === localColumnConfigs.value.length - 1) return
@@ -145,38 +129,6 @@ function handleMoveDown(index: number) {
   if (!current || !next) return
   localColumnConfigs.value[index] = next
   localColumnConfigs.value[index + 1] = current
-  emitChange()
-}
-
-// 切换可见性
-function handleToggleVisible(index: number) {
-  const config = localColumnConfigs.value[index]
-  if (!config) return
-  config.visible = !config.visible
-  emitChange()
-}
-
-// 切换冻结
-function handleToggleFrozen(index: number) {
-  const config = localColumnConfigs.value[index]
-  if (!config) return
-  config.frozen = !config.frozen
-  emitChange()
-}
-
-// 切换可拖拽宽度大小
-function handleToggleResizable(index: number) {
-  const config = localColumnConfigs.value[index]
-  if (!config) return
-  config.resizable = !config.resizable
-  emitChange()
-}
-
-// 修改宽度
-function handleWidthChange(index: number, width: number | undefined) {
-  const config = localColumnConfigs.value[index]
-  if (!config) return
-  config.width = width
   emitChange()
 }
 
@@ -414,66 +366,7 @@ function handleColumnDrop(index: number, event: DragEvent) {
                   <FieldTypeIcon :field-type="getFieldType(column.fieldId)" size="small" />
                   <span class="column-name">{{ getFieldName(column.fieldId) }}</span>
                 </div>
-                <div class="column-config">
-                  <a-space :size="6">
-                    <div class="config-item">
-                      <span class="config-label">宽度:</span>
-                      <a-input-number
-                        :model-value="column.width"
-                        :min="80"
-                        :max="800"
-                        :step="10"
-                        size="mini"
-                        style="width: 80px"
-                        placeholder="150"
-                        @change="(v: number | undefined) => handleWidthChange(index, v)"
-                      />
-                    </div>
-                    <a-checkbox
-                      :model-value="column.resizable"
-                      @change="handleToggleResizable(index)"
-                    >
-                      <span style="font-size: 11px;">可拖拽宽度</span>
-                    </a-checkbox>
-                    <a-tooltip content="切换可见性">
-                      <a-button
-                        type="text"
-                        size="small"
-                        class="toggle-btn visibility-btn"
-                        :class="{ 'visibility-btn-active': column.visible }"
-                        @click="handleToggleVisible(index)"
-                      >
-                        <template #icon>
-                          <component :is="column.visible ? IconEye : IconEyeInvisible" />
-                        </template>
-                      </a-button>
-                    </a-tooltip>
-                    <a-tooltip content="切换冻结">
-                      <a-button
-                        type="text"
-                        size="small"
-                        class="toggle-btn frozen-btn"
-                        :class="{ 'frozen-btn-active': column.frozen }"
-                        @click="handleToggleFrozen(index)"
-                      >
-                        <template #icon>
-                          <component :is="column.frozen ? IconLock : IconUnlock" />
-                        </template>
-                      </a-button>
-                    </a-tooltip>
-                  </a-space>
-                </div>
                 <div class="column-actions">
-                  <a-button
-                    type="text"
-                    size="mini"
-                    :disabled="index === 0"
-                    @click="handleMoveUp(index)"
-                  >
-                    <template #icon>
-                      <IconUp />
-                    </template>
-                  </a-button>
                   <a-button
                     type="text"
                     size="mini"
@@ -523,7 +416,8 @@ function handleColumnDrop(index: number, event: DragEvent) {
 }
 
 .available-fields {
-  flex: 4;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--color-border);
@@ -532,7 +426,8 @@ function handleColumnDrop(index: number, event: DragEvent) {
 }
 
 .selected-columns {
-  flex: 6;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--color-border);
@@ -637,8 +532,8 @@ function handleColumnDrop(index: number, event: DragEvent) {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex: 0 0 auto;
-  min-width: 100px;
+  flex: 1;
+  min-width: 0;
 }
 
 .column-name {
@@ -646,56 +541,14 @@ function handleColumnDrop(index: number, event: DragEvent) {
   font-weight: 500;
   color: var(--color-text-1);
   white-space: nowrap;
-}
-
-.column-config {
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .column-actions {
   display: flex;
   gap: 2px;
   flex-shrink: 0;
-}
-
-.config-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.config-label {
-  font-size: 11px;
-  color: var(--color-text-3);
-  white-space: nowrap;
-}
-
-.toggle-btn {
-  color: var(--color-text-4) !important;
-
-  :deep(.arco-icon) {
-    font-size: 16px;
-  }
-}
-
-.visibility-btn-active {
-  color: #f7ba1e !important;
-
-  :deep(.arco-icon) {
-    font-size: 16px;
-    font-weight: bold;
-  }
-}
-
-.frozen-btn-active {
-  color: #f7ba1e !important;
-
-  :deep(.arco-icon) {
-    font-size: 16px;
-    font-weight: bold;
-  }
 }
 
 .drag-over {

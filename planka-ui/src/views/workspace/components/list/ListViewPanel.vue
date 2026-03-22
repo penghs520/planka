@@ -46,6 +46,10 @@ import type { ColumnMeta as ViewColumnMeta } from '@/types/view-data'
 
 const PAGE_SIZE = 40
 
+/** 列表列宽由前端固定（首列为标题列，与历史后端约定一致） */
+const LIST_VIEW_TITLE_COL_WIDTH = 200
+const LIST_VIEW_DATA_COL_WIDTH = 150
+
 const props = defineProps<{
   viewId: string
   /** 架构节点页传入，用于视图数据可见性校验 */
@@ -117,7 +121,10 @@ const canShowEditViewInMore = computed(() => {
 const _tableScrollX = computed(() => {
   const checkboxWidth = 40  // 复选框列
   const addButtonWidth = 36 // 加号列
-  const dataColumnsWidth = columns.value.reduce((sum, col) => sum + (col.width || 150), 0)
+  const dataColumnsWidth = columns.value.reduce(
+    (sum, _col, i) => sum + (i === 0 ? LIST_VIEW_TITLE_COL_WIDTH : LIST_VIEW_DATA_COL_WIDTH),
+    0,
+  )
   return checkboxWidth + addButtonWidth + dataColumnsWidth
 })
 */
@@ -527,11 +534,11 @@ defineExpose({ refresh })
               v-for="(col, index) in columns"
               :key="col.fieldId"
               :data-index="col.fieldId"
-              :width="col.width || 150"
+              :width="index === 0 ? LIST_VIEW_TITLE_COL_WIDTH : LIST_VIEW_DATA_COL_WIDTH"
               :ellipsis="true"
               :fixed="index === 0 ? 'left' : undefined"
               :sortable="col.sortable ? { sortDirections: ['ascend', 'descend'] } : undefined"
-              :resizable="!col.frozen"
+              :resizable="index !== 0"
             >
               <template #title>
                 <span>{{ col.title }}</span>

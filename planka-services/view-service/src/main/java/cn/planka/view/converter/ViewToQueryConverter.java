@@ -92,10 +92,6 @@ public class ViewToQueryConverter {
             List<YieldLink> yieldLinks = new ArrayList<>();
 
             for (ListViewDefinition.ColumnConfig columnConfig : viewDef.getColumnConfigs()) {
-                if (!columnConfig.isVisible()) {
-                    continue;
-                }
-
                 String fieldId = columnConfig.getFieldId();
 
                 // 判断是否为关联字段（格式: "{linkTypeId}:{SOURCE|TARGET}"）

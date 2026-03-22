@@ -118,15 +118,6 @@ export interface ColumnMeta {
   /** 字段类型 */
   fieldType?: string
 
-  /** 列宽 */
-  width?: number
-
-  /** 是否冻结 */
-  frozen: boolean
-
-  /** 是否可见 */
-  visible: boolean
-
   /** 是否可排序 */
   sortable: boolean
 

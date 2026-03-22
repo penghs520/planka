@@ -51,8 +51,7 @@ export interface ListViewDefinition extends SchemaDefinition {
 }
 
 /**
- * 列配置
- * <p>
+ * 列配置：仅声明要展示的字段及顺序（顺序与数组一致）。
  * 对于关联字段（LINK类型），fieldId 格式为 "{linkTypeId}:{SOURCE|TARGET}"
  */
 export interface ColumnConfig {
@@ -61,18 +60,6 @@ export interface ColumnConfig {
    * 对于关联字段（LINK类型），格式为 "{linkTypeId}:{SOURCE|TARGET}"
    */
   fieldId: string
-
-  /** 列宽（像素） */
-  width?: number
-
-  /** 是否可见 */
-  visible: boolean
-
-  /** 是否可拖拽宽度 */
-  resizable: boolean
-
-  /** 是否冻结 */
-  frozen: boolean
 }
 
 /**
@@ -208,12 +195,6 @@ export function createEmptyListView(orgId: string): ListViewDefinition {
  * 创建空的列配置
  */
 export function createEmptyColumnConfig(fieldId: string): ColumnConfig {
-  return {
-    fieldId,
-    width: 150,
-    visible: true,
-    resizable: true,
-    frozen: false,
-  }
+  return { fieldId }
 }
 

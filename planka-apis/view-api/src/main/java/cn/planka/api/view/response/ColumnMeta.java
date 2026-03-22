@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
  * 列元数据
  * <p>
  * 描述视图中每一列的显示信息，包括：
- * - 基础显示配置（标题、宽度、冻结、排序等）
- * - 字段类型信息
- * - 编辑相关配置（是否可编辑、是否必填）
+ * - 字段标识、标题、类型、排序/编辑等能力
  * - 类型特有的渲染配置（多态结构）
+ * <p>
+ * 列宽、冻结、是否展示等布局由前端表格自行决定，不由接口下发。
  * <p>
  * 对于关联字段（LINK类型），fieldId 格式为 "{linkTypeId}:{SOURCE|TARGET}"
  */
@@ -43,24 +43,9 @@ public class ColumnMeta {
     private String fieldType;
 
     /**
-     * 列宽（像素）
-     */
-    private Integer width;
-
-    /**
-     * 是否冻结
-     */
-    private boolean frozen;
-
-    /**
      * 是否可排序
      */
     private boolean sortable;
-
-    /**
-     * 是否可见
-     */
-    private boolean visible;
 
     /**
      * 是否可编辑

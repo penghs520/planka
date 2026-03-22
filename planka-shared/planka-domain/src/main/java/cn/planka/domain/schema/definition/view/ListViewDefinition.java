@@ -22,8 +22,6 @@ import java.util.Set;
  * <ul>
  *     <li>自定义显示字段和顺序</li>
  *     <li>分组展示</li>
- *     <li>列宽度自定义</li>
- *     <li>冻结列</li>
  *     <li>分页配置</li>
  *     <li>排序配置</li>
  *     <li>过滤配置</li>
@@ -101,9 +99,7 @@ public final class ListViewDefinition extends AbstractViewDefinition {
     // ==================== 内部类定义 ====================
 
     /**
-     * 列配置
-     * <p>
-     * 定义每一列的显示属性，包括宽度、可见性、是否可拖拽宽度大小等。
+     * 列配置：仅声明要展示的字段及顺序（顺序与列表一致）。
      * <p>
      * 对于关联字段（LINK类型），fieldId 格式为 "{linkTypeId}:{SOURCE|TARGET}"
      */
@@ -119,32 +115,11 @@ public final class ListViewDefinition extends AbstractViewDefinition {
         @JsonProperty("fieldId")
         private String fieldId;
 
-        /** 列宽（像素） */
-        @JsonProperty("width")
-        private Integer width;
-
-        /** 是否可见 */
-        @JsonProperty("visible")
-        private boolean visible = true;
-
-        /** 是否可拖拽宽度大小 */
-        @JsonProperty("resizable")
-        private boolean resizable = true;
-
-        /** 是否冻结 */
-        @JsonProperty("frozen")
-        private boolean frozen = false;
-
         public ColumnConfig() {
         }
 
         public ColumnConfig(String fieldId) {
             this.fieldId = fieldId;
-        }
-
-        public ColumnConfig(String fieldId, Integer width) {
-            this.fieldId = fieldId;
-            this.width = width;
         }
     }
 
