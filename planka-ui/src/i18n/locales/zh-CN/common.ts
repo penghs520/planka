@@ -133,8 +133,8 @@ export default {
   erDiagram: {
     reference: '引用关系',
     disable: '停用',
-    sourceName: '源端名称',
-    targetName: '目标端名称',
+    sourceName: '源侧名称',
+    targetName: '对侧名称',
     multiSelect: '多选',
     singleSelect: '单选',
     implementTypes: '实现类型',

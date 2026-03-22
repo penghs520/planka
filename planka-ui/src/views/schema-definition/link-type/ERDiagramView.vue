@@ -7,7 +7,7 @@ import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
 import type { Node, Edge, VueFlowStore, GraphEdge, NodeTypesObject, EdgeTypesObject, Connection } from '@vue-flow/core'
 import { MarkerType } from '@vue-flow/core'
-import { Message, Modal } from '@arco-design/web-vue'
+import { Message } from '@arco-design/web-vue'
 import {
   IconFullscreen,
   IconFullscreenExit,
@@ -20,9 +20,7 @@ import CardinalityEdge from '@/components/er-diagram/CardinalityEdge.vue'
 import CreateButton from '@/components/common/CreateButton.vue'
 import SaveButton from '@/components/common/SaveButton.vue'
 import CancelButton from '@/components/common/CancelButton.vue'
-import LabelHelpTooltip from '@/components/common/LabelHelpTooltip.vue'
 import CardTypeSelect from '@/components/card-type/CardTypeSelect.vue'
-import SchemaReferenceDrawer from '@/components/schema/SchemaReferenceDrawer.vue'
 import { cardTypeApi, linkTypeApi } from '@/api'
 import type { CardTypeDefinition } from '@/types/card-type'
 import type { FieldOption } from '@/types/field-option'
@@ -661,7 +659,7 @@ const drawerTitle = computed(() => {
   return drawerMode.value === 'create' ? t('admin.linkType.createTitle') : t('admin.linkType.editTitle')
 })
 
-// 获取选中的源端实体类型名称
+// 获取选中的源侧实体类型名称
 const sourceCardTypeName = computed(() => {
   if (!formData.value.sourceCardTypeIds?.length) return ''
   const ids = formData.value.sourceCardTypeIds
@@ -671,7 +669,7 @@ const sourceCardTypeName = computed(() => {
   return names.join('、') || ''
 })
 
-// 获取选中的目标端实体类型名称
+// 获取选中的对侧实体类型名称
 const targetCardTypeName = computed(() => {
   if (!formData.value.targetCardTypeIds?.length) return ''
   const ids = formData.value.targetCardTypeIds
@@ -680,40 +678,6 @@ const targetCardTypeName = computed(() => {
     .map(ct => ct.name)
   return names.join('、') || ''
 })
-
-// 计算源端名称的建议值（去掉"如："前缀）
-const sourceNameSuggestion = computed(() => {
-  if (!targetCardTypeName.value) return ''
-  return t('admin.linkType.sourceNamePlaceholder', { target: targetCardTypeName.value }).replace(/^如[：:]\s*/, '')
-})
-
-// 计算目标端名称的建议值（去掉"如："前缀）
-const targetNameSuggestion = computed(() => {
-  if (!sourceCardTypeName.value) return ''
-  return t('admin.linkType.targetNamePlaceholder', { source: sourceCardTypeName.value }).replace(/^如[：:]\s*/, '')
-})
-
-// Tab 键快捷填充源端名称
-function handleSourceNameKeydown(e: KeyboardEvent) {
-  if (e.key === 'Tab' && !formData.value.sourceName && sourceNameSuggestion.value) {
-    e.preventDefault()
-    e.stopPropagation()
-    formData.value.sourceName = sourceNameSuggestion.value
-  }
-}
-
-// Tab 键快捷填充目标端名称
-function handleTargetNameKeydown(e: KeyboardEvent) {
-  if (e.key === 'Tab' && !formData.value.targetName && targetNameSuggestion.value) {
-    e.preventDefault()
-    e.stopPropagation()
-    formData.value.targetName = targetNameSuggestion.value
-  }
-}
-
-// Reference drawer state
-const referenceDrawerVisible = ref(false)
-const currentReferenceSchemaId = ref<string | undefined>(undefined)
 
 // 打开新建抽屉
 function handleCreate() {
@@ -841,102 +805,13 @@ async function handleSubmit() {
   }
 }
 
-// Edge action handlers
 function handleEdgeEdit(edgeId: string) {
   const linkTypeId = edgeId.replace('edge-', '')
   openEditDrawer(linkTypeId)
 }
 
-function handleEdgeShowReferences(edgeId: string) {
-  const linkTypeId = edgeId.replace('edge-', '')
-  currentReferenceSchemaId.value = linkTypeId
-  referenceDrawerVisible.value = true
-}
-
-async function handleEdgeDisable(edgeId: string) {
-  const linkTypeId = edgeId.replace('edge-', '')
-  const linkType = linkTypes.value.find(lt => lt.id === linkTypeId)
-  if (linkType) {
-    try {
-      await linkTypeApi.update(linkTypeId, {
-        enabled: !linkType.enabled,
-        expectedVersion: linkType.contentVersion,
-      })
-      Message.success(linkType.enabled ? '已停用' : '已启用')
-      await fetchData()
-    } catch (error) {
-      console.error('Failed to toggle enabled:', error)
-    }
-  }
-}
-
-import { handleReferenceConflictError } from '@/utils/error-handler'
-
-function handleEdgeDelete(edgeId: string) {
-  const linkTypeId = edgeId.replace('edge-', '')
-  const linkType = linkTypes.value.find(lt => lt.id === linkTypeId)
-  if (linkType) {
-    Modal.confirm({
-      title: '确认删除',
-      content: `确定要删除关联类型「${linkType.sourceName} → ${linkType.targetName}」吗？删除后不可恢复。`,
-      okText: '删除',
-      okButtonProps: { status: 'danger' },
-      modalClass: 'arco-modal-simple', // 使用全局优化样式
-      async onOk() {
-        try {
-          await linkTypeApi.delete(linkTypeId)
-          Message.success('删除成功')
-          await fetchData()
-        } catch (error) {
-          if (!handleReferenceConflictError(error)) {
-            console.error('Failed to delete:', error)
-          }
-        }
-      },
-    })
-  }
-}
-
-// Quick update for inline edit (name + multiSelect)
-async function handleEdgeQuickUpdate(
-  edgeId: string,
-  side: 'source' | 'target',
-  name: string,
-  multiSelect: boolean
-) {
-  const linkTypeId = edgeId.replace('edge-', '')
-  const linkType = linkTypes.value.find(lt => lt.id === linkTypeId)
-  if (!linkType) return
-
-  try {
-    const updateData: UpdateLinkTypeRequest = {
-      expectedVersion: linkType.contentVersion,
-    }
-
-    if (side === 'source') {
-      updateData.sourceName = name
-      updateData.sourceMultiSelect = multiSelect
-    } else {
-      updateData.targetName = name
-      updateData.targetMultiSelect = multiSelect
-    }
-
-    await linkTypeApi.update(linkTypeId, updateData)
-    Message.success('保存成功')
-    await fetchData()
-  } catch (error) {
-    console.error('Failed to quick update:', error)
-    Message.error('保存失败')
-  }
-}
-
-// Provide edge action handlers for CardinalityEdge component
 provide('edgeActionHandlers', {
   onEdit: handleEdgeEdit,
-  onShowReferences: handleEdgeShowReferences,
-  onDisable: handleEdgeDisable,
-  onDelete: handleEdgeDelete,
-  onQuickUpdate: handleEdgeQuickUpdate,
 })
 
 // Fetch data from APIs
@@ -1396,30 +1271,16 @@ onMounted(() => {
     <!-- Create/Edit Modal -->
     <a-modal
       v-model:visible="drawerVisible"
-      :width="700"
+      :width="640"
       :mask-closable="true"
       :esc-to-close="true"
       unmount-on-close
       :footer="false"
     >
       <template #title>
-        <div class="modal-title">
-          <span>{{ drawerTitle }}</span>
-          <LabelHelpTooltip :title="t('admin.linkType.configHelp.title')" width="400px">
-            <div class="popover-tip-content">
-              <strong>{{ t('admin.linkType.configHelp.step1') }}</strong><br/>
-              {{ t('admin.linkType.configHelp.step1Desc') }}<br/>
-              {{ t('admin.linkType.configHelp.step1Example') }}<br/>
-              {{ t('admin.linkType.configHelp.step1Hint') }}<br/><br/>
-              <strong>{{ t('admin.linkType.configHelp.step2') }}</strong><br/>
-              {{ t('admin.linkType.configHelp.step2Desc') }}<br/><br/>
-              <strong>{{ t('admin.linkType.configHelp.step3') }}</strong><br/>
-              {{ t('admin.linkType.configHelp.step3Desc') }}
-            </div>
-          </LabelHelpTooltip>
-        </div>
+        {{ drawerTitle }}
       </template>
-      <a-form :model="formData" layout="vertical">
+      <a-form class="link-type-edit-form" :model="formData" layout="vertical">
 
         <!-- 1. 先选择实体类型 -->
         <a-row :gutter="16">
@@ -1455,19 +1316,12 @@ onMounted(() => {
                 </span>
                 <span v-else>{{ t('admin.linkType.sourceName') }} <span class="label-hint">{{ t('admin.linkType.sourceNameHint') }}</span></span>
               </template>
-              <div @keydown="handleSourceNameKeydown">
-                <a-input
-                  v-model="formData.sourceName"
-                  :placeholder="t('admin.linkType.sourceNamePlaceholder', { target: targetCardTypeName || 'Epic' })"
-                  :max-length="20"
-                  :disabled="!sourceCardTypeName || !targetCardTypeName"
-                />
-              </div>
-              <template #extra>
-                <span v-if="sourceCardTypeName && targetCardTypeName && !formData.sourceName" class="tab-hint">
-                  {{ t('admin.linkType.tabHint') }}
-                </span>
-              </template>
+              <a-input
+                v-model="formData.sourceName"
+                :placeholder="t('admin.linkType.sourceNamePlaceholder', { target: targetCardTypeName || 'Epic' })"
+                :max-length="20"
+                :disabled="!sourceCardTypeName || !targetCardTypeName"
+              />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -1478,19 +1332,12 @@ onMounted(() => {
                 </span>
                 <span v-else>{{ t('admin.linkType.targetName') }} <span class="label-hint">{{ t('admin.linkType.sourceNameHint') }}</span></span>
               </template>
-              <div @keydown="handleTargetNameKeydown">
-                <a-input
-                  v-model="formData.targetName"
-                  :placeholder="t('admin.linkType.targetNamePlaceholder', { source: sourceCardTypeName || 'User Story' })"
-                  :max-length="20"
-                  :disabled="!sourceCardTypeName || !targetCardTypeName"
-                />
-              </div>
-              <template #extra>
-                <span v-if="sourceCardTypeName && targetCardTypeName && !formData.targetName" class="tab-hint">
-                  {{ t('admin.linkType.tabHint') }}
-                </span>
-              </template>
+              <a-input
+                v-model="formData.targetName"
+                :placeholder="t('admin.linkType.targetNamePlaceholder', { source: sourceCardTypeName || 'User Story' })"
+                :max-length="20"
+                :disabled="!sourceCardTypeName || !targetCardTypeName"
+              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -1519,38 +1366,30 @@ onMounted(() => {
           </a-col>
         </a-row>
 
-        <div class="setting-section">
-          <div class="section-title">{{ t('admin.linkType.relationConstraints') }}</div>
-          <div class="setting-options">
-          <!-- 多选配置 -->
-          <div class="setting-item">
-            <div class="setting-label">
-              <span v-if="sourceCardTypeName && formData.sourceName" class="setting-title">
-                在 <span class="type-highlight">{{ sourceCardTypeName }}</span> 中的 <span class="link-highlight">{{ formData.sourceName }}</span> 可多选
-              </span>
-              <span v-else class="setting-title">{{ t('admin.linkType.sourceMultiSelect') }}</span>
-              <span v-if="sourceCardTypeName && targetCardTypeName" class="setting-desc">
-                一个 <span class="type-highlight">{{ sourceCardTypeName }}</span> 可关联多个 <span class="type-highlight">{{ targetCardTypeName }}</span>
-              </span>
-              <span v-else class="setting-desc">{{ t('admin.linkType.sourceMultiSelectDesc') }}</span>
+        <a-row :gutter="16" class="multi-select-row">
+          <a-col :span="12">
+            <div class="setting-item">
+              <div class="setting-label">
+                <span v-if="sourceCardTypeName && formData.sourceName" class="setting-title">
+                  在 <span class="type-highlight">{{ sourceCardTypeName }}</span> 中的 <span class="link-highlight">{{ formData.sourceName }}</span> 可多选
+                </span>
+                <span v-else class="setting-title">{{ t('admin.linkType.sourceMultiSelect') }}</span>
+              </div>
+              <a-switch v-model="formData.sourceMultiSelect" />
             </div>
-            <a-switch v-model="formData.sourceMultiSelect" />
-          </div>
-          <div class="setting-item">
-            <div class="setting-label">
-              <span v-if="targetCardTypeName && formData.targetName" class="setting-title">
-                在 <span class="type-highlight">{{ targetCardTypeName }}</span> 中的 <span class="link-highlight">{{ formData.targetName }}</span> 可多选
-              </span>
-              <span v-else class="setting-title">{{ t('admin.linkType.targetMultiSelect') }}</span>
-              <span v-if="sourceCardTypeName && targetCardTypeName" class="setting-desc">
-                一个 <span class="type-highlight">{{ targetCardTypeName }}</span> 可关联多个 <span class="type-highlight">{{ sourceCardTypeName }}</span>
-              </span>
-              <span v-else class="setting-desc">{{ t('admin.linkType.targetMultiSelectDesc') }}</span>
+          </a-col>
+          <a-col :span="12">
+            <div class="setting-item">
+              <div class="setting-label">
+                <span v-if="targetCardTypeName && formData.targetName" class="setting-title">
+                  在 <span class="type-highlight">{{ targetCardTypeName }}</span> 中的 <span class="link-highlight">{{ formData.targetName }}</span> 可多选
+                </span>
+                <span v-else class="setting-title">{{ t('admin.linkType.targetMultiSelect') }}</span>
+              </div>
+              <a-switch v-model="formData.targetMultiSelect" />
             </div>
-            <a-switch v-model="formData.targetMultiSelect" />
-          </div>
-        </div>
-      </div>
+          </a-col>
+        </a-row>
 
       <a-form-item :label="t('admin.linkType.descriptionLabel')" class="description-item">
           <a-textarea
@@ -1573,12 +1412,6 @@ onMounted(() => {
         </a-space>
       </div>
     </a-modal>
-
-    <!-- Reference Drawer -->
-    <SchemaReferenceDrawer
-      v-model:visible="referenceDrawerVisible"
-      :schema-id="currentReferenceSchemaId"
-    />
   </div>
 </template>
 
@@ -1701,12 +1534,6 @@ onMounted(() => {
   line-height: 1.4;
 }
 
-.setting-options {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .setting-item {
   display: flex;
   align-items: center;
@@ -1725,17 +1552,15 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
 .setting-title {
   font-size: 13px;
   font-weight: 500;
   color: var(--color-text-1);
-}
-
-.setting-desc {
-  font-size: 11px;
-  color: var(--color-text-3);
+  line-height: 1.4;
 }
 
 /* Help Content Styles */
@@ -1797,28 +1622,6 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* Drawer Title Styles */
-.drawer-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Popover Tip Content */
-.popover-tip-content {
-  padding: 16px 20px;
-  background: rgb(var(--warning-1));
-  border-left: 3px solid rgb(var(--warning-6));
-  border-radius: 4px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--color-text-2);
-}
-
-.popover-tip-content strong {
-  color: rgb(var(--warning-6));
-}
-
 /* Dynamic Label Styles */
 .dynamic-label {
   display: inline-flex;
@@ -1834,11 +1637,6 @@ onMounted(() => {
   font-weight: normal;
 }
 
-.tab-hint {
-  font-size: 11px;
-  color: var(--color-text-3);
-}
-
 /* Type and Link Highlight */
 .type-highlight {
   color: var(--color-primary);
@@ -1850,53 +1648,36 @@ onMounted(() => {
   font-weight: 500;
 }
 
-/* Name Row Spacing */
-.name-row {
-  margin-top: 8px;
+/* 关联类型编辑表单：统一行距与表单项间距 */
+.link-type-edit-form > .arco-row + .arco-row {
+  margin-top: 12px;
 }
 
-/* Code Row Spacing */
-.code-row {
-  margin-top: 4px;
-}
-
-/* Setting Section */
-.setting-section {
-  margin-top: 24px;
-}
-
-.section-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text-2);
-  margin-bottom: 16px;
-}
-
-/* Description Item Spacing */
 .description-item {
-  margin-top: 24px;
+  margin-top: 16px;
 }
 
 /* Modal Footer */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  padding-top: 16px;
+  padding-top: 12px;
   border-top: 1px solid #E5E6EB;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
-/* Form Item Adjustments */
-:deep(.arco-form-item) {
-  margin-bottom: 20px;
+.link-type-edit-form :deep(.arco-form-item) {
+  margin-bottom: 12px;
 }
 
-:deep(.arco-form-item:last-child) {
+.link-type-edit-form :deep(.arco-form-item:last-child) {
   margin-bottom: 0;
 }
 
-:deep(.arco-form-item-label) {
+.link-type-edit-form :deep(.arco-form-item-label) {
   font-weight: 600;
+  line-height: 1.45;
+  margin-bottom: 4px;
 }
 </style>
 

@@ -41,7 +41,7 @@ export const fieldOptionsApi = {
 
   /**
    * 根据关联字段ID获取级联的目标实体类型的共同属性选项
-   * 当关联类型的目标端有多个实体类型时，后端会返回这些实体类型之间的共同属性
+   * 当关联类型的对侧有多个实体类型时，后端会返回这些实体类型之间的共同属性
    * 返回精简的 FieldOption 列表，适用于属性选择场景
    */
   async getFieldsByLinkFieldId(linkFieldId: string): Promise<FieldOption[]> {

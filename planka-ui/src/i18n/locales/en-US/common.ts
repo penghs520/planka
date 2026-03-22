@@ -133,8 +133,8 @@ export default {
   erDiagram: {
     reference: 'References',
     disable: 'Disable',
-    sourceName: 'Source Name',
-    targetName: 'Target Name',
+    sourceName: 'Source-side name',
+    targetName: 'Opposite-side name',
     multiSelect: 'Multi-select',
     singleSelect: 'Single-select',
     implementTypes: 'Implementation Types',

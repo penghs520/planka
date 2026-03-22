@@ -406,7 +406,7 @@ function getLinkFieldNameByLinkFieldId(linkFieldId: string): string {
     return linkField.name
   }
 
-  // 从 linkTypes 中查找（根据 position 决定显示源端还是目标端名称）
+  // 从 linkTypes 中查找（根据 position 决定显示源侧还是对侧名称）
   const linkType = props.linkTypes.find((lt) => lt.id === linkTypeId)
   if (linkType) {
     if (position === 'SOURCE') {
