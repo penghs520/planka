@@ -22,15 +22,6 @@ export interface LoginResponse {
 }
 
 /**
- * 账号激活请求
- */
-export interface ActivateRequest {
-  email: string
-  activationCode: string
-  password: string
-}
-
-/**
  * 刷新Token请求
  */
 export interface RefreshTokenRequest {

@@ -2,7 +2,6 @@ package cn.planka.user.controller;
 
 import cn.planka.api.user.dto.LoginResponse;
 import cn.planka.api.user.dto.SwitchOrganizationResponse;
-import cn.planka.api.user.request.ActivateRequest;
 import cn.planka.api.user.request.LoginRequest;
 import cn.planka.api.user.request.RefreshTokenRequest;
 import cn.planka.api.user.request.SwitchOrganizationRequest;
@@ -32,17 +31,6 @@ public class AuthController {
             HttpServletRequest httpRequest) {
         String clientIp = getClientIp(httpRequest);
         return authService.login(request, clientIp);
-    }
-
-    /**
-     * 账号激活（首次设置密码）
-     */
-    @PostMapping("/activate")
-    public Result<LoginResponse> activate(
-            @Valid @RequestBody ActivateRequest request,
-            HttpServletRequest httpRequest) {
-        String clientIp = getClientIp(httpRequest);
-        return authService.activate(request, clientIp);
     }
 
     /**

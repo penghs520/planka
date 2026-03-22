@@ -82,9 +82,6 @@ async function proceedToApp(organizations: OrganizationDTO[]) {
   }
 }
 
-function goToActivate() {
-  router.push('/activate')
-}
 </script>
 
 <template>
@@ -134,11 +131,6 @@ function goToActivate() {
             </a-button>
           </a-form-item>
         </a-form>
-
-        <div class="login-footer">
-          <span class="footer-text">{{ t('auth.login.firstLogin') }}</span>
-          <a-link @click="goToActivate">{{ t('auth.login.activateAccount') }}</a-link>
-        </div>
       </div>
     </div>
 
@@ -215,16 +207,6 @@ function goToActivate() {
 .login-button {
   height: 44px;
   font-size: 15px;
-}
-
-.login-footer {
-  margin-top: 24px;
-  text-align: center;
-  color: var(--color-text-3);
-}
-
-.footer-text {
-  margin-right: 4px;
 }
 
 /* 右侧品牌展示区 */

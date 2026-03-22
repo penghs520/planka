@@ -16,17 +16,14 @@ USE planka_user;
 CREATE TABLE IF NOT EXISTS sys_user (
     id VARCHAR(64) NOT NULL COMMENT '用户ID（雪花算法）',
     email VARCHAR(255) NOT NULL COMMENT '邮箱（登录账号）',
-    password_hash VARCHAR(255) NULL COMMENT '密码哈希（待激活用户为空）',
+    password_hash VARCHAR(255) NOT NULL COMMENT '密码哈希',
     nickname VARCHAR(100) NOT NULL COMMENT '昵称',
     avatar VARCHAR(500) NULL COMMENT '头像URL',
     phone VARCHAR(20) NULL COMMENT '手机号',
     locale VARCHAR(20) NULL DEFAULT 'zh-CN' COMMENT '语言偏好(zh-CN/en-US)',
 
     super_admin TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否超级管理员',
-    status VARCHAR(20) NOT NULL DEFAULT 'PENDING_ACTIVATION' COMMENT '状态(PENDING_ACTIVATION/ACTIVE/DISABLED/LOCKED)',
-
-    activation_code VARCHAR(64) NULL COMMENT '激活码（首次设置密码用）',
-    activation_expires_at DATETIME NULL COMMENT '激活码过期时间',
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '状态(PENDING_ACTIVATION/ACTIVE/DISABLED/LOCKED)',
 
     last_login_at DATETIME NULL COMMENT '最后登录时间',
     last_login_ip VARCHAR(50) NULL COMMENT '最后登录IP',

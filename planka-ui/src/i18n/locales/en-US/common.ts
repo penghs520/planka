@@ -329,7 +329,6 @@ export default {
   // Route titles
   route: {
     login: 'Login',
-    activate: 'Activate Account',
     selectOrg: 'Select Organization',
     workspace: 'Workspace',
     sidebarSettings: 'Sidebar settings',

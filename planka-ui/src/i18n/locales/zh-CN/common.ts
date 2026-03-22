@@ -329,7 +329,6 @@ export default {
   // 路由标题
   route: {
     login: '登录',
-    activate: '激活账号',
     selectOrg: '选择组织',
     workspace: '工作区',
     sidebarSettings: '侧栏设置',

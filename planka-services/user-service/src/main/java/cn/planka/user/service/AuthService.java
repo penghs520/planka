@@ -8,7 +8,6 @@ import cn.planka.api.user.dto.OrganizationDTO;
 import cn.planka.api.user.dto.SwitchOrganizationResponse;
 import cn.planka.api.user.dto.UserDTO;
 import cn.planka.api.user.enums.UserStatus;
-import cn.planka.api.user.request.ActivateRequest;
 import cn.planka.api.user.request.LoginRequest;
 import cn.planka.api.user.request.RefreshTokenRequest;
 import cn.planka.api.user.request.SwitchOrganizationRequest;
@@ -67,9 +66,6 @@ public class AuthService {
 
         // 2. 检查用户状态
         String status = user.getStatus();
-        if (UserStatus.PENDING_ACTIVATION.name().equals(status)) {
-            return Result.failure("AUTH_002", "账号未激活，请先设置密码");
-        }
         if (UserStatus.LOCKED.name().equals(status)) {
             return Result.failure("AUTH_003", "账号已锁定，请联系管理员");
         }
@@ -88,46 +84,6 @@ public class AuthService {
 
         // 5. 生成 Token
         return generateLoginResponse(user, clientIp, requirePasswordChange);
-    }
-
-    /**
-     * 账号激活（首次设置密码）
-     */
-    @Transactional
-    public Result<LoginResponse> activate(ActivateRequest request, String clientIp) {
-        // 1. 查找用户
-        UserEntity user = userRepository.findByEmail(request.email()).orElse(null);
-        if (user == null) {
-            return Result.failure("AUTH_001", "用户不存在");
-        }
-
-        // 2. 检查状态
-        if (!UserStatus.PENDING_ACTIVATION.name().equals(user.getStatus())) {
-            return Result.failure("AUTH_006", "账号已激活，请直接登录");
-        }
-
-        // 3. 验证激活码
-        if (user.getActivationCode() == null ||
-                !user.getActivationCode().equals(request.activationCode())) {
-            return Result.failure("AUTH_007", "激活码无效");
-        }
-        if (user.getActivationExpiresAt() != null &&
-                user.getActivationExpiresAt().isBefore(LocalDateTime.now())) {
-            return Result.failure("AUTH_008", "激活码已过期");
-        }
-
-        // 4. 设置密码并激活
-        user.setPasswordHash(passwordEncoder.encode(request.password()));
-        user.setStatus(UserStatus.ACTIVE.name());
-        user.setActivationCode(null);
-        user.setActivationExpiresAt(null);
-        user.setUsingDefaultPassword(false);
-        userRepository.save(user);
-
-        log.info("User activated: {}", user.getEmail());
-
-        // 5. 生成 Token（新激活用户不需要强制修改密码）
-        return generateLoginResponse(user, clientIp, false);
     }
 
     /**

@@ -27,9 +27,6 @@ public class UserEntity {
     private boolean superAdmin;
     private String status;
 
-    private String activationCode;
-    private LocalDateTime activationExpiresAt;
-
     private LocalDateTime lastLoginAt;
     private String lastLoginIp;
     private int loginFailCount;

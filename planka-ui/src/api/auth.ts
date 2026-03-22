@@ -2,7 +2,6 @@ import request from './request'
 import type {
   LoginRequest,
   LoginResponse,
-  ActivateRequest,
   RefreshTokenRequest,
   RefreshTokenResponse,
   SwitchOrganizationRequest,
@@ -20,13 +19,6 @@ export const authApi = {
    */
   login(data: LoginRequest): Promise<LoginResponse> {
     return request.post(`${BASE_URL}/login`, data)
-  },
-
-  /**
-   * 账号激活（首次设置密码）
-   */
-  activate(data: ActivateRequest): Promise<LoginResponse> {
-    return request.post(`${BASE_URL}/activate`, data)
   },
 
   /**

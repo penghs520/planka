@@ -63,8 +63,8 @@ export function setupRouterGuards(router: Router) {
       }
     }
 
-    // 已登录且已选择组织，访问登录页或激活页，跳转到首页
-    if ((to.path === '/login' || to.path === '/activate') && isLoggedIn() && hasOrgId()) {
+    // 已登录且已选择组织，访问登录页，跳转到首页
+    if (to.path === '/login' && isLoggedIn() && hasOrgId()) {
       next('/')
       return
     }

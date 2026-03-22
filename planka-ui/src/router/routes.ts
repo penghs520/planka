@@ -15,15 +15,6 @@ export const routes: RouteRecordRaw[] = [
       requiresAuth: false,
     },
   },
-  {
-    path: '/activate',
-    name: 'Activate',
-    component: () => import('@/views/auth/ActivateView.vue'),
-    meta: {
-      titleKey: 'common.route.activate',
-      requiresAuth: false,
-    },
-  },
   // 组织选择页（需要登录，但不需要选择组织）
   {
     path: '/select-org',

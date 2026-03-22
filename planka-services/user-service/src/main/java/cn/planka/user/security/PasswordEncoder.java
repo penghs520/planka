@@ -77,16 +77,6 @@ public class PasswordEncoder {
     }
 
     /**
-     * 生成随机激活码
-     */
-    public String generateActivationCode() {
-        SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[32];
-        random.nextBytes(bytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
-    }
-
-    /**
      * 计算字符串的哈希值（用于存储 refresh token）
      */
     public String hashToken(String token) {

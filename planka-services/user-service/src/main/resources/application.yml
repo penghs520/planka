@@ -69,8 +69,6 @@ user:
   login:
     max-fail-count: 5
     lock-duration: 30  # 分钟
-  activation:
-    expires-hours: 72  # 激活码有效期（小时）
   invitation:
     default-password: ${USER_DEFAULT_PASSWORD:changeme}  # 邀请成员时的默认密码
 

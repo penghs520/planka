@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { UserDTO, UpdateUserRequest, ChangePasswordRequest } from '@/types/user'
-import type { LoginRequest, LoginResponse, ActivateRequest } from '@/types/auth'
+import type { LoginRequest, LoginResponse } from '@/types/auth'
 import type { OrganizationDTO } from '@/types/member'
 import { authApi } from '@/api/auth'
 import { userApi } from '@/api/user'
@@ -101,14 +101,6 @@ export const useUserStore = defineStore('user', () => {
   }
 
   /**
-   * 账号激活
-   */
-  async function activate(data: ActivateRequest): Promise<OrganizationDTO[]> {
-    const response = await authApi.activate(data)
-    return handleLoginSuccess(response)
-  }
-
-  /**
    * 刷新 Token
    */
   async function doRefreshToken(): Promise<void> {
@@ -184,7 +176,6 @@ export const useUserStore = defineStore('user', () => {
     isSuperAdmin,
     // 方法
     login,
-    activate,
     doRefreshToken,
     logout,
     fetchMe,

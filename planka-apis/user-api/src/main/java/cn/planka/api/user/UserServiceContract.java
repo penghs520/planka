@@ -40,12 +40,6 @@ public interface UserServiceContract {
     @PostMapping("/auth/refresh")
     Result<LoginResponse> refreshToken(@RequestBody RefreshTokenRequest request);
 
-    /**
-     * 账号激活（首次设置密码）
-     */
-    @PostMapping("/auth/activate")
-    Result<LoginResponse> activate(@RequestBody ActivateRequest request);
-
     // ==================== 用户 API ====================
 
     /**
