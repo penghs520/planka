@@ -12,7 +12,8 @@ import { ref, shallowRef, computed, watch, inject, onUnmounted, nextTick } from 
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 // import { Message, Modal } from '@arco-design/web-vue'
-import { IconPlusCircle } from '@arco-design/web-vue/es/icon'
+import { IconPlusCircle, IconEdit } from '@arco-design/web-vue/es/icon'
+import { Message } from '@arco-design/web-vue'
 import type {
   ListViewDataResponse,
   ViewDataRequest,
@@ -20,6 +21,7 @@ import type {
   // PageInfo,
   StatusOption,
 } from '@/types/view-data'
+import type { ListViewDefinition } from '@/types/view'
 import type { CardDTO } from '@/types/card'
 import type { Condition } from '@/types/condition'
 import { getCardId } from '@/types/card'
@@ -27,6 +29,7 @@ import { createEmptyViewDataRequest } from '@/types/view-data'
 import { viewDataApi } from '@/api/view-data'
 import { viewApi } from '@/api/view'
 import { useOrgStore } from '@/stores/org'
+import { useUserStore } from '@/stores/user'
 import { issueCardTypeId, projectIssueLinkTypeId } from '@/constants/systemSchemaIds'
 import { buildLinkFieldId } from '@/utils/link-field-utils'
 import { conditionLinkIn } from '@/utils/card-query'
@@ -36,6 +39,7 @@ import CardCreateModal from '../shared/CardCreateModal.vue'
 import ListViewCell from './ListViewCell.vue'
 import CellEditorOverlay from './CellEditorOverlay.vue'
 import ViewToolbar, { type RowHeightType } from '@/components/view-toolbar/ViewToolbar.vue'
+import ViewEditForm from '@/views/schema-definition/view/ViewEditForm.vue'
 import { useCardTabsStore } from '@/stores/cardTabs'
 import { useCellEditing } from '../../composables/list/useCellEditing'
 import type { ColumnMeta as ViewColumnMeta } from '@/types/view-data'
@@ -55,6 +59,7 @@ const viewDataQueryOpts = computed(() =>
 const { t } = useI18n()
 const route = useRoute()
 const orgStore = useOrgStore()
+const userStore = useUserStore()
 
 // Injections
 const setViewName = inject<(name: string) => void>('setViewName')
@@ -79,6 +84,11 @@ const tableHeight = ref(500) // 表格高度，用于虚拟滚动
 // 卡片新建 Modal 状态
 const createModalVisible = ref(false)
 
+/** 当前视图完整定义（用于「更多 > 编辑」权限与抽屉） */
+const viewDefForEdit = ref<ListViewDefinition | null>(null)
+const editViewVisible = ref(false)
+const editViewSaving = ref(false)
+
 // 漏斗过滤条件
 const filterCondition = ref<Condition | null>(null)
 const selectedRowKeys = ref<string[]>([])
@@ -92,6 +102,15 @@ const cards = computed<CardDTO[]>(() => accumulatedCards.value)
 const cardTypeId = computed(() => viewData.value?.cardTypeId)
 const rootCardTypeName = computed(() => viewData.value?.viewName || '')
 const statusOptions = computed<StatusOption[]>(() => viewData.value?.statusOptions || [])
+
+/** 仅创建人或组织管理员可见「编辑」 */
+const canShowEditViewInMore = computed(() => {
+  const def = viewDefForEdit.value
+  if (!def?.id || !props.viewId) return false
+  const uid = userStore.user?.id
+  const isCreator = !!(uid && def.createdBy && uid === def.createdBy)
+  return isCreator || orgStore.isAdmin
+})
 
 // 计算表格最小宽度，防止列数少时列宽被拉伸
 /*
@@ -339,6 +358,27 @@ function refresh() {
   fetchData()
 }
 
+function openEditView() {
+  if (!canShowEditViewInMore.value || !viewDefForEdit.value) return
+  editViewVisible.value = true
+}
+
+async function handleEditViewSave(def: ListViewDefinition) {
+  if (!props.viewId) return
+  editViewSaving.value = true
+  try {
+    const updated = await viewApi.update(props.viewId, def, def.contentVersion)
+    viewDefForEdit.value = updated
+    Message.success(t('common.state.success'))
+    editViewVisible.value = false
+    refresh()
+  } catch {
+    Message.error(t('common.state.failed'))
+  } finally {
+    editViewSaving.value = false
+  }
+}
+
 function handleSearch(keyword: string) {
   searchKeyword.value = keyword
   fetchData()
@@ -355,6 +395,20 @@ function handleFilterClear() {
 }
 
 // ==================== 生命周期 ====================
+watch(
+  () => props.viewId,
+  async (id) => {
+    viewDefForEdit.value = null
+    if (!id) return
+    try {
+      viewDefForEdit.value = await viewApi.getById(id)
+    } catch {
+      viewDefForEdit.value = null
+    }
+  },
+  { immediate: true },
+)
+
 watch(
   () => [props.viewId, route.query.scopeProjectIds] as const,
   ([newViewId]) => {
@@ -426,7 +480,13 @@ defineExpose({ refresh })
       @filter-clear="handleFilterClear"
       @search="handleSearch"
       @refresh-click="refresh"
-    />
+    >
+      <template v-if="canShowEditViewInMore" #more-menu>
+        <a-doption @click="openEditView">
+          <IconEdit /> {{ t('common.action.edit') }}
+        </a-doption>
+      </template>
+    </ViewToolbar>
 
     <!-- 数据区域 -->
     <div class="panel-content">
@@ -532,6 +592,15 @@ defineExpose({ refresh })
       v-model:visible="createModalVisible"
       :card-type-id="cardTypeId || ''"
       @success="handleFormSuccess"
+    />
+
+    <ViewEditForm
+      v-model:visible="editViewVisible"
+      mode="edit"
+      :view="viewDefForEdit"
+      :structure-node-context-id="structureNodeId"
+      :save-loading="editViewSaving"
+      @save="handleEditViewSave"
     />
   </div>
 </template>
