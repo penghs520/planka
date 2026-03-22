@@ -11,6 +11,7 @@ import IconStructure from '@/components/icons/IconStructure.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
 import IconFormulaDefinition from '@/components/icons/IconFormulaDefinition.vue'
 import IconCardType from '@/components/icons/IconCardType.vue'
+import { IconThunderbolt } from '@arco-design/web-vue/es/icon'
 import { usePermission } from '@/hooks/usePermission'
 import OrgSelector from '@/components/auth/OrgSelector.vue'
 import UserDropdown from '@/components/auth/UserDropdown.vue'
@@ -104,6 +105,7 @@ const menuGroups: MenuGroup[] = [
       { key: 'card-type', titleKey: 'admin.menu.cardType', icon: IconCardType, path: '/admin/card-type' },
       { key: 'link-type', titleKey: 'admin.menu.linkType', icon: IconLinkType, path: '/admin/link-type' },
       { key: 'formula-definition', titleKey: 'admin.menu.formulaDefinition', icon: IconFormulaDefinition, path: '/admin/formula-definition' },
+      { key: 'biz-rule-definition', titleKey: 'admin.menu.bizRuleDefinition', icon: IconThunderbolt, path: '/admin/biz-rule-definition' },
       { key: 'structure', titleKey: 'admin.menu.structure', icon: IconStructure, path: '/admin/structure' },
     ],
   },

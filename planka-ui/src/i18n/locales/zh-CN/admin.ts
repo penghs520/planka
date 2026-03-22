@@ -15,6 +15,7 @@ export default {
     cardType: '实体类型定义',
     fieldDefinition: '属性定义',
     formulaDefinition: '计算公式',
+    bizRuleDefinition: '业务规则定义',
     linkType: '实体关系定义',
     structure: '架构线',
     view: '视图配置',
@@ -991,6 +992,17 @@ targetFieldsRequired: '请选择目标属性',
     },
   },
 
+  // 业务规则定义（跨实体类型列表页）
+  bizRuleDefinition: {
+    title: '业务规则定义',
+    filterNamePlaceholder: '名称',
+    filterCardType: '实体类型',
+    entityTypeColumn: '实体类型',
+    selectCardTypeTitle: '选择实体类型',
+    selectCardTypeRequired: '请选择实体类型',
+    selectCardTypeForLogTitle: '选择要查看执行日志的实体类型',
+  },
+
   // 业务规则模块
   bizRule: {
     title: '业务规则',
@@ -1135,8 +1147,8 @@ targetFieldsRequired: '请选择目标属性',
     },
     // 执行日志
     executionLog: {
-      title: '执行日志',
-      viewButton: '查看执行日志',
+      title: '执行记录',
+      viewButton: '执行记录',
       recordCount: '共 {count} 条记录',
       filter: '筛选',
       filterByRule: '按规则',

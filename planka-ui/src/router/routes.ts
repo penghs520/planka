@@ -198,6 +198,16 @@ export const routes: RouteRecordRaw[] = [
               activeMenu: 'formula-definition',
             },
           },
+          // 业务规则定义（跨实体类型列表）
+          {
+            path: 'biz-rule-definition',
+            name: 'BizRuleDefinitionList',
+            component: () => import('@/views/schema-definition/biz-rule-definition/ListView.vue'),
+            meta: {
+              titleKey: 'admin.bizRuleDefinition.title',
+              activeMenu: 'biz-rule-definition',
+            },
+          },
           // 实体类型管理
           {
             path: 'card-type',

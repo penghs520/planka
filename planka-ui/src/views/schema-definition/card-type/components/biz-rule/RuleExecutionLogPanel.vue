@@ -35,11 +35,21 @@ import { getLocale } from '@/i18n'
 
 const { t } = useI18n()
 
-const props = defineProps<{
-  cardTypeId: string
-}>()
+// cardTypeOptions：传入时可在抽屉内切换实体类型（业务规则定义页）；未传时仅使用 cardTypeId（实体类型内 Tab）
+const props = withDefaults(
+  defineProps<{
+    cardTypeId?: string
+    cardTypeOptions?: { id: string; name: string; icon?: string; schemaSubType: string }[]
+  }>(),
+  { cardTypeOptions: () => [] },
+)
 
 const visible = defineModel<boolean>('visible', { default: false })
+
+/** 当前查询所用的实体类型（与 API 一致） */
+const activeCardTypeId = ref('')
+
+const showCardTypeSelector = computed(() => (props.cardTypeOptions?.length ?? 0) > 1)
 
 // 状态
 const loading = ref(false)
@@ -95,7 +105,7 @@ function getActionTypeLabel(actionType: string): string {
 
 // 加载日志
 async function loadLogs(reset = false) {
-  if (!props.cardTypeId) return
+  if (!activeCardTypeId.value) return
   if (loading.value) return
 
   if (reset) {
@@ -125,7 +135,7 @@ async function loadLogs(reset = false) {
       request.endTime = formatDateTimeForApi(end, true)
     }
 
-    const result = await ruleExecutionLogApi.search(props.cardTypeId, request)
+    const result = await ruleExecutionLogApi.search(activeCardTypeId.value, request)
 
     if (reset) {
       records.value = result.content
@@ -165,9 +175,9 @@ function refresh() {
 
 // 加载筛选选项
 async function loadFilters() {
-  if (!props.cardTypeId) return
+  if (!activeCardTypeId.value) return
   try {
-    filters.value = await ruleExecutionLogApi.getFilters(props.cardTypeId)
+    filters.value = await ruleExecutionLogApi.getFilters(activeCardTypeId.value)
   } catch (error) {
     console.error('加载筛选选项失败:', error)
   }
@@ -260,16 +270,40 @@ const hasActiveFilter = computed(() => {
   )
 })
 
-// 监听可见性变化
-watch(
-  visible,
-  (newVisible) => {
-    if (newVisible && props.cardTypeId) {
-      loadLogs(true)
-    }
-  },
-  { immediate: true }
-)
+function resolveInitialCardTypeId(): string {
+  if (props.cardTypeId) {
+    return props.cardTypeId
+  }
+  const opts = props.cardTypeOptions
+  const first = opts?.[0]
+  if (first?.id) {
+    return first.id
+  }
+  return ''
+}
+
+function onCardTypeChange() {
+  selectedRuleIds.value = []
+  selectedStatuses.value = []
+  dateRange.value = null
+  showFilter.value = false
+  filters.value = null
+  loadFilters()
+  loadLogs(true)
+}
+
+// 打开抽屉时：解析当前实体类型并加载
+watch(visible, (newVisible) => {
+  if (!newVisible) {
+    return
+  }
+  activeCardTypeId.value = resolveInitialCardTypeId()
+  if (!activeCardTypeId.value) {
+    return
+  }
+  loadFilters()
+  loadLogs(true)
+})
 </script>
 
 <template>
@@ -281,6 +315,21 @@ watch(
     unmount-on-close
   >
     <div class="execution-log-panel">
+      <!-- 多实体类型时可在抽屉内切换，无需打开前弹窗选择 -->
+      <div v-if="showCardTypeSelector" class="card-type-toolbar">
+        <span class="card-type-label">{{ t('admin.bizRuleDefinition.filterCardType') }}</span>
+        <a-select
+          v-model="activeCardTypeId"
+          allow-search
+          size="small"
+          class="card-type-select"
+          @change="onCardTypeChange"
+        >
+          <a-option v-for="opt in cardTypeOptions" :key="opt.id" :value="opt.id">
+            {{ opt.name }}
+          </a-option>
+        </a-select>
+      </div>
       <!-- 工具栏 -->
       <div class="toolbar">
         <div class="toolbar-left">
@@ -546,6 +595,26 @@ watch(
   flex-direction: column;
   height: 100%;
   width: 100%;
+}
+
+.card-type-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px 10px;
+  flex-shrink: 0;
+}
+
+.card-type-label {
+  font-size: 13px;
+  color: var(--color-text-2);
+  flex-shrink: 0;
+}
+
+.card-type-select {
+  flex: 1;
+  min-width: 0;
+  max-width: 360px;
 }
 
 // 工具栏

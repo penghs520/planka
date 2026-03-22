@@ -15,6 +15,7 @@ export default {
     cardType: 'Entity Type Definitions',
     fieldDefinition: 'Field Definitions',
     formulaDefinition: 'Formulas',
+    bizRuleDefinition: 'Business Rule Definitions',
     linkType: 'Entity Relation Definitions',
     structure: 'Structure Lines',
     view: 'View Configuration',
@@ -1149,6 +1150,17 @@ targetFieldsRequired: 'Please select target fields',
     },
   },
 
+  // Business rule definitions (cross entity type list)
+  bizRuleDefinition: {
+    title: 'Business Rule Definitions',
+    filterNamePlaceholder: 'Name',
+    filterCardType: 'Entity type',
+    entityTypeColumn: 'Entity type',
+    selectCardTypeTitle: 'Select entity type',
+    selectCardTypeRequired: 'Please select an entity type',
+    selectCardTypeForLogTitle: 'Select entity type for execution logs',
+  },
+
   // Business Rules module
   bizRule: {
     title: 'Business Rules',
@@ -1293,8 +1305,8 @@ targetFieldsRequired: 'Please select target fields',
     },
     // Execution Log
     executionLog: {
-      title: 'Execution Log',
-      viewButton: 'View Execution Log',
+      title: 'Execution Records',
+      viewButton: 'Execution Records',
       recordCount: '{count} records',
       filter: 'Filter',
       filterByRule: 'By Rule',

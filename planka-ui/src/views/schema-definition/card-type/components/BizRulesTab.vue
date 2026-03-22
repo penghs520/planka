@@ -163,7 +163,12 @@ watch(
         >
           <template #suffix><IconSearch /></template>
         </a-input>
-        <a-button type="text" size="small" @click="logPanelVisible = true">
+        <a-button
+          type="text"
+          size="small"
+          class="execution-log-toolbar-btn"
+          @click="logPanelVisible = true"
+        >
           <template #icon><IconHistory /></template>
           {{ t('admin.bizRule.executionLog.viewButton') }}
         </a-button>
@@ -287,6 +292,15 @@ watch(
 
 .filter-search {
   width: 200px;
+}
+
+.execution-log-toolbar-btn.arco-btn-text {
+  color: var(--color-text-2);
+
+  &:hover {
+    color: var(--color-text-1);
+    background-color: var(--color-fill-2);
+  }
 }
 
 .rule-list {
