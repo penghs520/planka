@@ -21,6 +21,7 @@ import { cardTypeApi, linkTypeApi } from '@/api'
 import type { CardTypeDefinition } from '@/types/card-type'
 import type { FieldOption } from '@/types/field-option'
 import type { LinkTypeVO, CardTypeInfo, UpdateLinkTypeRequest, CreateLinkTypeRequest } from '@/types/link-type'
+import { SchemaSubType } from '@/types/schema'
 import { applyDagreLayout } from '@/utils/dagre-layout'
 import { compactNotification } from '@/utils/compactNotification'
 
@@ -137,6 +138,18 @@ function findConcreteImplementations(abstractTypes: CardTypeInfo[]): CardTypeInf
   return Array.from(concretes.values())
 }
 
+/** 是否为特征类型（TRAIT_CARD_TYPE），用于 ER 图节点配色 */
+function isTraitCardTypeId(cardTypeId: string): boolean {
+  const ct = cardTypes.value.find(c => c.id === cardTypeId)
+  return ct?.schemaSubType === SchemaSubType.TRAIT_CARD_TYPE
+}
+
+/** 组合节点内全部为特征类型时整体按特征类型样式展示 */
+function isTraitNodeForCardTypes(cardTypeInfos: CardTypeInfo[]): boolean {
+  if (cardTypeInfos.length === 0) return false
+  return cardTypeInfos.every(ct => isTraitCardTypeId(ct.id))
+}
+
 // Build Vue Flow nodes and edges from data
 function buildGraph() {
   const newNodes: Node[] = []
@@ -167,6 +180,7 @@ function buildGraph() {
                 linkFields: [],
                 fieldsLoaded: false,
                 fieldsLoading: false,
+                isTraitCardType: isTraitCardTypeId(ct.id),
               },
             })
           }
@@ -181,6 +195,7 @@ function buildGraph() {
               entityId: nodeKey,
               abstractTypes: linkType.sourceCardTypes,
               concreteTypes: concretes,
+              isTraitCardType: isTraitNodeForCardTypes(linkType.sourceCardTypes),
             },
           })
         }
@@ -209,6 +224,7 @@ function buildGraph() {
                 linkFields: [],
                 fieldsLoaded: false,
                 fieldsLoading: false,
+                isTraitCardType: isTraitCardTypeId(ct.id),
               },
             })
           }
@@ -223,6 +239,7 @@ function buildGraph() {
               entityId: nodeKey,
               abstractTypes: linkType.targetCardTypes,
               concreteTypes: concretes,
+              isTraitCardType: isTraitNodeForCardTypes(linkType.targetCardTypes),
             },
           })
         }

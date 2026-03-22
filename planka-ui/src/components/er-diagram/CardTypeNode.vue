@@ -26,6 +26,8 @@ interface Props {
     isHighlighted?: boolean
     fieldsLoaded?: boolean
     fieldsLoading?: boolean
+    /** 特征类型（TRAIT_CARD_TYPE），与实体类型区分配色 */
+    isTraitCardType?: boolean
   }
 }
 
@@ -59,7 +61,8 @@ function toggleFieldsSection() {
     :class="{
       'is-combo': data.mode === 'combo',
       'is-selected': data.isSelected,
-      'is-highlighted': data.isHighlighted
+      'is-highlighted': data.isHighlighted,
+      'is-trait-card-type': data.isTraitCardType,
     }"
   >
     <!-- Connection handles - multiple handles per side for parallel edges -->
@@ -174,6 +177,48 @@ function toggleFieldsSection() {
 .card-type-node.is-combo {
   border-color: rgb(var(--primary-5));
   background: linear-gradient(to bottom, rgba(var(--primary-1), 0.3), #ffffff);
+}
+
+/* 特征类型：低饱和紫灰，与实体/抽象组合区分，无渐变 */
+.card-type-node.is-trait-card-type {
+  border-color: #b8b0c8;
+  background: #f4f3f6;
+}
+
+.card-type-node.is-trait-card-type .node-header {
+  background: #e8e6ef;
+  border-bottom-color: #d4d0dc;
+}
+
+.card-type-node.is-trait-card-type.is-combo {
+  border-color: #a8a0b4;
+  background: #f2f1f5;
+}
+
+.card-type-node.is-trait-card-type .combo-header {
+  background: #e4e2eb;
+}
+
+.card-type-node.is-trait-card-type .section-toggle.concrete {
+  color: #5a5268;
+}
+
+.card-type-node.is-trait-card-type .section-toggle.concrete:hover {
+  background: #dcd8e4;
+}
+
+.card-type-node.is-trait-card-type .concrete-item:hover {
+  background: #e2dfe8;
+}
+
+.card-type-node.is-trait-card-type.is-selected {
+  border: 2px solid rgb(var(--primary-6));
+  box-shadow: 0 4px 16px rgba(var(--primary-6), 0.3);
+}
+
+.card-type-node.is-trait-card-type.is-highlighted {
+  border: 2px solid rgb(var(--warning-6));
+  box-shadow: 0 4px 16px rgba(var(--warning-6), 0.3);
 }
 
 /* Vue Flow Handles - hidden but functional */
