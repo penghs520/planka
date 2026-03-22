@@ -89,7 +89,7 @@ export function getSourceLabel(config: FieldConfig, fieldList: FieldConfigListWi
     if (source.definitionInherited) {
       return `继承自 ${source.definitionSourceCardTypeName} 的关联关系`
     }
-    return '自有关联类型定义'
+    return '自有实体关系定义'
   }
 
   // 有配置存在时，显示配置来源

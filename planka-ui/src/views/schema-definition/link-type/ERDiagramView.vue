@@ -22,6 +22,7 @@ import type { CardTypeDefinition } from '@/types/card-type'
 import type { FieldOption } from '@/types/field-option'
 import type { LinkTypeVO, CardTypeInfo, UpdateLinkTypeRequest, CreateLinkTypeRequest } from '@/types/link-type'
 import { applyDagreLayout } from '@/utils/dagre-layout'
+import { compactNotification } from '@/utils/compactNotification'
 
 const { t } = useI18n()
 
@@ -631,7 +632,7 @@ async function openEditDrawer(linkTypeId: string) {
     drawerVisible.value = true
   } catch (error) {
     console.error('Failed to fetch link type:', error)
-    Message.error('获取关联类型详情失败')
+    Message.error('获取实体关系详情失败')
   }
 }
 
@@ -808,7 +809,9 @@ function handleAutoLayout() {
   setTimeout(() => {
     vueFlowRef.value?.fitView({ padding: 0.2 })
   }, 100)
-  Message.success('已重新排列布局')
+  compactNotification.success({
+    content: t('admin.linkType.erDiagramLayoutRearranged'),
+  })
 }
 
 // Handle node double click - enter focus mode
@@ -1065,7 +1068,7 @@ onMounted(() => {
 
       <!-- Empty State -->
       <div v-if="!loading && nodes.length === 0" class="empty-state">
-        <a-empty description="暂无关联类型数据" />
+        <a-empty description="暂无实体关系数据" />
       </div>
     </div>
 

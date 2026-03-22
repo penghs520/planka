@@ -2,7 +2,7 @@ import type { Page, Locator } from '@playwright/test'
 import { arco } from '../../helpers/selectors'
 
 /**
- * 关联类型管理页 Page Object
+ * 实体关系管理页 Page Object
  */
 export class LinkTypePage {
   readonly table: Locator

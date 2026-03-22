@@ -7,7 +7,7 @@ test.describe('管理后台视觉回归', () => {
     await expect(page).toHaveScreenshot('admin-card-type-list.png')
   })
 
-  test('关联类型 ER 图', async ({ page }) => {
+  test('实体关系 ER 图', async ({ page }) => {
     await page.goto('/admin/link-type/graph')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(500) // 等待 Vue Flow 渲染

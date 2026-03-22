@@ -166,7 +166,7 @@ export const SchemaTypeConfig: Record<SchemaType, { label: string; requiresBelon
   [SchemaType.FIELD_CONFIG]: { label: '属性配置', requiresBelongTo: true },
   [SchemaType.VIEW]: { label: '视图', requiresBelongTo: false },
   [SchemaType.VALUE_STREAM]: { label: '价值流定义', requiresBelongTo: true },
-  [SchemaType.LINK_TYPE]: { label: '关联类型', requiresBelongTo: false },
+  [SchemaType.LINK_TYPE]: { label: '实体关系', requiresBelongTo: false },
   [SchemaType.STRUCTURE_DEFINITION]: { label: '架构线定义', requiresBelongTo: false },
   [SchemaType.BIZ_RULE]: { label: '业务规则', requiresBelongTo: true },
   [SchemaType.FLOW_POLICY]: { label: '流转策略', requiresBelongTo: true },
@@ -209,7 +209,7 @@ export const SchemaSubTypeConfig: Record<SchemaSubType, { label: string; categor
   [SchemaSubType.WEB_URL_FIELD]: { label: '网页链接属性配置', category: SchemaType.FIELD_CONFIG },
   [SchemaSubType.STRUCTURE_FIELD]: { label: '架构层级属性配置', category: SchemaType.FIELD_CONFIG },
   // 关联类型
-  [SchemaSubType.LINK_TYPE]: { label: '关联类型', category: SchemaType.LINK_TYPE },
+  [SchemaSubType.LINK_TYPE]: { label: '实体关系', category: SchemaType.LINK_TYPE },
   [SchemaSubType.LINK_FIELD]: { label: '关联属性配置', category: SchemaType.FIELD_CONFIG },
   // 架构线定义
   [SchemaSubType.STRUCTURE_DEFINITION]: { label: '架构线定义', category: SchemaType.STRUCTURE_DEFINITION },

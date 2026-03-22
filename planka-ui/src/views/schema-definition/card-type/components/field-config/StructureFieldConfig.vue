@@ -202,10 +202,10 @@ async function handleAutoCreateLinkType(record: LevelBinding): Promise<void> {
     }
     matchingLinksCache.value[levelIndex].push(newField)
 
-    Message.success(`已自动创建关联类型: ${linkType.sourceName}`)
+    Message.success(`已自动创建实体关系: ${linkType.sourceName}`)
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : '未知错误'
-    Message.error(`创建关联类型失败: ${errorMessage}`)
+    Message.error(`创建实体关系失败: ${errorMessage}`)
   } finally {
     creatingLinkLevelIndex.value = null
   }

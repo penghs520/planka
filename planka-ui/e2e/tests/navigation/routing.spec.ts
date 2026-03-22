@@ -25,8 +25,8 @@ test.describe('路由导航', () => {
     await page.goto('/admin/card-type')
     await page.waitForLoadState('networkidle')
 
-    // 点击关联类型菜单
-    const linkTypeMenu = page.locator('.arco-menu-item:has-text("关联类型"), a[href*="link-type"]')
+    // 点击实体关系定义菜单
+    const linkTypeMenu = page.locator('.arco-menu-item:has-text("实体关系定义"), a[href*="link-type"]')
     if (await linkTypeMenu.isVisible()) {
       await linkTypeMenu.click()
       await expect(page).toHaveURL(/\/admin\/link-type/)

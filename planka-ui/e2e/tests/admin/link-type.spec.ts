@@ -1,7 +1,7 @@
 import { test, expect } from '../../fixtures/base'
 
-test.describe('关联类型管理', () => {
-  test('关联类型列表页正常加载', async ({ page }) => {
+test.describe('实体关系管理', () => {
+  test('实体关系列表页正常加载', async ({ page }) => {
     await page.goto('/admin/link-type')
     await expect(page).toHaveURL(/\/admin\/link-type/)
     await page.waitForLoadState('networkidle')
