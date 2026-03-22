@@ -35,7 +35,8 @@ SERVICES=(
     "planka-services/user-service"
     "planka-services/view-service"
     "planka-services/oss/oss-service"
-    "planka-services/extension-service"
+    "planka-services/history-service"
+    "planka-services/comment-service"
     "planka-services/schema-service"
 )
 
@@ -45,7 +46,8 @@ SERVICE_NAMES=(
     "用户服务"
     "视图服务"
     "OSS服务"
-    "扩展服务"
+    "操作历史服务"
+    "评论服务"
     "Schema服务"
 )
 
@@ -56,7 +58,8 @@ SERVICE_PORTS=(
     "18102"   # user-service
     "18103"   # view-service
     "18104"   # oss-service
-    "18105"   # extension-service
+    "18105"   # history-service
+    "18106"   # comment-service
     "18100"   # schema-service
 )
 

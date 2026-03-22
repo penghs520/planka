@@ -15,12 +15,13 @@
 |------|------|
 | 前端开发服务器 | 13000 |
 | API 网关 | 18000 |
-| Card Service | 18100 |
-| User Service | 18101 |
-| View Service | 18102 |
-| OSS Service | 18103 |
-| Extension Service | 18105 |
-| Schema Service | 18107 |
+| Card Service | 18101 |
+| User Service | 18102 |
+| View Service | 18103 |
+| OSS Service | 18104 |
+| History Service | 18105 |
+| Comment Service | 18106 |
+| Schema Service | 18100 |
 | Nacos | 28848 |
 | MySQL | 23306 |
 | Redis | 26379 |

@@ -22,7 +22,8 @@
         <module>user-service</module>
         <module>card-service</module>
         <module>view-service</module>
-        <module>extension-service</module>
+        <module>history-service</module>
+        <module>comment-service</module>
         <module>oss</module>
     </modules>
 

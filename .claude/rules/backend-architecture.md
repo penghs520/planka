@@ -9,7 +9,8 @@ planka-services/
 ├── card-service/         # 卡片数据服务 (18100)
 ├── view-service/         # 视图数据服务 (18102)
 ├── user-service/         # 用户认证服务 (18101)
-├── extension-service/    # 扩展服务 (18104)
+├── history-service/      # 操作历史 (18105)
+├── comment-service/      # 评论 (18106)
 └── oss/                  # 对象存储服务 (18103)
 ```
 

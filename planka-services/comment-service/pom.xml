@@ -10,11 +10,11 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>extension-service</artifactId>
+    <artifactId>comment-service</artifactId>
     <packaging>jar</packaging>
 
-    <name>Extension Service</name>
-    <description>扩展服务 - 操作历史、附件管理、通知、业务规则、评论等扩展功能</description>
+    <name>Comment Service</name>
+    <description>评论与建议服务</description>
 
     <dependencies>
         <!-- 项目内部模块 -->
@@ -148,7 +148,7 @@
     </dependencies>
 
     <build>
-        <finalName>extension-service</finalName>
+        <finalName>comment-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

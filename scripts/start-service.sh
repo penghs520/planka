@@ -7,7 +7,8 @@
 #   ./start-service.sh user-service
 #   ./start-service.sh card-service
 #   ./start-service.sh view-service
-#   ./start-service.sh extension-service
+#   ./start-service.sh history-service
+#   ./start-service.sh comment-service
 #   ./start-service.sh oss-service
 #   ./start-service.sh gateway-service
 #
@@ -37,7 +38,8 @@ get_service_info() {
         user-service) echo "planka-services/user-service:8082" ;;
         card-service) echo "planka-services/card-service:8083" ;;
         view-service) echo "planka-services/view-service:8084" ;;
-        extension-service) echo "planka-services/extension-service:8085" ;;
+        history-service) echo "planka-services/history-service:18105" ;;
+        comment-service) echo "planka-services/comment-service:18106" ;;
         oss-service) echo "planka-services/oss/oss-service:8088" ;;
         gateway-service) echo "planka-services/gateway-service:8000" ;;
         *) echo "" ;;
@@ -46,7 +48,7 @@ get_service_info() {
 
 # 列出所有服务
 list_services() {
-    echo "schema-service user-service card-service view-service extension-service oss-service gateway-service"
+    echo "schema-service user-service card-service view-service history-service comment-service oss-service gateway-service"
 }
 
 check_port() {

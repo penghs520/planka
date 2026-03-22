@@ -28,7 +28,8 @@ get_service_port() {
         user-service) echo "8082" ;;
         card-service) echo "8083" ;;
         view-service) echo "8084" ;;
-        extension-service) echo "8085" ;;
+        history-service) echo "18105" ;;
+        comment-service) echo "18106" ;;
         oss-service) echo "8088" ;;
         gateway-service) echo "8000" ;;
         *) echo "" ;;
@@ -37,7 +38,7 @@ get_service_port() {
 
 # 列出所有服务
 list_services() {
-    echo "schema-service user-service card-service view-service extension-service oss-service gateway-service"
+    echo "schema-service user-service card-service view-service history-service comment-service oss-service gateway-service"
 }
 
 check_port() {

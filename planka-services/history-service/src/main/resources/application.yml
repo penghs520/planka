@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: extension-service
+    name: history-service
   # 国际化消息配置
   messages:
     basename: i18n/messages
@@ -16,7 +16,7 @@ spring:
         server-addr: localhost:28848
         namespace: public
   datasource:
-    url: jdbc:mysql://localhost:23306/planka_extension?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:23306/planka_history?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -30,12 +30,12 @@ spring:
   kafka:
     bootstrap-servers: localhost:29092
     consumer:
-      group-id: extension-service
+      group-id: history-service
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: cn.planka.event,cn.planka.event.card,cn.planka.event.comment
+        spring.json.trusted.packages: cn.planka.event,cn.planka.event.card
 
 # MyBatis Plus
 mybatis-plus:
@@ -45,11 +45,6 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: input
-
-# 评论配置
-comment:
-  # 撤回时间限制（秒）
-  withdraw-time-limit: 120
 
 # Logging
 logging:
