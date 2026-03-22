@@ -426,15 +426,16 @@ async function handleFieldConfigCreated() {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 4px 6px;
+  align-items: stretch;
+  gap: 2px 4px;
 }
 
 .feishu-inline-tab {
+  position: relative;
   margin: 0;
-  padding: 4px 8px;
+  padding: 6px 10px 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 6px 6px 0 0;
   background: transparent;
   color: var(--color-text-2);
   font: inherit;
@@ -450,8 +451,19 @@ async function handleFieldConfigCreated() {
 }
 
 .feishu-inline-tab--active {
-  color: var(--color-text-1);
+  color: var(--color-primary);
   font-weight: 600;
+}
+
+.feishu-inline-tab--active::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--color-primary);
 }
 
 .feishu-inline-tab:focus-visible {
@@ -498,6 +510,7 @@ async function handleFieldConfigCreated() {
   align-items: center;
   padding-top: 10px;
   padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-border-2);
 }
 
 .card-type-form-drawer .arco-drawer-title {

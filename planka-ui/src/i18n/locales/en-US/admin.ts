@@ -111,7 +111,7 @@ export default {
     // Tabs
     tabs: {
       basic: 'Basic Info',
-      fields: 'Field Configuration',
+      fields: 'Field Management',
       valueStream: 'Value Stream',
       pageLayout: 'Page Layout',
       permission: 'Permission',
@@ -334,9 +334,10 @@ targetFieldsRequired: 'Please select target fields',
       confirmDeleteContent: 'Are you sure you want to delete field "{name}"? This action cannot be undone.',
       deleteSuccess: 'Deleted successfully',
       deleteFailed: 'Failed to delete',
-      emptyDescription: 'No field configurations',
+      emptyDescription: 'No fields yet',
+      listSearchPlaceholder: 'Search by name or system identifier',
       // Create new field config
-      createNew: 'New Field Config',
+      createNew: 'New Field',
       createNewWithType: 'New {type} Field',
       selectFieldType: 'Select Field Type',
       createSuccess: 'Field configuration created successfully',
