@@ -36,7 +36,6 @@ SERVICES=(
     "planka-services/view-service"
     "planka-services/oss/oss-service"
     "planka-services/extension-service"
-    "planka-services/notification/notification-service"
     "planka-services/schema-service"
 )
 
@@ -47,19 +46,18 @@ SERVICE_NAMES=(
     "视图服务"
     "OSS服务"
     "扩展服务"
-    "通知服务"
     "Schema服务"
 )
 
+# 与各服务 application.yml 中 server.port 一致（顺序同 SERVICES）
 SERVICE_PORTS=(
-    "18000"
-    "18100"
-    "18101"
-    "18102"
-    "18103"
-    "18104"
-    "18105"
-    "18107"
+    "18000"   # gateway-service
+    "18101"   # card-service
+    "18102"   # user-service
+    "18103"   # view-service
+    "18104"   # oss-service
+    "18105"   # extension-service
+    "18100"   # schema-service
 )
 
 RED='\033[0;31m'

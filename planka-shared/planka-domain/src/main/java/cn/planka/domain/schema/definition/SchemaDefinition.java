@@ -20,8 +20,6 @@ import cn.planka.domain.schema.definition.template.CardDetailTemplateDefinition;
 import cn.planka.domain.schema.definition.template.CardCreatePageTemplateDefinition;
 import cn.planka.domain.schema.definition.template.CardFaceDefinition;
 import cn.planka.domain.schema.definition.view.ListViewDefinition;
-import cn.planka.domain.notification.NotificationChannelConfigDefinition;
-import cn.planka.domain.notification.NotificationTemplateDefinition;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -84,10 +82,6 @@ import java.util.Set;
 
         // ==================== 卡片动作 ====================
         @JsonSubTypes.Type(value = CardActionConfigDefinition.class, name = SchemaSubType.CARD_ACTION_CONFIG),
-
-        // ==================== 通知配置 ====================
-        @JsonSubTypes.Type(value = NotificationChannelConfigDefinition.class, name = SchemaSubType.NOTIFICATION_CHANNEL_CONFIG),
-        @JsonSubTypes.Type(value = NotificationTemplateDefinition.class, name = SchemaSubType.NOTIFICATION_TEMPLATE),
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public interface SchemaDefinition<ID extends SchemaId> {

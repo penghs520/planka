@@ -11,7 +11,6 @@ import IconStructure from '@/components/icons/IconStructure.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
 import IconFormulaDefinition from '@/components/icons/IconFormulaDefinition.vue'
 import IconCardType from '@/components/icons/IconCardType.vue'
-import IconNotification from '@/components/icons/IconNotification.vue'
 import { usePermission } from '@/hooks/usePermission'
 import OrgSelector from '@/components/auth/OrgSelector.vue'
 import UserDropdown from '@/components/auth/UserDropdown.vue'
@@ -113,7 +112,6 @@ const menuGroups: MenuGroup[] = [
     labelKey: 'admin.menuGroup.operations',
     items: [
       { key: 'audit-log', titleKey: 'admin.menu.auditLog', icon: IconAuditLog, path: '/admin/audit-log' },
-      { key: 'notification-settings', titleKey: 'admin.menu.notificationSettings', icon: IconNotification, path: '/admin/notification-settings' },
     ],
   },
   {

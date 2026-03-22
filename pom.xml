@@ -174,17 +174,6 @@
                 <artifactId>oss-plugin-minio</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>cn.planka</groupId>
-                <artifactId>notification-plugin-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.planka</groupId>
-                <artifactId>notification-plugin-builtin</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <!-- 工具库 -->
             <dependency>
                 <groupId>org.projectlombok</groupId>

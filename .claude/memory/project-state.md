@@ -19,8 +19,7 @@
 | User Service | 18101 |
 | View Service | 18102 |
 | OSS Service | 18103 |
-| Extension Service | 18104 |
-| Notification Service | 18105 |
+| Extension Service | 18105 |
 | Schema Service | 18107 |
 | Nacos | 28848 |
 | MySQL | 23306 |

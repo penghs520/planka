@@ -4,7 +4,8 @@
 # 支持按端口或按应用名称停止
 
 # 服务端口号列表
-PORTS=(8000 8100 8101 8102 8103 8104 8105 8107)
+# 与 planka-dev.sh 中各服务端口对应（18xxx → 8xxx，便于与常见本地端口区分）
+PORTS=(8000 8100 8101 8102 8103 8104 8105)
 
 # 服务名称列表
 SERVICE_NAMES=(
@@ -15,7 +16,6 @@ SERVICE_NAMES=(
   "view-service"
   "oss-service"
   "extension-service"
-  "notification-service"
 )
 
 # 颜色定义

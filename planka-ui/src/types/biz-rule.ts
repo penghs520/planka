@@ -37,7 +37,6 @@ export enum RuleActionType {
   CREATE_CARD = 'CREATE_CARD',
   CREATE_LINKED_CARD = 'CREATE_LINKED_CARD',
   COMMENT_CARD = 'COMMENT_CARD',
-  SEND_NOTIFICATION = 'SEND_NOTIFICATION',
   TRACK_USER_BEHAVIOR = 'TRACK_USER_BEHAVIOR',
   CALL_EXTERNAL_API = 'CALL_EXTERNAL_API',
 }
@@ -186,15 +185,6 @@ export interface CommentCardAction extends BaseRuleAction {
 }
 
 /**
- * 发送通知动作
- */
-export interface SendNotificationAction extends BaseRuleAction {
-  actionType: RuleActionType.SEND_NOTIFICATION
-  /** 通知模板ID列表（多选） */
-  templateIds: string[]
-}
-
-/**
  * 用户行为追踪动作
  */
 export interface TrackUserBehaviorAction extends BaseRuleAction {
@@ -227,7 +217,6 @@ export type RuleAction =
   | CreateCardAction
   | CreateLinkedCardAction
   | CommentCardAction
-  | SendNotificationAction
   | TrackUserBehaviorAction
   | CallExternalApiAction
 
@@ -354,12 +343,6 @@ export function validateRuleAction(
       const a = action as CommentCardAction
       if (!a.contentTemplate)
         return t('admin.bizRule.actionConfig.contentTemplateRequired')
-      break
-    }
-    case RuleActionType.SEND_NOTIFICATION: {
-      const a = action as SendNotificationAction
-      if (!a.templateIds || a.templateIds.length === 0)
-        return t('admin.bizRule.actionConfig.templateIdsRequired')
       break
     }
     case RuleActionType.TRACK_USER_BEHAVIOR: {

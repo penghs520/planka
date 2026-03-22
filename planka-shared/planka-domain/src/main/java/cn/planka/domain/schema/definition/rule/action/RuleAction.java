@@ -18,14 +18,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = CreateCardAction.class, name = "CREATE_CARD"),
         @JsonSubTypes.Type(value = CreateLinkedCardAction.class, name = "CREATE_LINKED_CARD"),
         @JsonSubTypes.Type(value = CommentCardAction.class, name = "COMMENT_CARD"),
-        @JsonSubTypes.Type(value = SendNotificationAction.class, name = "SEND_NOTIFICATION"),
         @JsonSubTypes.Type(value = TrackUserBehaviorAction.class, name = "TRACK_USER_BEHAVIOR"),
         @JsonSubTypes.Type(value = CallExternalApiAction.class, name = "CALL_EXTERNAL_API")
 })
 public sealed interface RuleAction
         permits DiscardCardAction, ArchiveCardAction, RestoreCardAction,
         MoveCardAction, UpdateCardAction, CreateCardAction,
-        CreateLinkedCardAction, CommentCardAction, SendNotificationAction,
+        CreateLinkedCardAction, CommentCardAction,
         TrackUserBehaviorAction, CallExternalApiAction {
 
     /**

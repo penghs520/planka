@@ -294,36 +294,6 @@ export const routes: RouteRecordRaw[] = [
               activeMenu: 'audit-log',
             },
           },
-          // 通知设置
-          {
-            path: 'notification-settings',
-            name: 'NotificationSettings',
-            component: () => import('@/views/admin/notification-settings/index.vue'),
-            meta: {
-              titleKey: 'admin.notificationSettings.title',
-              activeMenu: 'notification-settings',
-            },
-          },
-          // 通知插件管理
-          {
-            path: 'notification-plugins',
-            name: 'NotificationPlugins',
-            component: () => import('@/views/admin/notification-plugins/index.vue'),
-            meta: {
-              titleKey: 'admin.plugin.title',
-              activeMenu: 'notification-plugins',
-            },
-          },
-          // 渠道配置
-          {
-            path: 'notification-channels/:channelId/config',
-            name: 'ChannelConfig',
-            component: () => import('@/views/admin/notification-channels/config.vue'),
-            meta: {
-              titleKey: 'admin.channel.config',
-              activeMenu: 'notification-plugins',
-            },
-          },
         ],
       },
     ],

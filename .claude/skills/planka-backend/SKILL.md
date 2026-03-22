@@ -22,7 +22,6 @@ planka-services/
 ├── view-service/         # 视图数据服务 (18102)
 ├── user-service/         # 用户认证服务 (18101)
 ├── extension-service/    # 扩展服务 (18104)
-├── notification/         # 通知服务 (18105)
 └── oss/                  # 对象存储服务 (18103)
 ```
 

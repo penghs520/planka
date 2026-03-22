@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 接收者选择器
  * <p>
- * 定义通知的接收人选择策略。
+ * 定义规则动作中的接收人选择策略。
  * 支持两种模式：
  * 1. 单选择器模式（向后兼容）：使用 selectorType + memberIds/fieldId/linkPath
  * 2. 多选择器模式：使用 selectors 列表，多个选择器的结果取并集

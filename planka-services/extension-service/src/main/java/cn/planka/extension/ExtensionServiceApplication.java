@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 /**
  * Extension Service 启动类
  * <p>
- * 扩展服务 - 操作历史、附件管理、通知、业务规则、评论等扩展功能
+ * 扩展服务 - 操作历史、附件管理、业务规则、评论等扩展功能
  */
 @SpringBootApplication(scanBasePackages = {"cn.planka"})
 @EnableDiscoveryClient

@@ -34,10 +34,6 @@ export enum SchemaType {
   CARD_PERMISSION = 'CARD_PERMISSION',
   /** 菜单定义 */
   MENU = 'MENU',
-  /** 通知模板 */
-  NOTIFICATION_TEMPLATE = 'NOTIFICATION_TEMPLATE',
-  /** 通知渠道配置 */
-  NOTIFICATION_CHANNEL_CONFIG = 'NOTIFICATION_CHANNEL_CONFIG',
   /** 计算公式定义 */
   FORMULA_DEFINITION = 'FORMULA_DEFINITION',
   /** 卡片动作 */
@@ -147,14 +143,6 @@ export enum SchemaSubType {
   // ==================== 卡片动作 ====================
   /** 卡片动作配置 */
   CARD_ACTION_CONFIG = 'CARD_ACTION_CONFIG',
-
-  // ==================== 通知渠道配置 ====================
-  /** 通知渠道配置 */
-  NOTIFICATION_CHANNEL_CONFIG = 'NOTIFICATION_CHANNEL_CONFIG',
-
-  // ==================== 通知模板 ====================
-  /** 通知模板 */
-  NOTIFICATION_TEMPLATE = 'NOTIFICATION_TEMPLATE',
 }
 
 /**
@@ -175,8 +163,6 @@ export const SchemaTypeConfig: Record<SchemaType, { label: string; requiresBelon
   [SchemaType.CARD_FACE]: { label: '卡面定义', requiresBelongTo: true },
   [SchemaType.CARD_PERMISSION]: { label: '权限定义', requiresBelongTo: true },
   [SchemaType.MENU]: { label: '菜单定义', requiresBelongTo: false },
-  [SchemaType.NOTIFICATION_TEMPLATE]: { label: '通知模板', requiresBelongTo: false },
-  [SchemaType.NOTIFICATION_CHANNEL_CONFIG]: { label: '通知渠道配置', requiresBelongTo: false },
   [SchemaType.CARD_ACTION]: { label: '卡片动作', requiresBelongTo: true },
   [SchemaType.FORMULA_DEFINITION]: { label: '计算公式', requiresBelongTo: true },
 }
@@ -234,10 +220,6 @@ export const SchemaSubTypeConfig: Record<SchemaSubType, { label: string; categor
   [SchemaSubType.DATE_COLLECTION_FORMULA_DEFINITION]: { label: '日期汇集公式', category: SchemaType.FORMULA_DEFINITION },
   [SchemaSubType.CARD_COLLECTION_FORMULA_DEFINITION]: { label: '卡片汇集公式', category: SchemaType.FORMULA_DEFINITION },
   [SchemaSubType.NUMBER_CALCULATION_FORMULA_DEFINITION]: { label: '数值运算公式', category: SchemaType.FORMULA_DEFINITION },
-  // 通知渠道配置
-  [SchemaSubType.NOTIFICATION_CHANNEL_CONFIG]: { label: '通知渠道配置', category: SchemaType.NOTIFICATION_CHANNEL_CONFIG },
-  // 通知模板
-  [SchemaSubType.NOTIFICATION_TEMPLATE]: { label: '通知模板', category: SchemaType.NOTIFICATION_TEMPLATE },
 }
 
 /**

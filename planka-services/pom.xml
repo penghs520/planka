@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
 
     <name>planka Services</name>
-    <description>应用服务模块 - 数据服务（卡片以及记录的存储查询、权限控制）、视图服务、Schema服务、操作历史服务、通知服务、业务规则服务等</description>
+    <description>应用服务模块 - 数据服务（卡片以及记录的存储查询、权限控制）、视图服务、Schema服务、操作历史服务、业务规则服务等</description>
 
     <modules>
         <module>schema-service</module>
@@ -24,7 +24,6 @@
         <module>view-service</module>
         <module>extension-service</module>
         <module>oss</module>
-        <module>notification</module>
     </modules>
 
 </project>

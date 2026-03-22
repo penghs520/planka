@@ -83,16 +83,6 @@ public enum SchemaType {
     MENU("菜单定义", false),
 
     /**
-     * 通知渠道配置（组织级别）
-     */
-    NOTIFICATION_CHANNEL_CONFIG("通知渠道配置", false),
-
-    /**
-     * 通知模板（属于某个__PLANKA_EINST__）
-     */
-    NOTIFICATION_TEMPLATE("通知模板", true),
-
-    /**
      * 计算公式定义
      */
     FORMULA_DEFINITION("计算公式定义", false),

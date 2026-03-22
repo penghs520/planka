@@ -75,10 +75,6 @@ const SCHEMA_ROUTE_MAP: Record<string, SchemaRouteConfig> = {
     path: '',
     navigable: false,
   },
-  [SchemaType.NOTIFICATION_TEMPLATE]: {
-    path: '',
-    navigable: false,
-  },
 }
 
 /**
@@ -173,7 +169,6 @@ export function getSchemaTypeDisplayName(schemaType: string): string {
     [SchemaType.CARD_FACE]: 'common.schemaTypeName.CARD_FACE',
     [SchemaType.CARD_PERMISSION]: 'common.schemaTypeName.CARD_PERMISSION',
     [SchemaType.MENU]: 'common.schemaTypeName.MENU',
-    [SchemaType.NOTIFICATION_TEMPLATE]: 'common.schemaTypeName.NOTIFICATION_TEMPLATE',
   }
   const key = keyMap[schemaType]
   return key ? t(key) : schemaType

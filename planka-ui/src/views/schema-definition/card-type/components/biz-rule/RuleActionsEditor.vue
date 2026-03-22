@@ -13,7 +13,6 @@ import {
   type CreateCardAction,
   type CreateLinkedCardAction,
   type CommentCardAction,
-  type SendNotificationAction,
   type CallExternalApiAction,
   type ActionTargetSelector as ActionTargetSelectorType,
   RuleActionType,
@@ -30,8 +29,6 @@ import ActionTargetSelector from './ActionTargetSelector.vue'
 import TextExpressionTemplateEditor from '@/components/common/text-expression-template/TextExpressionTemplateEditor.vue'
 import type { FieldProvider } from '@/components/common/text-expression-template/types'
 import { getMemberFieldsCached } from '@/views/schema-definition/card-type/components/permission/memberFieldsCache'
-import { notificationTemplateApi, type NotificationTemplateDefinition } from '@/api/notification-template'
-
 const { t } = useI18n()
 const orgStore = useOrgStore()
 
@@ -183,26 +180,6 @@ function getActionStatusOptions(index: number, action: RuleAction): StatusOption
   return actionTargetStatusOptions.value.get(index) || []
 }
 
-// 通知模板列表
-const notificationTemplates = ref<NotificationTemplateDefinition[]>([])
-const loadingTemplates = ref(false)
-
-async function loadNotificationTemplates() {
-  if (!props.cardTypeId) return
-  loadingTemplates.value = true
-  try {
-    notificationTemplates.value = await notificationTemplateApi.listByCardType(props.cardTypeId)
-  } catch (e) {
-    console.error('Failed to load notification templates:', e)
-  } finally {
-    loadingTemplates.value = false
-  }
-}
-
-watch(() => props.cardTypeId, (newVal) => {
-  if (newVal) loadNotificationTemplates()
-}, { immediate: true })
-
 // 当前实体类型的状态选项
 const currentCardTypeStatusOptions = ref<StatusOption[]>([])
 
@@ -270,7 +247,6 @@ const actionTypeOptions = computed(() => [
   { label: t('admin.bizRule.actionType.CREATE_CARD'), value: RuleActionType.CREATE_CARD },
   { label: t('admin.bizRule.actionType.CREATE_LINKED_CARD'), value: RuleActionType.CREATE_LINKED_CARD },
   { label: t('admin.bizRule.actionType.COMMENT_CARD'), value: RuleActionType.COMMENT_CARD },
-  { label: t('admin.bizRule.actionType.SEND_NOTIFICATION'), value: RuleActionType.SEND_NOTIFICATION },
   { label: t('admin.bizRule.actionType.CALL_EXTERNAL_API'), value: RuleActionType.CALL_EXTERNAL_API },
 ])
 
@@ -354,13 +330,6 @@ function createDefaultAction(actionType: RuleActionType, sortOrder: number): Rul
         target: baseTarget,
         contentTemplate: '',
       } as CommentCardAction
-
-    case RuleActionType.SEND_NOTIFICATION:
-      return {
-        actionType,
-        sortOrder,
-        templateIds: [],
-      } as SendNotificationAction
 
     case RuleActionType.CALL_EXTERNAL_API:
       return {
@@ -498,16 +467,6 @@ function getTimeout(action: RuleAction): number {
 // 设置超时时间
 function setTimeout(index: number, value: number) {
   updateAction(index, { timeoutMs: value } as any)
-}
-
-// 获取通知模板ID列表
-function getTemplateIds(action: RuleAction): string[] {
-  return (action as SendNotificationAction).templateIds || []
-}
-
-// 设置通知模板ID列表
-function setTemplateIds(index: number, value: string[]) {
-  updateAction(index, { templateIds: value } as Partial<SendNotificationAction>)
 }
 
 // 获取创建实体类型
@@ -657,11 +616,6 @@ function hasActionConfig(action: RuleAction): boolean {
   if (action.actionType === RuleActionType.COMMENT_CARD) {
     const a = action as CommentCardAction
     return !!a.contentTemplate
-  }
-  // SEND_NOTIFICATION 检查模板
-  if (action.actionType === RuleActionType.SEND_NOTIFICATION) {
-    const a = action as SendNotificationAction
-    return (a.templateIds?.length || 0) > 0
   }
   // CALL_EXTERNAL_API 检查 URL
   if (action.actionType === RuleActionType.CALL_EXTERNAL_API) {
@@ -897,21 +851,6 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
                 :field-provider="expressionFieldProvider"
                 :placeholder="t('admin.bizRule.actionConfig.commentPlaceholder')"
                 @update:model-value="(val: string) => setCommentContent(index, val)"
-              />
-            </a-form-item>
-          </template>
-
-          <!-- SEND_NOTIFICATION 配置 - 简化版 -->
-          <template v-else-if="action.actionType === RuleActionType.SEND_NOTIFICATION">
-            <a-form-item :label="t('admin.bizRule.actionConfig.notificationTemplates')">
-              <a-select
-                :model-value="getTemplateIds(action)"
-                :options="notificationTemplates.map(t => ({ label: t.name, value: t.id }))"
-                :loading="loadingTemplates"
-                multiple
-                allow-clear
-                :placeholder="t('admin.bizRule.actionConfig.selectTemplatesPlaceholder')"
-                @update:model-value="(val: string[]) => setTemplateIds(index, val)"
               />
             </a-form-item>
           </template>

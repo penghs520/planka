@@ -83,10 +83,4 @@ public final class SchemaSubType {
     /** 卡片动作配置 */
     public static final String CARD_ACTION_CONFIG = "CARD_ACTION_CONFIG";
 
-    // ==================== 通知配置 ====================
-    /** 通知渠道配置 */
-    public static final String NOTIFICATION_CHANNEL_CONFIG = "NOTIFICATION_CHANNEL_CONFIG";
-    /** 通知模板 */
-    public static final String NOTIFICATION_TEMPLATE = "NOTIFICATION_TEMPLATE";
-
 }
