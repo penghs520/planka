@@ -5,7 +5,7 @@ import { VueFlow } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
-import type { Node, Edge, VueFlowStore, GraphEdge, NodeTypesObject, EdgeTypesObject } from '@vue-flow/core'
+import type { Node, Edge, VueFlowStore, GraphEdge, NodeTypesObject, EdgeTypesObject, Connection } from '@vue-flow/core'
 import { MarkerType } from '@vue-flow/core'
 import { Message, Modal } from '@arco-design/web-vue'
 import {
@@ -731,6 +731,49 @@ function handleCreate() {
   drawerVisible.value = true
 }
 
+// Handle connect event - user drags a line between two nodes
+function onConnect(connection: Connection) {
+  const sourceNode = (nodes.value as Node[]).find(n => n.id === connection.source)
+  const targetNode = (nodes.value as Node[]).find(n => n.id === connection.target)
+  if (!sourceNode || !targetNode) return
+
+  // Extract card type IDs from nodes
+  const sourceCardTypeIds: string[] = []
+  const targetCardTypeIds: string[] = []
+
+  if (sourceNode.data.mode === 'single' && sourceNode.data.entityId) {
+    sourceCardTypeIds.push(sourceNode.data.entityId as string)
+  } else if (sourceNode.data.mode === 'combo' && sourceNode.data.abstractTypes) {
+    for (const at of sourceNode.data.abstractTypes as { id: string }[]) {
+      sourceCardTypeIds.push(at.id)
+    }
+  }
+
+  if (targetNode.data.mode === 'single' && targetNode.data.entityId) {
+    targetCardTypeIds.push(targetNode.data.entityId as string)
+  } else if (targetNode.data.mode === 'combo' && targetNode.data.abstractTypes) {
+    for (const at of targetNode.data.abstractTypes as { id: string }[]) {
+      targetCardTypeIds.push(at.id)
+    }
+  }
+
+  // Open create drawer with pre-filled card types
+  drawerMode.value = 'create'
+  editingLinkType.value = null
+  formData.value = {
+    name: '',
+    sourceName: '',
+    targetName: '',
+    sourceVisible: true,
+    targetVisible: true,
+    sourceMultiSelect: false,
+    targetMultiSelect: false,
+    sourceCardTypeIds,
+    targetCardTypeIds,
+  }
+  drawerVisible.value = true
+}
+
 // Open edit drawer
 async function openEditDrawer(linkTypeId: string) {
   try {
@@ -1332,6 +1375,7 @@ onMounted(() => {
         @pane-ready="onPaneReady"
         @node-double-click="onNodeDoubleClick"
         @node-drag-stop="onNodeDragStop"
+        @connect="onConnect"
       >
         <Background pattern-color="#e2e8f0" :gap="20" />
         <Controls position="bottom-right" />

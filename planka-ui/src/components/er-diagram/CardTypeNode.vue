@@ -64,17 +64,17 @@ function toggleFieldsSection() {
   >
     <!-- Connection handles - multiple handles per side for parallel edges -->
     <!-- Left handles -->
-    <Handle id="left-top" type="target" :position="Position.Left" class="handle handle-left" :style="{ top: '30%' }" />
-    <Handle id="left" type="target" :position="Position.Left" class="handle handle-left" :style="{ top: '50%' }" />
-    <Handle id="left-bottom" type="target" :position="Position.Left" class="handle handle-left" :style="{ top: '70%' }" />
+    <Handle id="left-top" type="source" :position="Position.Left" class="handle handle-left" :style="{ top: '30%' }" />
+    <Handle id="left" type="source" :position="Position.Left" class="handle handle-left" :style="{ top: '50%' }" />
+    <Handle id="left-bottom" type="source" :position="Position.Left" class="handle handle-left" :style="{ top: '70%' }" />
     <!-- Right handles -->
     <Handle id="right-top" type="source" :position="Position.Right" class="handle handle-right" :style="{ top: '30%' }" />
     <Handle id="right" type="source" :position="Position.Right" class="handle handle-right" :style="{ top: '50%' }" />
     <Handle id="right-bottom" type="source" :position="Position.Right" class="handle handle-right" :style="{ top: '70%' }" />
     <!-- Top handles -->
-    <Handle id="top-left" type="target" :position="Position.Top" class="handle handle-top" :style="{ left: '30%' }" />
-    <Handle id="top" type="target" :position="Position.Top" class="handle handle-top" :style="{ left: '50%' }" />
-    <Handle id="top-right" type="target" :position="Position.Top" class="handle handle-top" :style="{ left: '70%' }" />
+    <Handle id="top-left" type="source" :position="Position.Top" class="handle handle-top" :style="{ left: '30%' }" />
+    <Handle id="top" type="source" :position="Position.Top" class="handle handle-top" :style="{ left: '50%' }" />
+    <Handle id="top-right" type="source" :position="Position.Top" class="handle handle-top" :style="{ left: '70%' }" />
     <!-- Bottom handles -->
     <Handle id="bottom-left" type="source" :position="Position.Bottom" class="handle handle-bottom" :style="{ left: '30%' }" />
     <Handle id="bottom" type="source" :position="Position.Bottom" class="handle handle-bottom" :style="{ left: '50%' }" />
