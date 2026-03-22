@@ -461,14 +461,6 @@ onMounted(async () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.trait-card {
-  border-left: 3px solid #722ED1;
-}
-
-.entity-card {
-  border-left: 3px solid #3370FF;
-}
-
 .type-card :deep(.arco-card-body) {
   padding: 14px 16px;
   display: flex;
