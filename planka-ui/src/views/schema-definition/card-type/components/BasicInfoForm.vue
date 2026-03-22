@@ -255,6 +255,14 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
 <template>
   <div class="basic-info-form-container">
     <a-form ref="formRef" :model="formData" :rules="formRules" layout="vertical">
+      <section class="bio-section" aria-labelledby="bio-section-basic">
+        <header class="bio-section__head">
+          <h3 id="bio-section-basic" class="bio-section__title">
+            <span class="bio-section__bar" aria-hidden="true" />
+            {{ t('admin.cardType.form.sectionBasic') }}
+          </h3>
+        </header>
+
       <!-- 新建模式：实体类型种类选择 -->
     <a-form-item v-if="mode === 'create'">
       <template #label>
@@ -304,11 +312,17 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
     </a-form-item>
 
     <!-- 名称和编码 -->
-    <a-row :gutter="32">
+    <a-row :gutter="24">
       <a-col :span="12">
-        <a-form-item :label="t('admin.cardType.form.name')" field="name" :validate-trigger="['change', 'blur']">
+        <a-form-item
+          :label="t('admin.cardType.form.name')"
+          field="name"
+          asterisk-position="end"
+          :validate-trigger="['change', 'blur']"
+        >
           <a-input
             v-model="formData.name"
+            class="bio-input-surface"
             :placeholder="t('admin.cardType.form.namePlaceholder')"
             :max-length="50"
           />
@@ -322,6 +336,7 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
           </template>
           <a-input
             v-model="formData.code"
+            class="bio-input-surface"
             :placeholder="t('admin.cardType.form.codePlaceholder')"
             :max-length="50"
           />
@@ -358,6 +373,30 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
         :placeholder="t('admin.cardType.form.parentTypesPlaceholder')"
       />
     </a-form-item>
+
+    <!-- 描述（归入基础信息区块） -->
+    <a-form-item :label="t('admin.cardType.form.description')">
+      <a-textarea
+        v-model="formData.description"
+        class="bio-input-surface"
+        :placeholder="t('admin.cardType.form.descriptionPlaceholder')"
+        :max-length="200"
+        :auto-size="{ minRows: 3, maxRows: 6 }"
+      />
+    </a-form-item>
+      </section>
+
+      <section
+        v-if="formData.schemaSubType === SchemaSubType.ENTITY_CARD_TYPE"
+        class="bio-section"
+        aria-labelledby="bio-section-rules"
+      >
+        <header class="bio-section__head">
+          <h3 id="bio-section-rules" class="bio-section__title">
+            <span class="bio-section__bar" aria-hidden="true" />
+            {{ t('admin.cardType.form.sectionNumberingAndTitle') }}
+          </h3>
+        </header>
 
     <!-- 编号生成规则 -->
     <a-form-item
@@ -507,24 +546,74 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
       </a-space>
     </a-form-item>
 
-    <!-- 描述 -->
-    <a-form-item :label="t('admin.cardType.form.description')">
-      <a-textarea
-        v-model="formData.description"
-        :placeholder="t('admin.cardType.form.descriptionPlaceholder')"
-        :max-length="200"
-        :auto-size="{ minRows: 2, maxRows: 4 }"
-      />
-    </a-form-item>
+      </section>
     </a-form>
   </div>
 </template>
 
 <style scoped>
 .basic-info-form-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
   height: 100%;
   overflow-y: auto;
-  padding: 0 12px; /* Prevent horizontal scrollbar caused by a-row gutter negative margins */
+  padding: 24px 12px 12px;
+}
+
+.bio-section {
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-border-2);
+}
+
+.bio-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.bio-section__head {
+  margin-bottom: 20px;
+}
+
+.bio-section__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-1);
+  line-height: 22px;
+}
+
+.bio-section__bar {
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* 参考稿：浅底输入区 */
+:deep(.bio-input-surface.arco-input-wrapper),
+:deep(.bio-input-surface.arco-textarea-wrapper) {
+  background-color: var(--color-fill-1) !important;
+  border-color: var(--color-border-2);
+  border-radius: var(--radius-md);
+}
+
+:deep(.bio-input-surface.arco-input-wrapper:hover),
+:deep(.bio-input-surface.arco-textarea-wrapper:hover) {
+  background-color: var(--color-fill-2) !important;
+  border-color: var(--color-border-3);
+}
+
+:deep(.bio-input-surface.arco-input-wrapper.arco-input-focus),
+:deep(.bio-input-surface.arco-textarea-wrapper:focus-within) {
+  background-color: var(--color-bg-2) !important;
 }
 
 /* 类型帮助内容 */

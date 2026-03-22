@@ -7,13 +7,13 @@ import { IconFile, IconTag } from '@arco-design/web-vue/es/icon'
 import { cardTypeApi } from '@/api'
 import { useOrgStore } from '@/stores/org'
 import SaveButton from '@/components/common/SaveButton.vue'
-import CancelButton from '@/components/common/CancelButton.vue'
 import BasicInfoForm from './components/BasicInfoForm.vue'
 import FieldConfigTab from './components/FieldConfigTab.vue'
 import PageLayoutTab from './components/PageLayoutTab.vue'
 import ValueStreamTab from './components/ValueStreamTab.vue'
 import PermissionTab from './components/PermissionTab.vue'
 import CardActionsTab from './components/CardActionsTab.vue'
+import FlowManagementTab from './components/FlowManagementTab.vue'
 import BizRulesTab from './components/BizRulesTab.vue'
 import FieldConfigDrawer from './FieldConfigDrawer.vue'
 import CreateFieldConfigDrawer from './CreateFieldConfigDrawer.vue'
@@ -48,6 +48,15 @@ const formData = ref<CardTypeDefinition | null>(null)
 const selectedSubType = ref<SchemaSubType.TRAIT_CARD_TYPE | SchemaSubType.ENTITY_CARD_TYPE>(SchemaSubType.ENTITY_CARD_TYPE)
 const activeTab = ref('basic')
 const fieldList = ref<FieldConfigListWithSource | null>(null)
+
+/** 与 props.mode 同步；创建成功后置为 edit，便于继续配置其它 Tab */
+const effectiveMode = ref<'create' | 'edit'>('create')
+
+const showFooter = computed(
+  () =>
+    effectiveMode.value === 'create'
+    || (effectiveMode.value === 'edit' && activeTab.value === 'basic'),
+)
 
 // 属性配置详情抽屉
 const fieldConfigDrawerVisible = ref(false)
@@ -89,6 +98,7 @@ const cardTypeEditTabItems = computed(() => {
     { key: 'pageLayout', label: t('admin.cardType.tabs.pageLayout') },
     { key: 'permission', label: t('admin.cardType.tabs.permission') },
     { key: 'cardButtons', label: t('admin.cardType.tabs.cardButtons') },
+    { key: 'flowManagement', label: t('admin.cardType.tabs.flowManagement') },
     { key: 'businessRules', label: t('admin.cardType.tabs.businessRules') },
   ]
 })
@@ -102,14 +112,14 @@ const drawerTitle = computed(() => {
 
 // 监听 selectedSubType 变化（仅新建模式）
 watch(selectedSubType, (newSubType) => {
-  if (props.mode === 'create' && orgStore.currentOrgId) {
+  if (effectiveMode.value === 'create' && orgStore.currentOrgId) {
     formData.value = createEmptyCardType(newSubType, orgStore.currentOrgId)
   }
 })
 
 // 监听 tab 切换，懒加载属性配置数据
 watch(activeTab, async (newTab) => {
-  if (newTab === 'fields' && props.mode === 'edit' && formData.value?.id && !fieldList.value) {
+  if (newTab === 'fields' && effectiveMode.value === 'edit' && formData.value?.id && !fieldList.value) {
     loading.value = true
     try {
       fieldList.value = await cardTypeApi.getFieldConfigsWithSource(formData.value.id)
@@ -124,6 +134,7 @@ watch(activeTab, async (newTab) => {
 
 // 初始化抽屉数据
 async function initDrawer() {
+  effectiveMode.value = props.mode
   activeTab.value = 'basic'
   fieldList.value = null
 
@@ -151,18 +162,20 @@ async function doSubmit() {
 
   saving.value = true
   try {
-    if (props.mode === 'create') {
-      await cardTypeApi.create(formData.value)
+    if (effectiveMode.value === 'create') {
+      const created = await cardTypeApi.create(formData.value)
+      formData.value = created
+      effectiveMode.value = 'edit'
       Message.success(t('admin.message.createSuccess'))
     } else {
-      await cardTypeApi.update(
+      const updated = await cardTypeApi.update(
         formData.value.id!,
         formData.value,
         formData.value.contentVersion,
       )
+      formData.value = updated
       Message.success(t('admin.message.saveSuccess'))
     }
-    drawerVisible.value = false
     emit('success')
   } catch (error) {
     console.error('Failed to save:', error)
@@ -218,15 +231,16 @@ async function handleFieldConfigCreated() {
   <a-drawer
     v-model:visible="drawerVisible"
     class="card-type-form-drawer"
-    :width="mode === 'create' ? 800 : 1100"
-    :body-class="mode === 'edit' ? 'card-type-form-drawer-body' : undefined"
+    :width="effectiveMode === 'create' ? 800 : 1100"
+    :body-class="effectiveMode === 'edit' ? 'card-type-form-drawer-body' : undefined"
+    :footer="showFooter"
     :mask-closable="true"
     :esc-to-close="true"
     unmount-on-close
     @before-open="initDrawer"
   >
     <template #title>
-      <template v-if="mode === 'create'">{{ drawerTitle }}</template>
+      <template v-if="effectiveMode === 'create'">{{ drawerTitle }}</template>
       <div v-else class="feishu-drawer-header-row">
         <div class="feishu-drawer-brand">
           <span
@@ -257,15 +271,15 @@ async function handleFieldConfigCreated() {
         </nav>
       </div>
     </template>
-    <a-spin :loading="loading && mode === 'edit'" class="drawer-spin">
+    <a-spin :loading="loading && effectiveMode === 'edit'" class="drawer-spin">
       <div v-if="formData" class="drawer-content">
         <!-- 新建模式：基础表单 -->
-        <template v-if="mode === 'create'">
+        <template v-if="effectiveMode === 'create'">
           <BasicInfoForm
             v-model:form-ref="formRef"
             v-model:selected-sub-type="selectedSubType"
             :form-data="formData"
-            :mode="mode"
+            :mode="effectiveMode"
           />
         </template>
 
@@ -277,7 +291,7 @@ async function handleFieldConfigCreated() {
                 v-show="activeTab === 'basic'"
                 v-model:form-ref="formRef"
                 :form-data="formData"
-                :mode="mode"
+                :mode="effectiveMode"
               />
 
               <!-- 单根包裹：FieldConfigTab 为多根片段，v-show 直接打在子组件上无法隐藏全部根节点 -->
@@ -318,6 +332,12 @@ async function handleFieldConfigCreated() {
                 :card-type-name="formData.name"
               />
 
+              <FlowManagementTab
+                v-if="isEntityType && activeTab === 'flowManagement' && formData?.id"
+                :card-type-id="formData.id"
+                :card-type-name="formData.name"
+              />
+
               <BizRulesTab
                 v-if="isEntityType && activeTab === 'businessRules' && formData?.id"
                 :card-type-id="formData.id"
@@ -330,14 +350,11 @@ async function handleFieldConfigCreated() {
     </a-spin>
 
     <template #footer>
-      <a-space>
-        <CancelButton @click="drawerVisible = false" />
-        <SaveButton
-          :loading="saving"
-          :text="mode === 'create' ? t('admin.action.create') : t('admin.action.save')"
-          @click="handleSubmit"
-        />
-      </a-space>
+      <SaveButton
+        :loading="saving"
+        :text="t('admin.cardType.saveConfig')"
+        @click="handleSubmit"
+      />
     </template>
   </a-drawer>
 
@@ -382,7 +399,7 @@ async function handleFieldConfigCreated() {
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding-top: 4px;
+  padding-top: 12px;
 }
 
 /* 标题行：左侧图标+名称，右侧可换行标签（与关闭按钮同一 header 行） */
