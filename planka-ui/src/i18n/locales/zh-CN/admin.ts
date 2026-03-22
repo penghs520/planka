@@ -112,9 +112,7 @@ export default {
       basic: '基础信息',
       fields: '属性配置',
       valueStream: '价值流定义',
-      detailTemplate: '详情模板',
-      createPageTemplate: '新建页模板',
-      cardFace: '卡面模板',
+      pageLayout: '页面布局',
       permission: '权限配置',
       cardButtons: '卡片动作',
       businessRules: '业务规则',
@@ -209,8 +207,14 @@ export default {
         migrationFailed: '迁移失败',
       },
     },
+    /** 页面布局（详情页 + 新建页） */
+    pageLayout: {
+      tabs: {
+        detail: '详情页布局',
+        create: '新建页布局',
+      },
+    },
     // Empty states
-    cardFaceInDev: '卡面模板功能开发中...',
     createPageTemplateInDev: '新建页模板功能开发中...',
     cardButtonsInDev: '卡片按钮功能开发中...',
     businessRulesInDev: '业务规则功能开发中...',

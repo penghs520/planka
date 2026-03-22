@@ -133,8 +133,6 @@ export interface EntityCardType extends AbstractCardTypeDefinition {
   valueStreamId?: string
   /** 默认详情页模板 ID */
   defaultDetailTemplateId?: string
-  /** 默认卡面定义 ID */
-  defaultCardFaceId?: string
   /** 权限配置 */
   permissionConfig?: PermissionConfig
   /** 编号生成规则 */

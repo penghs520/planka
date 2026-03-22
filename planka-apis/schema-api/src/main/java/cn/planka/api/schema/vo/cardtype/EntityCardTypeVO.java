@@ -44,9 +44,4 @@ public class EntityCardTypeVO extends CardTypeVO {
      */
     private String valueStreamId;
 
-    /**
-     * 默认卡面定义 ID
-     */
-    private String defaultCardFaceId;
-
 }

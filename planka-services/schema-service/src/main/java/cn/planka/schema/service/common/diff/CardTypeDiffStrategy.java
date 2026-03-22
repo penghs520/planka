@@ -58,7 +58,6 @@ public class CardTypeDiffStrategy implements SchemaDiffStrategy {
         STRING_FIELDS.put("color", "颜色");
         STRING_FIELDS.put("valueStreamId", "价值流");
         STRING_FIELDS.put("defaultDetailTemplateId", "默认详情模板");
-        STRING_FIELDS.put("defaultCardFaceId", "默认卡面");
 
         BOOLEAN_FIELDS.put("enabled", "启用状态");
         BOOLEAN_FIELDS.put("systemType", "系统内置");

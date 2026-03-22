@@ -111,9 +111,7 @@ export default {
       basic: 'Basic Info',
       fields: 'Field Configuration',
       valueStream: 'Value Stream',
-      detailTemplate: 'Detail Template',
-      createPageTemplate: 'Create Page Template',
-      cardFace: 'Card Face Template',
+      pageLayout: 'Page Layout',
       permission: 'Permission',
       cardButtons: 'Card Actions',
       splitSettings: 'Split Settings',
@@ -201,8 +199,14 @@ export default {
         migrationFailed: 'Migration failed',
       },
     },
+    /** Detail page + create page templates */
+    pageLayout: {
+      tabs: {
+        detail: 'Detail Page Layout',
+        create: 'New Page Layout',
+      },
+    },
     // Empty states
-    cardFaceInDev: 'Card Face Template feature is under development...',
     createPageTemplateInDev: 'Create Page Template feature is under development...',
     cardButtonsInDev: 'Card Buttons feature is under development...',
     splitSettingsInDev: 'Split Settings feature is under development...',

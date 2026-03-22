@@ -325,7 +325,7 @@ function handleBack() {
   if (cardTypeId) {
     router.push({
       path: '/admin/card-type',
-      query: { edit: cardTypeId, tab: 'detailTemplate' },
+      query: { edit: cardTypeId, tab: 'pageLayout' },
     })
   } else {
     router.push({ name: 'CardTypeCard' })

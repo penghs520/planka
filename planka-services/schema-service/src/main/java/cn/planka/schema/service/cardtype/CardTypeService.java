@@ -173,7 +173,6 @@ public class CardTypeService {
                     .updatedAt(cardType.getUpdatedAt())
                     .parentTypeIds(concrete.getParentTypeIds())
                     .parentTypes(parentTypes)
-                    .defaultCardFaceId(concrete.getDefaultCardFaceId())
                     .build();
         }
 

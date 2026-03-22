@@ -102,7 +102,7 @@ export function getDefaultTab(schemaType: string): string | undefined {
  * @param schemaType Schema类型（如 'CARD_TYPE', 'LINK_TYPE'）
  * @param schemaId Schema ID
  * @param router Vue Router实例
- * @param tab 可选的tab参数，用于定位到特定标签页（如 'fields', 'detailTemplate'）
+ * @param tab 可选的tab参数，用于定位到特定标签页（如 'fields', 'pageLayout'）
  */
 export function navigateToSchemaInNewTab(
   schemaType: string,

@@ -3,14 +3,14 @@ import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { FormInstance } from '@arco-design/web-vue'
 import { Message, Modal } from '@arco-design/web-vue'
+import { IconFile, IconTag } from '@arco-design/web-vue/es/icon'
 import { cardTypeApi } from '@/api'
 import { useOrgStore } from '@/stores/org'
 import SaveButton from '@/components/common/SaveButton.vue'
 import CancelButton from '@/components/common/CancelButton.vue'
 import BasicInfoForm from './components/BasicInfoForm.vue'
 import FieldConfigTab from './components/FieldConfigTab.vue'
-import DetailTemplateTab from './components/DetailTemplateTab.vue'
-import CreatePageTemplateTab from './components/CreatePageTemplateTab.vue'
+import PageLayoutTab from './components/PageLayoutTab.vue'
 import ValueStreamTab from './components/ValueStreamTab.vue'
 import PermissionTab from './components/PermissionTab.vue'
 import CardActionsTab from './components/CardActionsTab.vue'
@@ -62,6 +62,36 @@ const drawerVisible = computed({
 })
 
 const isEntityType = computed(() => formData.value?.schemaSubType === SchemaSubType.ENTITY_CARD_TYPE)
+
+/** 标题栏图标：加载中时尚无 formData 时回退 editingCardType */
+const headerIsEntityType = computed(() => {
+  const sub = formData.value?.schemaSubType ?? props.editingCardType?.schemaSubType
+  return sub === SchemaSubType.ENTITY_CARD_TYPE
+})
+
+const entityDisplayName = computed(() => {
+  const name = formData.value?.name ?? props.editingCardType?.name
+  return name?.trim() ? name : ''
+})
+
+/** 编辑模式标题行内标签（与 a-tab-pane key 一致） */
+const cardTypeEditTabItems = computed(() => {
+  const base: { key: string; label: string }[] = [
+    { key: 'basic', label: t('admin.cardType.tabs.basic') },
+    { key: 'fields', label: t('admin.cardType.tabs.fields') },
+    { key: 'valueStream', label: t('admin.cardType.tabs.valueStream') },
+  ]
+  if (!isEntityType.value) {
+    return base
+  }
+  return [
+    ...base,
+    { key: 'pageLayout', label: t('admin.cardType.tabs.pageLayout') },
+    { key: 'permission', label: t('admin.cardType.tabs.permission') },
+    { key: 'cardButtons', label: t('admin.cardType.tabs.cardButtons') },
+    { key: 'businessRules', label: t('admin.cardType.tabs.businessRules') },
+  ]
+})
 
 const drawerTitle = computed(() => {
   if (props.mode === 'create') {
@@ -187,13 +217,46 @@ async function handleFieldConfigCreated() {
 <template>
   <a-drawer
     v-model:visible="drawerVisible"
-    :title="drawerTitle"
+    class="card-type-form-drawer"
     :width="mode === 'create' ? 800 : 1100"
+    :body-class="mode === 'edit' ? 'card-type-form-drawer-body' : undefined"
     :mask-closable="true"
     :esc-to-close="true"
     unmount-on-close
     @before-open="initDrawer"
   >
+    <template #title>
+      <template v-if="mode === 'create'">{{ drawerTitle }}</template>
+      <div v-else class="feishu-drawer-header-row">
+        <div class="feishu-drawer-brand">
+          <span
+            class="feishu-entity-icon-wrap"
+            :class="headerIsEntityType ? 'is-entity' : 'is-trait'"
+            aria-hidden="true"
+          >
+            <IconFile v-if="headerIsEntityType" />
+            <IconTag v-else />
+          </span>
+          <span class="feishu-entity-name">{{
+            entityDisplayName || t('admin.cardType.editTitle')
+          }}</span>
+        </div>
+        <nav class="feishu-inline-tabs" role="tablist" aria-label="Card type sections">
+          <button
+            v-for="item in cardTypeEditTabItems"
+            :key="item.key"
+            type="button"
+            role="tab"
+            class="feishu-inline-tab"
+            :class="{ 'feishu-inline-tab--active': activeTab === item.key }"
+            :aria-selected="activeTab === item.key"
+            @click="activeTab = item.key"
+          >
+            {{ item.label }}
+          </button>
+        </nav>
+      </div>
+    </template>
     <a-spin :loading="loading && mode === 'edit'" class="drawer-spin">
       <div v-if="formData" class="drawer-content">
         <!-- 新建模式：基础表单 -->
@@ -206,79 +269,62 @@ async function handleFieldConfigCreated() {
           />
         </template>
 
-        <!-- 编辑模式：多 Tab 结构 -->
+        <!-- 编辑模式：标签在标题行，内容区仅面板 -->
         <template v-else>
-          <a-tabs v-model:active-key="activeTab" direction="vertical" class="edit-tabs">
-            <a-tab-pane key="basic" :title="t('admin.cardType.tabs.basic')">
+          <div class="edit-mode-shell">
+            <div class="edit-mode-panel">
               <BasicInfoForm
+                v-show="activeTab === 'basic'"
                 v-model:form-ref="formRef"
                 :form-data="formData"
                 :mode="mode"
               />
-            </a-tab-pane>
 
-            <a-tab-pane key="fields" :title="t('admin.cardType.tabs.fields')">
-              <FieldConfigTab
-                :field-list="fieldList"
-                :card-type-id="formData.id || ''"
-                @open-detail="handleOpenFieldConfigDetail"
-                @create-new="handleCreateNewField"
-                @refresh="handleFieldConfigRefresh"
-              />
-            </a-tab-pane>
+              <!-- 单根包裹：FieldConfigTab 为多根片段，v-show 直接打在子组件上无法隐藏全部根节点 -->
+              <div
+                v-show="activeTab === 'fields'"
+                class="edit-mode-tab-panel"
+              >
+                <FieldConfigTab
+                  :field-list="fieldList"
+                  :card-type-id="formData.id || ''"
+                  @open-detail="handleOpenFieldConfigDetail"
+                  @create-new="handleCreateNewField"
+                  @refresh="handleFieldConfigRefresh"
+                />
+              </div>
 
-            <a-tab-pane key="valueStream" :title="t('admin.cardType.tabs.valueStream')">
               <ValueStreamTab
                 v-if="activeTab === 'valueStream' && formData?.id"
                 ref="valueStreamTabRef"
                 :card-type-id="formData.id"
               />
-            </a-tab-pane>
 
-            <a-tab-pane v-if="isEntityType" key="detailTemplate" :title="t('admin.cardType.tabs.detailTemplate')">
-              <DetailTemplateTab
-                v-if="activeTab === 'detailTemplate' && formData?.id"
+              <PageLayoutTab
+                v-if="isEntityType && activeTab === 'pageLayout' && formData?.id"
                 :card-type-id="formData.id"
                 :card-type-name="formData.name"
               />
-            </a-tab-pane>
 
-            <a-tab-pane v-if="isEntityType" key="createPageTemplate" :title="t('admin.cardType.tabs.createPageTemplate')">
-              <CreatePageTemplateTab
-                v-if="activeTab === 'createPageTemplate' && formData?.id"
-                :card-type-id="formData.id"
-                :card-type-name="formData.name"
-              />
-            </a-tab-pane>
-
-            <a-tab-pane v-if="isEntityType" key="cardFace" :title="t('admin.cardType.tabs.cardFace')">
-              <a-empty :description="t('admin.cardType.cardFaceInDev')" />
-            </a-tab-pane>
-
-            <a-tab-pane v-if="isEntityType" key="permission" :title="t('admin.cardType.tabs.permission')">
               <PermissionTab
-                v-if="activeTab === 'permission' && formData?.id"
+                v-if="isEntityType && activeTab === 'permission' && formData?.id"
                 :card-type-id="formData.id"
                 :org-id="orgStore.currentOrgId!"
               />
-            </a-tab-pane>
 
-            <a-tab-pane v-if="isEntityType" key="cardButtons" :title="t('admin.cardType.tabs.cardButtons')">
               <CardActionsTab
-                v-if="activeTab === 'cardButtons' && formData?.id"
+                v-if="isEntityType && activeTab === 'cardButtons' && formData?.id"
                 :card-type-id="formData.id"
                 :card-type-name="formData.name"
               />
-            </a-tab-pane>
 
-            <a-tab-pane v-if="isEntityType" key="businessRules" :title="t('admin.cardType.tabs.businessRules')">
               <BizRulesTab
-                v-if="activeTab === 'businessRules' && formData?.id"
+                v-if="isEntityType && activeTab === 'businessRules' && formData?.id"
                 :card-type-id="formData.id"
                 :card-type-name="formData.name"
               />
-            </a-tab-pane>
-          </a-tabs>
+            </div>
+          </div>
         </template>
       </div>
     </a-spin>
@@ -325,43 +371,127 @@ async function handleFieldConfigCreated() {
   flex-direction: column;
 }
 
-.edit-tabs {
+.edit-mode-shell {
   height: 100%;
+  min-height: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
-.edit-tabs :deep(.arco-tabs-nav) {
-  flex-shrink: 0;
-  width: auto;
-  padding: 0;
-}
-
-.edit-tabs :deep(.arco-tabs-nav-vertical .arco-tabs-tab) {
-  padding: 6px 8px;
-  font-size: 14px;
-  margin-bottom: 0;
-}
-
-/* 隐藏活动指示器竖线 */
-.edit-tabs :deep(.arco-tabs-nav-ink) {
-  display: none;
-}
-
-.edit-tabs :deep(.arco-tabs-content) {
+.edit-mode-panel {
   flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding-top: 4px;
+}
+
+/* 标题行：左侧图标+名称，右侧可换行标签（与关闭按钮同一 header 行） */
+.feishu-drawer-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+
+.feishu-drawer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
+  max-width: 42%;
+}
+
+.feishu-inline-tabs {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.feishu-inline-tab {
+  margin: 0;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-2);
+  font: inherit;
+  font-size: 13px;
+  line-height: 22px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.feishu-inline-tab:hover {
+  background-color: var(--color-fill-2);
+  color: var(--color-text-1);
+}
+
+.feishu-inline-tab--active {
+  color: var(--color-text-1);
+  font-weight: 600;
+}
+
+.feishu-inline-tab:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.feishu-entity-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  font-size: 16px;
+  color: #fff;
+}
+
+.feishu-entity-icon-wrap.is-entity {
+  background: linear-gradient(145deg, var(--color-primary) 0%, var(--color-primary-active) 100%);
+}
+
+.feishu-entity-icon-wrap.is-trait {
+  background: linear-gradient(145deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
+}
+
+.feishu-entity-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-1);
+  line-height: 24px;
   overflow: hidden;
-  padding: 0 12px 0 12px;
-  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
+
+<style>
+/* class 在 a-drawer 上，随 attrs 落在 container；header/body 为后代 */
+.card-type-form-drawer .arco-drawer-header {
+  height: auto;
+  min-height: 48px;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.edit-tabs :deep(.arco-tabs-content-list) {
-  height: 100%;
-  width: 100%;
+.card-type-form-drawer .arco-drawer-title {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-right: 8px;
 }
 
-.edit-tabs :deep(.arco-tabs-pane) {
-  height: 100%;
-  width: 100%;
+/* body-class 渲染在 Drawer 内部 */
+.card-type-form-drawer-body.arco-drawer-body {
+  background-color: var(--color-fill-1);
+  padding: 0 16px 16px;
 }
 </style>

@@ -121,7 +121,6 @@ class SchemaDefinitionSerializationTest {
 
             // EntityCardType 特有字段
             cardType.setParentTypeIds(Set.of(CardTypeId.of("ct_001"), CardTypeId.of("ct_003")));
-            cardType.setDefaultCardFaceId("face_001");
 
             // 快速创建关联配置
             EntityCardType.QuickCreateLinkConfig linkConfig = new EntityCardType.QuickCreateLinkConfig();
@@ -152,7 +151,6 @@ class SchemaDefinitionSerializationTest {
             assertThat(result.getParentTypeIds())
                     .extracting(CardTypeId::value)
                     .containsExactlyInAnyOrder("ct_001", "ct_003");
-            assertThat(result.getDefaultCardFaceId()).isEqualTo("face_001");
 
             // 验证快速创建关联配置
             assertThat(result.getQuickCreateLinkConfigs()).hasSize(1);

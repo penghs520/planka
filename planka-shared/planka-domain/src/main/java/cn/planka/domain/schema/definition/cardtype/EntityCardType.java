@@ -51,15 +51,6 @@ public final class EntityCardType extends CardTypeDefinition {
     private Set<CardTypeId> parentTypeIds;
 
     /**
-     * 默认生效的卡面定义ID
-     * <p>
-     * 运行时根据卡片数据匹配第一个满足生效条件的卡面。
-     */
-    @JsonProperty("defaultCardFaceId")
-    private String defaultCardFaceId;
-
-
-    /**
      * 一键创建关联卡片配置列表
      */
     @JsonProperty("quickCreateLinkConfigs")
