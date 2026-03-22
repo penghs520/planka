@@ -7,6 +7,7 @@ export default {
     schemaDefinition: 'MODELING',
     configuration: 'CONFIGURATION',
     operations: 'OPERATIONS',
+    intelligence: 'AI',
     administration: 'ADMINISTRATION',
   },
 
@@ -21,8 +22,14 @@ export default {
     view: 'View Configuration',
     menuConfig: 'Menu Configuration',
     auditLog: 'Audit Log',
+    documentManagement: 'Documents',
+    workflowDefinition: 'Workflows',
+    ai: 'AI',
+    agents: 'Agents',
     members: 'Members',
     orgSettings: 'Organization Settings',
+    api: 'API',
+    billing: 'Billing',
   },
 
   // Common table columns
@@ -852,6 +859,14 @@ targetFieldsRequired: 'Please select target fields',
     },
   },
 
+  api: {
+    title: 'API',
+  },
+
+  billing: {
+    title: 'Billing',
+  },
+
   // Audit Log
   changelog: {
     title: 'Audit Log',
@@ -946,6 +961,26 @@ targetFieldsRequired: 'Please select target fields',
     allTypes: 'All Types',
     allOperators: 'All Operators',
     empty: 'No audit logs',
+  },
+
+  documentManagement: {
+    title: 'Documents',
+  },
+
+  workflowDefinition: {
+    title: 'Approval Flow Definitions',
+  },
+
+  ai: {
+    title: 'AI',
+  },
+
+  agents: {
+    title: 'Agents',
+  },
+
+  placeholder: {
+    comingSoon: 'Coming soon',
   },
 
   // Card Action module

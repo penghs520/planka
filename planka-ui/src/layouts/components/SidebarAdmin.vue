@@ -3,12 +3,13 @@ import { computed, type Component } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { usePermission } from '@/hooks/usePermission'
-import { IconSettings } from '@arco-design/web-vue/es/icon'
+import { IconSettings, IconBook, IconRobot, IconRobotAdd, IconBranch, IconCode } from '@arco-design/web-vue/es/icon'
 import IconAuditLog from '@/components/icons/IconAuditLog.vue'
 import IconStructure from '@/components/icons/IconStructure.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
 import IconFormulaDefinition from '@/components/icons/IconFormulaDefinition.vue'
 import IconCardType from '@/components/icons/IconCardType.vue'
+import IconBankCard from '@/components/icons/IconBankCard.vue'
 import { IconThunderbolt } from '@arco-design/web-vue/es/icon'
 const { t } = useI18n()
 const route = useRoute()
@@ -46,13 +47,23 @@ const sections: MenuSection[] = [
       { key: 'structure', titleKey: 'admin.menu.structure', icon: IconStructure, path: '/admin/structure' },
       { key: 'formula-definition', titleKey: 'admin.menu.formulaDefinition', icon: IconFormulaDefinition, path: '/admin/formula-definition' },
       { key: 'biz-rule-definition', titleKey: 'admin.menu.bizRuleDefinition', icon: IconThunderbolt, path: '/admin/biz-rule-definition' },
+      { key: 'workflow-definition', titleKey: 'admin.menu.workflowDefinition', icon: IconBranch, path: '/admin/workflow-definition' },
     ],
   },
   {
     key: 'operations',
     labelKey: 'admin.menuGroup.operations',
     items: [
+      { key: 'document-management', titleKey: 'admin.menu.documentManagement', icon: IconBook, path: '/admin/document-management' },
       { key: 'audit-log', titleKey: 'admin.menu.auditLog', icon: IconAuditLog, path: '/admin/audit-log' },
+    ],
+  },
+  {
+    key: 'intelligence',
+    labelKey: 'admin.menuGroup.intelligence',
+    items: [
+      { key: 'ai', titleKey: 'admin.menu.ai', icon: IconRobot, path: '/admin/ai' },
+      { key: 'agents', titleKey: 'admin.menu.agents', icon: IconRobotAdd, path: '/admin/agents' },
     ],
   },
   {
@@ -60,6 +71,8 @@ const sections: MenuSection[] = [
     labelKey: 'admin.menuGroup.administration',
     visible: () => isAdmin.value,
     items: [
+      { key: 'api', titleKey: 'admin.menu.api', icon: IconCode, path: '/admin/api' },
+      { key: 'billing', titleKey: 'admin.menu.billing', icon: IconBankCard, path: '/admin/billing' },
       { key: 'org-settings', titleKey: 'admin.menu.orgSettings', icon: IconSettings, path: '/admin/org-settings' },
     ],
   },

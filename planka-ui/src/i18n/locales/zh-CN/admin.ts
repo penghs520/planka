@@ -7,6 +7,7 @@ export default {
     schemaDefinition: '建模',
     configuration: '配置',
     operations: '运营',
+    intelligence: '智能',
     administration: '管理',
   },
 
@@ -21,8 +22,14 @@ export default {
     view: '视图配置',
     menuConfig: '菜单配置',
     auditLog: '审计日志',
+    documentManagement: '文档管理',
+    workflowDefinition: '工作流',
+    ai: 'AI',
+    agents: 'Agents',
     members: '成员管理',
     orgSettings: '组织设置',
+    api: 'API',
+    billing: '计费',
   },
 
   // 通用表格列
@@ -896,6 +903,14 @@ targetFieldsRequired: '请选择目标属性',
     },
   },
 
+  api: {
+    title: 'API',
+  },
+
+  billing: {
+    title: '计费',
+  },
+
   // 审计日志模块
   auditLog: {
     title: '审计日志',
@@ -905,6 +920,26 @@ targetFieldsRequired: '请选择目标属性',
     allTypes: '全部类型',
     allOperators: '全部操作人',
     empty: '暂无审计日志',
+  },
+
+  documentManagement: {
+    title: '文档管理',
+  },
+
+  workflowDefinition: {
+    title: '审批流定义',
+  },
+
+  ai: {
+    title: 'AI',
+  },
+
+  agents: {
+    title: 'Agents',
+  },
+
+  placeholder: {
+    comingSoon: '功能建设中',
   },
 
   // 审计日志

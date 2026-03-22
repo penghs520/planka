@@ -208,6 +208,16 @@ export const routes: RouteRecordRaw[] = [
               activeMenu: 'biz-rule-definition',
             },
           },
+          // 工作流（审批流定义）
+          {
+            path: 'workflow-definition',
+            name: 'WorkflowDefinition',
+            component: () => import('@/views/admin/AdminFeaturePlaceholder.vue'),
+            meta: {
+              titleKey: 'admin.workflowDefinition.title',
+              activeMenu: 'workflow-definition',
+            },
+          },
           // 实体类型管理
           {
             path: 'card-type',
@@ -294,6 +304,26 @@ export const routes: RouteRecordRaw[] = [
               activeMenu: 'org-settings',
             },
           },
+          // API（密钥、Webhook 等，占位）
+          {
+            path: 'api',
+            name: 'AdminApi',
+            component: () => import('@/views/admin/AdminFeaturePlaceholder.vue'),
+            meta: {
+              titleKey: 'admin.api.title',
+              activeMenu: 'api',
+            },
+          },
+          // 计费 / Billing
+          {
+            path: 'billing',
+            name: 'AdminBilling',
+            component: () => import('@/views/admin/AdminFeaturePlaceholder.vue'),
+            meta: {
+              titleKey: 'admin.billing.title',
+              activeMenu: 'billing',
+            },
+          },
           // 审计日志
           {
             path: 'audit-log',
@@ -302,6 +332,36 @@ export const routes: RouteRecordRaw[] = [
             meta: {
               titleKey: 'admin.auditLog.title',
               activeMenu: 'audit-log',
+            },
+          },
+          // 文档管理
+          {
+            path: 'document-management',
+            name: 'DocumentManagement',
+            component: () => import('@/views/admin/AdminFeaturePlaceholder.vue'),
+            meta: {
+              titleKey: 'admin.documentManagement.title',
+              activeMenu: 'document-management',
+            },
+          },
+          // AI
+          {
+            path: 'ai',
+            name: 'AdminAi',
+            component: () => import('@/views/admin/AdminFeaturePlaceholder.vue'),
+            meta: {
+              titleKey: 'admin.ai.title',
+              activeMenu: 'ai',
+            },
+          },
+          // Agents
+          {
+            path: 'agents',
+            name: 'AdminAgents',
+            component: () => import('@/views/admin/AdminFeaturePlaceholder.vue'),
+            meta: {
+              titleKey: 'admin.agents.title',
+              activeMenu: 'agents',
             },
           },
         ],
