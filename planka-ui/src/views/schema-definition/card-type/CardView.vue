@@ -15,7 +15,6 @@ import {
 } from '@arco-design/web-vue/es/icon'
 import { cardTypeApi } from '@/api'
 import CreateButton from '@/components/common/CreateButton.vue'
-import ViewSwitcher from '@/components/card-type/ViewSwitcher.vue'
 import SchemaReferenceDrawer from '@/components/schema/SchemaReferenceDrawer.vue'
 import SchemaChangelogDrawer from '@/components/schema/SchemaChangelogDrawer.vue'
 import CardTypeFormDrawer from './CardTypeFormDrawer.vue'
@@ -182,8 +181,6 @@ onMounted(async () => {
   <div class="card-view-page">
     <div class="card-view-content">
       <div class="content-header">
-        <ViewSwitcher />
-        <div class="header-divider" />
         <a-input-search
           v-model="searchKeyword"
           :placeholder="t('admin.search.placeholder')"
@@ -208,7 +205,7 @@ onMounted(async () => {
             </div>
             <a-row :gutter="[16, 16]" class="card-grid">
               <a-col v-for="ct in traitTypes" :key="ct.id" :xs="24" :sm="12" :md="8" :lg="6">
-                <a-card class="type-card" hoverable @click="handleEdit(ct)">
+                <a-card class="type-card trait-card" hoverable @click="handleEdit(ct)">
                   <div class="type-card-header">
                     <div class="type-card-icon trait-bg">
                       <IconTag />
@@ -270,7 +267,7 @@ onMounted(async () => {
             </div>
             <a-row :gutter="[16, 16]" class="card-grid">
               <a-col v-for="ct in entityTypes" :key="ct.id" :xs="24" :sm="12" :md="8" :lg="6">
-                <a-card class="type-card" hoverable @click="handleEdit(ct)">
+                <a-card class="type-card entity-card" hoverable @click="handleEdit(ct)">
                   <div class="type-card-header">
                     <div class="type-card-icon entity-bg">
                       <IconFile />
@@ -386,13 +383,6 @@ onMounted(async () => {
   gap: 8px;
   padding: 6px 12px;
   border-bottom: 1px solid var(--color-border-1);
-}
-
-.header-divider {
-  width: 1px;
-  height: 20px;
-  background: var(--color-border-2);
-  margin: 0 4px;
 }
 
 .header-spacer {

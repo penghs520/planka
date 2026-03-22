@@ -61,7 +61,7 @@ function handleSourceClick(event: MouseEvent) {
     event.preventDefault()
     // 在新标签页打开实体类型列表，并带上 edit 参数自动打开编辑抽屉
     const url = router.resolve({
-      name: 'CardTypeList',
+      name: 'CardTypeCard',
       query: { edit: target.dataset.cardTypeId },
     }).href
     window.open(url, '_blank')

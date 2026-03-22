@@ -328,7 +328,7 @@ function handleBack() {
       query: { edit: cardTypeId, tab: 'detailTemplate' },
     })
   } else {
-    router.push({ name: 'CardTypeList' })
+    router.push({ name: 'CardTypeCard' })
   }
 }
 
