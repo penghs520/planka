@@ -22,9 +22,9 @@ public class PermissionConfigService {
     private final SchemaQuery schemaQuery;
 
     /**
-     * 查询卡片类型的权限配置列表
+     * 查询__PLANKA_EINST__的权限配置列表
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 权限配置列表
      */
     public Result<List<PermissionConfigDefinition>> listByCardType(String cardTypeId) {
@@ -43,7 +43,7 @@ public class PermissionConfigService {
     /**
      * 获取权限配置
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 权限配置（可能为空）
      */
     public Result<PermissionConfigDefinition> getConfig(String cardTypeId) {

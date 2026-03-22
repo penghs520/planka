@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 /**
  * 属性来源信息
  * <p>
- * 记录属性定义和配置的来源卡片类型，以及是否继承。
+ * 记录属性定义和配置的来源实体类型，以及是否继承。
  */
 @Data
 @Builder
@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FieldSourceInfo {
 
-    /** 属性定义来源的卡片类型ID */
+    /** 属性定义来源的实体类型ID */
     private String definitionSourceCardTypeId;
 
-    /** 属性定义来源的卡片类型名称 */
+    /** 属性定义来源的实体类型名称 */
     private String definitionSourceCardTypeName;
 
-    /** 属性配置来源的卡片类型ID（null 表示从定义转换，无持久化配置） */
+    /** 属性配置来源的实体类型ID（null 表示从定义转换，无持久化配置） */
     private String configSourceCardTypeId;
 
-    /** 属性配置来源的卡片类型名称 */
+    /** 属性配置来源的实体类型名称 */
     private String configSourceCardTypeName;
 
     /** 属性定义是否继承 */

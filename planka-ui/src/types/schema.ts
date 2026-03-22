@@ -6,7 +6,7 @@ import type { EntityState } from './common'
  * 对应后端 SchemaType 枚举，用于分页查询接口的 type 参数
  */
 export enum SchemaType {
-  /** 卡片类型 */
+  /** 实体类型（Schema 大类） */
   CARD_TYPE = 'CARD_TYPE',
   /** 属性定义 */
   FIELD_DEFINITION = 'FIELD_DEFINITION',
@@ -50,10 +50,10 @@ export enum SchemaType {
  * 对应后端 @JsonSubTypes 注解的 name 属性，用于创建/更新时的 type 字段
  */
 export enum SchemaSubType {
-  // ==================== 卡片类型 ====================
-  /** 属性集 */
+  // ==================== 实体类型（子类型） ====================
+  /** 特征类型 */
   TRAIT_CARD_TYPE = 'TRAIT_CARD_TYPE',
-  /** 实体类型 */
+  /** 实体类型（ENTITY 子类） */
   ENTITY_CARD_TYPE = 'ENTITY_CARD_TYPE',
 
   // ==================== 属性定义 ====================
@@ -161,7 +161,7 @@ export enum SchemaSubType {
  * Schema 大类显示配置
  */
 export const SchemaTypeConfig: Record<SchemaType, { label: string; requiresBelongTo: boolean }> = {
-  [SchemaType.CARD_TYPE]: { label: '卡片类型', requiresBelongTo: false },
+  [SchemaType.CARD_TYPE]: { label: '实体类型', requiresBelongTo: false },
   [SchemaType.FIELD_DEFINITION]: { label: '属性定义', requiresBelongTo: false },
   [SchemaType.FIELD_CONFIG]: { label: '属性配置', requiresBelongTo: true },
   [SchemaType.VIEW]: { label: '视图', requiresBelongTo: false },
@@ -185,8 +185,8 @@ export const SchemaTypeConfig: Record<SchemaType, { label: string; requiresBelon
  * Schema 子类型显示配置
  */
 export const SchemaSubTypeConfig: Record<SchemaSubType, { label: string; category: SchemaType }> = {
-  // 卡片类型
-  [SchemaSubType.TRAIT_CARD_TYPE]: { label: '属性集', category: SchemaType.CARD_TYPE },
+  // 实体类型（子类型）
+  [SchemaSubType.TRAIT_CARD_TYPE]: { label: '特征类型', category: SchemaType.CARD_TYPE },
   [SchemaSubType.ENTITY_CARD_TYPE]: { label: '实体类型', category: SchemaType.CARD_TYPE },
   // 属性定义
   [SchemaSubType.SINGLE_LINE_TEXT_FIELD_DEFINITION]: { label: '单行文本属性', category: SchemaType.FIELD_DEFINITION },

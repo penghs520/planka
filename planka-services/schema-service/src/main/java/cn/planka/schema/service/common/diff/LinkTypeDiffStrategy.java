@@ -75,7 +75,7 @@ public class LinkTypeDiffStrategy implements SchemaDiffStrategy {
                     .ifPresent(detail::addFieldChange);
         }
 
-        // 比较源端卡片类型列表（使用ID对象比较）
+        // 比较源端__PLANKA_EINST__列表（使用ID对象比较）
         detail.getSemanticChanges().addAll(
                 diffHelper.compareIdObjectList(
                         before.path("sourceCardTypeIds"),
@@ -84,7 +84,7 @@ public class LinkTypeDiffStrategy implements SchemaDiffStrategy {
                 )
         );
 
-        // 比较目标端卡片类型列表（使用ID对象比较）
+        // 比较目标端__PLANKA_EINST__列表（使用ID对象比较）
         detail.getSemanticChanges().addAll(
                 diffHelper.compareIdObjectList(
                         before.path("targetCardTypeIds"),

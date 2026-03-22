@@ -61,7 +61,7 @@ pub mod condition_node {
         /// 关键词条件
         #[prost(message, tag = "12")]
         Keyword(super::KeywordConditionItem),
-        /// 卡片类型条件
+        /// __PLANKA_EINST__条件
         #[prost(message, tag = "13")]
         CardType(super::CardTypeConditionItem),
     }
@@ -394,7 +394,7 @@ pub struct StateNotInOperator {
     pub values: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// ==============================================================================
-/// 卡片类型条件
+/// __PLANKA_EINST__条件
 /// ==============================================================================
 #[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1419,7 +1419,7 @@ pub struct SortField {
     /// 支持枚举属性排序，要提供枚举项的order信息，按照每一个枚举项对应的order来排序
     /// 支持关联属性排序，按照关联卡的标题来排序
     /// 支持一些内置属性的排序：
-    ///      卡片类型、容器，这些就按照他们排序就行
+    ///      __PLANKA_EINST__、容器，这些就按照他们排序就行
     ///      标题：要按照拼接标题来排序
     ///      卡片编号：如果有custom_code，则按照custom_code排序，否则按照code_in_org进行排序，前者是文本，后置是数字
     /// 不支持计算属性排序、价值流状态排序、架构属性排序
@@ -1434,7 +1434,7 @@ pub mod sort_field {
     /// 支持枚举属性排序，要提供枚举项的order信息，按照每一个枚举项对应的order来排序
     /// 支持关联属性排序，按照关联卡的标题来排序
     /// 支持一些内置属性的排序：
-    ///      卡片类型、容器，这些就按照他们排序就行
+    ///      __PLANKA_EINST__、容器，这些就按照他们排序就行
     ///      标题：要按照拼接标题来排序
     ///      卡片编号：如果有custom_code，则按照custom_code排序，否则按照code_in_org进行排序，前者是文本，后置是数字
     /// 不支持计算属性排序、价值流状态排序、架构属性排序
@@ -1465,7 +1465,7 @@ pub struct SortDateField {
     #[prost(string, tag = "1")]
     pub field_id: ::prost::alloc::string::String,
 }
-/// 内置属性：标题、编号、卡片类型、创建时间、更新时间、创建人、更新人、丢弃时间、归档时间
+/// 内置属性：标题、编号、__PLANKA_EINST__、创建时间、更新时间、创建人、更新人、丢弃时间、归档时间
 #[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

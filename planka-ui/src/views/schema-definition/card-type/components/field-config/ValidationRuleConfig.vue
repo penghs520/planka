@@ -117,7 +117,7 @@ const props = withDefaults(
     validationRules?: ValidationRule[]
     /** 属性ID */
     fieldId?: string
-    /** 卡片类型ID */
+    /** 实体类型ID */
     cardTypeId?: string
     /** 可用字段列表 */
     availableFields?: FieldOption[]

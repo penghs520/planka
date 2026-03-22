@@ -15,7 +15,7 @@ export type TemplateType = 'BUILTIN' | 'CUSTOM'
 export type DefinitionParameterType = 'CARD_TYPE' | 'DATE' | 'TEXT' | 'MULTILINE_TEXT' | 'LINK' | 'NUMBER'
 
 /**
- * 卡片类型定义参数
+ * 实体类型定义参数
  */
 export interface CardTypeDefinitionParameter {
   type: 'CARD_TYPE'
@@ -126,9 +126,9 @@ export interface NotificationTemplateDefinition extends SchemaDefinition {
   templateType?: TemplateType
   /** 定义参数 */
   definitionParameter: DefinitionParameter
-  /** 所属卡片类型ID（兼容字段） */
+  /** 所属实体类型ID（兼容字段） */
   cardTypeId?: string
-  /** 所属卡片类型名称（兼容字段） */
+  /** 所属实体类型名称（兼容字段） */
   cardTypeName?: string
   /** 触发事件类型 */
   triggerEvent: TriggerEvent
@@ -250,7 +250,7 @@ export const notificationTemplateApi = {
   },
 
   /**
-   * 根据卡片类型获取模板列表
+   * 根据实体类型获取模板列表
    */
   listByCardType(cardTypeId: string): Promise<NotificationTemplateDefinition[]> {
     return request.get(`${BASE_URL}/by-card-type/${cardTypeId}`)

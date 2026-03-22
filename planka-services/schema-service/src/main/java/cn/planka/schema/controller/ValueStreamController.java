@@ -35,11 +35,11 @@ public class ValueStreamController {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     /**
-     * 根据卡片类型ID获取价值流定义
+     * 根据__PLANKA_EINST__ID获取价值流定义
      * <p>
-     * 一个卡片类型仅允许创建一个价值流，不存在则返回null
+     * 一个__PLANKA_EINST__仅允许创建一个价值流，不存在则返回null
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 价值流定义
      */
     @GetMapping("/by-card-type/{cardTypeId}")
@@ -53,7 +53,7 @@ public class ValueStreamController {
      * <p>
      * 返回精简的状态选项，用于状态下拉选择
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 状态选项列表
      */
     @GetMapping("/status-options/{cardTypeId}")

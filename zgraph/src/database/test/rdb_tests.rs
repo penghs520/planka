@@ -214,7 +214,7 @@ mod tests {
      * 1. 创建一个节点
      * 2. 测试基本节点类型查询
      * 3. 测试复合条件查询（类型+容器+状态）
-     * 4. 测试不存在的卡片类型
+     * 4. 测试不存在的__PLANKA_EINST__
      * 5. 测试不存在的容器
      * 6. 测试不匹配的卡片状态
      *
@@ -261,7 +261,7 @@ mod tests {
         assert_eq!(result[0].card_id, vertex.card_id);
         assert_eq!(result[0].card_id, vertex.card_id);
 
-        // 测试不存在的卡片类型
+        // 测试不存在的__PLANKA_EINST__
         let query = VertexQuery {
             card_ids: None,
             vertex_ids: None,

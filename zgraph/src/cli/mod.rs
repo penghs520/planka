@@ -319,10 +319,10 @@ impl ZGraphClient {
                                 println!("  help select - Show detailed SQL query syntax");
                                 println!();
                                 println!("Quick SQL Examples:");
-                                println!("  SELECT * FROM `（卡片类型ID）`");
-                                println!("  SELECT id, title FROM `（卡片类型ID）` WHERE state = 'InProgress'");
-                                println!("  SELECT COUNT(*) FROM `（卡片类型ID）` WHERE container_id = 'container1'");
-                                println!("  SELECT * FROM `（卡片类型ID）` WHERE title CONTAINS 'test' ORDER BY created_at DESC LIMIT 10");
+                                println!("  SELECT * FROM `（__PLANKA_EINST__ID）`");
+                                println!("  SELECT id, title FROM `（__PLANKA_EINST__ID）` WHERE state = 'InProgress'");
+                                println!("  SELECT COUNT(*) FROM `（__PLANKA_EINST__ID）` WHERE container_id = 'container1'");
+                                println!("  SELECT * FROM `（__PLANKA_EINST__ID）` WHERE title CONTAINS 'test' ORDER BY created_at DESC LIMIT 10");
                             }
                         }
                         "exit" => {
@@ -390,7 +390,7 @@ impl ZGraphClient {
         println!("  内置字段:");
         println!("    • id, card_id          - 卡片ID (两者等价)");
         println!("    • org_id               - 组织ID");
-        println!("    • card_type_id               - 卡片类型ID");
+        println!("    • card_type_id               - __PLANKA_EINST__ID");
         println!("    • container_id         - 容器ID");
         println!("    • state                - 卡片状态 (支持值: InProgress, Archived, Abandon, Deleted)");
         println!("    • title                - 标题");

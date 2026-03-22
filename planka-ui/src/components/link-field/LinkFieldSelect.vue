@@ -49,7 +49,7 @@ async function loadLinkFields() {
     return
   }
 
-  // 使用第一个卡片类型获取关联类型
+  // 使用第一个实体类型获取关联类型
   const cardTypeId = props.cardTypeIds[0]
   if (!cardTypeId) {
     linkFieldOptions.value = []

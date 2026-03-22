@@ -203,7 +203,7 @@ class LinkTypeServiceTest {
         }
 
         @Test
-        @DisplayName("指定多个源端卡片类型时必须都是属性集")
+        @DisplayName("指定多个源端__PLANKA_EINST__时必须都是特征类型")
         void shouldFailWhenMultipleSourceCardTypesNotAllAbstract() {
             // Given
             CreateLinkTypeRequest request = new CreateLinkTypeRequest();
@@ -211,8 +211,8 @@ class LinkTypeServiceTest {
             request.setTargetName("目标端");
             request.setSourceCardTypeIds(List.of("ct-1", "ct-2"));
 
-            AbstractCardType abstractType = createAbstractCardType("ct-1", "属性集");
-            EntityCardType concreteType = createEntityCardType("ct-2", "实体类型");
+            AbstractCardType abstractType = createAbstractCardType("ct-1", "特征类型");
+            EntityCardType concreteType = createEntityCardType("ct-2", "__PLANKA_EINST__");
 
             when(schemaRepository.findByIds(any())).thenReturn(List.of(abstractType, concreteType));
 
@@ -222,11 +222,11 @@ class LinkTypeServiceTest {
             // Then
             assertThat(result.isSuccess()).isFalse();
             assertThat(result.getCode()).isEqualTo(CommonErrorCode.VALIDATION_ERROR.getCode());
-            assertThat(result.getMessage()).contains("属性集");
+            assertThat(result.getMessage()).contains("特征类型");
         }
 
         @Test
-        @DisplayName("指定多个属性集时成功创建")
+        @DisplayName("指定多个特征类型时成功创建")
         void shouldSucceedWhenMultipleSourceCardTypesAllAbstract() {
             // Given
             CreateLinkTypeRequest request = new CreateLinkTypeRequest();
@@ -234,8 +234,8 @@ class LinkTypeServiceTest {
             request.setTargetName("目标端");
             request.setSourceCardTypeIds(List.of("ct-1", "ct-2"));
 
-            AbstractCardType abstractType1 = createAbstractCardType("ct-1", "属性集1");
-            AbstractCardType abstractType2 = createAbstractCardType("ct-2", "属性集2");
+            AbstractCardType abstractType1 = createAbstractCardType("ct-1", "特征类型1");
+            AbstractCardType abstractType2 = createAbstractCardType("ct-2", "特征类型2");
 
             when(schemaRepository.findByIds(any())).thenReturn(List.of(abstractType1, abstractType2));
             when(schemaCommonService.create(eq(ORG_ID), eq(OPERATOR_ID), any(CreateSchemaRequest.class)))
@@ -252,7 +252,7 @@ class LinkTypeServiceTest {
         }
 
         @Test
-        @DisplayName("单个卡片类型不验证是否抽象")
+        @DisplayName("单个__PLANKA_EINST__不验证是否抽象")
         void shouldNotValidateWhenSingleCardType() {
             // Given
             CreateLinkTypeRequest request = new CreateLinkTypeRequest();
@@ -352,7 +352,7 @@ class LinkTypeServiceTest {
     class GetAvailableLinkTypesTests {
 
         @Test
-        @DisplayName("返回卡片类型可用的关联类型（不限位置）")
+        @DisplayName("返回__PLANKA_EINST__可用的关联类型（不限位置）")
         void shouldReturnAvailableLinkTypesForCardType() {
             // Given
             EntityCardType cardType = createEntityCardType("ct-1", "需求");
@@ -362,8 +362,8 @@ class LinkTypeServiceTest {
 
             LinkTypeDefinition linkType2 = createLinkType("lt-2", "限定关联");
             linkType2.setEnabled(true);
-            linkType2.setSourceCardTypeIds(List.of(CardTypeId.of("ct-2")));  // 限定其他卡片类型
-            linkType2.setTargetCardTypeIds(List.of(CardTypeId.of("ct-2"))); // 目标端也限定为其他卡片类型
+            linkType2.setSourceCardTypeIds(List.of(CardTypeId.of("ct-2")));  // 限定其他__PLANKA_EINST__
+            linkType2.setTargetCardTypeIds(List.of(CardTypeId.of("ct-2"))); // 目标端也限定为其他__PLANKA_EINST__
 
             when(schemaRepository.findById("ct-1")).thenReturn(Optional.of(cardType));
             when(schemaQuery.queryAll(ORG_ID, SchemaType.LINK_TYPE))
@@ -411,7 +411,7 @@ class LinkTypeServiceTest {
         }
 
         @Test
-        @DisplayName("卡片类型不存在时返回失败")
+        @DisplayName("__PLANKA_EINST__不存在时返回失败")
         void shouldFailWhenCardTypeNotFound() {
             // Given
             when(schemaRepository.findById("not-exist")).thenReturn(Optional.empty());

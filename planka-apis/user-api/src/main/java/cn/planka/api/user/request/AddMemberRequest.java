@@ -18,6 +18,6 @@ public record AddMemberRequest(
 
         String role,  // ADMIN 或 MEMBER，默认 MEMBER
 
-        String cardTypeId  // 成员卡片类型ID，当有多种成员类型时需要指定
+        String cardTypeId  // 成员实体类型ID，当有多种成员类型时需要指定
 ) {
 }

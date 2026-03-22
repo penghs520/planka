@@ -31,12 +31,12 @@ public class CreateLinkTypeRequest {
     /** 目标端是否显示 */
     private boolean targetVisible = true;
 
-    /** 源端允许的卡片类型ID列表 */
-    @NotEmpty(message = "源端卡片类型不能为空")
+    /** 源端允许的实体类型ID列表 */
+    @NotEmpty(message = "源端实体类型不能为空")
     private List<String> sourceCardTypeIds;
 
-    /** 目标端允许的卡片类型ID列表 */
-    @NotEmpty(message = "目标端卡片类型不能为空")
+    /** 目标端允许的实体类型ID列表 */
+    @NotEmpty(message = "目标端实体类型不能为空")
     private List<String> targetCardTypeIds;
 
     /** 源端是否多选 */

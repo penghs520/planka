@@ -12,7 +12,7 @@ export interface LevelBinding {
   levelIndex: number
   /** 层级名称 */
   levelName?: string
-  /** 层级对应的卡片类型名称列表 */
+  /** 层级对应的实体类型名称列表 */
   levelCardTypeNames?: string[]
   /** 关联属性ID */
   linkFieldId?: string
@@ -170,7 +170,7 @@ export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseField
     const targetCardTypeIds = level.cardTypeIds
 
     if (!targetCardTypeIds || targetCardTypeIds.length === 0) {
-      Message.error('层级未配置卡片类型')
+      Message.error('层级未配置实体类型')
       return
     }
 

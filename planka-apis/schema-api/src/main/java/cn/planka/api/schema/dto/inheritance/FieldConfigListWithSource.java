@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 卡片类型属性配置列表响应 DTO
+ * 实体类型属性配置列表响应 DTO
  * <p>
- * 包含卡片类型的完整属性配置列表和可能的冲突信息。
+ * 包含实体类型的完整属性配置列表和可能的冲突信息。
  * 直接使用领域对象 FieldConfig，来源信息通过 Map 单独提供。
  */
 @Data
@@ -21,10 +21,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class FieldConfigListWithSource {
 
-    /** 卡片类型ID */
+    /** 实体类型ID */
     private String cardTypeId;
 
-    /** 卡片类型名称 */
+    /** 实体类型名称 */
     private String cardTypeName;
 
     /**

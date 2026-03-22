@@ -50,7 +50,7 @@ public interface CardPermissionService {
      * 创建时卡片不存在，无法评估卡片条件，因此仅校验操作人条件（组织级）
      *
      * @param operation    操作类型（通常为 CREATE）
-     * @param cardTypeId   卡片类型ID
+     * @param cardTypeId   __PLANKA_EINST__ID
      * @param operatorId   操作人ID（成员卡片ID）
      * @throws PermissionDeniedException 无权限时抛出
      */
@@ -102,10 +102,10 @@ public interface CardPermissionService {
     /**
      * 属性编辑权限校验（含关联属性双向检查）
      * <p>
-     * 在普通属性权限检查基础上，额外检查关联属性的对侧卡片类型权限配置。
+     * 在普通属性权限检查基础上，额外检查关联属性的对侧__PLANKA_EINST__权限配置。
      * <ul>
      *     <li>当前侧权限不通过 → 正常阻断提示</li>
-     *     <li>对侧权限不通过 → 提示对侧卡片类型配置了权限限制</li>
+     *     <li>对侧权限不通过 → 提示对侧__PLANKA_EINST__配置了权限限制</li>
      * </ul>
      *
      * @param targetCardId              目标卡片ID

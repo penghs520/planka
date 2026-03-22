@@ -102,7 +102,7 @@ export interface StepConfig {
  * 价值流定义
  */
 export interface ValueStreamDefinition extends SchemaDefinition {
-  /** 所属卡片类型ID */
+  /** 所属实体类型ID */
   cardTypeId: string
   /** 阶段列表 */
   stepList: StepConfig[]
@@ -122,7 +122,7 @@ export interface StatusBranch {
  * 价值流分支定义
  */
 export interface ValueStreamBranchDefinition extends SchemaDefinition {
-  /** 所属卡片类型ID */
+  /** 所属实体类型ID */
   cardTypeId: string
   /** 关联的基线ID */
   baseLineId: string

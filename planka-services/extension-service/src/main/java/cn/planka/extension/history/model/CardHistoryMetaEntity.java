@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * 卡片历史表元数据实体
  * <p>
- * 记录每个卡片类型对应的历史表名，用于动态分表
+ * 记录每个__PLANKA_EINST__对应的历史表名，用于动态分表
  */
 @Data
 @TableName("card_history_meta")
@@ -23,7 +23,7 @@ public class CardHistoryMetaEntity {
     private Long id;
 
     /**
-     * 卡片类型ID
+     * __PLANKA_EINST__ID
      */
     private String cardTypeId;
 

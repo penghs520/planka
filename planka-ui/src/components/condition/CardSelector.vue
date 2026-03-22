@@ -64,7 +64,7 @@ const props = withDefaults(
     /** 关联属性ID，格式 "{linkTypeId}:{SOURCE|TARGET}" */
     linkFieldId?: string
 
-    /** 目标卡片类型ID（已废弃，请使用 linkFieldId） */
+    /** 目标实体类型ID（已废弃，请使用 linkFieldId） */
     cardTypeId?: string
 
     /** 占位符 */

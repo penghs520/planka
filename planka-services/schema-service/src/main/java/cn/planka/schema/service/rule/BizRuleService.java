@@ -27,9 +27,9 @@ public class BizRuleService {
     private final SchemaQuery schemaQuery;
 
     /**
-     * 根据卡片类型ID获取所有业务规则
+     * 根据__PLANKA_EINST__ID获取所有业务规则
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 业务规则列表（按优先级排序）
      */
     public Result<List<BizRuleDefinition>> getByCardTypeId(CardTypeId cardTypeId) {
@@ -69,9 +69,9 @@ public class BizRuleService {
     }
 
     /**
-     * 根据卡片类型ID获取所有已启用的业务规则
+     * 根据__PLANKA_EINST__ID获取所有已启用的业务规则
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 已启用的业务规则列表（按优先级排序）
      */
     public Result<List<BizRuleDefinition>> getEnabledByCardTypeId(CardTypeId cardTypeId) {

@@ -183,7 +183,7 @@ onMounted(() => {
       <div class="content-header">
         <a-input-search
           v-model="searchKeyword"
-          placeholder="搜索名称、卡片类型"
+          placeholder="搜索名称、实体类型"
           style="width: 260px"
           size="small"
           allow-clear
@@ -215,7 +215,7 @@ onMounted(() => {
           </template>
         </a-table-column>
         <a-table-column
-          title="卡片类型"
+          title="实体类型"
           data-index="cardTypeName"
           :sortable="{ sortDirections: ['ascend', 'descend'] }"
         >

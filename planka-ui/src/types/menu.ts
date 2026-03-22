@@ -65,9 +65,9 @@ export interface MenuTreeNodeVO {
   icon?: string
   /** 视图类型（视图专用，如 LIST, planka） */
   viewType?: string
-  /** 关联的卡片类型ID（视图专用） */
+  /** 关联的实体类型ID（视图专用） */
   cardTypeId?: string
-  /** 关联的卡片类型名称（视图专用） */
+  /** 关联的实体类型名称（视图专用） */
   cardTypeName?: string
   /** 排序号 */
   sortOrder?: number

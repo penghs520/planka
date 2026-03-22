@@ -255,7 +255,7 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
 <template>
   <div class="basic-info-form-container">
     <a-form ref="formRef" :model="formData" :rules="formRules" layout="vertical">
-      <!-- 新建模式：卡片类型种类选择 -->
+      <!-- 新建模式：实体类型种类选择 -->
     <a-form-item v-if="mode === 'create'">
       <template #label>
         <span>{{ t('admin.cardType.form.subType') }}</span>

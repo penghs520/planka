@@ -1,7 +1,7 @@
 import { test, expect } from '../../fixtures/base'
 import { CardTypePage } from '../../page-objects/admin/card-type.page'
 
-test.describe('卡片类型管理', () => {
+test.describe('实体类型管理', () => {
   let cardTypePage: CardTypePage
 
   test.beforeEach(async ({ page }) => {
@@ -9,7 +9,7 @@ test.describe('卡片类型管理', () => {
     await cardTypePage.goto()
   })
 
-  test('卡片类型列表页正常加载', async ({ page }) => {
+  test('实体类型列表页正常加载', async ({ page }) => {
     await expect(page).toHaveURL(/\/admin\/card-type/)
     // 页面应包含表格或列表
     await page.waitForLoadState('networkidle')
@@ -24,7 +24,7 @@ test.describe('卡片类型管理', () => {
     }
   })
 
-  test('搜索过滤卡片类型', async ({ page }) => {
+  test('搜索过滤实体类型', async ({ page }) => {
     await page.waitForLoadState('networkidle')
     const searchInput = page.locator('input[placeholder*="搜索"], .search-input input')
     if (await searchInput.isVisible()) {

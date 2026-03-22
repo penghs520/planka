@@ -15,7 +15,7 @@ import java.util.Map;
  * 创建卡片请求
  *
  * @param orgId       组织ID
- * @param typeId      卡片类型ID
+ * @param typeId      实体类型ID
  * @param title       卡片标题
  * @param description 卡片描述
  * @param fieldValues 初始属性值

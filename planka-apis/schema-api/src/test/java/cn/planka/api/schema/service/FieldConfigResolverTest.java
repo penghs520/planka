@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 /**
  * FieldConfigResolver 单元测试
  * <p>
- * 测试继承优先级：自身 > 显式父类 > 任意卡属性集
+ * 测试继承优先级：自身 > 显式父类 > 任意卡特征类型
  */
 @ExtendWith(MockitoExtension.class)
 class FieldConfigResolverTest {
@@ -49,12 +49,12 @@ class FieldConfigResolverTest {
     class InheritancePriorityTests {
 
         @Test
-        @DisplayName("显式父类配置覆盖任意卡属性集配置")
+        @DisplayName("显式父类配置覆盖任意卡特征类型配置")
         void parentConfigOverridesRootConfig() {
             // Given
             EntityCardType cardType = createEntityCardType("concrete-1", "需求", Set.of("abstract-1"));
 
-            // 任意卡属性集的配置
+            // 任意卡特征类型的配置
             SingleLineTextFieldConfig rootConfig = createFieldConfig("root-config", ROOT_CARD_TYPE_ID, "field-1");
             rootConfig.setDefaultValue("顶级默认值");
 
@@ -76,7 +76,7 @@ class FieldConfigResolverTest {
             // When
             FieldConfigResolver.ResolvedFieldConfigs result = resolver.resolve(cardType);
 
-            // Then - 父类配置应该覆盖任意卡属性集配置
+            // Then - 父类配置应该覆盖任意卡特征类型配置
             assertThat(result.fieldConfigs()).containsKey("field-1");
             SingleLineTextFieldConfig effectiveConfig = (SingleLineTextFieldConfig) result.fieldConfigs().get("field-1");
             assertThat(effectiveConfig.getDefaultValue()).isEqualTo("父类默认值");
@@ -206,7 +206,7 @@ class FieldConfigResolverTest {
     class LinkConfigResolveTests {
 
         @Test
-        @DisplayName("继承任意卡属性集关联配置")
+        @DisplayName("继承任意卡特征类型关联配置")
         void inheritRootLinkConfig() {
             // Given
             EntityCardType cardType = createEntityCardType("concrete-1", "需求", null);
@@ -232,7 +232,7 @@ class FieldConfigResolverTest {
         }
 
         @Test
-        @DisplayName("自身关联配置覆盖任意卡属性集")
+        @DisplayName("自身关联配置覆盖任意卡特征类型")
         void ownLinkConfigOverridesRoot() {
             // Given
             EntityCardType cardType = createEntityCardType("concrete-1", "需求", null);
@@ -314,10 +314,10 @@ class FieldConfigResolverTest {
         }
 
         @Test
-        @DisplayName("任意卡属性集自身不继承任意卡属性集配置")
+        @DisplayName("任意卡特征类型自身不继承任意卡特征类型配置")
         void rootCardTypeDoesNotInheritFromItself() {
             // Given
-            EntityCardType rootCardType = createEntityCardType(ROOT_CARD_TYPE_ID, "任意卡属性集", null);
+            EntityCardType rootCardType = createEntityCardType(ROOT_CARD_TYPE_ID, "任意卡特征类型", null);
 
             SingleLineTextFieldConfig rootConfig = createFieldConfig("root-config", ROOT_CARD_TYPE_ID, "field-1");
 
@@ -329,7 +329,7 @@ class FieldConfigResolverTest {
             // When
             FieldConfigResolver.ResolvedFieldConfigs result = resolver.resolve(rootCardType);
 
-            // Then - 应该只查询一次（自身），不会重复查询任意卡属性集
+            // Then - 应该只查询一次（自身），不会重复查询任意卡特征类型
             verify(schemaDataProvider, times(1))
                     .getAllFieldConfigsByCardTypeId(ROOT_CARD_TYPE_ID);
             assertThat(result.fieldConfigs()).containsKey("field-1");

@@ -28,7 +28,7 @@ import type { LinkedCard } from '@/types/card'
 const props = defineProps<{
   /** 是否显示 */
   visible: boolean
-  /** 卡片类型 ID */
+  /** 实体类型 ID */
   cardTypeId: string
   /**
    * createApi：调用创建卡片接口；

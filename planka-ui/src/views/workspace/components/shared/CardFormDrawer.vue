@@ -11,7 +11,7 @@ const props = defineProps<{
   visible: boolean
   /** 模式：create 或 edit */
   mode: 'create' | 'edit'
-  /** 卡片类型 ID（创建时必填） */
+  /** 实体类型 ID（创建时必填） */
   cardTypeId?: string
   /** 卡片数据（编辑时必填） */
   card?: CardDTO | null
@@ -92,7 +92,7 @@ async function handleSubmit() {
 // 创建卡片
 async function createCard() {
   if (!props.cardTypeId) {
-    throw new Error('缺少卡片类型 ID')
+    throw new Error('缺少实体类型 ID')
   }
 
   const request: CreateCardRequest = {

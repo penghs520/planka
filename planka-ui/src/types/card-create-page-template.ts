@@ -10,7 +10,7 @@ export interface CardCreatePageTemplateDefinition extends SchemaDefinition {
     /** Schema 子类型标识 */
     schemaSubType: SchemaSubType.CARD_CREATE_PAGE_TEMPLATE
 
-    /** 所属卡片类型 ID */
+    /** 所属实体类型 ID */
     cardTypeId: string
 
     /** 是否系统内置模板 */
@@ -54,7 +54,7 @@ export interface CreatePageTemplateListItemVO {
     /** 模板描述 */
     description?: string
 
-    /** 所属卡片类型 ID */
+    /** 所属实体类型 ID */
     cardTypeId: string
 
     /** 是否系统内置模板 */
@@ -160,9 +160,9 @@ export interface CreatePageFormVO {
     templateId: string | null
     /** 模板名称 */
     templateName: string | null
-    /** 卡片类型 ID */
+    /** 实体类型 ID */
     cardTypeId: string
-    /** 卡片类型名称 */
+    /** 实体类型名称 */
     cardTypeName: string
     /** 字段配置列表 */
     fields: CreatePageFieldVO[]

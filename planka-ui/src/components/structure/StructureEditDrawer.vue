@@ -170,7 +170,7 @@ async function loadParentLinkOptions() {
   }
 }
 
-// 监听当前层级的卡片类型变化
+// 监听当前层级的实体类型变化
 watch(
   () => selectedLevel.value?.cardTypeIds,
   () => {
@@ -274,7 +274,7 @@ function selectLevel(index: number) {
 function updateLevel(field: keyof StructureLevel, value: unknown) {
   if (!selectedLevel.value) return
 
-  // 特殊处理卡片类型选择
+  // 特殊处理实体类型选择
   if (field === 'cardTypeIds' && Array.isArray(value)) {
     const cardTypeIds = value as string[]
 

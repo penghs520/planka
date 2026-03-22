@@ -40,7 +40,7 @@ import java.util.Set;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "schemaSubType", visible = true)
 @JsonSubTypes({
-        // ==================== 卡片类型定义 ====================
+        // ==================== __PLANKA_EINST__定义 ====================
         @JsonSubTypes.Type(value = AbstractCardType.class, name = SchemaSubType.TRAIT_CARD_TYPE),
         @JsonSubTypes.Type(value = EntityCardType.class, name = SchemaSubType.ENTITY_CARD_TYPE),
 

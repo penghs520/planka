@@ -26,7 +26,7 @@ public class DateCollectionFormulaDefinitionVO extends FormulaDefinitionVO {
     private String linkFieldId;
 
     /**
-     * 目标卡片类型ID列表
+     * 目标实体类型ID列表
      */
     private List<String> targetCardTypeIds;
 

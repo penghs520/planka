@@ -24,7 +24,7 @@ const { t } = useI18n()
 const props = defineProps<{
   /** 卡片ID */
   cardId: string
-  /** 卡片类型ID */
+  /** 实体类型ID */
   cardTypeId: string
 }>()
 

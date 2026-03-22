@@ -190,7 +190,7 @@ public interface CardServiceClient {
      * @param sourceStatusId 源状态ID
      * @param targetStatusId 目标状态ID
      * @param streamId 价值流ID
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId 实体类型ID
      * @param operatorId 操作人ID
      * @return 更新的卡片数量
      */

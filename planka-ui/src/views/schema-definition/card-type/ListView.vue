@@ -90,7 +90,7 @@ function handleRowClick(record: unknown) {
   handleEdit(record as CardTypeDefinition)
 }
 
-// 删除卡片类型
+// 删除实体类型
 async function handleDelete(cardType: CardTypeDefinition) {
   Modal.confirm({
     title: t('admin.message.confirmDelete'),

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * <p>
  * 通知模板的定义参数，支持多种类型：
  * <ul>
- *   <li>CARD_TYPE：卡片类型参数，需要选择具体的 CardTypeId</li>
+ *   <li>CARD_TYPE：__PLANKA_EINST__参数，需要选择具体的 CardTypeId</li>
  *   <li>DATE/TEXT/MULTILINE_TEXT/LINK/NUMBER：简单参数，只需要输入名称作为标识</li>
  * </ul>
  */

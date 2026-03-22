@@ -12,27 +12,27 @@ public final class SystemSchemaIds {
         // 工具类禁止实例化
     }
 
-    // ======================= 卡片类型 ID =======================
+    // ======================= __PLANKA_EINST__ ID =======================
 
     /**
-     * 成员卡片类型 ID
+     * 成员__PLANKA_EINST__ ID
      * <p>
      * 格式：{orgId}:member
      *
      * @param orgId 组织ID
-     * @return 成员卡片类型ID
+     * @return 成员__PLANKA_EINST__ID
      */
     public static String memberCardTypeId(String orgId) {
         return orgId + ":member";
     }
 
     /**
-     * 成员属性集 ID
+     * 成员特征类型 ID
      * <p>
      * 格式：{orgId}:member-trait
      *
      * @param orgId 组织ID
-     * @return 成员属性集ID
+     * @return 成员特征类型ID
      */
     public static String memberAbstractCardTypeId(String orgId) {
         return orgId + ":member-trait";
@@ -51,18 +51,18 @@ public final class SystemSchemaIds {
     }
 
     /**
-     * 任意卡属性集 ID
+     * 任意卡特征类型 ID
      * <p>
      * 格式：{orgId}:any-trait
      *
      * @param orgId 组织ID
-     * @return 任意卡属性集ID
+     * @return 任意卡特征类型ID
      */
     public static String anyTraitTypeId(String orgId) {
         return orgId + ":any-trait";
     }
 
-    // ---------- Team / Project / Issue 实体类型 ----------
+    // ---------- Team / Project / Issue __PLANKA_EINST__ ----------
 
     public static String teamCardTypeId(String orgId) {
         return orgId + ":team";

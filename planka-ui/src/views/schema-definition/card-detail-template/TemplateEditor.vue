@@ -36,10 +36,10 @@ const savedTemplateId = ref<string | null>(null)
 const isEditMode = computed(() => !!route.params.id || !!savedTemplateId.value)
 const templateId = computed(() => (route.params.id as string) || savedTemplateId.value || '')
 
-// 卡片类型是否锁定（编辑模式或从卡片类型页面进入时锁定）
+// 实体类型是否锁定（编辑模式或从实体类型页面进入时锁定）
 const isCardTypeLocked = computed(() => isEditMode.value || !!route.query.cardTypeId)
 
-// 卡片类型名称（从路由参数或模板数据获取）
+// 实体类型名称（从路由参数或模板数据获取）
 const cardTypeName = ref('')
 
 // 加载状态
@@ -94,13 +94,13 @@ provide('usedFieldIds', usedFieldIds)
 // 加载模板数据
 async function loadTemplate() {
   if (!isEditMode.value) {
-    // 新建模式：从 query 参数获取卡片类型
+    // 新建模式：从 query 参数获取实体类型
     const cardTypeId = route.query.cardTypeId as string || ''
     cardTypeName.value = route.query.cardTypeName as string || ''
     templateData.value = createEmptyTemplate(orgId.value, cardTypeId)
     pushHistory()
     savedHistoryIndex.value = historyIndex.value // 初始状态为已保存
-    // 如果有卡片类型，加载字段列表
+    // 如果有实体类型，加载字段列表
     if (cardTypeId) {
       await loadFields(cardTypeId)
     }
@@ -112,7 +112,7 @@ async function loadTemplate() {
     templateData.value = await cardDetailTemplateApi.getById(templateId.value)
     pushHistory()
     savedHistoryIndex.value = historyIndex.value // 初始状态为已保存
-    // 加载卡片类型名称和字段列表
+    // 加载实体类型名称和字段列表
     if (templateData.value.cardTypeId) {
       const cardType = await cardTypeApi.getById(templateData.value.cardTypeId)
       cardTypeName.value = cardType.name
@@ -146,7 +146,7 @@ async function loadFields(cardTypeId: string) {
   }
 }
 
-// 卡片类型变更
+// 实体类型变更
 function handleCardTypeChange(cardTypeId: string) {
   if (templateData.value) {
     templateData.value.cardTypeId = cardTypeId
@@ -244,7 +244,7 @@ async function handleSave() {
     return
   }
   if (!templateData.value.cardTypeId) {
-    Message.warning('请选择卡片类型')
+    Message.warning('请选择实体类型')
     saving.value = false
     return
   }
@@ -319,7 +319,7 @@ function handleKeyDown(e: KeyboardEvent) {
   }
 }
 
-// 返回卡片类型的详情模板 Tab
+// 返回实体类型的详情模板 Tab
 function handleBack() {
   const cardTypeId = templateData.value?.cardTypeId || (route.query.cardTypeId as string)
   if (cardTypeId) {
@@ -361,13 +361,13 @@ onUnmounted(() => {
           @change="handleTemplateChange"
         />
         <span v-if="isCardTypeLocked" class="card-type-label">
-          <span class="card-type-prefix">所属卡片类型</span>
+          <span class="card-type-prefix">所属实体类型</span>
           {{ cardTypeName }}
         </span>
         <CardTypeSelect
           v-else
           v-model="templateData.cardTypeId"
-          placeholder="选择卡片类型"
+          placeholder="选择实体类型"
           size="small"
           style="width: 160px"
           :multiple="false"

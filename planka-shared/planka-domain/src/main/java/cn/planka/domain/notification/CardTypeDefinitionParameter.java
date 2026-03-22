@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 /**
- * 卡片类型定义参数
+ * __PLANKA_EINST__定义参数
  * <p>
- * 需要选择具体的 CardTypeId，通知模板绑定到特定卡片类型。
+ * 需要选择具体的 CardTypeId，通知模板绑定到特定__PLANKA_EINST__。
  */
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,13 +18,13 @@ public final class CardTypeDefinitionParameter implements DefinitionParameter {
     public static final String TYPE = "CARD_TYPE";
 
     /**
-     * 卡片类型ID
+     * __PLANKA_EINST__ID
      */
     @JsonProperty("cardTypeId")
     private final CardTypeId cardTypeId;
 
     /**
-     * 卡片类型名称（用于显示）
+     * __PLANKA_EINST__名称（用于显示）
      */
     @JsonProperty("cardTypeName")
     private String cardTypeName;

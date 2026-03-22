@@ -263,7 +263,7 @@ export function createNameResolverCache(): NameResolverCache {
  * @param cardFields 卡片字段列表
  * @param memberFields 成员字段列表
  * @param t i18n 翻译函数
- * @param linkTargetFieldsMap Link 字段目标字段映射（key: linkFieldId, value: 目标卡片类型字段列表）
+ * @param linkTargetFieldsMap Link 字段目标字段映射（key: linkFieldId, value: 目标实体类型字段列表）
  */
 export function formatExpressionTemplate(
   template: string | undefined,

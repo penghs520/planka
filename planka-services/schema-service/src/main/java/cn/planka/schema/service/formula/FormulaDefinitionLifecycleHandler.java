@@ -40,29 +40,29 @@ abstract class AbstractFormulaDefinitionLifecycleHandler implements SchemaLifecy
     }
 
     /**
-     * 校验卡片类型关联规则
+     * 校验__PLANKA_EINST__关联规则
      * <p>
      * 规则：
      * <ul>
-     *   <li>cardTypeIds 如果存在，必须全部为属性集或全部为实体类型</li>
-     *   <li>如果全部为实体类型，只能有一个</li>
-     *   <li>如果全部为属性集，可以有多个</li>
+     *   <li>cardTypeIds 如果存在，必须全部为特征类型或全部为__PLANKA_EINST__</li>
+     *   <li>如果全部为__PLANKA_EINST__，只能有一个</li>
+     *   <li>如果全部为特征类型，可以有多个</li>
      * </ul>
      */
     protected void validateCardTypeAssociation(AbstractFormulaDefinition definition) {
         List<CardTypeId> cardTypeIds = definition.getCardTypeIds();
         if (cardTypeIds == null || cardTypeIds.isEmpty()) {
-            // 允许为空（不关联任何卡片类型）
+            // 允许为空（不关联任何__PLANKA_EINST__）
             return;
         }
 
-        // 批量查询卡片类型定义
+        // 批量查询__PLANKA_EINST__定义
         Set<String> cardTypeIdStrings = cardTypeIds.stream()
                 .map(CardTypeId::value)
                 .collect(Collectors.toSet());
         List<SchemaDefinition<?>> cardTypes = schemaRepository.findByIds(cardTypeIdStrings);
 
-        // 检查是否所有卡片类型都存在
+        // 检查是否所有__PLANKA_EINST__都存在
         if (cardTypes.size() != cardTypeIds.size()) {
             Set<String> foundIds = cardTypes.stream()
                     .map(s -> s.getId().value())
@@ -70,10 +70,10 @@ abstract class AbstractFormulaDefinitionLifecycleHandler implements SchemaLifecy
             Set<String> missingIds = cardTypeIdStrings.stream()
                     .filter(id -> !foundIds.contains(id))
                     .collect(Collectors.toSet());
-            throw new IllegalArgumentException("关联的卡片类型不存在: " + missingIds);
+            throw new IllegalArgumentException("关联的__PLANKA_EINST__不存在: " + missingIds);
         }
 
-        // 检查卡片类型是抽象还是具体
+        // 检查__PLANKA_EINST__是抽象还是具体
         long abstractCount = cardTypes.stream()
                 .filter(c -> c instanceof AbstractCardType)
                 .count();
@@ -81,17 +81,17 @@ abstract class AbstractFormulaDefinitionLifecycleHandler implements SchemaLifecy
                 .filter(c -> c instanceof EntityCardType)
                 .count();
 
-        // 必须全部为属性集或全部为实体类型
+        // 必须全部为特征类型或全部为__PLANKA_EINST__
         if (abstractCount > 0 && concreteCount > 0) {
-            throw new IllegalArgumentException("cardTypeIds 不能同时包含属性集和实体类型");
+            throw new IllegalArgumentException("cardTypeIds 不能同时包含特征类型和__PLANKA_EINST__");
         }
 
-        // 如果全部为实体类型，只能有一个
+        // 如果全部为__PLANKA_EINST__，只能有一个
         if (concreteCount > 0 && cardTypeIds.size() > 1) {
-            throw new IllegalArgumentException("当关联实体类型时，只能关联一个卡片类型");
+            throw new IllegalArgumentException("当关联__PLANKA_EINST__时，只能关联一个__PLANKA_EINST__");
         }
 
-        // 如果全部为属性集，可以有多个（无需额外校验）
+        // 如果全部为特征类型，可以有多个（无需额外校验）
     }
 
     /**

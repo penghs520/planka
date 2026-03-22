@@ -53,10 +53,10 @@ const actions = computed({
 const fieldOptions = ref<FieldOption[]>([])
 const loadingFields = ref(false)
 
-// 成员卡片类型字段选项
+// 成员实体类型字段选项
 const memberFieldOptions = ref<FieldOption[]>([])
 
-// 成员卡片类型ID
+// 成员实体类型ID
 const memberCardTypeId = computed(() => {
   if (!orgStore.currentOrgId) return ''
   return `${orgStore.currentOrgId}:member`
@@ -80,7 +80,7 @@ async function loadFieldOptions() {
   }
 }
 
-// 加载成员卡片类型的字段选项
+// 加载成员实体类型的字段选项
 async function loadMemberFieldOptions() {
   if (!memberCardTypeId.value) return
   try {
@@ -106,11 +106,11 @@ watch(memberCardTypeId, () => {
   loadMemberFieldOptions()
 }, { immediate: true })
 
-// 每个动作的目标卡片类型字段选项缓存（按动作索引）
+// 每个动作的目标实体类型字段选项缓存（按动作索引）
 const actionTargetFieldOptions = ref<Map<number, FieldOption[]>>(new Map())
 const actionTargetFieldsLoading = ref<Map<number, boolean>>(new Map())
 
-// 每个动作的目标卡片类型状态选项缓存（按动作索引）
+// 每个动作的目标实体类型状态选项缓存（按动作索引）
 const actionTargetStatusOptions = ref<Map<number, StatusOption[]>>(new Map())
 const actionTargetStatusLoading = ref<Map<number, boolean>>(new Map())
 
@@ -136,7 +136,7 @@ const expressionFieldProvider: FieldProvider = {
   },
 }
 
-// 加载动作目标卡片类型的字段选项
+// 加载动作目标实体类型的字段选项
 async function loadActionTargetFieldOptions(index: number, targetCardTypeId: string) {
   actionTargetFieldsLoading.value.set(index, true)
   try {
@@ -150,7 +150,7 @@ async function loadActionTargetFieldOptions(index: number, targetCardTypeId: str
   }
 }
 
-// 加载动作目标卡片类型的状态选项
+// 加载动作目标实体类型的状态选项
 async function loadActionTargetStatusOptions(index: number, targetCardTypeId: string) {
   actionTargetStatusLoading.value.set(index, true)
   try {
@@ -177,7 +177,7 @@ function getActionFieldOptions(index: number, action: RuleAction): FieldOption[]
 function getActionStatusOptions(index: number, action: RuleAction): StatusOption[] {
   const target = getActionTarget(action)
   if (target.targetType === ActionTargetType.CURRENT_CARD) {
-    // 当前卡片使用当前卡片类型的状态选项
+    // 当前卡片使用当前实体类型的状态选项
     return currentCardTypeStatusOptions.value
   }
   return actionTargetStatusOptions.value.get(index) || []
@@ -203,10 +203,10 @@ watch(() => props.cardTypeId, (newVal) => {
   if (newVal) loadNotificationTemplates()
 }, { immediate: true })
 
-// 当前卡片类型的状态选项
+// 当前实体类型的状态选项
 const currentCardTypeStatusOptions = ref<StatusOption[]>([])
 
-// 加载当前卡片类型的状态选项
+// 加载当前实体类型的状态选项
 async function loadCurrentCardTypeStatusOptions() {
   if (!props.cardTypeId) return
   try {
@@ -510,13 +510,13 @@ function setTemplateIds(index: number, value: string[]) {
   updateAction(index, { templateIds: value } as Partial<SendNotificationAction>)
 }
 
-// 获取创建卡片类型
+// 获取创建实体类型
 function getCreateCardType(action: RuleAction): string {
   const a = action as CreateCardAction
   return a.cardTypeId || ''
 }
 
-// 设置创建卡片类型
+// 设置创建实体类型
 function setCreateCardType(index: number, value: string) {
   updateAction(index, { cardTypeId: value } as any)
 }
@@ -586,7 +586,7 @@ function setActionTarget(index: number, value: ActionTargetSelectorType) {
 
     updateAction(index, updates as any)
 
-    // 如果切换到关联卡片，加载目标卡片类型的字段和状态选项
+    // 如果切换到关联卡片，加载目标实体类型的字段和状态选项
     if (value.targetType === ActionTargetType.LINKED_CARD && value.linkPath?.linkNodes?.length) {
       const linkFieldId = value.linkPath.linkNodes[0]
       const linkField = fieldOptions.value.find(f => f.id === linkFieldId)
@@ -637,7 +637,7 @@ function hasActionConfig(action: RuleAction): boolean {
     const a = action as UpdateCardAction
     return (a.fieldAssignments?.length || 0) > 0
   }
-  // CREATE_CARD / CREATE_LINKED_CARD 检查字段赋值或标题或卡片类型
+  // CREATE_CARD / CREATE_LINKED_CARD 检查字段赋值或标题或实体类型
   if (action.actionType === RuleActionType.CREATE_CARD ||
       action.actionType === RuleActionType.CREATE_LINKED_CARD) {
     const a = action as CreateCardAction | CreateLinkedCardAction

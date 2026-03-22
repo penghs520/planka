@@ -244,7 +244,7 @@ public class BizRuleTriggerService {
                                                       BizRuleDefinition.TriggerEvent event,
                                                       StatusId targetStatusId,
                                                       List<String> changedFieldIds) {
-        // 从缓存获取该卡片类型的所有规则
+        // 从缓存获取该__PLANKA_EINST__的所有规则
         List<BizRuleDefinition> allRules = bizRuleCacheQuery.getByCardTypeId(cardTypeId);
 
         return allRules.stream()

@@ -1,6 +1,6 @@
 ---
 name: planka-schema
-description: 开发 planka 的 Schema 定义（卡片类型、字段配置、视图、业务规则等）。当用户涉及 Schema 定义、卡片类型继承、字段配置、视图定义、业务规则时激活。
+description: 开发 planka 的 Schema 定义（__PLANKA_EINST__、字段配置、视图、业务规则等）。当用户涉及 Schema 定义、__PLANKA_EINST__继承、字段配置、视图定义、业务规则时激活。
 ---
 
 # planka Schema 开发 Skill
@@ -10,7 +10,7 @@ description: 开发 planka 的 Schema 定义（卡片类型、字段配置、视
 | 类型 | 类名 | 说明 |
 |------|------|------|
 | 属性配置 | FieldConfig | 字段配置 |
-| 卡片类型 | CardTypeDefinition | 属性集 / 实体类型 |
+| __PLANKA_EINST__ | CardTypeDefinition | 特征类型 / __PLANKA_EINST__ |
 | 关联类型 | LinkTypeDefinition | 卡片间关联 |
 | 视图定义 | ListViewDefinition | 列表/看板视图 |
 | 价值流 | ValueStreamDefinition | 状态流转 |
@@ -21,7 +21,7 @@ description: 开发 planka 的 Schema 定义（卡片类型、字段配置、视
 ## 继承体系
 
 ```
-自身配置 > 显式父类 > 任意卡属性集
+自身配置 > 显式父类 > 任意卡特征类型
 ```
 
 ## 字段配置查询
@@ -38,7 +38,7 @@ FieldConfigListWithSource result = fieldConfigQueryService
 
 | 查询类 | 适用场景 |
 |--------|----------|
-| CardTypeCacheQuery | 卡片类型缓存查询 |
+| CardTypeCacheQuery | __PLANKA_EINST__缓存查询 |
 | ViewCacheQuery | 视图定义缓存查询 |
 | CardFaceCacheQuery | 卡片面版模板缓存查询 |
 | BizRuleCacheQuery | 业务规则缓存查询 |

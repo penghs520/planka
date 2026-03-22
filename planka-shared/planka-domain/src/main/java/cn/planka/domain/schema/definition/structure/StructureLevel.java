@@ -12,11 +12,11 @@ import java.util.List;
 /**
  * 架构层级定义
  * <p>
- * 定义架构线中的一个层级，包含层级索引、名称、关联的卡片类型以及与上级的关联关系。
+ * 定义架构线中的一个层级，包含层级索引、名称、关联的__PLANKA_EINST__以及与上级的关联关系。
  *
  * @param index               层级索引（0为根层级）
  * @param name                层级名称（如"部落"、"小队"）
- * @param cardTypeIds         关联的卡片类型ID列表（支持多选，当为属性集时可指定多个）
+ * @param cardTypeIds         关联的__PLANKA_EINST__ID列表（支持多选，当为特征类型时可指定多个）
  * @param parentLinkFieldId   与上级的关联属性ID（根层级为null），格式为 "{linkTypeId}:{SOURCE|TARGET}"
  * @param ownerLinkFieldId    负责人关联属性ID（可选，用于标识当前架构节点的负责人）
  * @param sortFieldId         排序字段ID（可选，用于排序当前层级的节点）
@@ -41,7 +41,7 @@ public record StructureLevel(
             throw new IllegalArgumentException("层级名称不能为空");
         }
         if (cardTypeIds == null || cardTypeIds.isEmpty()) {
-            throw new IllegalArgumentException("卡片类型ID列表不能为空");
+            throw new IllegalArgumentException("__PLANKA_EINST__ID列表不能为空");
         }
         // 根层级（index=0）的 parentLinkFieldId 必须为 null
         if (index == 0 && parentLinkFieldId != null) {

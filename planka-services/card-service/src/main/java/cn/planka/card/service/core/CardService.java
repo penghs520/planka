@@ -494,7 +494,7 @@ public class CardService {
      * @param sourceStatusId 源状态ID
      * @param targetStatusId 目标状态ID
      * @param streamId 价值流ID
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @param operatorId 操作人ID
      * @return 更新的卡片数量
      */
@@ -723,13 +723,13 @@ public class CardService {
     // ==================== 属性值校验辅助方法 ====================
 
     /**
-     * 获取卡片类型的所有属性配置
+     * 获取__PLANKA_EINST__的所有属性配置
      */
     private List<FieldConfig> getFieldConfigsForCardType(CardTypeId typeId) {
         Result<FieldConfigListWithSource> result =
                 fieldConfigQueryService.getFieldConfigListWithSource(typeId.value());
         if (!result.isSuccess() || result.getData() == null) {
-            logger.warn("获取卡片类型属性配置失败: typeId={}, error={}", typeId, result.getMessage());
+            logger.warn("获取__PLANKA_EINST__属性配置失败: typeId={}, error={}", typeId, result.getMessage());
             return Collections.emptyList();
         }
         return result.getData().getFields();

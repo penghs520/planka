@@ -16,7 +16,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DetailHeaderConfig {
 
-    /** 是否显示卡片类型图标 */
+    /** 是否显示__PLANKA_EINST__图标 */
     @JsonProperty("showTypeIcon")
     private boolean showTypeIcon = true;
 

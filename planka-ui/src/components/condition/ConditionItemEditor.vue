@@ -152,7 +152,7 @@ const props = withDefaults(
     /** 关联类型列表 */
     linkTypes?: LinkTypeVO[]
 
-    /** 根卡片类型名称（用于路径面包屑显示） */
+    /** 根实体类型名称（用于路径面包屑显示） */
     rootCardTypeName?: string
 
     /** 根据关联字段ID获取级联字段的函数（用于多级关联） */

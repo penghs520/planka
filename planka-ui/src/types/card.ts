@@ -202,7 +202,7 @@ export interface CardDTO {
   id: string
   /** 组织 ID */
   orgId: string
-  /** 卡片类型 ID */
+  /** 实体类型 ID */
   typeId: string
   /** 卡片内置编号 */
   codeInOrg: number
@@ -263,16 +263,16 @@ export interface FieldRenderMeta {
 }
 
 /**
- * 卡片类型信息（用于头部显示）
+ * 实体类型信息（用于头部显示）
  */
 export interface CardTypeInfo {
-  /** 卡片类型 ID */
+  /** 实体类型 ID */
   id: string
-  /** 卡片类型名称 */
+  /** 实体类型名称 */
   name?: string
-  /** 卡片类型图标（可能为 null） */
+  /** 实体类型图标（可能为 null） */
   icon?: string
-  /** 卡片类型颜色（可能为 null） */
+  /** 实体类型颜色（可能为 null） */
   color?: string
 }
 
@@ -302,7 +302,7 @@ export interface CardDetailResponse {
   fieldRenderMetas?: FieldRenderMeta[]
   /** 字段控制配置（必填/只读） */
   fieldControls?: CardFieldControls
-  /** 卡片类型信息（用于头部显示） */
+  /** 实体类型信息（用于头部显示） */
   cardTypeInfo?: CardTypeInfo
   /** 价值流状态信息（用于头部显示，可能为 null） */
   valueStreamStatusInfo?: ValueStreamStatusInfo
@@ -334,7 +334,7 @@ export function pureTitle(value: string): CardTitleRequest {
 export interface CreateCardRequest {
   /** 组织 ID（直接字符串） */
   orgId: string
-  /** 卡片类型 ID（直接字符串） */
+  /** 实体类型 ID（直接字符串） */
   typeId: string
   /** 卡片标题 */
   title: CardTitleRequest

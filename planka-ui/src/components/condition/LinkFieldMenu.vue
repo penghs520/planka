@@ -44,10 +44,10 @@
           </div>
         </div>
 
-        <!-- 目标卡片类型信息 -->
+        <!-- 目标实体类型信息 -->
         <div v-if="targetCardTypes.length > 0" class="target-info">
           <a-divider :margin="4" />
-          <div class="target-label">目标卡片类型:</div>
+          <div class="target-label">目标实体类型:</div>
           <div class="target-types">
             <a-tag
               v-for="cardType in targetCardTypes"
@@ -70,7 +70,7 @@ import { IconRight, IconFilter, IconLayers } from '@arco-design/web-vue/es/icon'
 import { buildLinkFieldId } from '@/utils/link-field-utils'
 
 /**
- * 卡片类型信息
+ * 实体类型信息
  */
 export interface CardTypeInfo {
   id: string
@@ -91,7 +91,7 @@ const props = withDefaults(
     /** 关联位置 */
     position: 'SOURCE' | 'TARGET'
 
-    /** 目标卡片类型列表 */
+    /** 目标实体类型列表 */
     targetCardTypes?: CardTypeInfo[]
 
     /** 当前路径深度 */

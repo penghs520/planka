@@ -22,16 +22,16 @@ public class CreatePageFormVO {
     /** 模板名称 */
     private String templateName;
     
-    /** 卡片类型 ID */
+    /** __PLANKA_EINST__ ID */
     private String cardTypeId;
     
-    /** 卡片类型名称 */
+    /** __PLANKA_EINST__名称 */
     private String cardTypeName;
     
     /** 字段配置列表（包含布局信息和字段配置） */
     private List<CreatePageFieldVO> fields;
     
-    /** 空间绑定架构属性ID（当卡片类型绑定空间时，该字段必填） */
+    /** 空间绑定架构属性ID（当__PLANKA_EINST__绑定空间时，该字段必填） */
     private String spaceBindingFieldId;
 
     // ==================== 字段 VO 基类和子类 ====================

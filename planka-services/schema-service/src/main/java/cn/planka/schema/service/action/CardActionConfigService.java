@@ -32,12 +32,12 @@ public class CardActionConfigService {
     private final SchemaCommonService schemaCommonService;
 
     /**
-     * 根据卡片类型ID获取所有动作配置
+     * 根据__PLANKA_EINST__ID获取所有动作配置
      * <p>
      * 返回已持久化的动作 + 未持久化的内置动作默认配置。
      * 内置动作如果未被持久化，使用固定 ID 格式: builtin:{cardTypeId}:{builtInActionType}
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 动作配置列表
      */
     public Result<List<CardActionConfigDefinition>> getByCardTypeId(CardTypeId cardTypeId) {

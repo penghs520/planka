@@ -19,7 +19,7 @@ const props = withDefaults(
   defineProps<{
     modelValue?: string | string[]
     placeholder?: string
-    schemaSubType?: string // 用于过滤选项，例如只显示属性集
+    schemaSubType?: string // 用于过滤选项，例如只显示特征类型
     multiple?: boolean // 是否多选
     options?: CardTypeOption[] // 外部传入的选项（优化性能，避免重复请求）
     limitConcreteSingle?: boolean // 是否限制实体类型单选
@@ -98,7 +98,7 @@ watch(selectedValues, (newVal, oldVal) => {
               return // 这里的 return 很重要，会在 selectedValues 更新后再次触发 watch
             }
           } else {
-            // 如果添加的是属性集，检查之前是否选中了实体类型
+            // 如果添加的是特征类型，检查之前是否选中了实体类型
             const hasConcrete = oldArr.some(
               (id) => cardTypeMap.value[id] === 'ENTITY_CARD_TYPE'
             )
@@ -133,7 +133,7 @@ function buildSelectOptions(cardTypes: CardTypeOption[]) {
     ? cardTypes.filter((item) => item.schemaSubType === props.schemaSubType)
     : cardTypes
 
-  // 分组：属性集和实体类型
+  // 分组：特征类型和实体类型
   const abstractTypes = filteredList
     .filter((item) => item.schemaSubType === 'TRAIT_CARD_TYPE')
     .map((item) => ({
@@ -154,7 +154,7 @@ function buildSelectOptions(cardTypes: CardTypeOption[]) {
   if (abstractTypes.length > 0) {
     groupedOptions.push({
       isGroup: true,
-      label: props.limitConcreteSingle ? '属性集 (可多选)' : '属性集',
+      label: props.limitConcreteSingle ? '特征类型 (可多选)' : '特征类型',
       options: abstractTypes,
     })
   }
@@ -223,7 +223,7 @@ onMounted(() => {
     v-if="multiple"
     v-model="selectedValues"
     :options="selectOptions"
-    :placeholder="placeholder || '选择卡片类型'"
+    :placeholder="placeholder || '选择实体类型'"
     :loading="loading"
     multiple
     allow-clear
@@ -234,7 +234,7 @@ onMounted(() => {
     v-else
     v-model="singleValue"
     :options="selectOptions"
-    :placeholder="placeholder || '选择卡片类型'"
+    :placeholder="placeholder || '选择实体类型'"
     :loading="loading"
     allow-clear
     allow-search

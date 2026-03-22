@@ -42,7 +42,7 @@ export function getSourceType(config: FieldConfig, fieldList: FieldConfigListWit
   return source.definitionInherited ? 'inherited-definition' : 'own-definition'
 }
 
-// 高亮卡片类型名称，带有可点击跳转功能
+// 高亮实体类型名称，带有可点击跳转功能
 function highlightName(name: string, cardTypeId?: string): string {
   if (cardTypeId) {
     return `<a class="source-link" data-card-type-id="${cardTypeId}">${name}</a>`

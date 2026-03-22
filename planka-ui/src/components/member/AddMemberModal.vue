@@ -20,7 +20,7 @@ const emit = defineEmits<{
 const loading = ref(false)
 const formRef = ref()
 
-// 成员卡片类型列表
+// 成员实体类型列表
 const memberCardTypes = ref<MemberCardTypeOption[]>([])
 
 // 表单数据
@@ -39,10 +39,10 @@ const roleOptions = [
   { value: OrganizationRole.MEMBER, label: OrganizationRoleConfig[OrganizationRole.MEMBER].label },
 ]
 
-// 构造成员属性集ID
+// 构造成员特征类型ID
 const memberAbstractTypeId = computed(() => `${props.orgId}:member-trait`)
 
-// 加载成员卡片类型列表
+// 加载成员实体类型列表
 async function loadMemberCardTypes() {
   try {
     const res = await memberApi.getMemberCardTypes(memberAbstractTypeId.value)

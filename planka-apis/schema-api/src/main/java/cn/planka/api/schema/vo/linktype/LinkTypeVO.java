@@ -38,10 +38,10 @@ public class LinkTypeVO {
     /** 目标端是否显示 */
     private boolean targetVisible;
 
-    /** 源端允许的卡片类型 */
+    /** 源端允许的实体类型 */
     private List<CardTypeInfo> sourceCardTypes;
 
-    /** 目标端允许的卡片类型 */
+    /** 目标端允许的实体类型 */
     private List<CardTypeInfo> targetCardTypes;
 
     /** 源端是否多选 */

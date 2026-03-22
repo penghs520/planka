@@ -11,7 +11,7 @@ const TEMPLATE_URL = '/api/v1/schemas/card-detail-templates'
 export const cardDetailTemplateApi = {
   /**
    * 查询模板列表
-   * @param cardTypeId 可选，按卡片类型筛选
+   * @param cardTypeId 可选，按实体类型筛选
    */
   list(cardTypeId?: string): Promise<TemplateListItemVO[]> {
     return request.get(TEMPLATE_URL, { params: { cardTypeId } })
@@ -25,7 +25,7 @@ export const cardDetailTemplateApi = {
   },
 
   /**
-   * 根据卡片类型 ID 获取所有模板
+   * 根据实体类型 ID 获取所有模板
    */
   getByCardType(cardTypeId: string): Promise<CardDetailTemplateDefinition[]> {
     return request.get(`${TEMPLATE_URL}/by-card-type/${cardTypeId}`)

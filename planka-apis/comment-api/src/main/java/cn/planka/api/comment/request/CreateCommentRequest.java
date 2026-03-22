@@ -13,7 +13,7 @@ public record CreateCommentRequest(
         @NotBlank(message = "卡片ID不能为空")
         String cardId,
 
-        @NotBlank(message = "卡片类型ID不能为空")
+        @NotBlank(message = "实体类型ID不能为空")
         String cardTypeId,
 
         String parentId,

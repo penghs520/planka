@@ -30,7 +30,7 @@ public class NotificationTemplateController {
     }
 
     /**
-     * 根据卡片类型查询通知模板列表
+     * 根据__PLANKA_EINST__查询通知模板列表
      */
     @GetMapping("/by-card-type/{cardTypeId}")
     public Result<List<NotificationTemplateVO>> listByCardType(

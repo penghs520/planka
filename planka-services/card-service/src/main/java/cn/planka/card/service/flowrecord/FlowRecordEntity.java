@@ -25,7 +25,7 @@ public class FlowRecordEntity {
     private Long cardId;
 
     /**
-     * 卡片类型ID
+     * __PLANKA_EINST__ID
      */
     private String cardTypeId;
 

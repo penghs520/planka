@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Select;
 public interface RuleExecutionLogMetaMapper extends BaseMapper<RuleExecutionLogMetaEntity> {
 
     /**
-     * 根据卡片类型ID查询
+     * 根据__PLANKA_EINST__ID查询
      */
     @Select("SELECT * FROM biz_rule_execution_log_meta WHERE card_type_id = #{cardTypeId}")
     RuleExecutionLogMetaEntity findByCardTypeId(String cardTypeId);

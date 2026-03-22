@@ -23,7 +23,7 @@ import java.util.Set;
  * 业务规则定义
  * <p>
  * 定义一个业务规则，包括触发条件和执行动作。
- * belongTo: 所属的卡片类型ID
+ * belongTo: 所属的__PLANKA_EINST__ID
  */
 @Setter
 @Getter
@@ -35,7 +35,7 @@ public final class BizRuleDefinition extends AbstractSchemaDefinition<BizRuleId>
         return SchemaSubType.BIZ_RULE;
     }
 
-    /** 所属卡片类型ID */
+    /** 所属__PLANKA_EINST__ID */
     @JsonProperty("cardTypeId")
     private CardTypeId cardTypeId;
 
@@ -89,7 +89,7 @@ public final class BizRuleDefinition extends AbstractSchemaDefinition<BizRuleId>
 
     @Override
     public SchemaId belongTo() {
-        return cardTypeId;  // 业务规则属于某个卡片类型
+        return cardTypeId;  // 业务规则属于某个__PLANKA_EINST__
     }
 
     @Override

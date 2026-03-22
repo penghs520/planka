@@ -47,12 +47,12 @@ public class ViewListItemVO {
     private String schemaSubType;
 
     /**
-     * 关联的卡片类型 ID
+     * 关联的实体类型 ID
      */
     private String cardTypeId;
 
     /**
-     * 关联的卡片类型名称
+     * 关联的实体类型名称
      */
     private String cardTypeName;
 

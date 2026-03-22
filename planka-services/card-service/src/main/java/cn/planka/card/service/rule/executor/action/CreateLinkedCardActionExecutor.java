@@ -94,10 +94,10 @@ public class CreateLinkedCardActionExecutor extends AbstractRuleActionExecutor<C
         CardId memberCardId = context.getOperatorId() != null ? CardId.of(context.getOperatorId()) : null;
         String title = templateResolver.resolve(action.getTitleTemplate(), context.getCardId(), memberCardId);
 
-        // 确定卡片类型
+        // 确定__PLANKA_EINST__
         CardTypeId cardTypeId = action.getCardTypeId();
         if (cardTypeId == null) {
-            throw new IllegalArgumentException("目标卡片类型不能为空");
+            throw new IllegalArgumentException("目标__PLANKA_EINST__不能为空");
         }
 
         // 处理字段赋值

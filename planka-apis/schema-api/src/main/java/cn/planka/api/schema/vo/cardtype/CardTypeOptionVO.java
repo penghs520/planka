@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 卡片类型选项 VO（用于下拉框）
+ * 实体类型选项 VO（用于下拉框）
  * <p>
  * 只包含下拉框所需的必要字段，不包含继承类型等详细信息
  */
@@ -12,12 +12,12 @@ import lombok.Data;
 @Builder
 public class CardTypeOptionVO {
     /**
-     * 卡片类型 ID
+     * 实体类型 ID
      */
     private String id;
 
     /**
-     * 卡片类型名称
+     * 实体类型名称
      */
     private String name;
 

@@ -27,10 +27,10 @@ public class UpdateLinkTypeRequest {
     /** 目标端是否显示 */
     private Boolean targetVisible;
 
-    /** 源端允许的卡片类型ID列表 */
+    /** 源端允许的实体类型ID列表 */
     private List<String> sourceCardTypeIds;
 
-    /** 目标端允许的卡片类型ID列表 */
+    /** 目标端允许的实体类型ID列表 */
     private List<String> targetCardTypeIds;
 
     /** 源端是否多选 */

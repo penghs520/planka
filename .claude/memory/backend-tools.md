@@ -17,11 +17,11 @@
 
 | 查询类 | 适用场景 |
 |--------|----------|
-| `CardTypeCacheQuery` | 卡片类型缓存查询，支持按组织ID查询 |
+| `CardTypeCacheQuery` | __PLANKA_EINST__缓存查询，支持按组织ID查询 |
 | `ViewCacheQuery` | 视图定义缓存查询 |
-| `CardFaceCacheQuery` | 卡片面版模板缓存查询，支持按卡片类型查询 |
-| `BizRuleCacheQuery` | 业务规则缓存查询，支持按卡片类型查询 |
-| `LinkTypeCacheQuery` | 关联类型缓存查询，支持按卡片类型查询 |
+| `CardFaceCacheQuery` | 卡片面版模板缓存查询，支持按__PLANKA_EINST__查询 |
+| `BizRuleCacheQuery` | 业务规则缓存查询，支持按__PLANKA_EINST__查询 |
+| `LinkTypeCacheQuery` | 关联类型缓存查询，支持按__PLANKA_EINST__查询 |
 | `ValueStreamCacheQuery` | 价值流缓存查询 |
 | `CardActionCacheQuery` | 卡片动作缓存查询 |
 | `CardPermissionCacheQuery` | 卡片权限缓存查询 |
@@ -32,4 +32,4 @@
 |------|------|----------|
 | `ConditionYieldBuilder` | `card-api/util/ConditionYieldBuilder.java` | 从条件中提取字段构建 Yield |
 | `TextExpressionTemplateResolver` | `planka-infra-expression/TextExpressionTemplateResolver.java` | 解析模板变量生成动态文本 |
-| `FieldConfigQueryService` | `schema-api/service/FieldConfigQueryService.java` | 获取卡片类型字段配置（含继承解析） |
+| `FieldConfigQueryService` | `schema-api/service/FieldConfigQueryService.java` | 获取__PLANKA_EINST__字段配置（含继承解析） |

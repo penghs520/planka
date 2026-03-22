@@ -25,7 +25,7 @@ const MAX_HISTORY = 50
 const originalConfig = ref<string>('')
 
 const props = defineProps<{
-  /** 卡片类型ID */
+  /** 实体类型ID */
   cardTypeId: string
   /** 组织ID */
   orgId: string
@@ -213,7 +213,7 @@ function handleKeydown(e: KeyboardEvent) {
   }
 }
 
-// 监听卡片类型ID变化
+// 监听实体类型ID变化
 watch(
   () => props.cardTypeId,
   () => {

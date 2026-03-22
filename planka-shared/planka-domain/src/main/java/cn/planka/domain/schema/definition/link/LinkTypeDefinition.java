@@ -56,18 +56,18 @@ public final class LinkTypeDefinition extends AbstractSchemaDefinition<LinkTypeI
     private boolean targetVisible = true;
 
     /**
-     * 源端允许的卡片类型ID列表（空表示所有）
+     * 源端允许的__PLANKA_EINST__ID列表（空表示所有）
      * <p>
-     * 仅当都为属性集时才支持指定多个，表示多个属性集的共同实体类型才有此关联关系
+     * 仅当都为特征类型时才支持指定多个，表示多个特征类型的共同__PLANKA_EINST__才有此关联关系
      */
     @Setter
     @JsonProperty("sourceCardTypeIds")
     private List<CardTypeId> sourceCardTypeIds;
 
     /**
-     * 目标端允许的卡片类型ID列表（空表示所有）
+     * 目标端允许的__PLANKA_EINST__ID列表（空表示所有）
      * <p>
-     * 仅当都为属性集时才支持指定多个，表示多个属性集的共同实体类型才有此关联关系
+     * 仅当都为特征类型时才支持指定多个，表示多个特征类型的共同__PLANKA_EINST__才有此关联关系
      */
     @Setter
     @JsonProperty("targetCardTypeIds")

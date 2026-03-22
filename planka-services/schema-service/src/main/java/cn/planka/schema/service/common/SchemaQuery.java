@@ -116,9 +116,9 @@ public class SchemaQuery {
 
 
     /**
-     * 按卡片类型ID查询 Schema
+     * 按__PLANKA_EINST__ID查询 Schema
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @param type       目标 Schema 类型
      * @return Schema 列表
      */

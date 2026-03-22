@@ -61,10 +61,10 @@ const props = withDefaults(
     /** 条件值（v-model绑定） */
     modelValue?: Condition | null
 
-    /** 卡片类型ID（用于获取可用字段列表） */
+    /** 实体类型ID（用于获取可用字段列表） */
     cardTypeId?: string
 
-    /** 卡片类型ID列表（用于获取条件显示信息） */
+    /** 实体类型ID列表（用于获取条件显示信息） */
     cardTypeIds?: string[]
 
     /** 可用字段列表（如果不提供，则根据cardTypeId自动获取） */
@@ -73,7 +73,7 @@ const props = withDefaults(
     /** 关联类型列表 */
     linkTypes?: LinkTypeVO[]
 
-    /** 根卡片类型名称（用于路径面包屑显示） */
+    /** 根实体类型名称（用于路径面包屑显示） */
     rootCardTypeName?: string
 
     /** 根据关联字段ID获取级联字段的函数（用于多级关联） */

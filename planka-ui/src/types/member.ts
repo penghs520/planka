@@ -80,7 +80,7 @@ export interface MemberOptionDTO {
 }
 
 /**
- * 成员卡片类型选项
+ * 成员实体类型选项
  * 用于添加成员时选择类型
  */
 export interface MemberCardTypeOption {
@@ -96,7 +96,7 @@ export interface AddMemberRequest {
   email: string
   nickname: string
   role?: OrganizationRole
-  cardTypeId?: string  // 成员卡片类型ID，当有多种成员类型时需要指定
+  cardTypeId?: string  // 成员实体类型ID，当有多种成员类型时需要指定
 }
 
 /**

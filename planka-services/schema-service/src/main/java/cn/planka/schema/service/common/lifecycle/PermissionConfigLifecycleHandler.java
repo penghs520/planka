@@ -24,7 +24,7 @@ public class PermissionConfigLifecycleHandler implements SchemaLifecycleHandler<
     @Override
     public void beforeCreate(PermissionConfigDefinition definition) {
         if (definition.getCardTypeId() == null) {
-            throw new IllegalArgumentException("权限配置必须指定所属卡片类型ID");
+            throw new IllegalArgumentException("权限配置必须指定所属__PLANKA_EINST__ID");
         }
     }
 
@@ -33,7 +33,7 @@ public class PermissionConfigLifecycleHandler implements SchemaLifecycleHandler<
         // cardTypeId 创建后不可修改
         if (oldDefinition.getCardTypeId() != null && newDefinition.getCardTypeId() != null) {
             if (!oldDefinition.getCardTypeId().value().equals(newDefinition.getCardTypeId().value())) {
-                throw new IllegalArgumentException("权限配置的所属卡片类型不可修改");
+                throw new IllegalArgumentException("权限配置的所属__PLANKA_EINST__不可修改");
             }
         }
     }

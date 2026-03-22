@@ -28,11 +28,11 @@ public class ValueStreamService {
     private final SchemaRepository schemaRepository;
 
     /**
-     * 根据卡片类型ID获取价值流定义
+     * 根据__PLANKA_EINST__ID获取价值流定义
      * <p>
-     * 一个卡片类型仅允许创建一个价值流，因此返回单个结果或null
+     * 一个__PLANKA_EINST__仅允许创建一个价值流，因此返回单个结果或null
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 价值流定义，不存在则返回null
      */
     public Result<ValueStreamDefinition> getByCardTypeId(String cardTypeId) {

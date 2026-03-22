@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 日期属性的卡片类型级别配置
+ * 日期属性的__PLANKA_EINST__级别配置
  */
 @Getter
 @Setter

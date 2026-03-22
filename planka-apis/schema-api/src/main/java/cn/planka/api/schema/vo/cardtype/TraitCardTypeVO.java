@@ -6,9 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 属性集 VO
+ * 特征类型 VO
  * <p>
- * 属性集只能被继承，不能直接创建卡片。
+ * 特征类型只能被继承，不能直接创建卡片。
  */
 @Data
 @SuperBuilder

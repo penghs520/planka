@@ -28,9 +28,9 @@ const ROW_HEIGHT_OPTIONS = computed(() => [
 
 const props = withDefaults(
   defineProps<{
-    /** 卡片类型 ID（用于漏斗过滤） */
+    /** 实体类型 ID（用于漏斗过滤） */
     cardTypeId?: string
-    /** 根卡片类型名称（用于漏斗过滤路径显示） */
+    /** 根实体类型名称（用于漏斗过滤路径显示） */
     rootCardTypeName?: string
     /** 视图内置过滤条件描述 */
     viewConditionDescription?: string

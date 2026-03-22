@@ -6,7 +6,7 @@ const FIELD_OPTIONS_URL = '/api/v1/schemas/field-options'
 
 /**
  * 属性选项 API
- * 提供卡片类型属性选项的查询接口，用于：
+ * 提供实体类型属性选项的查询接口，用于：
  * - 视图配置的列选择
  * - 筛选器的字段选择
  * - 排序字段选择
@@ -15,7 +15,7 @@ const FIELD_OPTIONS_URL = '/api/v1/schemas/field-options'
  */
 export const fieldOptionsApi = {
   /**
-   * 获取单个卡片类型的字段列表（简化版，用于视图配置等场景）
+   * 获取单个实体类型的字段列表（简化版，用于视图配置等场景）
    */
   async getFields(cardTypeId: string): Promise<FieldOption[]> {
     const response: CommonFieldOptionResponse = await request.post(`${FIELD_OPTIONS_URL}/common`, {
@@ -25,8 +25,8 @@ export const fieldOptionsApi = {
   },
 
   /**
-   * 获取多个卡片类型的共同字段列表
-   * @param cardTypeIds 卡片类型ID列表
+   * 获取多个实体类型的共同字段列表
+   * @param cardTypeIds 实体类型ID列表
    * @param fieldTypes 可选，属性类型过滤
    */
   getCommonFields(
@@ -40,8 +40,8 @@ export const fieldOptionsApi = {
   },
 
   /**
-   * 根据关联字段ID获取级联的目标卡片类型的共同属性选项
-   * 当关联类型的目标端有多个卡片类型时，后端会返回这些卡片类型之间的共同属性
+   * 根据关联字段ID获取级联的目标实体类型的共同属性选项
+   * 当关联类型的目标端有多个实体类型时，后端会返回这些实体类型之间的共同属性
    * 返回精简的 FieldOption 列表，适用于属性选择场景
    */
   async getFieldsByLinkFieldId(linkFieldId: string): Promise<FieldOption[]> {
@@ -57,9 +57,9 @@ export const fieldOptionsApi = {
   },
 
   /**
-   * 获取源卡片类型和目标卡片类型之间可以匹配的关联属性
-   * @param sourceCardTypeIds 源卡片类型ID列表（当前层级）
-   * @param targetCardTypeIds 目标卡片类型ID列表（父层级）
+   * 获取源实体类型和目标实体类型之间可以匹配的关联属性
+   * @param sourceCardTypeIds 源实体类型ID列表（当前层级）
+   * @param targetCardTypeIds 目标实体类型ID列表（父层级）
    * @returns 只返回单选的关联属性（用于架构线配置，子节点只能有一个父节点）
    */
   getMatchingLinkFields(

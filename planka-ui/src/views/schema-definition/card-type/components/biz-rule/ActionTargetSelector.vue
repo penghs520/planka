@@ -9,9 +9,9 @@ import { fieldOptionsApi } from '@/api/field-options'
 const { t } = useI18n()
 
 const props = defineProps<{
-  /** 当前卡片类型的字段选项（用于获取关联属性） */
+  /** 当前实体类型的字段选项（用于获取关联属性） */
   fieldOptions: FieldOption[]
-  /** 当前卡片类型ID */
+  /** 当前实体类型ID */
   cardTypeId: string
 }>()
 
@@ -20,7 +20,7 @@ const modelValue = defineModel<ActionTargetSelector>({ required: true })
 // 下拉框显示状态
 const dropdownVisible = ref(false)
 
-// 加载关联属性目标卡片类型的字段
+// 加载关联属性目标实体类型的字段
 const linkedCardFieldOptions = ref<FieldOption[]>([])
 const loadingLinkedFields = ref(false)
 
@@ -109,7 +109,7 @@ function handleDropdownVisibleChange(visible: boolean) {
   }
 }
 
-// 加载关联属性目标卡片类型的字段
+// 加载关联属性目标实体类型的字段
 async function loadLinkedCardFields(linkFieldId: string) {
   loadingLinkedFields.value = true
   try {
@@ -122,7 +122,7 @@ async function loadLinkedCardFields(linkFieldId: string) {
   }
 }
 
-// 监听选中的关联属性变化，加载目标卡片类型的字段
+// 监听选中的关联属性变化，加载目标实体类型的字段
 watch(selectedLinkField, (field) => {
   if (field) {
     loadLinkedCardFields(field.id)

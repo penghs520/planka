@@ -13,10 +13,10 @@ USE planka_extension;
 -- ============================================================
 -- 1. card_history_meta 卡片历史表元数据
 -- ============================================================
--- 记录每个卡片类型对应的历史表名，用于动态分表
+-- 记录每个__PLANKA_EINST__对应的历史表名，用于动态分表
 CREATE TABLE IF NOT EXISTS card_history_meta (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '自增主键',
-    card_type_id VARCHAR(64) NOT NULL COMMENT '卡片类型ID',
+    card_type_id VARCHAR(64) NOT NULL COMMENT '__PLANKA_EINST__ID',
     table_name VARCHAR(100) NOT NULL COMMENT '历史表名',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     UNIQUE INDEX uk_card_type_id (card_type_id)
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS comment (
     id BIGINT PRIMARY KEY COMMENT '评论ID',
     org_id VARCHAR(64) NOT NULL COMMENT '组织ID',
     card_id VARCHAR(64) NOT NULL COMMENT '卡片ID',
-    card_type_id VARCHAR(64) NOT NULL COMMENT '卡片类型ID',
+    card_type_id VARCHAR(64) NOT NULL COMMENT '__PLANKA_EINST__ID',
     parent_id BIGINT DEFAULT NULL COMMENT '父评论ID（用于回复）',
     root_id BIGINT DEFAULT NULL COMMENT '根评论ID（用于回复链）',
     reply_to_member_id VARCHAR(64) DEFAULT NULL COMMENT '回复的成员ID',

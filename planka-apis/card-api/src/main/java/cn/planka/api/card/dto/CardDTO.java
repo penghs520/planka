@@ -43,7 +43,7 @@ public class CardDTO {
     private OrgId orgId;
 
     /**
-     * 卡片类型ID
+     * 实体类型ID
      */
     private CardTypeId typeId;
 

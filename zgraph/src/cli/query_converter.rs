@@ -291,7 +291,7 @@ impl QueryConverter {
         }))
     }
 
-    /// 构建卡片类型条件节点
+    /// 构建__PLANKA_EINST__条件节点
     fn build_card_type_condition_node(condition: &WhereCondition) -> Result<NodeType> {
         let operator = match condition.operator {
             WhereOperator::Equal => {

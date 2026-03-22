@@ -24,7 +24,7 @@ public class CardDetailTemplateController {
      * 查询模板列表
      *
      * @param orgId      组织ID
-     * @param cardTypeId 卡片类型ID（可选，用于筛选）
+     * @param cardTypeId __PLANKA_EINST__ID（可选，用于筛选）
      * @return 模板列表
      */
     @GetMapping
@@ -35,9 +35,9 @@ public class CardDetailTemplateController {
     }
 
     /**
-     * 根据卡片类型ID获取模板列表
+     * 根据__PLANKA_EINST__ID获取模板列表
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 模板定义列表
      */
     @GetMapping("/by-card-type/{cardTypeId}")

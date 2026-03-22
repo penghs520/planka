@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Data
 public class QueryScope {
-    /** 卡片类型ID列表 */
+    /** 实体类型ID列表 */
     private List<String> cardTypeIds;
 
     /** 卡片ID列表 */

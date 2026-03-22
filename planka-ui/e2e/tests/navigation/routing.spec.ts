@@ -11,7 +11,7 @@ test.describe('路由导航', () => {
     await expect(page).toHaveURL(/\/admin/)
   })
 
-  test('管理后台默认重定向到卡片类型', async ({ page }) => {
+  test('管理后台默认重定向到实体类型', async ({ page }) => {
     await page.goto('/admin')
     await expect(page).toHaveURL(/\/admin\/card-type/)
   })

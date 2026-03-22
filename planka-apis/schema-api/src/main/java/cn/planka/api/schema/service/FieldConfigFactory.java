@@ -19,7 +19,7 @@ class FieldConfigFactory {
      * 从关联类型创建关联属性配置
      *
      * @param linkType   关联类型定义
-     * @param cardTypeId 所属卡片类型ID
+     * @param cardTypeId 所属实体类型ID
      * @param position   关联位置（SOURCE 或 TARGET）
      * @return 关联属性配置
      */

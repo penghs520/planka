@@ -25,7 +25,7 @@ public final class CreateLinkedCardExecution implements ActionExecutionType {
     private String linkTypeId;
 
     /**
-     * 目标卡片类型ID
+     * 目标__PLANKA_EINST__ID
      */
     @JsonProperty("targetCardTypeId")
     private String targetCardTypeId;

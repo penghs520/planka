@@ -122,14 +122,14 @@ function handleClose() {
                           <div class="help-desc">
                             强依赖关系，部分不能脱离整体独立存在。当整体被删除时，部分也应该被删除。
                           </div>
-                          <div class="help-example">例如：卡片详情模板依赖于卡片类型</div>
+                          <div class="help-example">例如：卡片详情模板依赖于实体类型</div>
                         </div>
                         <div class="help-item">
                           <div class="help-label">聚合（AGGREGATION）</div>
                           <div class="help-desc">
                             弱依赖关系，部分可以独立存在。当存在聚合引用时，无法删除被引用的对象，需先解除引用关系。
                           </div>
-                          <div class="help-example">例如：视图聚合引用卡片类型，必须先删除视图或解除引用，才能删除卡片类型</div>
+                          <div class="help-example">例如：视图聚合引用实体类型，必须先删除视图或解除引用，才能删除实体类型</div>
                         </div>
                       </div>
                     </template>
@@ -182,14 +182,14 @@ function handleClose() {
                           <div class="help-desc">
                             强依赖关系，部分不能脱离整体独立存在。当整体被删除时，部分也应该被删除。
                           </div>
-                          <div class="help-example">例如：卡片详情模板依赖于卡片类型</div>
+                          <div class="help-example">例如：卡片详情模板依赖于实体类型</div>
                         </div>
                         <div class="help-item">
                           <div class="help-label">聚合（AGGREGATION）</div>
                           <div class="help-desc">
                             弱依赖关系，部分可以独立存在。当存在聚合引用时，无法删除被引用的对象，需先解除引用关系。
                           </div>
-                          <div class="help-example">例如：视图聚合引用卡片类型，必须先删除视图或解除引用，才能删除卡片类型</div>
+                          <div class="help-example">例如：视图聚合引用实体类型，必须先删除视图或解除引用，才能删除实体类型</div>
                         </div>
                       </div>
                     </template>

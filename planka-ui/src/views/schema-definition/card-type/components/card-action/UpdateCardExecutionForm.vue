@@ -12,7 +12,7 @@ const { t } = useI18n()
 const orgStore = useOrgStore()
 
 const props = defineProps<{
-  /** 当前卡片类型 ID */
+  /** 当前实体类型 ID */
   cardTypeId: string
 }>()
 
@@ -22,10 +22,10 @@ const modelValue = defineModel<UpdateCardExecution>({ required: true })
 const fieldOptions = ref<FieldOption[]>([])
 const loadingFields = ref(false)
 
-// 成员卡片类型的字段选项
+// 成员实体类型的字段选项
 const memberFieldOptions = ref<FieldOption[]>([])
 
-// 成员卡片类型ID
+// 成员实体类型ID
 const memberCardTypeId = computed(() => {
   if (!orgStore.currentOrgId) return ''
   return `${orgStore.currentOrgId}:member`
@@ -54,7 +54,7 @@ async function loadFieldOptions() {
   }
 }
 
-// 加载成员卡片类型的字段选项
+// 加载成员实体类型的字段选项
 async function loadMemberFieldOptions() {
   if (!memberCardTypeId.value) return
   try {

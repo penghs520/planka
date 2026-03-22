@@ -59,7 +59,7 @@ public class CreateCardActionExecutor extends AbstractRuleActionExecutor<CreateC
             CardId memberCardId = context.getOperatorId() != null ? CardId.of(context.getOperatorId()) : null;
             String title = templateResolver.resolve(action.getTitleTemplate(), context.getCardId(), memberCardId);
 
-            // 确定卡片类型
+            // 确定__PLANKA_EINST__
             CardTypeId cardTypeId = action.getCardTypeId() != null
                     ? action.getCardTypeId()
                     : context.getCardTypeId();

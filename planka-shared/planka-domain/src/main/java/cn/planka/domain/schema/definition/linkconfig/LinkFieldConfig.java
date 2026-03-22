@@ -24,9 +24,9 @@ import java.util.Set;
  * 关联属性配置
  * <p>
  * 继承 FieldConfig，fieldId 字段存储格式为 "{linkTypeId}:{SOURCE|TARGET}"。
- * 当关联类型应用到卡片类型时，产生此配置，支持差异化设置。
+ * 当关联类型应用到__PLANKA_EINST__时，产生此配置，支持差异化设置。
  * <p>
- * belongTo: 所属的卡片类型ID
+ * belongTo: 所属的__PLANKA_EINST__ID
  */
 @Getter
 @Setter
@@ -63,7 +63,7 @@ public final class LinkFieldConfig extends FieldConfig {
      * @param id          配置ID
      * @param orgId       组织ID
      * @param name        名称
-     * @param cardTypeId  所属卡片类型ID
+     * @param cardTypeId  所属__PLANKA_EINST__ID
      * @param linkFieldId 关联属性ID，格式为 "{linkTypeId}:{SOURCE|TARGET}"
      * @param systemField 是否系统内置
      */

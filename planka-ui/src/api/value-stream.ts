@@ -24,9 +24,9 @@ const VALUE_STREAM_URL = '/api/v1/schemas/value-streams'
  */
 export const valueStreamApi = {
   /**
-   * 根据卡片类型ID获取价值流定义
+   * 根据实体类型ID获取价值流定义
    *
-   * @param cardTypeId 卡片类型ID
+   * @param cardTypeId 实体类型ID
    * @returns 价值流定义，不存在则返回 null
    */
   getByCardType(cardTypeId: string): Promise<ValueStreamDefinition | null> {
@@ -77,7 +77,7 @@ export const valueStreamApi = {
    *
    * @param statusId 状态ID
    * @param streamId 价值流ID
-   * @param cardTypeId 卡片类型ID
+   * @param cardTypeId 实体类型ID
    * @returns 卡片数量
    */
   getCardCountByStatus(statusId: string, streamId: string, cardTypeId: string): Promise<number> {
@@ -130,7 +130,7 @@ export const valueStreamBranchApi = {
   /**
    * 获取价值流状态选项列表
    *
-   * @param cardTypeId 卡片类型ID
+   * @param cardTypeId 实体类型ID
    * @returns 状态选项列表
    */
   getStatusOptions(cardTypeId: string): Promise<StatusOption[]> {

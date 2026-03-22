@@ -73,7 +73,7 @@ export interface ViewDataResponse {
 export interface ListViewDataResponse extends ViewDataResponse {
   viewType: 'LIST'
 
-  /** 关联的卡片类型 ID */
+  /** 关联的实体类型 ID */
   cardTypeId?: string
 
   /** 卡片数据列表（非分组模式） */
@@ -242,9 +242,9 @@ export interface LinkRenderConfig {
   type: 'LINK'
   /** 是否多选 */
   multiple: boolean
-  /** 目标卡片类型 ID */
+  /** 目标实体类型 ID */
   targetCardTypeId?: string
-  /** 目标卡片类型名称 */
+  /** 目标实体类型名称 */
   targetCardTypeName?: string
 }
 

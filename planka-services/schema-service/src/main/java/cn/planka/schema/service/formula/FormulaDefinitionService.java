@@ -45,7 +45,7 @@ public class FormulaDefinitionService {
         // 公式定义仅支持组织级配置，忽略 spaceId 参数
         List<SchemaDefinition<?>> schemas = schemaQuery.query(orgId, SchemaType.FORMULA_DEFINITION);
 
-        // 收集所有卡片类型 ID
+        // 收集所有__PLANKA_EINST__ ID
         Set<String> allCardTypeIds = schemas.stream()
                 .filter(s -> s instanceof AbstractFormulaDefinition)
                 .map(s -> (AbstractFormulaDefinition) s)
@@ -54,7 +54,7 @@ public class FormulaDefinitionService {
                 .map(CardTypeId::value)
                 .collect(Collectors.toSet());
 
-        // 批量查询卡片类型名称
+        // 批量查询__PLANKA_EINST__名称
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(orgId, allCardTypeIds);
 
         List<FormulaDefinitionVO> voList = schemas.stream()
@@ -66,7 +66,7 @@ public class FormulaDefinitionService {
     }
 
     /**
-     * 批量获取卡片类型名称映射
+     * 批量获取__PLANKA_EINST__名称映射
      */
     private Map<String, String> getCardTypeNameMap(String orgId, Set<String> cardTypeIds) {
         if (cardTypeIds.isEmpty()) {
@@ -85,7 +85,7 @@ public class FormulaDefinitionService {
      * 将公式定义转换为 VO
      */
     private FormulaDefinitionVO toVO(AbstractFormulaDefinition formula, Map<String, String> cardTypeNameMap) {
-        // 构建卡片类型信息列表
+        // 构建__PLANKA_EINST__信息列表
         List<CardTypeInfo> cardTypes = null;
         if (formula.getCardTypeIds() != null && !formula.getCardTypeIds().isEmpty()) {
             cardTypes = formula.getCardTypeIds().stream()

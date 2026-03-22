@@ -29,7 +29,7 @@ public abstract class CardEvent extends DomainEvent {
     /** 卡片ID */
     private final String cardId;
 
-    /** 卡片类型ID */
+    /** __PLANKA_EINST__ID */
     private final String cardTypeId;
 
     /** 操作来源（用户操作、业务规则、API调用等） */

@@ -13,11 +13,11 @@ defineProps<{
   fieldOptions: FieldOption[]
   /** 当前卡片的字段列表（用于"当前卡片"引用来源，默认使用 fieldOptions） */
   referenceFieldOptions?: FieldOption[]
-  /** 成员卡片类型的字段列表（用于"当前用户"引用） */
+  /** 成员实体类型的字段列表（用于"当前用户"引用） */
   memberFieldOptions?: FieldOption[]
-  /** 当前卡片类型ID（用于判断引用来源本身是否可选） */
+  /** 当前实体类型ID（用于判断引用来源本身是否可选） */
   currentCardTypeId?: string
-  /** 成员卡片类型ID（用于判断引用来源本身是否可选） */
+  /** 成员实体类型ID（用于判断引用来源本身是否可选） */
   memberCardTypeId?: string
   /** 是否隐藏用户输入选项（业务规则等自动执行场景使用） */
   hideUserInput?: boolean

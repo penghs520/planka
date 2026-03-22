@@ -45,7 +45,7 @@ export const cardActionApi = {
   },
 
   /**
-   * 根据卡片类型 ID 获取动作配置列表
+   * 根据实体类型 ID 获取动作配置列表
    */
   getByCardTypeId(cardTypeId: string): Promise<CardActionConfigDefinition[]> {
     return request.get(`${CARD_ACTION_URL}/by-card-type/${cardTypeId}`)

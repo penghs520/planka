@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS sys_organization (
     description VARCHAR(1000) NULL COMMENT '组织描述',
     logo VARCHAR(500) NULL COMMENT '组织Logo URL',
 
-    member_card_type_id VARCHAR(64) NULL COMMENT '成员卡片类型ID',
+    member_card_type_id VARCHAR(64) NULL COMMENT '成员__PLANKA_EINST__ID',
 
     status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '状态(ACTIVE/DISABLED/DELETED)',
 

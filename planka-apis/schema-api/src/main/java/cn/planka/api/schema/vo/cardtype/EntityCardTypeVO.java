@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * 实体类型 VO
  * <p>
- * 实体类型可以继承多个属性集，可用于创建卡片实例。
+ * 实体类型可以继承多个特征类型，可用于创建卡片实例。
  */
 @Data
 @SuperBuilder
@@ -30,12 +30,12 @@ public class EntityCardTypeVO extends CardTypeVO {
     private CodeGenerationRuleVO codeGenerationRule;
 
     /**
-     * 继承的属性集 ID 列表
+     * 继承的特征类型 ID 列表
      */
     private Set<CardTypeId> parentTypeIds;
 
     /**
-     * 继承的属性集信息列表
+     * 继承的特征类型信息列表
      */
     private List<CardTypeInfo> parentTypes;
 

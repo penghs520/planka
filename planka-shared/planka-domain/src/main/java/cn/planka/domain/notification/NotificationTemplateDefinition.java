@@ -42,7 +42,7 @@ public final class NotificationTemplateDefinition
     /**
      * 定义参数
      * <p>
-     * 支持多种类型：卡片类型、日期、文本、多行文本、链接、数字
+     * 支持多种类型：__PLANKA_EINST__、日期、文本、多行文本、链接、数字
      */
     @JsonProperty("definitionParameter")
     private DefinitionParameter definitionParameter;
@@ -122,7 +122,7 @@ public final class NotificationTemplateDefinition
     }
 
     /**
-     * 通知模板属于某个卡片类型（仅当定义参数为卡片类型时）
+     * 通知模板属于某个__PLANKA_EINST__（仅当定义参数为__PLANKA_EINST__时）
      */
     @Override
     public SchemaId belongTo() {
@@ -164,7 +164,7 @@ public final class NotificationTemplateDefinition
     }
 
     /**
-     * 获取卡片类型ID（兼容方法，仅当定义参数为卡片类型时有效）
+     * 获取__PLANKA_EINST__ID（兼容方法，仅当定义参数为__PLANKA_EINST__时有效）
      */
     public CardTypeId getCardTypeId() {
         if (definitionParameter instanceof CardTypeDefinitionParameter cardTypeParam) {

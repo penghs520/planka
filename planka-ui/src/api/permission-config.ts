@@ -13,9 +13,9 @@ const BASE_URL = '/api/v1/schemas/common'
  */
 export const permissionConfigApi = {
   /**
-   * 查询卡片类型的权限配置列表
+   * 查询实体类型的权限配置列表
    *
-   * @param cardTypeId 卡片类型ID
+   * @param cardTypeId 实体类型ID
    * @returns 权限配置列表
    */
   async listByCardType(cardTypeId: string): Promise<PermissionConfigDefinition[]> {
@@ -31,7 +31,7 @@ export const permissionConfigApi = {
   /**
    * 获取权限配置
    *
-   * @param cardTypeId 卡片类型ID
+   * @param cardTypeId 实体类型ID
    * @returns 权限配置（可能为空）
    */
   async getOrgLevel(cardTypeId: string): Promise<PermissionConfigDefinition | null> {

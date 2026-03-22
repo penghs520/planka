@@ -15,9 +15,9 @@ public class LinkRenderConfig extends FieldRenderConfig {
     /** 是否多选 */
     private boolean multiple;
 
-    /** 目标卡片类型 ID */
+    /** 目标实体类型 ID */
     private String targetCardTypeId;
 
-    /** 目标卡片类型名称 */
+    /** 目标实体类型名称 */
     private String targetCardTypeName;
 }

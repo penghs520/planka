@@ -11,7 +11,7 @@ const TEMPLATE_URL = '/api/v1/schemas/card-create-page-templates'
 export const cardCreatePageTemplateApi = {
     /**
      * 查询模板列表
-     * @param cardTypeId 可选，按卡片类型筛选
+     * @param cardTypeId 可选，按实体类型筛选
      */
     list(cardTypeId?: string): Promise<CreatePageTemplateListItemVO[]> {
         return request.get(TEMPLATE_URL, { params: { cardTypeId } })
@@ -25,14 +25,14 @@ export const cardCreatePageTemplateApi = {
     },
 
     /**
-     * 根据卡片类型 ID 获取所有模板
+     * 根据实体类型 ID 获取所有模板
      */
     getByCardType(cardTypeId: string): Promise<CardCreatePageTemplateDefinition[]> {
         return request.get(`${TEMPLATE_URL}/by-card-type/${cardTypeId}`)
     },
 
     /**
-     * 获取卡片类型的默认新建页模板
+     * 获取实体类型的默认新建页模板
      */
     getDefaultByCardType(cardTypeId: string): Promise<CardCreatePageTemplateDefinition | null> {
         return request.get(`${TEMPLATE_URL}/by-card-type/${cardTypeId}/default`)
@@ -95,7 +95,7 @@ export const cardCreatePageTemplateApi = {
 
     /**
      * 获取运行时表单配置
-     * @param cardTypeId 卡片类型 ID
+     * @param cardTypeId 实体类型 ID
      */
     getForm(cardTypeId: string): Promise<CreatePageFormVO> {
         return request.get(`${TEMPLATE_URL}/form`, { params: { cardTypeId } })

@@ -17,7 +17,7 @@ const { t } = useI18n()
 const orgStore = useOrgStore()
 
 const props = defineProps<{
-  /** 当前卡片类型 ID */
+  /** 当前实体类型 ID */
   cardTypeId: string
 }>()
 
@@ -34,7 +34,7 @@ const titleTemplateValue = computed({
   },
 })
 
-// 当前卡片类型的字段列表（用于标题模板引用）
+// 当前实体类型的字段列表（用于标题模板引用）
 const sourceFieldOptions = ref<FieldOption[]>([])
 const loadingSourceFields = ref(false)
 
@@ -42,11 +42,11 @@ const loadingSourceFields = ref(false)
 const linkTypeOptions = ref<LinkTypeOptionVO[]>([])
 const loadingLinkTypes = ref(false)
 
-// 卡片类型列表
+// 实体类型列表
 const cardTypeOptions = ref<{ id: string; name: string }[]>([])
 const loadingCardTypes = ref(false)
 
-// 目标卡片类型的字段列表
+// 目标实体类型的字段列表
 const targetFieldOptions = ref<FieldOption[]>([])
 const loadingTargetFields = ref(false)
 
@@ -77,7 +77,7 @@ const expressionFieldProvider: FieldProvider = {
   },
 }
 
-// 加载当前卡片类型的字段
+// 加载当前实体类型的字段
 async function loadSourceFields() {
   if (!props.cardTypeId) return
 
@@ -103,7 +103,7 @@ async function loadLinkTypes() {
   }
 }
 
-// 加载卡片类型
+// 加载实体类型
 async function loadCardTypes() {
   loadingCardTypes.value = true
   try {
@@ -116,7 +116,7 @@ async function loadCardTypes() {
   }
 }
 
-// 加载目标卡片类型的字段
+// 加载目标实体类型的字段
 async function loadTargetFields(cardTypeId: string) {
   if (!cardTypeId) {
     targetFieldOptions.value = []
@@ -141,7 +141,7 @@ function handleLinkTypeChange(linkTypeId: string) {
   }
 }
 
-// 目标卡片类型变化时加载字段
+// 目标实体类型变化时加载字段
 function handleTargetCardTypeChange(cardTypeId: string) {
   modelValue.value = {
     ...modelValue.value,
@@ -175,7 +175,7 @@ watch(
   }
 )
 
-// 监听目标卡片类型变化
+// 监听目标实体类型变化
 watch(
   () => modelValue.value?.targetCardTypeId,
   (cardTypeId) => {
@@ -207,7 +207,7 @@ watch(
       </a-select>
     </a-form-item>
 
-    <!-- 目标卡片类型 -->
+    <!-- 目标实体类型 -->
     <a-form-item :label="t('admin.cardAction.createLinkedCard.targetCardType')">
       <a-select
         :model-value="modelValue.targetCardTypeId"

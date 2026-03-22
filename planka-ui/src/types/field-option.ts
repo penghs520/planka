@@ -35,10 +35,10 @@ export interface FieldOption {
   enumOptions?: EnumOption[]
 
   /**
-   * 目标卡片类型ID列表（仅关联类型字段有效）
+   * 目标实体类型ID列表（仅关联类型字段有效）
    * <p>
-   * 对于 LINK 类型字段，包含该关联属性可以链接到的目标卡片类型ID。
-   * SOURCE 端返回 TARGET 端卡片类型ID，TARGET 端返回 SOURCE 端卡片类型ID。
+   * 对于 LINK 类型字段，包含该关联属性可以链接到的目标实体类型ID。
+   * SOURCE 端返回 TARGET 端实体类型ID，TARGET 端返回 SOURCE 端实体类型ID。
    */
   targetCardTypeIds?: string[]
 

@@ -197,10 +197,10 @@ const props = withDefaults(
     /** 可用字段列表 */
     availableFields?: FieldOption[]
 
-    /** 关联类型列表（用于获取目标卡片类型） */
+    /** 关联类型列表（用于获取目标实体类型） */
     linkTypes?: LinkTypeVO[]
 
-    /** 根卡片类型名称 */
+    /** 根实体类型名称 */
     rootCardTypeName?: string
 
     /** 最大路径深度（默认3级） */

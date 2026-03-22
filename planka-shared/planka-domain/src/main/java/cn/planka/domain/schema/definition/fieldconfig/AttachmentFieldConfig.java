@@ -13,7 +13,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 附件属性的卡片类型级别配置
+ * 附件属性的__PLANKA_EINST__级别配置
  */
 @Setter
 @Getter

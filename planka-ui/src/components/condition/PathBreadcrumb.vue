@@ -54,9 +54,9 @@ export interface PathItemInfo {
   linkFieldId: string
   /** 关联名称（用于显示） */
   name: string
-  /** 目标卡片类型ID */
+  /** 目标实体类型ID */
   targetCardTypeId: string
-  /** 目标卡片类型名称 */
+  /** 目标实体类型名称 */
   targetCardTypeName: string
 }
 

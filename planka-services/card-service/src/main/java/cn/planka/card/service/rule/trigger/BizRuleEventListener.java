@@ -124,7 +124,7 @@ public class BizRuleEventListener {
         ValueStreamDefinition valueStream = valueStreamCacheQuery
                 .getValueStreamByCardTypeId(CardTypeId.of(event.getCardTypeId()))
                 .orElseThrow(() -> new IllegalStateException(
-                        "找不到卡片类型对应的价值流定义: cardTypeId=" + event.getCardTypeId()));
+                        "找不到__PLANKA_EINST__对应的价值流定义: cardTypeId=" + event.getCardTypeId()));
 
         // 通过价值流独立判断移动方向
         boolean isRollback = false;

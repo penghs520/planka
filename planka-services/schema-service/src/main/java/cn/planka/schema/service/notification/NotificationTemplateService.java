@@ -72,7 +72,7 @@ public class NotificationTemplateService {
     }
 
     /**
-     * 根据卡片类型查询通知模板列表
+     * 根据__PLANKA_EINST__查询通知模板列表
      */
     public Result<List<NotificationTemplateVO>> listByCardType(String orgId, String cardTypeId) {
         List<SchemaDefinition<?>> schemas = schemaQuery.query(orgId, SchemaType.NOTIFICATION_TEMPLATE);
@@ -81,7 +81,7 @@ public class NotificationTemplateService {
                 .filter(s -> s instanceof NotificationTemplateDefinition)
                 .map(s -> (NotificationTemplateDefinition) s)
                 .filter(t -> {
-                    // 只过滤卡片类型参数的模板
+                    // 只过滤__PLANKA_EINST__参数的模板
                     if (t.getDefinitionParameter() instanceof CardTypeDefinitionParameter cardTypeParam) {
                         return cardTypeParam.getCardTypeId() != null
                                 && cardTypeParam.getCardTypeId().value().equals(cardTypeId);
@@ -292,7 +292,7 @@ public class NotificationTemplateService {
      * 将通知模板转换为 VO
      */
     private NotificationTemplateVO toVO(NotificationTemplateDefinition template) {
-        // 提取卡片类型信息（兼容）
+        // 提取__PLANKA_EINST__信息（兼容）
         String cardTypeId = null;
         if (template.getDefinitionParameter() instanceof CardTypeDefinitionParameter cardTypeParam) {
             cardTypeId = cardTypeParam.getCardTypeId() != null ? cardTypeParam.getCardTypeId().value() : null;

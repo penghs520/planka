@@ -281,9 +281,9 @@ const props = defineProps<{
   referenceFields?: FieldOption[]
   /** 成员卡片字段（用于"当前用户"引用） */
   memberFields?: FieldOption[]
-  /** 当前卡片类型ID（用于判断引用来源本身是否可选） */
+  /** 当前实体类型ID（用于判断引用来源本身是否可选） */
   currentCardTypeId?: string
-  /** 成员卡片类型ID（用于判断引用来源本身是否可选） */
+  /** 成员实体类型ID（用于判断引用来源本身是否可选） */
   memberCardTypeId?: string
   /** 是否隐藏用户输入选项（业务规则等自动执行场景使用） */
   hideUserInput?: boolean
@@ -437,7 +437,7 @@ function isSourceSelfSelectableCheck(source: ReferenceSource): boolean {
   const targetCardTypeIds = props.targetField.targetCardTypeIds || []
   if (targetCardTypeIds.length === 0) return true // 无限制时都可以
 
-  // 获取引用来源的卡片类型ID
+  // 获取引用来源的实体类型ID
   const sourceCardTypeId = source === ReferenceSource.CURRENT_USER
     ? props.memberCardTypeId
     : props.currentCardTypeId

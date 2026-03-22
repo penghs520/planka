@@ -32,14 +32,14 @@ public class CardDetailTemplateService {
      * 查询模板列表
      *
      * @param orgId      组织ID
-     * @param cardTypeId 卡片类型ID（可选）
+     * @param cardTypeId __PLANKA_EINST__ID（可选）
      * @return 模板列表
      */
     public Result<List<TemplateListItemVO>> list(String orgId, String cardTypeId) {
         List<SchemaDefinition<?>> definitions;
 
         if (cardTypeId != null && !cardTypeId.isEmpty()) {
-            // 按卡片类型筛选（查询全部，不应用空间过滤）
+            // 按__PLANKA_EINST__筛选（查询全部，不应用空间过滤）
             definitions = schemaQuery.queryBySecondKey(CardTypeId.of(cardTypeId), SchemaType.CARD_DETAIL_TEMPLATE);
         } else {
             // 查询组织下所有模板（查询全部，不应用空间过滤）
@@ -55,9 +55,9 @@ public class CardDetailTemplateService {
     }
 
     /**
-     * 根据卡片类型ID获取模板列表
+     * 根据__PLANKA_EINST__ID获取模板列表
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 模板定义列表
      */
     public Result<List<CardDetailTemplateDefinition>> getByCardType(String cardTypeId) {
@@ -148,7 +148,7 @@ public class CardDetailTemplateService {
     /**
      * 设置为默认模板
      * <p>
-     * 将指定模板设置为默认模板，同时取消该卡片类型下其他模板的默认状态
+     * 将指定模板设置为默认模板，同时取消该__PLANKA_EINST__下其他模板的默认状态
      *
      * @param templateId 模板ID
      * @param operatorId 操作人ID
@@ -170,7 +170,7 @@ public class CardDetailTemplateService {
             return Result.success();
         }
 
-        // 取消该卡片类型下其他模板的默认状态
+        // 取消该__PLANKA_EINST__下其他模板的默认状态
         List<SchemaDefinition<?>> sameTypeTemplates = schemaQuery.queryBySecondKey(
                 targetTemplate.getCardTypeId(),
                 SchemaType.CARD_DETAIL_TEMPLATE

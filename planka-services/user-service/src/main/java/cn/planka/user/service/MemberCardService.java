@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * 成员卡片服务
  * <p>
- * 负责创建成员卡片类型和成员卡片实例
+ * 负责创建成员__PLANKA_EINST__和成员卡片实例
  */
 @Slf4j
 @Service
@@ -38,11 +38,11 @@ public class MemberCardService {
     private final UserRepository userRepository;
 
     /**
-     * 成员卡片类型名称
+     * 成员__PLANKA_EINST__名称
      */
     private static final String MEMBER_CARD_TYPE_NAME = "成员";
     /**
-     * 成员卡片类型编码
+     * 成员__PLANKA_EINST__编码
      */
     private static final String MEMBER_CARD_TYPE_CODE = "member";
 
@@ -65,7 +65,7 @@ public class MemberCardService {
      * 当用户加入组织时调用，创建一个成员卡片实例
      *
      * @param orgId            组织ID
-     * @param memberCardTypeId 成员卡片类型ID
+     * @param memberCardTypeId 成员__PLANKA_EINST__ID
      * @param userId           用户ID
      * @return 成员卡片ID
      * @throws RuntimeException 如果创建失败
@@ -77,7 +77,7 @@ public class MemberCardService {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("用户不存在: " + userId));
 
-        // 2. 查询成员卡片类型的字段配置，获取fieldId
+        // 2. 查询成员__PLANKA_EINST__的字段配置，获取fieldId
         Map<String, String> fieldCodeToId = getFieldIdsByCardType(memberCardTypeId);
 
         // 3. 构建属性值
@@ -121,12 +121,12 @@ public class MemberCardService {
     }
 
     /**
-     * 获取卡片类型关联的字段配置 code -> fieldId 映射
+     * 获取__PLANKA_EINST__关联的字段配置 code -> fieldId 映射
      */
     private Map<String, String> getFieldIdsByCardType(String cardTypeId) {
         Map<String, String> fieldCodeToId = new HashMap<>();
 
-        // 通过字段配置查询接口获取卡片类型的字段配置列表
+        // 通过字段配置查询接口获取__PLANKA_EINST__的字段配置列表
         Result<FieldConfigListWithSource> result = fieldConfigQueryService.getFieldConfigListWithSource(cardTypeId);
 
         if (result.isSuccess() && result.getData() != null) {

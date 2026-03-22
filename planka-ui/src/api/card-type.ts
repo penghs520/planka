@@ -10,32 +10,32 @@ import type { FieldOption } from '@/types/field-option'
 const CARD_TYPE_URL = '/api/v1/schemas/card-types'
 
 /**
- * 卡片类型 API
+ * 实体类型 API
  */
 export const cardTypeApi = {
   /**
-   * 获取卡片类型
+   * 获取实体类型
    */
   getById(cardTypeId: string): Promise<CardTypeDefinition> {
     return schemaApi.getById<CardTypeDefinition>(cardTypeId)
   },
 
   /**
-   * 批量获取卡片类型
+   * 批量获取实体类型
    */
   getByIds(cardTypeIds: string[]): Promise<CardTypeDefinition[]> {
     return schemaApi.getByIds<CardTypeDefinition>(cardTypeIds)
   },
 
   /**
-   * 创建卡片类型
+   * 创建实体类型
    */
   create(definition: CardTypeDefinition): Promise<CardTypeDefinition> {
     return schemaApi.create<CardTypeDefinition>({ definition })
   },
 
   /**
-   * 更新卡片类型
+   * 更新实体类型
    */
   update(
     cardTypeId: string,
@@ -46,70 +46,70 @@ export const cardTypeApi = {
   },
 
   /**
-   * 删除卡片类型
+   * 删除实体类型
    */
   delete(cardTypeId: string): Promise<void> {
     return schemaApi.delete(cardTypeId)
   },
 
   /**
-   * 启用卡片类型
+   * 启用实体类型
    */
   activate(cardTypeId: string): Promise<void> {
     return schemaApi.activate(cardTypeId)
   },
 
   /**
-   * 停用卡片类型
+   * 停用实体类型
    */
   disable(cardTypeId: string): Promise<void> {
     return schemaApi.disable(cardTypeId)
   },
 
   /**
-   * 查询卡片类型列表
+   * 查询实体类型列表
    */
   list(): Promise<CardTypeDefinition[]> {
     return request.get(CARD_TYPE_URL)
   },
 
   /**
-   * 查询卡片类型选项列表（用于下拉框）
+   * 查询实体类型选项列表（用于下拉框）
    */
   listOptions(): Promise<{ id: string; name: string; icon?: string; schemaSubType: string }[]> {
     return request.get(`${CARD_TYPE_URL}/options`)
   },
 
   /**
-   * 查询所有卡片类型
+   * 查询所有实体类型
    */
   listAll(): Promise<CardTypeDefinition[]> {
     return request.get(CARD_TYPE_URL)
   },
 
   /**
-   * 获取卡片类型的引用摘要
+   * 获取实体类型的引用摘要
    */
   getReferenceSummary(cardTypeId: string) {
     return schemaApi.getReferenceSummary(cardTypeId)
   },
 
   /**
-   * 获取卡片类型的变更历史
+   * 获取实体类型的变更历史
    */
   getChangelog(cardTypeId: string, limit = 50) {
     return schemaApi.getChangelog(cardTypeId, limit)
   },
 
   /**
-   * 获取卡片类型的属性配置列表
+   * 获取实体类型的属性配置列表
    */
   getFieldConfigsWithSource(cardTypeId: string): Promise<FieldConfigListWithSource> {
     return request.get(`/api/v1/schemas/field-configs/with-source/${cardTypeId}`)
   },
 
   /**
-   * 保存卡片类型的单个属性配置
+   * 保存实体类型的单个属性配置
    */
   saveFieldConfig(cardTypeId: string, config: FieldConfig): Promise<void> {
     return request.post(`/api/v1/schemas/field-configs/${cardTypeId}`, config)
@@ -124,9 +124,9 @@ export const cardTypeApi = {
 
 
   /**
-   * 获取卡片类型的属性选项（用于过滤条件等场景）
+   * 获取实体类型的属性选项（用于过滤条件等场景）
    * 返回精简的属性信息，不包含完整的配置详情
-   * @param cardTypeId 卡片类型ID
+   * @param cardTypeId 实体类型ID
    */
   async getFieldOptions(cardTypeId: string): Promise<FieldOption[]> {
     try {
@@ -146,7 +146,7 @@ export const cardTypeApi = {
   },
 
   /**
-   * 根据父类型ID查询继承它的卡片类型
+   * 根据父类型ID查询继承它的实体类型
    * @param parentTypeId 父类型ID（格式：schemaId:code）
    */
   getByParent(parentTypeId: string): Promise<CardTypeDefinition[]> {

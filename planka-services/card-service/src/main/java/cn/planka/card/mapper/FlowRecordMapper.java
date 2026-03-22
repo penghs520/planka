@@ -75,7 +75,7 @@ public interface FlowRecordMapper {
     @Update("CREATE TABLE IF NOT EXISTS ${tableName} (" +
             "id BIGINT UNSIGNED NOT NULL COMMENT '唯一标识（雪花算法）', " +
             "card_id BIGINT NOT NULL COMMENT '卡片ID', " +
-            "card_type_id VARCHAR(64) NOT NULL COMMENT '卡片类型ID', " +
+            "card_type_id VARCHAR(64) NOT NULL COMMENT '__PLANKA_EINST__ID', " +
             "stream_id VARCHAR(64) NOT NULL COMMENT '价值流ID', " +
             "step_id VARCHAR(64) NOT NULL COMMENT '阶段ID', " +
             "status_id VARCHAR(64) NOT NULL COMMENT '状态ID', " +

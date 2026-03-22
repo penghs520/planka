@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS flow_record_meta (
 -- CREATE TABLE flow_record_{stream_id} (
 --     id BIGINT UNSIGNED NOT NULL COMMENT '唯一标识（雪花算法）',
 --     card_id BIGINT NOT NULL COMMENT '卡片ID',
---     card_type_id VARCHAR(64) NOT NULL COMMENT '卡片类型ID',
+--     card_type_id VARCHAR(64) NOT NULL COMMENT '__PLANKA_EINST__ID',
 --     stream_id VARCHAR(64) NOT NULL COMMENT '价值流ID',
 --     step_id VARCHAR(64) NOT NULL COMMENT '阶段ID',
 --     status_id VARCHAR(64) NOT NULL COMMENT '状态ID',
@@ -65,10 +65,10 @@ CREATE TABLE IF NOT EXISTS flow_record_meta (
 -- ============================================================
 -- 3. biz_rule_execution_log_meta 规则执行日志元数据表
 -- ============================================================
--- 用于管理按卡片类型动态创建的规则执行日志表
+-- 用于管理按__PLANKA_EINST__动态创建的规则执行日志表
 CREATE TABLE IF NOT EXISTS biz_rule_execution_log_meta (
     id BIGINT AUTO_INCREMENT NOT NULL COMMENT '自增主键',
-    card_type_id VARCHAR(64) NOT NULL COMMENT '卡片类型ID',
+    card_type_id VARCHAR(64) NOT NULL COMMENT '__PLANKA_EINST__ID',
     table_name VARCHAR(128) NOT NULL COMMENT '执行日志表名',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (id),

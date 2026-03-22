@@ -5,7 +5,7 @@ package cn.planka.domain.notification;
  */
 public enum DefinitionParameterType {
     /**
-     * 卡片类型 - 需要选择具体的 CardTypeId
+     * __PLANKA_EINST__ - 需要选择具体的 CardTypeId
      */
     CARD_TYPE,
 

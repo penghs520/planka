@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * 属性配置查询服务
- * 提供卡片类型属性配置的获取功能： 继承优先级（从高到低）：自身 > 显式父类 > 任意卡属性集
+ * 提供实体类型属性配置的获取功能： 继承优先级（从高到低）：自身 > 显式父类 > 任意卡特征类型
  */
 public class FieldConfigQueryService {
 
@@ -30,22 +30,22 @@ public class FieldConfigQueryService {
     }
 
     /**
-     * 获取卡片类型的完整属性配置列表（包含继承和冲突信息）
+     * 获取实体类型的完整属性配置列表（包含继承和冲突信息）
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId 实体类型ID
      * @return 属性配置列表
      */
     public Result<FieldConfigListWithSource> getFieldConfigListWithSource(String cardTypeId) {
         Optional<CardTypeDefinition> schemaOpt = dataProvider.getCardTypeById(cardTypeId);
         if (schemaOpt.isEmpty()) {
-            return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "卡片类型不存在");
+            return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "实体类型不存在");
         }
 
         CardTypeDefinition cardType = schemaOpt.get();
         boolean isConcrete = cardType instanceof EntityCardType;
 
         if (!isConcrete && !(cardType instanceof AbstractCardType)) {
-            return Result.failure(CommonErrorCode.BAD_REQUEST, "指定的 Schema 不是卡片类型");
+            return Result.failure(CommonErrorCode.BAD_REQUEST, "指定的 Schema 不是实体类型");
         }
 
         return Result.success(buildFieldConfigList(cardType, isConcrete));

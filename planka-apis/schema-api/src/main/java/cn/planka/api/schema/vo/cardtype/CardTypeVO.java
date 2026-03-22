@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 /**
- * 卡片类型 VO 基类
+ * 实体类型 VO 基类
  * <p>
  * 使用 Jackson 多态序列化，不同类型返回不同字段。
  */
@@ -28,7 +28,7 @@ public abstract class CardTypeVO {
     public abstract String getSchemaSubType();
 
     /**
-     * 卡片类型 ID
+     * 实体类型 ID
      */
     private String id;
 
@@ -38,17 +38,17 @@ public abstract class CardTypeVO {
     private String orgId;
 
     /**
-     * 卡片类型名称
+     * 实体类型名称
      */
     private String name;
 
     /**
-     * 卡片类型编码
+     * 实体类型编码
      */
     private String code;
 
     /**
-     * 是否为系统内置卡片类型
+     * 是否为系统内置实体类型
      */
     private boolean systemCardType;
 

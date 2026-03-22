@@ -99,7 +99,7 @@ fn get_vertex_hit_cache_bench(c: &mut Criterion) {
 }
 
 fn create_vertex_for_query(db: &RocksDatabase) {
-    //创建500w节点，每5w个节点分配一个卡片类型和容器id
+    //创建500w节点，每5w个节点分配一个__PLANKA_EINST__和容器id
     //每10个节点中有6个节点是卡片状态为Archived，3个节点是卡片状态为InProgress，1个节点是卡片状态为Abandoned
 
     let mut card_type_id = CardTypeId::new("card_type_1".to_string());
@@ -128,7 +128,7 @@ fn create_vertex_for_query(db: &RocksDatabase) {
     txn.commit().unwrap();
 }
 
-//根据卡片类型查询的基准测试
+//根据__PLANKA_EINST__查询的基准测试
 fn get_vertex_by_card_type_bench(c: &mut Criterion) {
     fs::remove_dir_all("/tmp/rdb_test").ok();
     let db = RocksDatabase::new_db_with_config(RocksDbConfig::new("/tmp/rdb_test".to_owned()));
@@ -154,7 +154,7 @@ fn get_vertex_by_card_type_bench(c: &mut Criterion) {
     });
 }
 
-//根据卡片类型 + 容器 + 卡片周期查询的基准测试
+//根据__PLANKA_EINST__ + 容器 + 卡片周期查询的基准测试
 fn get_vertex_by_card_type_and_container_and_state_bench(c: &mut Criterion) {
     fs::remove_dir_all("/tmp/rdb_test").ok();
     let db = RocksDatabase::new_db_with_config(RocksDbConfig::new("/tmp/rdb_test".to_owned()));

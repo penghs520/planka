@@ -25,7 +25,7 @@ public class AttendanceApplicationValidationRequest {
     private String applicantId;
 
     /**
-     * 卡片类型ID
+     * 实体类型ID
      */
     private String cardTypeId;
 

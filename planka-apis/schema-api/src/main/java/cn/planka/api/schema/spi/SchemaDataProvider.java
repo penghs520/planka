@@ -18,10 +18,10 @@ import java.util.Set;
 public interface SchemaDataProvider {
 
     /**
-     * 根据ID获取卡片类型定义
+     * 根据ID获取实体类型定义
      *
-     * @param cardTypeId 卡片类型ID
-     * @return 卡片类型定义，不存在时返回 Optional.empty()
+     * @param cardTypeId 实体类型ID
+     * @return 实体类型定义，不存在时返回 Optional.empty()
      */
     Optional<CardTypeDefinition> getCardTypeById(String cardTypeId);
 
@@ -34,17 +34,17 @@ public interface SchemaDataProvider {
     List<SchemaDefinition<?>> getSchemasByIds(Set<String> ids);
 
     /**
-     * 按卡片类型ID查询所有属性配置（包括关联配置）
+     * 按实体类型ID查询所有属性配置（包括关联配置）
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId 实体类型ID
      * @return 所有属性配置列表（包含 FieldConfig 及其子类 LinkFieldConfig）
      */
     List<FieldConfig> getAllFieldConfigsByCardTypeId(String cardTypeId);
 
     /**
-     * 按卡片类型ID查询关联类型定义
+     * 按实体类型ID查询关联类型定义
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId 实体类型ID
      * @return 关联类型定义列表
      */
     List<LinkTypeDefinition> getLinkTypesByCardTypeId(String cardTypeId);

@@ -94,18 +94,18 @@ public class LinkCardService {
             }
             LinkTypeDefinition linkType = linkTypeOpt.get();
 
-            // 3. 根据 LinkPosition 确定对端卡片类型
+            // 3. 根据 LinkPosition 确定对端__PLANKA_EINST__
             List<CardTypeId> targetCardTypeIds = getTargetCardTypeIds(linkType, linkPosition);
             if (targetCardTypeIds.isEmpty()) {
-                logger.warn("关联类型 {} 的对端卡片类型为空", linkTypeIdValue);
+                logger.warn("关联类型 {} 的对端__PLANKA_EINST__为空", linkTypeIdValue);
                 return Result.success(PageResult.empty());
             }
 
-            // 3.5. 展开属性集为实体类型
+            // 3.5. 展开特征类型为__PLANKA_EINST__
             // TODO 这个逻辑不用在这里处理，卡片查询接口会负责
             targetCardTypeIds = expandAbstractCardTypes(targetCardTypeIds, orgId);
             if (targetCardTypeIds.isEmpty()) {
-                logger.warn("展开属性集后，对端卡片类型为空");
+                logger.warn("展开特征类型后，对端__PLANKA_EINST__为空");
                 return Result.success(PageResult.empty());
             }
 
@@ -290,10 +290,10 @@ public class LinkCardService {
     }
 
     /**
-     * 根据 LinkPosition 确定对端卡片类型
+     * 根据 LinkPosition 确定对端__PLANKA_EINST__
      * <p>
-     * 如果当前位置是 SOURCE，说明当前卡片是源端，需要查询目标端卡片类型
-     * 如果当前位置是 TARGET，说明当前卡片是目标端，需要查询源端卡片类型
+     * 如果当前位置是 SOURCE，说明当前卡片是源端，需要查询目标端__PLANKA_EINST__
+     * 如果当前位置是 TARGET，说明当前卡片是目标端，需要查询源端__PLANKA_EINST__
      */
     private List<CardTypeId> getTargetCardTypeIds(LinkTypeDefinition linkType, LinkPosition currentPosition) {
         if (currentPosition == LinkPosition.SOURCE) {
@@ -306,13 +306,13 @@ public class LinkCardService {
     }
 
     /**
-     * 展开属性集为实体类型
+     * 展开特征类型为__PLANKA_EINST__
      * <p>
-     * 如果 cardTypeIds 中包含属性集（如 member-trait），
-     * 则将其替换为对应的实体类型（如 member）
+     * 如果 cardTypeIds 中包含特征类型（如 member-trait），
+     * 则将其替换为对应的__PLANKA_EINST__（如 member）
      */
     private List<CardTypeId> expandAbstractCardTypes(List<CardTypeId> cardTypeIds, String orgId) {
-        logger.info("开始展开属性集，输入: {}", cardTypeIds.stream().map(CardTypeId::value).toList());
+        logger.info("开始展开特征类型，输入: {}", cardTypeIds.stream().map(CardTypeId::value).toList());
 
         List<CardTypeId> expandedIds = new ArrayList<>();
 
@@ -324,14 +324,14 @@ public class LinkCardService {
                 // 替换为具体的 member 类型
                 String memberTypeId = orgId + ":member";
                 expandedIds.add(CardTypeId.of(memberTypeId));
-                logger.info("展开属性集: {} -> {}", typeIdValue, memberTypeId);
+                logger.info("展开特征类型: {} -> {}", typeIdValue, memberTypeId);
             } else {
                 // 保留原类型
                 expandedIds.add(cardTypeId);
             }
         }
 
-        logger.info("展开属性集完成，输出: {}", expandedIds.stream().map(CardTypeId::value).toList());
+        logger.info("展开特征类型完成，输出: {}", expandedIds.stream().map(CardTypeId::value).toList());
         return expandedIds;
     }
 
@@ -350,7 +350,7 @@ public class LinkCardService {
         queryContext.setOperatorId(operatorId);
         queryRequest.setQueryContext(queryContext);
 
-        // 查询范围：只查询指定卡片类型且为活跃状态的卡片
+        // 查询范围：只查询指定__PLANKA_EINST__且为活跃状态的卡片
         QueryScope queryScope = new QueryScope();
         List<String> cardTypeIdStrings = cardTypeIds.stream().map(CardTypeId::value).toList();
         queryScope.setCardTypeIds(cardTypeIdStrings);

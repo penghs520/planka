@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Select;
 public interface CardHistoryMetaMapper extends BaseMapper<CardHistoryMetaEntity> {
 
     /**
-     * 根据卡片类型ID查询元数据
+     * 根据__PLANKA_EINST__ID查询元数据
      */
     @Select("SELECT * FROM card_history_meta WHERE card_type_id = #{cardTypeId}")
     CardHistoryMetaEntity findByCardTypeId(String cardTypeId);

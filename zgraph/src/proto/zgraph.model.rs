@@ -15,7 +15,7 @@ pub struct Card {
     pub code_in_org: i64,
     #[prost(string, tag = "4")]
     pub custom_code: ::prost::alloc::string::String,
-    /// 卡片类型ID
+    /// __PLANKA_EINST__ID
     #[prost(string, tag = "5")]
     pub type_id: ::prost::alloc::string::String,
     /// ==================== 基本信息 ====================

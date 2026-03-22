@@ -304,7 +304,7 @@ export default {
 
   // Schema类型
   schemaType: {
-    cardType: '卡片类型',
+    cardType: '实体类型',
     fieldDefinition: '属性定义',
     linkType: '关联类型',
     view: '视图',
@@ -510,7 +510,7 @@ export default {
 
   // Schema 类型名称
   schemaTypeName: {
-    CARD_TYPE: '卡片类型',
+    CARD_TYPE: '实体类型',
     FIELD_DEFINITION: '属性定义',
     FORMULA_DEFINITION: '计算公式',
     LINK_TYPE: '关联类型',

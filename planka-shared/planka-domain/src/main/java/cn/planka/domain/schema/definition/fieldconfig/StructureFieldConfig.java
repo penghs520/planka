@@ -15,7 +15,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 架构层级属性的卡片类型级别配置
+ * 架构层级属性的__PLANKA_EINST__级别配置
  * <p>
  * structureId 和 levelBindings 从父类型继承，
  * 在 Config 中只读，不可覆盖。

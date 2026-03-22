@@ -689,11 +689,11 @@ async function handleEditSubmit() {
     return
   }
   if (!formData.value.sourceCardTypeIds || formData.value.sourceCardTypeIds.length === 0) {
-    Message.error('请选择源端卡片类型')
+    Message.error('请选择源端实体类型')
     return
   }
   if (!formData.value.targetCardTypeIds || formData.value.targetCardTypeIds.length === 0) {
-    Message.error('请选择目标端卡片类型')
+    Message.error('请选择目标端实体类型')
     return
   }
 
@@ -1152,7 +1152,7 @@ onMounted(() => {
           <a-select
             v-model="selectedCardTypeIds"
             v-model:popup-visible="selectPopupVisible"
-            placeholder="选择卡片类型筛选..."
+            placeholder="选择实体类型筛选..."
             size="small"
             multiple
             allow-clear
@@ -1269,7 +1269,7 @@ onMounted(() => {
         <!-- 关联关系定义 -->
         <div class="form-section-header">
           <span>关联关系定义</span>
-          <a-tooltip content="定义两端卡片类型之间的关联关系">
+          <a-tooltip content="定义两端实体类型之间的关联关系">
             <IconInfoCircle class="help-icon" />
           </a-tooltip>
         </div>
@@ -1295,18 +1295,18 @@ onMounted(() => {
 
         <a-row :gutter="16">
           <a-col :span="12">
-            <a-form-item label="源端卡片类型" required>
+            <a-form-item label="源端实体类型" required>
               <CardTypeSelect
                 v-model="formData.sourceCardTypeIds"
-                placeholder="请选择卡片类型"
+                placeholder="请选择实体类型"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="目标端卡片类型" required>
+            <a-form-item label="目标端实体类型" required>
               <CardTypeSelect
                 v-model="formData.targetCardTypeIds"
-                placeholder="请选择卡片类型"
+                placeholder="请选择实体类型"
               />
             </a-form-item>
           </a-col>

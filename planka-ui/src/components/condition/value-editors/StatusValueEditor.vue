@@ -48,7 +48,7 @@ const emit = defineEmits<{
 }>()
 
 /**
- * 从父组件注入卡片类型ID（可能是 ComputedRef 或字符串）
+ * 从父组件注入实体类型ID（可能是 ComputedRef 或字符串）
  */
 const injectedCardTypeId = inject<ComputedRef<string> | string>('cardTypeId', '')
 const cardTypeId = computed(() => unref(injectedCardTypeId))

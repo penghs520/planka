@@ -117,7 +117,7 @@ export interface DateFieldConfig extends FieldConfigBase {
 /** 枚举属性配置 */
 export interface EnumFieldConfig extends FieldConfigBase {
   schemaSubType: 'ENUM_FIELD'
-  /** 枚举选项列表（卡片类型级别可覆盖选项，复用 EnumOptionDTO 统一类型） */
+  /** 枚举选项列表（实体类型级别可覆盖选项，复用 EnumOptionDTO 统一类型） */
   options?: EnumOptionDTO[]
   multiSelect?: boolean
   defaultOptionIds?: string[]
@@ -146,7 +146,7 @@ export interface LevelBinding {
   levelIndex: number
   /** 层级名称 */
   levelName?: string
-  /** 层级对应的卡片类型名称列表 */
+  /** 层级对应的实体类型名称列表 */
   levelCardTypeNames?: string[]
   /** 关联属性ID */
   linkFieldId?: string

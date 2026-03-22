@@ -153,7 +153,7 @@ async function handleAutoCreateLinkType(record: LevelBinding): Promise<void> {
   const targetCardTypeIds = level.cardTypeIds
 
   if (!targetCardTypeIds || targetCardTypeIds.length === 0) {
-    Message.error('层级未配置卡片类型')
+    Message.error('层级未配置实体类型')
     return
   }
 

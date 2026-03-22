@@ -164,7 +164,7 @@ function handleDragStart(field: FieldConfig, event: DragEvent) {
 
         <a-empty
           v-if="fields.length === 0 && !loading"
-          description="请先选择卡片类型"
+          description="请先选择实体类型"
           class="empty-hint-main"
         />
       </a-spin>

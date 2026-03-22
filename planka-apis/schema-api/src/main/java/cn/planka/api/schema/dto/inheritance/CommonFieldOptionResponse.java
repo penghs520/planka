@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 多个卡片类型的共同属性选项响应
+ * 多个实体类型的共同属性选项响应
  */
 @Data
 @Builder

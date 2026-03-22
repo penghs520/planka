@@ -215,7 +215,7 @@ const searchResults = ref<CardInfo[]>([])
 const hasLoadedInitial = ref(false)
 const hasLoadedTargetCardTypes = ref(false)
 
-// 左侧 linkFieldId 的目标卡片类型 IDs
+// 左侧 linkFieldId 的目标实体类型 IDs
 const targetCardTypeIds = ref<string[]>([])
 
 // 成员属性相关（支持多层级联）
@@ -371,7 +371,7 @@ const dropdownStyle = computed(() => {
 })
 
 /**
- * 成员卡片类型ID
+ * 成员实体类型ID
  */
 const memberCardTypeId = computed(() => {
   if (!orgStore.currentOrgId) return ''
@@ -435,7 +435,7 @@ async function handleDropdownVisibleChange(visible: boolean) {
   dropdownVisible.value = visible
 
   if (visible) {
-    // 首次打开时加载目标卡片类型（用于"当前用户"级联选择的匹配判断）
+    // 首次打开时加载目标实体类型（用于"当前用户"级联选择的匹配判断）
     if (!hasLoadedTargetCardTypes.value && props.linkFieldId) {
       hasLoadedTargetCardTypes.value = true
       await loadTargetCardTypes()
@@ -520,7 +520,7 @@ function removeCard(cardId: string) {
 }
 
 /**
- * 加载左侧 linkFieldId 的目标卡片类型
+ * 加载左侧 linkFieldId 的目标实体类型
  */
 async function loadTargetCardTypes() {
   if (!props.linkFieldId) {
@@ -532,7 +532,7 @@ async function loadTargetCardTypes() {
     const { linkTypeId, position } = parseLinkFieldId(props.linkFieldId)
     const linkType = await linkTypeApi.getById(linkTypeId)
 
-    // 根据 position 确定目标卡片类型
+    // 根据 position 确定目标实体类型
     // SOURCE 端关联的是 TARGET 端卡片，反之亦然
     const cardTypes = position === 'SOURCE'
       ? linkType.targetCardTypes
@@ -540,7 +540,7 @@ async function loadTargetCardTypes() {
 
     targetCardTypeIds.value = cardTypes?.map(ct => ct.id) || []
   } catch (error) {
-    console.error('加载目标卡片类型失败:', error)
+    console.error('加载目标实体类型失败:', error)
     targetCardTypeIds.value = []
   }
 }
@@ -593,7 +593,7 @@ async function loadPathFieldNamesFromApi(linkNodes: string[]) {
   try {
     if (!memberCardTypeId.value) return
 
-    // 第一层：从成员卡片类型加载
+    // 第一层：从成员实体类型加载
     const firstLevelFields = await fieldOptionsApi.getFields(memberCardTypeId.value)
     const firstField = firstLevelFields.find(f => f.id === linkNodes[0])
     if (firstField && linkNodes[0]) {
@@ -622,19 +622,19 @@ async function loadPathFieldNamesFromApi(linkNodes: string[]) {
 }
 
 /**
- * 判断字段的目标卡片类型是否与左侧 linkFieldId 的目标卡片类型匹配
+ * 判断字段的目标实体类型是否与左侧 linkFieldId 的目标实体类型匹配
  * @param field 成员属性的 FieldOption（包含 targetCardTypeIds）
  * @returns 是否匹配（有交集）
  */
 function checkFieldMatch(field: FieldOption): boolean {
   if (targetCardTypeIds.value.length === 0) {
-    // 如果没有目标卡片类型约束，则全部可选
+    // 如果没有目标实体类型约束，则全部可选
     return true
   }
 
   const fieldTargetCardTypeIds = field.targetCardTypeIds || []
   if (fieldTargetCardTypeIds.length === 0) {
-    // 如果该字段没有目标卡片类型约束（即可链接任意卡片类型），则视为匹配
+    // 如果该字段没有目标实体类型约束（即可链接任意实体类型），则视为匹配
     return true
   }
 
@@ -654,7 +654,7 @@ async function loadFirstLevelFields() {
     // 只显示关联类型的字段
     const linkFields = fields.filter(f => f.fieldType === 'LINK')
 
-    // 检查每个字段是否与目标卡片类型匹配（同步判断，使用内联的 targetCardTypeIds）
+    // 检查每个字段是否与目标实体类型匹配（同步判断，使用内联的 targetCardTypeIds）
     const fieldsWithMatch = linkFields.map(field => ({
       ...field,
       matched: checkFieldMatch(field),
@@ -707,7 +707,7 @@ async function loadNextLevelFields(levelIndex: number, parentLinkFieldId: string
     // 只显示关联类型的字段
     const linkFields = fields.filter(f => f.fieldType === 'LINK')
 
-    // 检查每个字段是否与目标卡片类型匹配（同步判断，使用内联的 targetCardTypeIds）
+    // 检查每个字段是否与目标实体类型匹配（同步判断，使用内联的 targetCardTypeIds）
     const fieldsWithMatch = linkFields.map(field => ({
       ...field,
       matched: checkFieldMatch(field),
@@ -904,7 +904,7 @@ function schedulePanelClose() {
 
 /**
  * 监听 linkFieldId 变化，重置状态
- * 注意：不再立即加载目标卡片类型，而是延迟到下拉框打开时加载
+ * 注意：不再立即加载目标实体类型，而是延迟到下拉框打开时加载
  */
 watch(
   () => props.linkFieldId,

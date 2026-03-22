@@ -15,11 +15,11 @@ import { SchemaSubType } from './schema'
  * 权限配置定义（独立 Schema）
  *
  * 对应后端 PermissionConfigDefinition
- * belongTo: cardTypeId（所属卡片类型）
+ * belongTo: cardTypeId（所属实体类型）
  */
 export interface PermissionConfigDefinition extends SchemaDefinition {
   schemaSubType: SchemaSubType.CARD_PERMISSION
-  /** 所属卡片类型ID */
+  /** 所属实体类型ID */
   cardTypeId: string
   /** 卡片操作权限列表 */
   cardOperations?: CardOperationPermission[]

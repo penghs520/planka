@@ -71,7 +71,7 @@ public enum BuiltInActionType {
     /**
      * 生成内置动作的固定 ID
      *
-     * @param cardTypeId 卡片类型 ID
+     * @param cardTypeId __PLANKA_EINST__ ID
      * @param actionType 内置动作类型
      * @return 固定 ID，格式为 builtin:{cardTypeId}:{actionType}
      */
@@ -82,7 +82,7 @@ public enum BuiltInActionType {
     /**
      * 创建默认的内置动作配置
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 默认的内置动作配置定义
      */
     public CardActionConfigDefinition createDefaultAction(CardTypeId cardTypeId) {

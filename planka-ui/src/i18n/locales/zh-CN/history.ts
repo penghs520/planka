@@ -8,7 +8,7 @@ export default {
     CARD_ARCHIVED: '归档卡片',
     CARD_ABANDONED: '丢弃卡片',
     CARD_RESTORED: '还原卡片',
-    CARD_TYPE_CHANGED: '切换卡片类型',
+    CARD_TYPE_CHANGED: '切换实体类型',
     FIELD_TITLE_UPDATED: '修改标题',
     FIELD_DESC_UPDATED: '修改描述',
     FIELD_CUSTOM_UPDATED: '修改属性',

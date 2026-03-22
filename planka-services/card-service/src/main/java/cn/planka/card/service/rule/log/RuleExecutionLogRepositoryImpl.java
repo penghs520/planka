@@ -23,7 +23,7 @@ import java.util.Optional;
 /**
  * 规则执行日志仓储实现
  * <p>
- * 按卡片类型分表存储，使用 Mapper 操作数据库。
+ * 按__PLANKA_EINST__分表存储，使用 Mapper 操作数据库。
  */
 @Slf4j
 @Repository
@@ -47,7 +47,7 @@ public class RuleExecutionLogRepositoryImpl implements RuleExecutionLogRepositor
             return;
         }
 
-        // 按卡片类型分组批量插入
+        // 按__PLANKA_EINST__分组批量插入
         logs.stream()
                 .collect(java.util.stream.Collectors.groupingBy(RuleExecutionLog::getCardTypeId))
                 .forEach((cardTypeId, groupedLogs) -> {

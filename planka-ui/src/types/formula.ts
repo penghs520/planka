@@ -70,9 +70,9 @@ export enum CardAggregationType {
 export interface AbstractFormulaDefinition extends SchemaDefinition {
   /** 公式编码 */
   code?: string
-  /** 关联的卡片类型 ID 列表（创建/编辑时使用） */
+  /** 关联的实体类型 ID 列表（创建/编辑时使用） */
   cardTypeIds?: string[]
-  /** 关联的卡片类型列表（列表查询返回） */
+  /** 关联的实体类型列表（列表查询返回） */
   cardTypes?: CardTypeInfo[]
 }
 
@@ -123,7 +123,7 @@ export interface DateCollectionFormulaDefinition extends AbstractFormulaDefiniti
   schemaSubType: SchemaSubType.DATE_COLLECTION_FORMULA_DEFINITION
   /** 关联属性ID */
   linkFieldId: string
-  /** 目标卡片类型ID列表 */
+  /** 目标实体类型ID列表 */
   targetCardTypeIds?: string[]
   /** 关联卡片中的源日期字段ID */
   sourceFieldId: string
@@ -140,7 +140,7 @@ export interface CardCollectionFormulaDefinition extends AbstractFormulaDefiniti
   schemaSubType: SchemaSubType.CARD_COLLECTION_FORMULA_DEFINITION
   /** 关联属性ID */
   linkFieldId: string
-  /** 目标卡片类型ID列表 */
+  /** 目标实体类型ID列表 */
   targetCardTypeIds?: string[]
   /** 关联卡片中的源数值字段ID */
   sourceFieldId?: string

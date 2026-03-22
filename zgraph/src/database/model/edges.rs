@@ -11,7 +11,7 @@ pub type EdgeType = Identifier;
 /// 边（Edge）结构体 - 表示图中两个节点之间的关系
 ///
 /// 边连接两个节点，具有方向性（从源到目标），
-/// 每条边有一个类型和可选的属性集合
+/// 每条边有一个类型和可选的特征类型合
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Edge {
     /// 源节点ID - 边的起始节点

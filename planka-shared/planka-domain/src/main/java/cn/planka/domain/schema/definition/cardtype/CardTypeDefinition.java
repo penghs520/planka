@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 卡片类型定义抽象基类
+ * __PLANKA_EINST__定义抽象基类
  * <p>
- * 卡片类型分为两种：
+ * __PLANKA_EINST__分为两种：
  * <ul>
- *     <li>属性集（AbstractCardType）：只能被继承，不能直接创建卡片，用于定义共同的属性和关联关系</li>
- *     <li>实体类型（EntityCardType）：可以继承多个属性集，可以用来创建卡片</li>
+ *     <li>特征类型（AbstractCardType）：只能被继承，不能直接创建卡片，用于定义共同的属性和关联关系</li>
+ *     <li>__PLANKA_EINST__（EntityCardType）：可以继承多个特征类型，可以用来创建卡片</li>
  * </ul>
  * <p>
- * 卡片类型一旦创建后，其类型（抽象/具体）不可改变。
+ * __PLANKA_EINST__一旦创建后，其类型（抽象/具体）不可改变。
  * <p>
  * 注意：Jackson 多态注解已集中配置在 {@link cn.planka.domain.schema.definition.SchemaDefinition} 接口上。
  */
@@ -30,7 +30,7 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class CardTypeDefinition extends AbstractSchemaDefinition<CardTypeId> {
 
-    /** 卡片类型编码（唯一标识，可以为空，仅在数据同步场景需要使用）） */
+    /** __PLANKA_EINST__编码（唯一标识，可以为空，仅在数据同步场景需要使用）） */
     @JsonProperty("code")
     protected String code;
 
@@ -49,12 +49,12 @@ public abstract class CardTypeDefinition extends AbstractSchemaDefinition<CardTy
 
     @Override
     public SchemaId belongTo() {
-        return null;  // 卡片类型没有所属关系
+        return null;  // __PLANKA_EINST__没有所属关系
     }
 
     @Override
     public Set<SchemaId> secondKeys() {
-        return Set.of();  // 卡片类型没有二级索引
+        return Set.of();  // __PLANKA_EINST__没有二级索引
     }
 
     @Override

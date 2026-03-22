@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>
  * 测试所有 SchemaDefinition 子类的 Jackson 序列化和反序列化是否正常工作，
  * 包括：
- * - 卡片类型定义（AbstractCardType, EntityCardType）
+ * - __PLANKA_EINST__定义（AbstractCardType, EntityCardType）
  * - 属性定义（SingleLineTextFieldDefinition, MultiLineTextFieldDefinition, MarkdownFieldDefinition, NumberFieldDefinition 等 9 种）
  * - 属性配置（SingleLineTextFieldConfig, MultiLineTextFieldConfig, MarkdownFieldConfig, NumberFieldConfig 等 9 种）
  */
@@ -46,10 +46,10 @@ class SchemaDefinitionSerializationTest {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-    // ==================== 卡片类型定义测试 ====================
+    // ==================== __PLANKA_EINST__定义测试 ====================
 
     @Nested
-    @DisplayName("卡片类型定义测试")
+    @DisplayName("__PLANKA_EINST__定义测试")
     class CardTypeDefinitionTest {
 
         @Test
@@ -62,7 +62,7 @@ class SchemaDefinitionSerializationTest {
                     "工作项"
             );
             cardType.setCode("WORK_ITEM");
-            cardType.setDescription("属性集-工作项");
+            cardType.setDescription("特征类型-工作项");
             cardType.setSortOrder(1);
             cardType.setEnabled(true);
             cardType.setState(EntityState.ACTIVE);
@@ -88,7 +88,7 @@ class SchemaDefinitionSerializationTest {
             assertThat(result.getOrgId()).isEqualTo("org_001");
             assertThat(result.getName()).isEqualTo("工作项");
             assertThat(result.getCode()).isEqualTo("WORK_ITEM");
-            assertThat(result.getDescription()).isEqualTo("属性集-工作项");
+            assertThat(result.getDescription()).isEqualTo("特征类型-工作项");
             assertThat(result.getSortOrder()).isEqualTo(1);
             assertThat(result.isEnabled()).isTrue();
             assertThat(result.getState()).isEqualTo(EntityState.ACTIVE);
@@ -110,7 +110,7 @@ class SchemaDefinitionSerializationTest {
                     "需求"
             );
             cardType.setCode("REQUIREMENT");
-            cardType.setDescription("实体类型-需求");
+            cardType.setDescription("__PLANKA_EINST__-需求");
             cardType.setSortOrder(2);
             cardType.setEnabled(true);
             cardType.setState(EntityState.ACTIVE);
@@ -146,7 +146,7 @@ class SchemaDefinitionSerializationTest {
             assertThat(result.getOrgId()).isEqualTo("org_001");
             assertThat(result.getName()).isEqualTo("需求");
             assertThat(result.getCode()).isEqualTo("REQUIREMENT");
-            assertThat(result.getDescription()).isEqualTo("实体类型-需求");
+            assertThat(result.getDescription()).isEqualTo("__PLANKA_EINST__-需求");
 
             // 验证 EntityCardType 特有字段
             assertThat(result.getParentTypeIds())
@@ -519,7 +519,7 @@ class SchemaDefinitionSerializationTest {
                         "schemaSubType": "TRAIT_CARD_TYPE",
                         "id": "ct_100",
                         "orgId": "org_001",
-                        "name": "属性集"
+                        "name": "特征类型"
                     }
                     """;
             SchemaDefinition<?> abstractType = objectMapper.readValue(abstractJson, SchemaDefinition.class);
@@ -531,7 +531,7 @@ class SchemaDefinitionSerializationTest {
                         "schemaSubType": "ENTITY_CARD_TYPE",
                         "id": "ct_101",
                         "orgId": "org_001",
-                        "name": "实体类型",
+                        "name": "__PLANKA_EINST__",
                         "parentTypeIds": ["ct_100"]
                     }
                     """;

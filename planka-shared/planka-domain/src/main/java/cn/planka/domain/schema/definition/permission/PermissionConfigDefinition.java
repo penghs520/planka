@@ -18,10 +18,10 @@ import java.util.Set;
 /**
  * 权限配置定义
  * <p>
- * 定义卡片类型级别的权限配置，包括操作权限、属性权限、附件权限等。
+ * 定义__PLANKA_EINST__级别的权限配置，包括操作权限、属性权限、附件权限等。
  * 支持组织级和空间级两层配置，运行时采用交集合并策略。
  * <p>
- * belongTo: 所属的卡片类型ID
+ * belongTo: 所属的__PLANKA_EINST__ID
  */
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -33,7 +33,7 @@ public final class PermissionConfigDefinition extends AbstractSchemaDefinition<P
     }
 
     /**
-     * 所属卡片类型ID
+     * 所属__PLANKA_EINST__ID
      */
     @Setter
     @JsonProperty("cardTypeId")
@@ -74,7 +74,7 @@ public final class PermissionConfigDefinition extends AbstractSchemaDefinition<P
     }
 
     /**
-     * 权限配置属于某个卡片类型
+     * 权限配置属于某个__PLANKA_EINST__
      */
     @Override
     public SchemaId belongTo() {

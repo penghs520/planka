@@ -19,12 +19,12 @@ public class CardSnapshot {
     private String cardId;
 
     /**
-     * 卡片类型ID
+     * __PLANKA_EINST__ID
      */
     private String cardTypeId;
 
     /**
-     * 卡片类型名称
+     * __PLANKA_EINST__名称
      */
     private String cardTypeName;
 

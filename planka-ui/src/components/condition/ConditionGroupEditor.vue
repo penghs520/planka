@@ -182,7 +182,7 @@ const props = withDefaults(
     /** 关联类型列表 */
     linkTypes?: LinkTypeVO[]
 
-    /** 根卡片类型名称 */
+    /** 根实体类型名称 */
     rootCardTypeName?: string
 
     /** 根据关联字段ID获取级联字段的函数 */

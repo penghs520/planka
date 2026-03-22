@@ -8,7 +8,7 @@ export default {
     CARD_ARCHIVED: 'Archived card',
     CARD_ABANDONED: 'Abandoned card',
     CARD_RESTORED: 'Restored card',
-    CARD_TYPE_CHANGED: 'Changed card type',
+    CARD_TYPE_CHANGED: 'Changed entity type',
     FIELD_TITLE_UPDATED: 'Updated title',
     FIELD_DESC_UPDATED: 'Updated description',
     FIELD_CUSTOM_UPDATED: 'Updated field',

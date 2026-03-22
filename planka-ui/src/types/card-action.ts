@@ -295,7 +295,7 @@ export type ActionExecutionType =
  */
 export interface CardActionConfigDefinition extends SchemaDefinition {
   schemaSubType: SchemaSubType.CARD_ACTION_CONFIG
-  /** 所属卡片类型 ID */
+  /** 所属实体类型 ID */
   cardTypeId: string
   /** 动作类别 */
   actionCategory?: ActionCategory

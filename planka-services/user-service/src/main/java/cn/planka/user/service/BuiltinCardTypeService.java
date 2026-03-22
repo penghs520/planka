@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 /**
- * 组织创建时写入 schema-service 的内置定义：成员属性集与成员类型、任意卡属性集与系统关联、Team/Project/Issue。
+ * 组织创建时写入 schema-service 的内置定义：成员特征类型与成员类型、任意卡特征类型与系统关联、Team/Project/Issue。
  * <p>
  * Team/Project/Issue 相关创建前通过 {@link #schemaExists(String)} 幂等探测；成员与任意卡段在重复调用时跳过已存在的定义。
  */
@@ -45,7 +45,7 @@ public class BuiltinCardTypeService {
     private static final String SYSTEM_OPERATOR = "system";
 
     // ----- 成员 -----
-    private static final String MEMBER_TRAIT_NAME = "成员属性集";
+    private static final String MEMBER_TRAIT_NAME = "成员特征类型";
     private static final String MEMBER_TRAIT_CODE = "member-trait";
     private static final String MEMBER_ENTITY_NAME = "成员";
     private static final String MEMBER_ENTITY_CODE = "member";
@@ -56,8 +56,8 @@ public class BuiltinCardTypeService {
     private static final String FIELD_PHONE = "联系电话";
     private static final String FIELD_PHONE_CODE = "phone";
 
-    // ----- 任意卡属性集 -----
-    private static final String ANY_TRAIT_NAME = "任意卡属性集";
+    // ----- 任意卡特征类型 -----
+    private static final String ANY_TRAIT_NAME = "任意卡特征类型";
     private static final String ANY_TRAIT_CODE = "any-trait";
     private static final String CREATOR_LINK_CODE = "creator";
     private static final String ARCHIVER_LINK_CODE = "archiver";
@@ -68,9 +68,9 @@ public class BuiltinCardTypeService {
     // ==================== 对外：组织创建流程 ====================
 
     /**
-     * 成员属性集 + 用户名/邮箱/电话字段
+     * 成员特征类型 + 用户名/邮箱/电话字段
      *
-     * @return 成员属性集 ID（{orgId}:member-trait）
+     * @return 成员特征类型 ID（{orgId}:member-trait）
      */
     public String createMemberAbstractCardType(String orgId) {
         String abstractCardTypeId = SystemSchemaIds.memberAbstractCardTypeId(orgId);
@@ -82,7 +82,7 @@ public class BuiltinCardTypeService {
                     MEMBER_TRAIT_NAME
             );
             cardType.setCode(MEMBER_TRAIT_CODE);
-            cardType.setDescription("成员属性集，定义成员共有的属性（用户名、邮箱、电话），所有成员类型都继承此类型");
+            cardType.setDescription("成员特征类型，定义成员共有的属性（用户名、邮箱、电话），所有成员类型都继承此类型");
             cardType.setSystemType(true);
             createSchema(orgId, cardType);
             log.info("Member abstract card type created: {}", abstractCardTypeId);
@@ -97,9 +97,9 @@ public class BuiltinCardTypeService {
     }
 
     /**
-     * 成员实体类型（继承成员属性集）
+     * 成员__PLANKA_EINST__（继承成员特征类型）
      *
-     * @return 成员卡片类型 ID（{orgId}:member）
+     * @return 成员__PLANKA_EINST__ ID（{orgId}:member）
      */
     public String createMemberCardType(String orgId, String memberAbstractCardTypeId) {
         String memberCardTypeId = SystemSchemaIds.memberCardTypeId(orgId);
@@ -113,7 +113,7 @@ public class BuiltinCardTypeService {
                 MEMBER_ENTITY_NAME
         );
         cardType.setCode(MEMBER_ENTITY_CODE);
-        cardType.setDescription("组织成员卡片类型，与系统用户绑定，继承成员属性集");
+        cardType.setDescription("组织成员__PLANKA_EINST__，与系统用户绑定，继承成员特征类型");
         cardType.setSystemType(true);
         cardType.setParentTypeIds(Set.of(CardTypeId.of(memberAbstractCardTypeId)));
         createSchema(orgId, cardType);
@@ -122,9 +122,9 @@ public class BuiltinCardTypeService {
     }
 
     /**
-     * 任意卡属性集 + 创建人/归档人/丢弃人（目标端为成员属性集）
+     * 任意卡特征类型 + 创建人/归档人/丢弃人（目标端为成员特征类型）
      *
-     * @return 任意卡属性集 ID（{orgId}:any-trait）
+     * @return 任意卡特征类型 ID（{orgId}:any-trait）
      */
     public String createAnyTraitAndSystemMemberLinks(String orgId) {
         String rootCardTypeId = SystemSchemaIds.anyTraitTypeId(orgId);
@@ -136,7 +136,7 @@ public class BuiltinCardTypeService {
                     ANY_TRAIT_NAME
             );
             cardType.setCode(ANY_TRAIT_CODE);
-            cardType.setDescription("系统任意卡属性集，所有卡片类型隐式继承此类型");
+            cardType.setDescription("系统任意卡特征类型，所有__PLANKA_EINST__隐式继承此类型");
             cardType.setSystemType(true);
             createSchema(orgId, cardType);
             log.info("Any-trait card type created: {}", rootCardTypeId);
@@ -230,7 +230,7 @@ public class BuiltinCardTypeService {
         if (!schemaExists(typeId)) {
             EntityCardType cardType = new EntityCardType(CardTypeId.of(typeId), orgId, "团队");
             cardType.setCode("team");
-            cardType.setDescription("内置团队卡片类型");
+            cardType.setDescription("内置团队__PLANKA_EINST__");
             cardType.setSystemType(true);
             createSchema(orgId, cardType);
             log.info("Builtin team card type created: {}", typeId);
@@ -252,7 +252,7 @@ public class BuiltinCardTypeService {
         if (!schemaExists(typeId)) {
             EntityCardType cardType = new EntityCardType(CardTypeId.of(typeId), orgId, "项目");
             cardType.setCode("project");
-            cardType.setDescription("内置项目卡片类型");
+            cardType.setDescription("内置项目__PLANKA_EINST__");
             cardType.setSystemType(true);
             createSchema(orgId, cardType);
             log.info("Builtin project card type created: {}", typeId);
@@ -266,7 +266,7 @@ public class BuiltinCardTypeService {
         if (!schemaExists(typeId)) {
             EntityCardType cardType = new EntityCardType(CardTypeId.of(typeId), orgId, "工作项");
             cardType.setCode("issue");
-            cardType.setDescription("内置工作项（Issue）卡片类型");
+            cardType.setDescription("内置工作项（Issue）__PLANKA_EINST__");
             cardType.setSystemType(true);
             createSchema(orgId, cardType);
             log.info("Builtin issue card type created: {}", typeId);

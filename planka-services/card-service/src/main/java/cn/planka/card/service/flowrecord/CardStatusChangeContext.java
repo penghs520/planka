@@ -26,7 +26,7 @@ public class CardStatusChangeContext {
     private final CardId cardId;
 
     /**
-     * 卡片类型ID
+     * __PLANKA_EINST__ID
      */
     private final CardTypeId cardTypeId;
 

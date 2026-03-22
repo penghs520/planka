@@ -23,7 +23,7 @@ import java.util.Set;
  * 卡片详情页模板定义
  * <p>
  * 定义卡片详情页的布局和展示内容，包括区域划分、属性排列等。
- * 实体类型通过引用模板ID来使用该模板。
+ * __PLANKA_EINST__通过引用模板ID来使用该模板。
  */
 @Setter
 @Getter
@@ -35,7 +35,7 @@ public final class CardDetailTemplateDefinition extends AbstractSchemaDefinition
         return SchemaSubType.CARD_DETAIL_TEMPLATE;
     }
 
-    /** 所属卡片类型ID */
+    /** 所属__PLANKA_EINST__ID */
     @JsonProperty("cardTypeId")
     private CardTypeId cardTypeId;
 
@@ -51,7 +51,7 @@ public final class CardDetailTemplateDefinition extends AbstractSchemaDefinition
     @JsonProperty("priority")
     private Integer priority = 100;
 
-    /** 是否默认模板（每个卡片类型只能有一个默认模板） */
+    /** 是否默认模板（每个__PLANKA_EINST__只能有一个默认模板） */
     @JsonProperty("isDefault")
     private boolean isDefault = false;
 
@@ -78,7 +78,7 @@ public final class CardDetailTemplateDefinition extends AbstractSchemaDefinition
 
     @Override
     public SchemaId belongTo() {
-        return cardTypeId;  // 卡片详情页模板属于某个卡片类型
+        return cardTypeId;  // 卡片详情页模板属于某个__PLANKA_EINST__
     }
 
     @Override

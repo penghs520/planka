@@ -17,7 +17,7 @@ export interface StructureLevel {
   index: number
   /** 层级名称（如"部落"、"小队"） */
   name: string
-  /** 关联的卡片类型ID列表（支持多选） */
+  /** 关联的实体类型ID列表（支持多选） */
   cardTypeIds: string[]
   /** 与上级的关联属性ID（根层级为null），格式: {linkTypeId}:{SOURCE|TARGET} */
   parentLinkFieldId: string | null

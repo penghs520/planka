@@ -157,14 +157,14 @@ impl InMemory {
         }
     }
 
-    /// 使用闭包处理指定卡片类型的节点ID集合，避免克隆
+    /// 使用闭包处理指定__PLANKA_EINST__的节点ID集合，避免克隆
     ///
     /// # 参数
-    /// * `card_type_id` - 卡片类型ID
+    /// * `card_type_id` - __PLANKA_EINST__ID
     /// * `f` - 处理节点ID集合的闭包
     ///
     /// # 返回
-    /// 如果找到指定的卡片类型，返回闭包的执行结果，否则返回None
+    /// 如果找到指定的__PLANKA_EINST__，返回闭包的执行结果，否则返回None
     pub fn with_vertex_ids_by_card_type_id<F, R>(&self, card_type_id: &CardTypeId, f: F) -> Option<R>
     where
         F: FnOnce(&FxHashSet<VertexId>) -> R,
@@ -175,7 +175,7 @@ impl InMemory {
     /// 从card_type索引中移除指定的节点ID
     ///
     /// # 参数
-    /// * `card_type_id` - 卡片类型ID
+    /// * `card_type_id` - __PLANKA_EINST__ID
     /// * `vertex_id` - 要移除的节点ID
     ///
     /// # 返回
@@ -191,7 +191,7 @@ impl InMemory {
     /// 向card_type索引中添加节点ID
     ///
     /// # 参数
-    /// * `card_type_id` - 卡片类型ID
+    /// * `card_type_id` - __PLANKA_EINST__ID
     /// * `vertex_id` - 要添加的节点ID
     pub fn add_vertex_to_card_type_index(&self, card_type_id: &CardTypeId, vertex_id: &VertexId) {
         self.card_type_index
@@ -203,7 +203,7 @@ impl InMemory {
     /// 批量向card_type索引中添加节点ID
     ///
     /// # 参数
-    /// * `card_type_id` - 卡片类型ID
+    /// * `card_type_id` - __PLANKA_EINST__ID
     /// * `vertex_ids` - 要添加的节点ID列表
     pub fn add_vertices_to_card_type_index(&self, card_type_id: &CardTypeId, vertex_ids: &[VertexId]) {
         let mut set = self
@@ -218,7 +218,7 @@ impl InMemory {
     /// 批量从card_type索引中移除节点ID
     ///
     /// # 参数
-    /// * `card_type_id` - 卡片类型ID
+    /// * `card_type_id` - __PLANKA_EINST__ID
     /// * `card_ids` - 要移除的卡片ID列表 (CardId = VertexId)
     pub fn remove_vertices_from_card_type_index(&self, card_type_id: &CardTypeId, card_ids: &[CardId]) {
         if let Some(mut set) = self.card_type_index.get_mut(card_type_id) {

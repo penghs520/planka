@@ -1,10 +1,10 @@
 export default {
   viewName: '视图名称',
   viewNamePlaceholder: '请输入视图名称',
-  cardType: '卡片类型',
-  cardTypePlaceholder: '请选择卡片类型',
+  cardType: '实体类型',
+  cardTypePlaceholder: '请选择实体类型',
   description: '描述',
-  selectCardTypeFirst: '请先在「基础信息」中选择关联的卡片类型',
+  selectCardTypeFirst: '请先在「基础信息」中选择关联的实体类型',
   tabBasic: '基础信息',
   tabVisibility: '可见性',
   tabColumns: '列配置',
@@ -33,7 +33,7 @@ export default {
   sortDragHint: '拖动排序',
   validation: {
     nameRequired: '请输入视图名称',
-    cardTypeRequired: '请选择关联的卡片类型',
+    cardTypeRequired: '请选择关联的实体类型',
     columnsRequired: '请至少配置一列，并填写有效的字段 ID',
     teamsRequired: '选择「指定团队」时，请至少选择一个团队',
     structureNodesRequired: '选择「指定架构节点」时，请至少选择一个节点',

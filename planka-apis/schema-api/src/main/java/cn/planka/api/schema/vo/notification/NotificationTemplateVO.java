@@ -30,10 +30,10 @@ public class NotificationTemplateVO {
     /** 定义参数 */
     private DefinitionParameter definitionParameter;
 
-    /** 所属卡片类型ID（兼容字段，仅当定义参数为卡片类型时有效） */
+    /** 所属实体类型ID（兼容字段，仅当定义参数为实体类型时有效） */
     private String cardTypeId;
 
-    /** 所属卡片类型名称（兼容字段，仅当定义参数为卡片类型时有效） */
+    /** 所属实体类型名称（兼容字段，仅当定义参数为实体类型时有效） */
     private String cardTypeName;
 
     /** 触发事件类型 */

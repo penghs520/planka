@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 /**
  * 卡片历史表管理器
  * <p>
- * 负责按卡片类型动态创建和管理历史记录表
+ * 负责按__PLANKA_EINST__动态创建和管理历史记录表
  */
 @Slf4j
 @Component
@@ -62,7 +62,7 @@ public class CardHistoryTableManager {
     /**
      * 获取或创建历史记录表
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 表名
      */
     public String getOrCreateTable(CardTypeId cardTypeId) {
@@ -72,7 +72,7 @@ public class CardHistoryTableManager {
     /**
      * 获取或创建历史记录表
      *
-     * @param cardTypeId 卡片类型ID字符串
+     * @param cardTypeId __PLANKA_EINST__ID字符串
      * @return 表名
      */
     public String getOrCreateTable(String cardTypeId) {
@@ -174,7 +174,7 @@ public class CardHistoryTableManager {
     /**
      * 获取表名（不自动创建）
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 表名，如果不存在返回 null
      */
     public String getTableName(CardTypeId cardTypeId) {
@@ -184,7 +184,7 @@ public class CardHistoryTableManager {
     /**
      * 获取表名（不自动创建）
      *
-     * @param cardTypeId 卡片类型ID字符串
+     * @param cardTypeId __PLANKA_EINST__ID字符串
      * @return 表名，如果不存在返回 null
      */
     public String getTableName(String cardTypeId) {

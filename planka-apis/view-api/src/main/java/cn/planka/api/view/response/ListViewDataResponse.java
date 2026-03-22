@@ -16,7 +16,7 @@ public class ListViewDataResponse extends ViewDataResponse {
     private static final String VIEW_TYPE = "LIST";
 
     /**
-     * 关联的卡片类型 ID
+     * 关联的实体类型 ID
      */
     private String cardTypeId;
 

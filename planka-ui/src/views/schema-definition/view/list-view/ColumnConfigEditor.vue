@@ -62,7 +62,7 @@ watch(
 watch(
   () => props.cardTypeId,
   async (newCardTypeId, oldCardTypeId) => {
-    // 卡片类型变化时，重置加载标志
+    // 实体类型变化时，重置加载标志
     if (newCardTypeId !== oldCardTypeId) {
       fieldsLoaded.value = false
       availableFields.value = []

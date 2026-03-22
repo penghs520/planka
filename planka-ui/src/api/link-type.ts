@@ -56,7 +56,7 @@ export const linkTypeApi = {
   },
 
   /**
-   * 获取卡片类型可用的关联类型列表
+   * 获取实体类型可用的关联类型列表
    */
   getAvailableForCardType(cardTypeId: string, position?: LinkPosition): Promise<LinkTypeOptionVO[]> {
     return request.get(`${LINK_TYPE_URL}/available-for-card-type/${cardTypeId}`, {

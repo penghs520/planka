@@ -58,7 +58,7 @@ public abstract class FormulaDefinitionVO {
     private String description;
 
     /**
-     * 关联的卡片类型列表（包含 ID 和名称）
+     * 关联的实体类型列表（包含 ID 和名称）
      */
     private List<CardTypeInfo> cardTypes;
 

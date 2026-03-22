@@ -42,7 +42,7 @@ const loading = ref(false)
 const linkTypes = ref<LinkTypeVO[]>([])
 const searchKeyword = ref('')
 
-// 卡片类型数据（用于动态标签显示）
+// 实体类型数据（用于动态标签显示）
 interface CardTypeOption {
   id: string
   name: string
@@ -93,7 +93,7 @@ const drawerTitle = computed(() => {
   return drawerMode.value === 'create' ? t('admin.linkType.createTitle') : t('admin.linkType.editTitle')
 })
 
-// 获取选中的源端卡片类型名称
+// 获取选中的源端实体类型名称
 const sourceCardTypeName = computed(() => {
   if (!formData.value.sourceCardTypeIds?.length) return ''
   const ids = formData.value.sourceCardTypeIds
@@ -103,7 +103,7 @@ const sourceCardTypeName = computed(() => {
   return names.join('、') || ''
 })
 
-// 获取选中的目标端卡片类型名称
+// 获取选中的目标端实体类型名称
 const targetCardTypeName = computed(() => {
   if (!formData.value.targetCardTypeIds?.length) return ''
   const ids = formData.value.targetCardTypeIds
@@ -156,7 +156,7 @@ async function fetchData() {
   }
 }
 
-// 获取卡片类型列表（用于动态标签）
+// 获取实体类型列表（用于动态标签）
 async function fetchCardTypes() {
   try {
     cardTypes.value = await cardTypeApi.listOptions()
@@ -511,7 +511,7 @@ onMounted(async () => {
       </template>
       <a-form :model="formData" layout="vertical">
 
-        <!-- 1. 先选择卡片类型 -->
+        <!-- 1. 先选择实体类型 -->
         <a-row :gutter="16">
           <a-col :span="12">
             <a-form-item :label="t('admin.linkType.sourceCardTypeLabel')" required>
@@ -972,7 +972,7 @@ onMounted(async () => {
   white-space: nowrap;
 }
 
-/* 卡片类型名称高亮 */
+/* 实体类型名称高亮 */
 .type-highlight {
   color: var(--color-primary);
   font-weight: 500;

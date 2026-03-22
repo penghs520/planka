@@ -97,7 +97,7 @@ public class LinkTypeController {
     // ========== 查询可用关联类型 ==========
 
     /**
-     * 查询卡片类型可用的关联类型
+     * 查询__PLANKA_EINST__可用的关联类型
      */
     @GetMapping("/available-for-card-type/{cardTypeId}")
     public Result<List<LinkTypeOptionVO>> getAvailableLinkTypes(

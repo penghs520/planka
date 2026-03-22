@@ -33,7 +33,7 @@
         </a-radio-group>
       </a-form-item>
 
-      <!-- 定义参数类型 - 自定义模板只能选卡片类型，内置模板可选所有类型 -->
+      <!-- 定义参数类型 - 自定义模板只能选实体类型，内置模板可选所有类型 -->
       <a-form-item field="parameterType" :label="t('admin.notificationSettings.template.form.parameterType')" required>
         <a-radio-group v-model="formData.parameterType" type="button" @change="handleParameterTypeChange">
           <a-radio value="CARD_TYPE">{{ t('admin.notificationSettings.template.parameterType.cardType') }}</a-radio>
@@ -47,7 +47,7 @@
         </a-radio-group>
       </a-form-item>
 
-      <!-- 卡片类型选择（仅当参数类型为 CARD_TYPE 时显示） -->
+      <!-- 实体类型选择（仅当参数类型为 CARD_TYPE 时显示） -->
       <a-form-item
         v-if="formData.parameterType === 'CARD_TYPE'"
         field="cardTypeId"
@@ -63,7 +63,7 @@
         />
       </a-form-item>
 
-      <!-- 参数名称（非卡片类型时显示） -->
+      <!-- 参数名称（非实体类型时显示） -->
       <a-form-item
         v-if="formData.parameterType !== 'CARD_TYPE'"
         field="parameterName"
@@ -105,7 +105,7 @@
         </a-select>
       </a-form-item>
 
-      <!-- 通知群 - 选择卡片类型的文本属性 -->
+      <!-- 通知群 - 选择实体类型的文本属性 -->
       <a-form-item
         v-if="formData.recipientType === 'GROUP'"
         field="groupFieldId"
@@ -343,7 +343,7 @@ const recipientOptions = computed(() => {
     value: 'operator',
   })
 
-  // 操作人的属性（成员卡片类型中 LINK 类型且关联到成员卡片类型的字段）
+  // 操作人的属性（成员实体类型中 LINK 类型且关联到成员实体类型的字段）
   memberCardTypeFields.value.forEach((f) => {
     options.push({
       label: t('admin.notificationSettings.template.recipientOptions.operatorField', { fieldName: f.name }),
@@ -353,7 +353,7 @@ const recipientOptions = computed(() => {
 
   // 2. 卡片字段选项组（仅当参数类型为 CARD_TYPE 时显示）
   if (formData.value.parameterType === 'CARD_TYPE' && availableFields.value.length > 0) {
-    // 过滤出 LINK 类型且关联到成员卡片类型的字段
+    // 过滤出 LINK 类型且关联到成员实体类型的字段
     const cardMemberFields = availableFields.value.filter(
       (f) => f.fieldType === 'LINK' && memberCardTypeId && f.targetCardTypeIds?.includes(memberCardTypeId)
     )
@@ -460,7 +460,7 @@ const formRules = {
   titleTemplate: [{ required: true, message: t('admin.notificationSettings.template.form.titleTemplateRequired') }],
 }
 
-// 加载卡片类型选项
+// 加载实体类型选项
 const loadCardTypes = async () => {
   cardTypeLoading.value = true
   try {
@@ -502,13 +502,13 @@ function getChannelTypeLabel(channelId: string): string {
   return key ? t(key) : channelId
 }
 
-// 加载成员卡片类型的字段（用于操作人属性选项）
+// 加载成员实体类型的字段（用于操作人属性选项）
 const loadMemberCardTypeFields = async () => {
   const memberCardTypeId = orgStore.currentOrg?.memberCardTypeId
   if (!memberCardTypeId) return
   try {
     const fields = await fieldOptionsApi.getFields(memberCardTypeId)
-    // 获取成员卡片类型中 LINK 类型且关联到成员卡片类型的字段（如上级、导师等）
+    // 获取成员实体类型中 LINK 类型且关联到成员实体类型的字段（如上级、导师等）
     memberCardTypeFields.value = fields.filter(
       (f) => f.fieldType === 'LINK' && f.targetCardTypeIds?.includes(memberCardTypeId)
     )
@@ -521,13 +521,13 @@ const loadMemberCardTypeFields = async () => {
   }
 }
 
-// 加载卡片类型的人员字段
+// 加载实体类型的人员字段
 const loadMemberFields = async (cardTypeId: string) => {
   console.log('[loadMemberFields] cardTypeId:', cardTypeId)
   if (!cardTypeId) return
   fieldLoading.value = true
   try {
-    // 获取卡片类型的属性配置
+    // 获取实体类型的属性配置
     const fields: FieldOption[] = await cardTypeApi.getFieldOptions(cardTypeId)
     console.log('[loadMemberFields] fields loaded:', fields.length)
     availableFields.value = fields
@@ -597,7 +597,7 @@ const applyPendingRecipientSelector = () => {
   pendingRecipientSelector.value = null
 }
 
-// 处理卡片类型变化
+// 处理实体类型变化
 const handleCardTypeChange = (value: string) => {
   formData.value.recipientSelector.fieldId = ''
   formData.value.recipientSelector.fieldIds = []
@@ -624,7 +624,7 @@ const handleParameterTypeChange = () => {
 
 // 处理模板类型变化
 const handleTemplateTypeChange = () => {
-  // 切换到自定义模板时，参数类型只能是卡片类型
+  // 切换到自定义模板时，参数类型只能是实体类型
   if (formData.value.templateType === 'CUSTOM' && formData.value.parameterType !== 'CARD_TYPE') {
     formData.value.parameterType = 'CARD_TYPE'
     handleParameterTypeChange()
@@ -862,7 +862,7 @@ watch(
       if (parameterType === 'CARD_TYPE' && cardTypeId) {
         loadMemberFields(cardTypeId)
       } else if (pendingRecipientSelector.value) {
-        // 非卡片类型参数，直接应用 recipientSelector
+        // 非实体类型参数，直接应用 recipientSelector
         applyPendingRecipientSelector()
       }
     } else {

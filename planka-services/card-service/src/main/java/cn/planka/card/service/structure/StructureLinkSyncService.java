@@ -82,7 +82,7 @@ public class StructureLinkSyncService {
      * 一个关联属性可能被多个架构属性绑定，此方法会处理所有受影响的架构属性。
      *
      * @param cardId              当前卡片ID
-     * @param cardTypeId          卡片类型ID
+     * @param cardTypeId          __PLANKA_EINST__ID
      * @param linkFieldId         被更新的关联属性ID
      * @param targetCardIds       新的关联目标卡片ID列表
      * @param oldStructureValues  关联更新前的架构属性值映射（由调用方预先计算）
@@ -165,7 +165,7 @@ public class StructureLinkSyncService {
      * 一个关联属性可能被多个架构属性绑定。
      *
      * @param cardId      卡片ID
-     * @param cardTypeId  卡片类型ID
+     * @param cardTypeId  __PLANKA_EINST__ID
      * @param linkFieldId 关联属性ID
      * @param operatorId  操作人ID
      * @return 架构属性ID到当前值的映射，如果关联属性不属于任何架构绑定则返回空Map
@@ -195,7 +195,7 @@ public class StructureLinkSyncService {
      * 供 LinkCardService 在更新关联前调用，用于获取架构属性旧值
      *
      * @param cardId      卡片ID
-     * @param cardTypeId  卡片类型ID
+     * @param cardTypeId  __PLANKA_EINST__ID
      * @param linkFieldId 关联属性ID
      * @param operatorId  操作人ID
      * @return 架构属性当前值，如果关联属性不属于架构绑定则返回 null
@@ -220,7 +220,7 @@ public class StructureLinkSyncService {
      * 多个关联属性的更新操作。
      *
      * @param cardId         卡片ID
-     * @param cardTypeId     卡片类型ID
+     * @param cardTypeId     __PLANKA_EINST__ID
      * @param structureValue 架构属性值（链表结构）
      * @param orgId          组织ID
      * @param operatorId     操作人ID
@@ -289,17 +289,17 @@ public class StructureLinkSyncService {
     /**
      * 查找关联属性对应的所有架构绑定
      * <p>
-     * 遍历该卡片类型的所有架构属性定义，检查当前 linkFieldId 是否属于某个架构属性的层级绑定。
+     * 遍历该__PLANKA_EINST__的所有架构属性定义，检查当前 linkFieldId 是否属于某个架构属性的层级绑定。
      * 一个关联属性可能被多个架构属性绑定。
      *
-     * @param cardTypeId  卡片类型ID
+     * @param cardTypeId  __PLANKA_EINST__ID
      * @param linkFieldId 关联属性ID
      * @return 所有匹配的架构绑定信息列表
      */
     public List<StructureBindingMatch> findAllStructureBindings(String cardTypeId, String linkFieldId) {
         List<StructureBindingMatch> matches = new ArrayList<>();
 
-        // 获取该卡片类型的所有架构属性定义
+        // 获取该__PLANKA_EINST__的所有架构属性定义
         List<SchemaDefinition<?>> schemas = schemaCacheService.getBySecondaryIndex(
                 CARD_TYPE_INDEX, cardTypeId, SchemaType.FIELD_CONFIG);
 
@@ -330,7 +330,7 @@ public class StructureLinkSyncService {
      * <p>
      * 向后兼容方法，返回第一个匹配的绑定。
      *
-     * @param cardTypeId  卡片类型ID
+     * @param cardTypeId  __PLANKA_EINST__ID
      * @param linkFieldId 关联属性ID
      * @return 匹配的架构绑定信息，不存在时返回 Optional.empty()
      */
@@ -641,7 +641,7 @@ public class StructureLinkSyncService {
     private void publishSyncLinkEvent(String cardId, String linkFieldId,
                                        Set<String> addedIds, Set<String> removedIds,
                                        String orgId, String operatorId, String sourceIp) {
-        // 获取卡片类型
+        // 获取__PLANKA_EINST__
         CardId id = CardId.of(cardId);
         Optional<CardDTO> cardOpt = cardRepository.findById(id, Yield.basic(), operatorId);
         if (cardOpt.isEmpty()) {

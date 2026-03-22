@@ -11,10 +11,10 @@ public final class SchemaSubType {
         // 私有构造函数，防止实例化
     }
 
-    // ==================== 卡片类型 ====================
-    /** 属性集 */
+    // ==================== __PLANKA_EINST__ ====================
+    /** 特征类型 */
     public static final String TRAIT_CARD_TYPE = "TRAIT_CARD_TYPE";
-    /** 实体类型 */
+    /** __PLANKA_EINST__ */
     public static final String ENTITY_CARD_TYPE = "ENTITY_CARD_TYPE";
 
     // ==================== 属性配置 ====================

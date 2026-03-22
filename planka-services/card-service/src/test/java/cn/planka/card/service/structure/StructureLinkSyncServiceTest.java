@@ -129,7 +129,7 @@ class StructureLinkSyncServiceTest {
         }
 
         @Test
-        @DisplayName("当卡片类型没有架构属性时返回空")
+        @DisplayName("当__PLANKA_EINST__没有架构属性时返回空")
         void returnsEmpty_whenNoStructureFieldDefinition() {
             when(schemaCacheService.getBySecondaryIndex(eq("CARD_TYPE"), eq(CARD_TYPE_ID), eq(SchemaType.FIELD_CONFIG)))
                     .thenReturn(List.of());

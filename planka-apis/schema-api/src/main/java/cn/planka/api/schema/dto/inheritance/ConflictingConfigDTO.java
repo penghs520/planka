@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ConflictingConfigDTO {
 
-    /** 来源卡片类型ID */
+    /** 来源实体类型ID */
     private String cardTypeId;
 
-    /** 来源卡片类型名称 */
+    /** 来源实体类型名称 */
     private String cardTypeName;
 
     /** 是否必填 */

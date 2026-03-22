@@ -58,7 +58,7 @@ export enum DateFormat {
 }
 
 /**
- * 卡片类型信息
+ * 实体类型信息
  */
 export interface CardTypeInfo {
   id: string
@@ -71,9 +71,9 @@ export interface CardTypeInfo {
 export interface AbstractFieldDefinition extends SchemaDefinition {
   /** 属性编码 */
   code?: string
-  /** 关联的卡片类型 ID 列表（创建/编辑时使用） */
+  /** 关联的实体类型 ID 列表（创建/编辑时使用） */
   cardTypeIds?: string[]
-  /** 关联的卡片类型列表（列表查询返回） */
+  /** 关联的实体类型列表（列表查询返回） */
   cardTypes?: CardTypeInfo[]
   /** 是否系统内置属性 */
   systemField: boolean

@@ -58,16 +58,16 @@ function getFieldOption(fieldId: string): FieldOption | undefined {
   return fieldOptions.value.find(f => f.id === fieldId)
 }
 
-// 获取应该加载字段选项的卡片类型ID
+// 获取应该加载字段选项的实体类型ID
 const targetCardTypeId = computed<string | null>(() => {
   if (!props.action?.executionType) return props.cardTypeId
 
   const execType = props.action.executionType
-  // UPDATE_CARD 使用当前卡片类型
+  // UPDATE_CARD 使用当前实体类型
   if (execType.type === ExecutionTypeEnum.UPDATE_CARD) {
     return props.cardTypeId
   }
-  // CREATE_LINKED_CARD 使用目标卡片类型
+  // CREATE_LINKED_CARD 使用目标实体类型
   if (execType.type === ExecutionTypeEnum.CREATE_LINKED_CARD && execType.targetCardTypeId) {
     return execType.targetCardTypeId
   }

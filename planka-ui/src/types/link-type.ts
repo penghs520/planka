@@ -7,7 +7,7 @@ export enum LinkPosition {
 }
 
 /**
- * 卡片类型信息
+ * 实体类型信息
  */
 export interface CardTypeInfo {
   id: string

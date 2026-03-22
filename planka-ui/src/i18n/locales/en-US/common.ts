@@ -304,7 +304,7 @@ export default {
 
   // Schema types
   schemaType: {
-    cardType: 'Card Type',
+    cardType: 'Entity Type',
     fieldDefinition: 'Field Definition',
     linkType: 'Link Type',
     view: 'View',
@@ -510,7 +510,7 @@ export default {
 
   // Schema type names
   schemaTypeName: {
-    CARD_TYPE: 'Card Type',
+    CARD_TYPE: 'Entity Type',
     FIELD_DEFINITION: 'Field Definition',
     FORMULA_DEFINITION: 'Formula',
     LINK_TYPE: 'Link Type',

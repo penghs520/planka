@@ -40,7 +40,7 @@ public class CardDetailResponse {
     private Map<String, FieldControlDTO> fieldControls;
 
     /**
-     * 卡片类型信息（用于头部显示）
+     * 实体类型信息（用于头部显示）
      */
     private CardTypeInfoDTO cardTypeInfo;
 
@@ -191,7 +191,7 @@ public class CardDetailResponse {
     }
 
     /**
-     * 卡片类型信息（用于头部显示）
+     * 实体类型信息（用于头部显示）
      */
     @Getter
     @Setter
@@ -199,9 +199,9 @@ public class CardDetailResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CardTypeInfoDTO {
-        /** 卡片类型ID */
+        /** 实体类型ID */
         private String id;
-        /** 卡片类型名称 */
+        /** 实体类型名称 */
         private String name;
     }
 

@@ -22,10 +22,10 @@ import { Message } from '@arco-design/web-vue'
 const { t } = useI18n()
 const orgStore = useOrgStore()
 
-// 成员属性集字段（用于操作人条件编辑器）
+// 成员特征类型字段（用于操作人条件编辑器）
 const memberFields = ref<FieldOption[]>([])
 
-// 加载成员属性集字段
+// 加载成员特征类型字段
 async function loadMemberFields() {
   const memberCardTypeId = orgStore.currentOrg?.memberCardTypeId
   if (memberCardTypeId) {
@@ -42,7 +42,7 @@ const props = defineProps<{
   visible: boolean
   /** 权限规则 */
   rule: PermissionRule | null
-  /** 卡片类型ID */
+  /** 实体类型ID */
   cardTypeId: string
   /** 可用字段列表（用于条件编辑器） */
   availableFields: FieldOption[]
@@ -189,7 +189,7 @@ watch(
         clonedRule.operatorConditions = []
       }
       localRule.value = clonedRule
-      // 加载成员属性集字段（用于操作人条件）
+      // 加载成员特征类型字段（用于操作人条件）
       loadMemberFields()
     } else {
       localRule.value = null

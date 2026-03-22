@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 属性配置 REST 控制器
  * <p>
- * 提供卡片类型的属性配置查询和保存接口。
+ * 提供__PLANKA_EINST__的属性配置查询和保存接口。
  * <p>
- * 继承优先级：自身 > 显式父类 > 任意卡属性集
+ * 继承优先级：自身 > 显式父类 > 任意卡特征类型
  */
 @RestController
 @RequestMapping("/api/v1/schemas/field-configs")
@@ -24,11 +24,11 @@ public class FieldConfigController {
     private final FieldConfigQueryService fieldConfigQueryService;
 
     /**
-     * 获取卡片类型属性配置列表
+     * 获取__PLANKA_EINST__属性配置列表
      * <p>
      * 返回属性配置列表，包含继承的属性和关联属性，并标记多继承时的配置冲突。
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      */
     @GetMapping("/with-source/{cardTypeId}")
     public Result<FieldConfigListWithSource> getFieldConfigs(@PathVariable("cardTypeId") String cardTypeId) {
@@ -38,9 +38,9 @@ public class FieldConfigController {
     /**
      * 保存单个属性配置
      * <p>
-     * 保存卡片类型的单个属性配置。
+     * 保存__PLANKA_EINST__的单个属性配置。
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @param operatorId 操作人ID
      * @param config     属性配置
      */

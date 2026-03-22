@@ -15,12 +15,12 @@ import java.util.*;
 /**
  * 属性配置解析器
  * <p>
- * 负责解析卡片类型的完整属性配置（包括普通属性和关联属性），处理继承链遍历和配置合并。
+ * 负责解析实体类型的完整属性配置（包括普通属性和关联属性），处理继承链遍历和配置合并。
  * <p>
- * 继承优先级（从高到低）：自身 > 显式父类 > 任意卡属性集
+ * 继承优先级（从高到低）：自身 > 显式父类 > 任意卡特征类型
  * <p>
  * 使用 LinkedHashMap + put() 实现覆盖语义：
- * 1. 先添加任意卡属性集配置（最低优先级）
+ * 1. 先添加任意卡特征类型配置（最低优先级）
  * 2. 按声明顺序添加显式父类配置（后声明覆盖先声明）
  * 3. 最后添加自身配置（最高优先级）
  */
@@ -33,9 +33,9 @@ class FieldConfigResolver {
     }
 
     /**
-     * 解析卡片类型的完整属性配置（包括普通属性和关联属性）
+     * 解析实体类型的完整属性配置（包括普通属性和关联属性）
      *
-     * @param cardType 卡片类型
+     * @param cardType 实体类型
      * @return 解析结果，包含所有配置
      */
     public ResolvedFieldConfigs resolve(CardTypeDefinition cardType) {
@@ -66,7 +66,7 @@ class FieldConfigResolver {
 
         List<String> chain = new ArrayList<>();
 
-        // 1. 任意卡属性集（最低优先级，排除自身）
+        // 1. 任意卡特征类型（最低优先级，排除自身）
         if (!isRootCardType) {
             chain.add(rootCardTypeId);
         }
@@ -96,7 +96,7 @@ class FieldConfigResolver {
     // ==================== 私有方法 ====================
 
     /**
-     * 从指定卡片类型添加所有配置（包括已保存配置、关联默认配置）
+     * 从指定实体类型添加所有配置（包括已保存配置、关联默认配置）
      */
     private void addConfigsFromCardType(String cardTypeId, ResolveContext ctx) {
         // 1. 添加已保存的属性配置

@@ -54,11 +54,11 @@ async function loadFields() {
       // 根据关联属性ID获取字段选项
       fields = await fieldOptionsApi.getFieldsByLinkFieldId(props.linkFieldId)
     } else if (props.cardTypeIds && props.cardTypeIds.length > 0) {
-      // 获取共同字段（单个或多个卡片类型都使用此方法）
+      // 获取共同字段（单个或多个实体类型都使用此方法）
       const response = await fieldOptionsApi.getCommonFields(props.cardTypeIds, props.fieldTypes)
       fields = response.fields
     } else {
-      // 没有卡片类型ID，返回空列表
+      // 没有实体类型ID，返回空列表
       fields = []
     }
 

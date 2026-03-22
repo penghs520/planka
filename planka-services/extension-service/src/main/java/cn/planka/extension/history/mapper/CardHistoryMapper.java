@@ -134,7 +134,7 @@ public interface CardHistoryMapper {
             "id BIGINT UNSIGNED NOT NULL COMMENT '历史记录ID（雪花算法）', " +
             "org_id VARCHAR(64) NOT NULL COMMENT '组织ID', " +
             "card_id BIGINT NOT NULL COMMENT '卡片ID', " +
-            "card_type_id VARCHAR(64) NOT NULL COMMENT '卡片类型ID', " +
+            "card_type_id VARCHAR(64) NOT NULL COMMENT '__PLANKA_EINST__ID', " +
             "operation_type VARCHAR(50) NOT NULL COMMENT '操作类型', " +
             "operator_id VARCHAR(64) NOT NULL COMMENT '操作人ID', " +
             "operator_ip VARCHAR(50) NULL COMMENT '操作人IP', " +

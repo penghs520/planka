@@ -54,12 +54,12 @@ const emit = defineEmits<{
   'refresh': []
 }>()
 
-// 处理来源列中卡片类型链接的点击
+// 处理来源列中实体类型链接的点击
 function handleSourceClick(event: MouseEvent) {
   const target = event.target as HTMLElement
   if (target.classList.contains('source-link') && target.dataset.cardTypeId) {
     event.preventDefault()
-    // 在新标签页打开卡片类型列表，并带上 edit 参数自动打开编辑抽屉
+    // 在新标签页打开实体类型列表，并带上 edit 参数自动打开编辑抽屉
     const url = router.resolve({
       name: 'CardTypeList',
       query: { edit: target.dataset.cardTypeId },

@@ -1,10 +1,10 @@
 export default {
   viewName: 'View name',
   viewNamePlaceholder: 'Enter view name',
-  cardType: 'Card type',
-  cardTypePlaceholder: 'Select a card type',
+  cardType: 'Business entity type',
+  cardTypePlaceholder: 'Select a entity type',
   description: 'Description',
-  selectCardTypeFirst: 'Select a card type under Basics first',
+  selectCardTypeFirst: 'Select a entity type under Basics first',
   tabBasic: 'Basics',
   tabVisibility: 'Visibility',
   tabColumns: 'Columns',
@@ -34,7 +34,7 @@ export default {
   sortDragHint: 'Drag to reorder',
   validation: {
     nameRequired: 'Enter a view name',
-    cardTypeRequired: 'Select a card type',
+    cardTypeRequired: 'Select a entity type',
     columnsRequired: 'Add at least one column with a valid field ID',
     teamsRequired: 'Pick at least one team when using team visibility',
     structureNodesRequired: 'Pick at least one structure node when using node visibility',

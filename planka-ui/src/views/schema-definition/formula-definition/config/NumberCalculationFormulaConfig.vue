@@ -1,6 +1,6 @@
 <template>
   <div class="number-calculation-formula-config">
-    <!-- 卡片类型单独占一行 -->
+    <!-- 实体类型单独占一行 -->
     <a-form-item :label="t('admin.formulaDefinition.cardTypes')">
       <CardTypeSelect
         v-model="formula.cardTypeIds"

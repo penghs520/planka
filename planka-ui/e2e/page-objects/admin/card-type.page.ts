@@ -2,7 +2,7 @@ import type { Page, Locator } from '@playwright/test'
 import { arco } from '../../helpers/selectors'
 
 /**
- * 卡片类型管理页 Page Object
+ * 实体类型管理页 Page Object
  */
 export class CardTypePage {
   readonly table: Locator

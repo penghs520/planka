@@ -48,14 +48,14 @@ export interface MatchingLinkFieldDTO {
 }
 
 /**
- * 卡片类型子类型显示配置
+ * 实体类型子类型显示配置
  * 使用 SchemaSubType 作为类型标识
  */
 export const CardTypeSubTypeConfig: Record<
   SchemaSubType.TRAIT_CARD_TYPE | SchemaSubType.ENTITY_CARD_TYPE,
   { label: string }
 > = {
-  [SchemaSubType.TRAIT_CARD_TYPE]: { label: '属性集' },
+  [SchemaSubType.TRAIT_CARD_TYPE]: { label: '特征类型' },
   [SchemaSubType.ENTITY_CARD_TYPE]: { label: '实体类型' },
 }
 
@@ -74,17 +74,17 @@ export interface CodeGenerationRule {
 }
 
 /**
- * 卡片类型定义基类
+ * 实体类型定义基类
  */
 export interface AbstractCardTypeDefinition extends SchemaDefinition {
   /** 编码 */
   code?: string
-  /** 是否为系统内置卡片类型 */
+  /** 是否为系统内置实体类型 */
   systemCardType?: boolean
 }
 
 /**
- * 属性集
+ * 特征类型
  */
 export interface AbstractCardType extends AbstractCardTypeDefinition {
   schemaSubType: SchemaSubType.TRAIT_CARD_TYPE
@@ -121,13 +121,13 @@ export interface TitleCompositionRule {
 }
 
 /**
- * 实体类型
+ * 实体类型（可创建卡片的子类）
  */
 export interface EntityCardType extends AbstractCardTypeDefinition {
   schemaSubType: SchemaSubType.ENTITY_CARD_TYPE
-  /** 继承的属性集 ID 列表 */
+  /** 继承的特征类型 ID 列表 */
   parentTypeIds?: string[]
-  /** 继承的属性集信息列表 */
+  /** 继承的特征类型信息列表 */
   parentTypes?: ParentTypeInfo[]
   /** 价值流定义 ID */
   valueStreamId?: string
@@ -144,7 +144,7 @@ export interface EntityCardType extends AbstractCardTypeDefinition {
 }
 
 /**
- * 卡片类型联合类型
+ * 实体类型联合类型
  */
 export type CardTypeDefinition = AbstractCardType | EntityCardType
 
@@ -152,13 +152,13 @@ export type CardTypeDefinition = AbstractCardType | EntityCardType
  * 属性来源信息
  */
 export interface FieldSourceInfo {
-  /** 属性定义来源卡片类型 ID */
+  /** 属性定义来源实体类型 ID */
   definitionSourceCardTypeId?: string
-  /** 属性定义来源卡片类型名称 */
+  /** 属性定义来源实体类型名称 */
   definitionSourceCardTypeName?: string
-  /** 属性配置来源卡片类型 ID */
+  /** 属性配置来源实体类型 ID */
   configSourceCardTypeId?: string
-  /** 属性配置来源卡片类型名称 */
+  /** 属性配置来源实体类型名称 */
   configSourceCardTypeName?: string
   /** 属性定义是否继承 */
   definitionInherited: boolean
@@ -169,12 +169,12 @@ export interface FieldSourceInfo {
 }
 
 /**
- * 卡片类型属性配置列表
+ * 实体类型属性配置列表
  */
 export interface FieldConfigListWithSource {
-  /** 卡片类型 ID */
+  /** 实体类型 ID */
   cardTypeId: string
-  /** 卡片类型名称 */
+  /** 实体类型名称 */
   cardTypeName: string
   /** 完整属性配置列表 */
   fields: FieldConfig[]
@@ -183,7 +183,7 @@ export interface FieldConfigListWithSource {
 }
 
 /**
- * 创建空的卡片类型定义
+ * 创建空的实体类型定义
  * 注意：新建时不传 id，由后端自动生成
  */
 export function createEmptyCardType(

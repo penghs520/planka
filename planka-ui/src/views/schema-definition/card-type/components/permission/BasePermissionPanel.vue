@@ -21,7 +21,7 @@ type PermissionRule = CardOperationPermission | FieldPermission | AttachmentPerm
 interface Props {
   /** 权限规则列表 */
   modelValue?: T[]
-  /** 卡片类型ID */
+  /** 实体类型ID */
   cardTypeId: string
   /** 可用字段列表（用于条件编辑） */
   availableFields: FieldOption[]
@@ -100,7 +100,7 @@ function extractLinkFieldIdsFromTemplate(template: string): string[] {
 }
 
 /**
- * 确保加载指定 link 字段的目标卡片类型字段
+ * 确保加载指定 link 字段的目标实体类型字段
  */
 function ensureLinkTargetFields(linkFieldId: string) {
   if (loadedLinkFieldIds.has(linkFieldId)) return
@@ -178,7 +178,7 @@ function handleSave(rule: PermissionRule) {
   }
 }
 
-// 当卡片类型变化时，清除 link 字段缓存
+// 当实体类型变化时，清除 link 字段缓存
 watch(() => props.cardTypeId, () => {
   linkTargetFieldsMap.value.clear()
   loadedLinkFieldIds.clear()

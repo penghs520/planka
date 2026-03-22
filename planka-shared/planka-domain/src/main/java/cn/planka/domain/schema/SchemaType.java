@@ -12,14 +12,14 @@ import lombok.Getter;
 public enum SchemaType {
 
     /**
-     * 卡片类型定义
+     * __PLANKA_EINST__定义
      */
-    CARD_TYPE("卡片类型", false),
+    CARD_TYPE("__PLANKA_EINST__", false),
 
     /**
-     * 卡片类型的属性配置（哪个属性在哪个卡片类型上的配置）
+     * __PLANKA_EINST__的属性配置（哪个属性在哪个__PLANKA_EINST__上的配置）
      */
-    FIELD_CONFIG("卡片类型属性配置", true),
+    FIELD_CONFIG("__PLANKA_EINST__属性配置", true),
 
     /**
      * 属性定义
@@ -32,7 +32,7 @@ public enum SchemaType {
     VIEW("视图", false),
 
     /**
-     * 价值流定义（属于某个卡片类型）
+     * 价值流定义（属于某个__PLANKA_EINST__）
      */
     VALUE_STREAM("价值流定义", true),
 
@@ -47,7 +47,7 @@ public enum SchemaType {
     STRUCTURE_DEFINITION("架构线定义", false),
 
     /**
-     * 业务规则定义（属于某个卡片类型）
+     * 业务规则定义（属于某个__PLANKA_EINST__）
      */
     BIZ_RULE("业务规则", true),
 
@@ -57,22 +57,22 @@ public enum SchemaType {
     FLOW_POLICY("流转策略", true),
 
     /**
-     * 卡片详情页模板定义（属于某个卡片类型）
+     * 卡片详情页模板定义（属于某个__PLANKA_EINST__）
      */
     CARD_DETAIL_TEMPLATE("卡片详情页模板定义", true),
 
     /**
-     * 卡片新建页模板定义（属于某个卡片类型）
+     * 卡片新建页模板定义（属于某个__PLANKA_EINST__）
      */
     CARD_CREATE_PAGE_TEMPLATE("卡片新建页模板定义", true),
 
     /**
-     * 卡面定义（属于某个卡片类型）
+     * 卡面定义（属于某个__PLANKA_EINST__）
      */
     CARD_FACE("卡面定义", true),
 
     /**
-     * 卡片权限定义（属于某个卡片类型）
+     * 卡片权限定义（属于某个__PLANKA_EINST__）
      */
     CARD_PERMISSION("权限定义", true),
 
@@ -88,7 +88,7 @@ public enum SchemaType {
     NOTIFICATION_CHANNEL_CONFIG("通知渠道配置", false),
 
     /**
-     * 通知模板（属于某个卡片类型）
+     * 通知模板（属于某个__PLANKA_EINST__）
      */
     NOTIFICATION_TEMPLATE("通知模板", true),
 
@@ -98,7 +98,7 @@ public enum SchemaType {
     FORMULA_DEFINITION("计算公式定义", false),
 
     /**
-     * 卡片动作配置（属于某个卡片类型）
+     * 卡片动作配置（属于某个__PLANKA_EINST__）
      */
     CARD_ACTION("卡片动作配置", true);
 

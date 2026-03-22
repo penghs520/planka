@@ -54,9 +54,9 @@ export const memberApi = {
   },
 
   /**
-   * 获取成员卡片类型选项（用于添加成员时选择）
+   * 获取成员实体类型选项（用于添加成员时选择）
    * 直接调用 schema-service 的 /by-parent 接口
-   * @param parentTypeId 父类型ID（成员属性集）
+   * @param parentTypeId 父类型ID（成员特征类型）
    */
   getMemberCardTypes(parentTypeId: string): Promise<MemberCardTypeOption[]> {
     return request.get(`${SCHEMA_BASE_URL}/by-parent`, { params: { parentTypeId } })

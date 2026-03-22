@@ -199,7 +199,7 @@ impl<'a> RocksTransaction<'a> {
         // 获取所有更新
         let vertex_delta = std::mem::replace(&mut self.vertex_manager.delta, Default::default());
 
-        // 按卡片类型分组收集需要处理的节点
+        // 按__PLANKA_EINST__分组收集需要处理的节点
         let mut delete_by_card_type: HashMap<CardTypeId, Vec<(VertexId, CardId)>> = HashMap::new();
         let mut create_by_card_type: HashMap<CardTypeId, Vec<(VertexId, VertexFragment)>> =
             HashMap::new();
@@ -226,7 +226,7 @@ impl<'a> RocksTransaction<'a> {
         for (vertex_id, current) in vertex_delta.update {
             if let Some(before) = self.in_memory.get_vertex_fragment(&vertex_id) {
                 if before.card_type_id != current.card_type_id {
-                    // 如果卡片类型发生变化，需要处理两个不同类型的索引
+                    // 如果__PLANKA_EINST__发生变化，需要处理两个不同类型的索引
                     delete_by_card_type
                         .entry(before.card_type_id)
                         .or_insert_with(Vec::new)
@@ -237,7 +237,7 @@ impl<'a> RocksTransaction<'a> {
                         .or_insert_with(Vec::new)
                         .push((vertex_id, current));
                 } else {
-                    // 卡片类型没变，只需更新其他信息
+                    // __PLANKA_EINST__没变，只需更新其他信息
                     update_by_card_type
                         .entry(current.card_type_id)
                         .or_insert_with(Vec::new)
@@ -250,16 +250,16 @@ impl<'a> RocksTransaction<'a> {
                 .remove_card_description_from_cache(&vertex_id);
         }
 
-        // 处理更新（卡片类型相同的情况）
+        // 处理更新（__PLANKA_EINST__相同的情况）
         for (_, vertices) in update_by_card_type {
             for (vertex_id, patch) in vertices {
-                // 这些节点的卡片类型没变，只需更新其他属性
+                // 这些节点的__PLANKA_EINST__没变，只需更新其他属性
                 // 更新节点缓存
                 self.in_memory.insert_vertex_fragment(vertex_id, patch);
             }
         }
 
-        // 批量处理删除   先处理删除，再处理创建，因为卡片类型切换的场景需要
+        // 批量处理删除   先处理删除，再处理创建，因为__PLANKA_EINST__切换的场景需要
         for (card_type_id, vertices) in delete_by_card_type {
             // 提取 card_ids (VertexId = CardId)
             let card_ids: Vec<CardId> = vertices.iter().map(|(vid, _)| *vid).collect();
@@ -623,7 +623,7 @@ impl<'a> Transaction<'a> for RocksTransaction<'a> {
         if let Some(card_ids) = &query.card_ids {
             vertex_ids.extend(card_ids);
         } else {
-            // 只有在没有指定卡片ID的情况下，才使用卡片类型ID查询
+            // 只有在没有指定卡片ID的情况下，才使用__PLANKA_EINST__ID查询
             for card_type_id in &query.card_type_ids {
                 // 使用闭包处理节点ID集合，避免克隆整个集合
                 self.in_memory.with_vertex_ids_by_card_type_id(card_type_id, |ids| {
@@ -651,7 +651,7 @@ impl<'a> Transaction<'a> for RocksTransaction<'a> {
             .map(|vid| {
                 let opt = self.in_memory.get_vertex_from_lru_cache(vid);
                 if let Some(v_arc) = opt {
-                    // 卡片类型过滤（如果是通过card_type_id进行查询的，不需要再过滤卡片类型）
+                    // __PLANKA_EINST__过滤（如果是通过card_type_id进行查询的，不需要再过滤__PLANKA_EINST__）
                     let card_type_match = if need_card_type_filter {
                         query.card_type_ids.contains(&v_arc.card_type_id)
                     } else {
@@ -688,7 +688,7 @@ impl<'a> Transaction<'a> for RocksTransaction<'a> {
                     return Some(v_arc);
                 } else {
                     if let Some(v) = self.in_memory.get_vertex_fragment(&vid) {
-                        // 卡片类型过滤（如果是通过card_type_id进行查询的，不需要再过滤卡片类型）
+                        // __PLANKA_EINST__过滤（如果是通过card_type_id进行查询的，不需要再过滤__PLANKA_EINST__）
                         let card_type_match = if need_card_type_filter {
                             query.card_type_ids.contains(&v.card_type_id)
                         } else {

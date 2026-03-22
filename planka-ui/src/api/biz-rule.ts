@@ -24,7 +24,7 @@ export const bizRuleApi = {
   },
 
   /**
-   * 根据卡片类型 ID 获取规则列表
+   * 根据实体类型 ID 获取规则列表
    */
   getByCardTypeId(cardTypeId: string): Promise<BizRuleDefinition[]> {
     return request.get(`${BIZ_RULE_URL}/by-card-type/${cardTypeId}`)

@@ -119,7 +119,7 @@ public interface SchemaServiceClient {
     /**
      * 根据 belongTo 查询 Schema 列表
      * <p>
-     * 用于查询隶属于某个 Schema 的所有定义，如查询某个卡片类型的权限配置。
+     * 用于查询隶属于某个 Schema 的所有定义，如查询某个实体类型的权限配置。
      *
      * @param belongToId    所属 Schema ID（如 cardTypeId）
      * @param schemaSubType Schema 子类型（如 "CARD_PERMISSION"）

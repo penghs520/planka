@@ -11,7 +11,7 @@ export interface ListViewDefinition extends SchemaDefinition {
   /** Schema 子类型标识 */
   schemaSubType: SchemaSubType.LIST_VIEW
 
-  /** 关联的卡片类型 ID */
+  /** 关联的实体类型 ID */
   cardTypeId: string
 
   /** 列配置列表 */
@@ -111,10 +111,10 @@ export interface ViewListItemVO {
   /** Schema 子类型标识 */
   schemaSubType: string
 
-  /** 关联的卡片类型 ID */
+  /** 关联的实体类型 ID */
   cardTypeId: string
 
-  /** 关联的卡片类型名称 */
+  /** 关联的实体类型名称 */
   cardTypeName?: string
 
   /** 列数量 */

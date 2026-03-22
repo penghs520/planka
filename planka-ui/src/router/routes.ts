@@ -198,7 +198,7 @@ export const routes: RouteRecordRaw[] = [
               activeMenu: 'formula-definition',
             },
           },
-          // 卡片类型管理
+          // 实体类型管理
           {
             path: 'card-type',
             name: 'CardTypeList',

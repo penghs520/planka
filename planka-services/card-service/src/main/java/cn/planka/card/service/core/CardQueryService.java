@@ -170,7 +170,7 @@ public class CardQueryService {
      * @param orgId 组织ID
      * @param statusId 状态ID
      * @param streamId 价值流ID
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 卡片数量
      */
     public Result<Integer> countCardsByStatus(String orgId, String statusId, String streamId, String cardTypeId) {

@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 实体类型
+ * __PLANKA_EINST__
  * <p>
- * 实体类型的特点：
+ * __PLANKA_EINST__的特点：
  * <ul>
- *     <li>可以继承多个属性集，以获得共同的属性定义和关联关系定义</li>
+ *     <li>可以继承多个特征类型，以获得共同的属性定义和关联关系定义</li>
  *     <li>可以用来创建卡片实例</li>
  * </ul>
  * <p>
- * 示例："需求"、"任务"、"缺陷"等都是实体类型，可以基于它们创建实际的卡片。
+ * 示例："需求"、"任务"、"缺陷"等都是__PLANKA_EINST__，可以基于它们创建实际的卡片。
  */
 @Getter
 @Setter
@@ -45,7 +45,7 @@ public final class EntityCardType extends CardTypeDefinition {
     private TitleCompositionRule titleCompositionRule;
 
     /**
-     * 继承的属性集ID列表（可继承多个）
+     * 继承的特征类型ID列表（可继承多个）
      */
     @JsonProperty("parentTypeIds")
     private Set<CardTypeId> parentTypeIds;
@@ -85,7 +85,7 @@ public final class EntityCardType extends CardTypeDefinition {
     /**
      * 一键创建关联卡片配置
      * <p>
-     * 定义从当前卡片类型一键创建关联卡片的规则。
+     * 定义从当前__PLANKA_EINST__一键创建关联卡片的规则。
      */
     @Getter
     @Setter
@@ -113,7 +113,7 @@ public final class EntityCardType extends CardTypeDefinition {
         private LinkFieldId linkFieldId;
 
         /**
-         * 限定目标卡片类型ID，为空表示允许关联关系对侧定义的全部卡片类型
+         * 限定目标__PLANKA_EINST__ID，为空表示允许关联关系对侧定义的全部__PLANKA_EINST__
          */
         @JsonProperty("targetCardTypeIdsLimit")
         private List<String> targetCardTypeIdsLimit;

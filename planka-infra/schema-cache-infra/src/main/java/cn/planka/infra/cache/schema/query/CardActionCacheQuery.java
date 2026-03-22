@@ -77,7 +77,7 @@ public class CardActionCacheQuery {
     }
 
     /**
-     * 根据卡片类型ID获取所有动作配置
+     * 根据__PLANKA_EINST__ID获取所有动作配置
      * <p>
      * 返回已持久化的动作 + 未持久化的内置动作默认配置。
      */

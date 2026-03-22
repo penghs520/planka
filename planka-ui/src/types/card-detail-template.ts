@@ -12,7 +12,7 @@ export interface CardDetailTemplateDefinition extends SchemaDefinition {
   /** Schema 子类型标识 */
   schemaSubType: SchemaSubType.CARD_DETAIL_TEMPLATE
 
-  /** 所属卡片类型 ID */
+  /** 所属实体类型 ID */
   cardTypeId: string
 
   /** 是否系统内置模板 */
@@ -37,7 +37,7 @@ export interface CardDetailTemplateDefinition extends SchemaDefinition {
  * 详情页头部配置
  */
 export interface DetailHeaderConfig {
-  /** 是否显示卡片类型图标 */
+  /** 是否显示实体类型图标 */
   showTypeIcon: boolean
 
   /** 是否显示卡片编号 */
@@ -176,10 +176,10 @@ export interface TemplateListItemVO {
   /** 模板描述 */
   description?: string
 
-  /** 所属卡片类型 ID */
+  /** 所属实体类型 ID */
   cardTypeId: string
 
-  /** 所属卡片类型名称 */
+  /** 所属实体类型名称 */
   cardTypeName?: string
 
   /** 是否系统内置模板 */

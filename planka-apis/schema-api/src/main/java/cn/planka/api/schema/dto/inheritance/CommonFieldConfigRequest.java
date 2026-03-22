@@ -5,13 +5,13 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 获取多个卡片类型共同属性配置的请求
+ * 获取多个实体类型共同属性配置的请求
  */
 @Data
 public class CommonFieldConfigRequest {
 
     /**
-     * 卡片类型ID列表（必填）
+     * 实体类型ID列表（必填）
      */
     private List<String> cardTypeIds;
 

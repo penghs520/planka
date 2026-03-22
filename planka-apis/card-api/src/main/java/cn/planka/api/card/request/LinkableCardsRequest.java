@@ -20,7 +20,7 @@ public class LinkableCardsRequest {
     /**
      * 关联属性ID
      * <p>
-     * 格式为 "{linkTypeId}:{SOURCE|TARGET}"，用于确定对侧卡片类型
+     * 格式为 "{linkTypeId}:{SOURCE|TARGET}"，用于确定对侧实体类型
      */
     @NotBlank(message = "关联属性ID不能为空")
     private String linkFieldId;

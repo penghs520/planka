@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * 属性选项服务
  * <p>
- * 提供获取卡片类型共同属性选项的功能。
+ * 提供获取__PLANKA_EINST__共同属性选项的功能。
  */
 @Slf4j
 @Service
@@ -34,12 +34,12 @@ public class FieldOptionService {
     private final LinkFieldHelper linkFieldHelper;
 
     /**
-     * 根据关联字段ID获取级联的目标卡片类型的共同属性选项
+     * 根据关联字段ID获取级联的目标__PLANKA_EINST__的共同属性选项
      * <p>
      * linkFieldId 格式: {linkTypeId}:{SOURCE|TARGET}
      * 例如: 263671031548350464:SOURCE
      * <p>
-     * 当关联类型的目标端有多个卡片类型时，返回这些卡片类型之间的共同属性。
+     * 当关联类型的目标端有多个__PLANKA_EINST__时，返回这些__PLANKA_EINST__之间的共同属性。
      * 返回精简的 FieldOption 列表，适用于属性选择场景。
      *
      * @param linkFieldId 关联字段ID
@@ -51,27 +51,27 @@ public class FieldOptionService {
             return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "关联类型不存在: " + linkFieldId.getLinkTypeId());
         }
 
-        // 获取目标卡片类型列表
+        // 获取目标__PLANKA_EINST__列表
         List<CardTypeId> targetCardTypeIds = linkFieldHelper.getTargetCardTypeIds(linkFieldId);
 
         if (targetCardTypeIds.isEmpty()) {
-            // 没有限制卡片类型，返回空列表
+            // 没有限制__PLANKA_EINST__，返回空列表
             return Result.success(Collections.emptyList());
         }
 
         if (targetCardTypeIds.size() == 1) {
-            // 只有一个目标卡片类型，直接返回该卡片类型的属性
+            // 只有一个目标__PLANKA_EINST__，直接返回该__PLANKA_EINST__的属性
             return getFieldOptionsForCardType(targetCardTypeIds.get(0).value());
         }
 
-        // 多个目标卡片类型，获取共同属性
+        // 多个目标__PLANKA_EINST__，获取共同属性
         return getCommonFieldOptionsForCardTypes(
                 targetCardTypeIds.stream().map(CardTypeId::value).collect(Collectors.toList())
         );
     }
 
     /**
-     * 获取单个卡片类型的属性选项
+     * 获取单个__PLANKA_EINST__的属性选项
      */
     private Result<List<FieldOption>> getFieldOptionsForCardType(String cardTypeId) {
         Result<FieldConfigListWithSource> result = fieldConfigQueryService.getFieldConfigListWithSource(cardTypeId);
@@ -93,10 +93,10 @@ public class FieldOptionService {
     }
 
     /**
-     * 获取多个卡片类型的共同属性选项
+     * 获取多个__PLANKA_EINST__的共同属性选项
      */
     private Result<List<FieldOption>> getCommonFieldOptionsForCardTypes(List<String> cardTypeIds) {
-        // 获取每个卡片类型的属性
+        // 获取每个__PLANKA_EINST__的属性
         Map<String, List<FieldConfig>> cardTypeFieldsMap = new HashMap<>();
         for (String cardTypeId : cardTypeIds) {
             Result<FieldConfigListWithSource> result = fieldConfigQueryService.getFieldConfigListWithSource(cardTypeId);
@@ -128,7 +128,7 @@ public class FieldOptionService {
             return Result.success(Collections.emptyList());
         }
 
-        // 从第一个卡片类型获取共同属性的配置
+        // 从第一个__PLANKA_EINST__获取共同属性的配置
         List<FieldConfig> firstCardTypeFields = cardTypeFieldsMap.values().iterator().next();
         Set<String> finalCommonFieldKeys = commonFieldKeys;
         List<FieldOption> options = firstCardTypeFields.stream()
@@ -140,12 +140,12 @@ public class FieldOptionService {
     }
 
     /**
-     * 获取多个卡片类型的共同属性配置
+     * 获取多个__PLANKA_EINST__的共同属性配置
      * <p>
-     * 传入多个卡片类型ID，返回它们的共同属性配置（交集）。
+     * 传入多个__PLANKA_EINST__ID，返回它们的共同属性配置（交集）。
      * 支持按属性类型过滤。
      *
-     * @param request 请求参数，包含卡片类型ID列表和可选的属性类型过滤
+     * @param request 请求参数，包含__PLANKA_EINST__ID列表和可选的属性类型过滤
      * @return 共同属性配置响应
      */
     public Result<CommonFieldOptionResponse> getCommonFieldConfigs(CommonFieldConfigRequest request) {
@@ -153,10 +153,10 @@ public class FieldOptionService {
         List<String> fieldTypes = request.getFieldTypes();
 
         if (cardTypeIds == null || cardTypeIds.isEmpty()) {
-            return Result.failure(CommonErrorCode.BAD_REQUEST, "卡片类型ID列表不能为空");
+            return Result.failure(CommonErrorCode.BAD_REQUEST, "__PLANKA_EINST__ID列表不能为空");
         }
 
-        // 获取每个卡片类型的属性配置
+        // 获取每个__PLANKA_EINST__的属性配置
         Map<String, List<FieldConfig>> cardTypeFieldsMap = new HashMap<>();
         for (String cardTypeId : cardTypeIds) {
             Result<FieldConfigListWithSource> result = fieldConfigQueryService.getFieldConfigListWithSource(cardTypeId);
@@ -186,7 +186,7 @@ public class FieldOptionService {
                     .build());
         }
 
-        // 从第一个卡片类型获取共同属性的配置（作为参考）
+        // 从第一个__PLANKA_EINST__获取共同属性的配置（作为参考）
         List<FieldConfig> firstCardTypeFields = cardTypeFieldsMap.get(cardTypeIds.get(0));
         Set<String> finalCommonFieldKeys = commonFieldKeys;
         List<FieldConfig> commonFields = firstCardTypeFields.stream()
@@ -206,7 +206,7 @@ public class FieldOptionService {
                 .map(this::toFieldOption)
                 .collect(Collectors.toList());
 
-        // 添加内置字段选项（内置字段对所有卡片类型都可用）
+        // 添加内置字段选项（内置字段对所有__PLANKA_EINST__都可用）
         List<FieldOption> builtinFieldOptions = Arrays.stream(BuiltinField.values())
                 .filter(builtin -> fieldTypes == null || fieldTypes.isEmpty() ||
                         fieldTypes.contains(builtin.getFieldType().name()))
@@ -314,35 +314,35 @@ public class FieldOptionService {
     }
 
     /**
-     * 获取源卡片类型和目标卡片类型之间可以匹配的关联属性
+     * 获取源__PLANKA_EINST__和目标__PLANKA_EINST__之间可以匹配的关联属性
      * <p>
      * 用于架构线配置场景：
-     * - 源卡片类型：当前层级的卡片类型
-     * - 目标卡片类型：父层级的卡片类型
+     * - 源__PLANKA_EINST__：当前层级的__PLANKA_EINST__
+     * - 目标__PLANKA_EINST__：父层级的__PLANKA_EINST__
      * - 返回：当前层级中能够连接到父层级的所有关联属性（包含 multiple 信息）
      * <p>
      * 匹配规则：
-     * - 源卡片类型有关联属性 (linkTypeId: L1, position: SOURCE)
-     * - 目标卡片类型有关联属性 (linkTypeId: L1, position: TARGET)
+     * - 源__PLANKA_EINST__有关联属性 (linkTypeId: L1, position: SOURCE)
+     * - 目标__PLANKA_EINST__有关联属性 (linkTypeId: L1, position: TARGET)
      * - 则这两个属性可以建立关联，返回源端的属性
      * <p>
      * 注意：返回所有匹配的关联属性（包含单选和多选），由客户端根据场景决定是否使用
      *
-     * @param request 匹配请求，包含源和目标卡片类型ID列表
-     * @return 匹配的关联属性响应（从源卡片类型的视角，包含 multiple 信息）
+     * @param request 匹配请求，包含源和目标__PLANKA_EINST__ID列表
+     * @return 匹配的关联属性响应（从源__PLANKA_EINST__的视角，包含 multiple 信息）
      */
     public Result<MatchingLinkFieldsResponse> getMatchingLinkFields(MatchingLinkFieldsRequest request) {
         List<String> sourceCardTypeIds = request.getSourceCardTypeIds();
         List<String> targetCardTypeIds = request.getTargetCardTypeIds();
 
         if (sourceCardTypeIds == null || sourceCardTypeIds.isEmpty()) {
-            return Result.failure(CommonErrorCode.BAD_REQUEST, "源卡片类型ID列表不能为空");
+            return Result.failure(CommonErrorCode.BAD_REQUEST, "源__PLANKA_EINST__ID列表不能为空");
         }
         if (targetCardTypeIds == null || targetCardTypeIds.isEmpty()) {
-            return Result.failure(CommonErrorCode.BAD_REQUEST, "目标卡片类型ID列表不能为空");
+            return Result.failure(CommonErrorCode.BAD_REQUEST, "目标__PLANKA_EINST__ID列表不能为空");
         }
 
-        // 获取源卡片类型的所有关联属性（当前层级）
+        // 获取源__PLANKA_EINST__的所有关联属性（当前层级）
         Set<String> sourceLinkKeys = new HashSet<>();
         Map<String, LinkFieldConfig> sourceLinkFieldsMap = new HashMap<>();
         for (String cardTypeId : sourceCardTypeIds) {
@@ -361,7 +361,7 @@ public class FieldOptionService {
             }
         }
 
-        // 获取目标卡片类型的所有关联属性（父层级）
+        // 获取目标__PLANKA_EINST__的所有关联属性（父层级）
         Set<String> targetLinkKeys = new HashSet<>();
         for (String cardTypeId : targetCardTypeIds) {
             Result<FieldConfigListWithSource> result = fieldConfigQueryService.getFieldConfigListWithSource(cardTypeId);

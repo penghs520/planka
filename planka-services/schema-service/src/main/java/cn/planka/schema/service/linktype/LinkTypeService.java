@@ -51,7 +51,7 @@ public class LinkTypeService {
     public Result<List<LinkTypeVO>> listLinkTypes(String orgId) {
         List<SchemaDefinition<?>> schemas = schemaQuery.query(orgId, SchemaType.LINK_TYPE);
 
-        // 收集所有卡片类型 ID
+        // 收集所有__PLANKA_EINST__ ID
         Set<String> allCardTypeIds = new HashSet<>();
         for (SchemaDefinition<?> schema : schemas) {
             if (schema instanceof LinkTypeDefinition linkType) {
@@ -64,7 +64,7 @@ public class LinkTypeService {
             }
         }
 
-        // 批量查询卡片类型名称
+        // 批量查询__PLANKA_EINST__名称
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(allCardTypeIds);
 
         List<LinkTypeVO> voList = schemas.stream()
@@ -111,7 +111,7 @@ public class LinkTypeService {
             return Result.failure(CommonErrorCode.BAD_REQUEST, "非关联类型: " + linkTypeId);
         }
 
-        // 收集卡片类型 ID
+        // 收集__PLANKA_EINST__ ID
         Set<String> cardTypeIds = collectCardTypeIds(linkType);
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(cardTypeIds);
 
@@ -128,11 +128,11 @@ public class LinkTypeService {
      */
     @Transactional
     public Result<LinkTypeVO> createLinkType(String orgId, String operatorId, CreateLinkTypeRequest request) {
-        // 转换并验证卡片类型ID
+        // 转换并验证__PLANKA_EINST__ID
         List<CardTypeId> sourceCardTypeIds = toCardTypeIds(request.getSourceCardTypeIds());
         List<CardTypeId> targetCardTypeIds = toCardTypeIds(request.getTargetCardTypeIds());
 
-        // 验证：多个卡片类型时，必须都是属性集
+        // 验证：多个__PLANKA_EINST__时，必须都是特征类型
         Result<Void> validationResult = validateCardTypeIds(sourceCardTypeIds, "源端");
         if (!validationResult.isSuccess()) {
             return Result.failure(validationResult.getCode(), validationResult.getMessage());
@@ -171,7 +171,7 @@ public class LinkTypeService {
 
         LinkTypeDefinition savedLinkType = (LinkTypeDefinition) createResult.getData();
 
-        // 查询卡片类型名称
+        // 查询__PLANKA_EINST__名称
         Set<String> cardTypeIds = collectCardTypeIds(savedLinkType);
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(cardTypeIds);
 
@@ -198,7 +198,7 @@ public class LinkTypeService {
             return Result.failure(CommonErrorCode.BAD_REQUEST, "非关联类型");
         }
 
-        // 特殊验证：卡片类型ID
+        // 特殊验证：__PLANKA_EINST__ID
         if (request.getSourceCardTypeIds() != null) {
             List<CardTypeId> sourceCardTypeIds = toCardTypeIds(request.getSourceCardTypeIds());
             Result<Void> validationResult = validateCardTypeIds(sourceCardTypeIds, "源端");
@@ -262,7 +262,7 @@ public class LinkTypeService {
 
         LinkTypeDefinition savedLinkType = (LinkTypeDefinition) updateResult.getData();
 
-        // 查询卡片类型名称
+        // 查询__PLANKA_EINST__名称
         Set<String> cardTypeIds = collectCardTypeIds(savedLinkType);
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(cardTypeIds);
 
@@ -283,17 +283,17 @@ public class LinkTypeService {
     }
 
     /**
-     * 查询卡片类型可用的关联类型
+     * 查询__PLANKA_EINST__可用的关联类型
      *
-     * @param cardTypeId 卡片类型 ID
+     * @param cardTypeId __PLANKA_EINST__ ID
      * @param position   关联位置（可选）
      * @return 可用的关联类型列表
      */
     public Result<List<LinkTypeOptionVO>> getAvailableLinkTypes(String cardTypeId, LinkPosition position) {
-        // 获取卡片类型
+        // 获取__PLANKA_EINST__
         Optional<SchemaDefinition<?>> cardTypeOpt = schemaRepository.findById(cardTypeId);
         if (cardTypeOpt.isEmpty() || !(cardTypeOpt.get() instanceof CardTypeDefinition)) {
-            return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "卡片类型不存在");
+            return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "__PLANKA_EINST__不存在");
         }
 
         CardTypeDefinition cardType = (CardTypeDefinition) cardTypeOpt.get();
@@ -315,7 +315,7 @@ public class LinkTypeService {
     }
 
     /**
-     * 检查关联类型是否对卡片类型可用
+     * 检查关联类型是否对__PLANKA_EINST__可用
      */
     private boolean isLinkTypeAvailableForCardType(LinkTypeDefinition linkType, String cardTypeId, LinkPosition position) {
         if (position == null) {
@@ -346,7 +346,7 @@ public class LinkTypeService {
     }
 
     /**
-     * 批量获取卡片类型名称映射
+     * 批量获取__PLANKA_EINST__名称映射
      */
     private Map<String, String> getCardTypeNameMap(Set<String> cardTypeIds) {
         if (cardTypeIds == null || cardTypeIds.isEmpty()) {
@@ -365,7 +365,7 @@ public class LinkTypeService {
      * 将关联类型转换为 VO
      */
     private LinkTypeVO toVO(LinkTypeDefinition linkType, Map<String, String> cardTypeNameMap) {
-        // 构建源端卡片类型信息
+        // 构建源端__PLANKA_EINST__信息
         List<CardTypeInfo> sourceCardTypes = null;
         if (linkType.getSourceCardTypeIds() != null && !linkType.getSourceCardTypeIds().isEmpty()) {
             sourceCardTypes = linkType.getSourceCardTypeIds().stream()
@@ -376,7 +376,7 @@ public class LinkTypeService {
                     .collect(Collectors.toList());
         }
 
-        // 构建目标端卡片类型信息
+        // 构建目标端__PLANKA_EINST__信息
         List<CardTypeInfo> targetCardTypes = null;
         if (linkType.getTargetCardTypeIds() != null && !linkType.getTargetCardTypeIds().isEmpty()) {
             targetCardTypes = linkType.getTargetCardTypeIds().stream()
@@ -437,7 +437,7 @@ public class LinkTypeService {
     }
 
     /**
-     * 收集关联类型中的卡片类型ID
+     * 收集关联类型中的__PLANKA_EINST__ID
      */
     private Set<String> collectCardTypeIds(LinkTypeDefinition linkType) {
         Set<String> cardTypeIds = new HashSet<>();
@@ -451,11 +451,11 @@ public class LinkTypeService {
     }
 
     /**
-     * 验证卡片类型ID列表
+     * 验证__PLANKA_EINST__ID列表
      * <p>
-     * 仅当都为属性集时才支持指定多个，表示多个属性集的共同实体类型才有此关联关系
+     * 仅当都为特征类型时才支持指定多个，表示多个特征类型的共同__PLANKA_EINST__才有此关联关系
      *
-     * @param cardTypeIds 卡片类型ID列表
+     * @param cardTypeIds __PLANKA_EINST__ID列表
      * @param position    位置描述（用于错误消息）
      * @return 验证结果
      */
@@ -464,7 +464,7 @@ public class LinkTypeService {
             return Result.success();
         }
 
-        // 多个卡片类型时，必须都是属性集
+        // 多个__PLANKA_EINST__时，必须都是特征类型
         Set<String> ids = cardTypeIds.stream()
                 .map(CardTypeId::value)
                 .collect(Collectors.toSet());
@@ -473,7 +473,7 @@ public class LinkTypeService {
         for (SchemaDefinition<?> schema : schemas) {
             if (!(schema instanceof AbstractCardType)) {
                 return Result.failure(CommonErrorCode.VALIDATION_ERROR,
-                        position + "指定多个卡片类型时，必须都是属性集，但 " + schema.getName() + " 不是属性集");
+                        position + "指定多个__PLANKA_EINST__时，必须都是特征类型，但 " + schema.getName() + " 不是特征类型");
             }
         }
 

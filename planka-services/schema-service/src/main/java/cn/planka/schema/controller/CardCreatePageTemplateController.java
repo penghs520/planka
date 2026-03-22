@@ -24,7 +24,7 @@ public class CardCreatePageTemplateController {
      * 查询模板列表
      *
      * @param orgId      组织ID
-     * @param cardTypeId 卡片类型ID（可选，用于筛选）
+     * @param cardTypeId __PLANKA_EINST__ID（可选，用于筛选）
      * @return 模板列表
      */
     @GetMapping
@@ -35,9 +35,9 @@ public class CardCreatePageTemplateController {
     }
 
     /**
-     * 根据卡片类型ID获取模板列表
+     * 根据__PLANKA_EINST__ID获取模板列表
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 模板定义列表
      */
     @GetMapping("/by-card-type/{cardTypeId}")
@@ -47,9 +47,9 @@ public class CardCreatePageTemplateController {
     }
 
     /**
-     * 获取卡片类型的默认新建页模板
+     * 获取__PLANKA_EINST__的默认新建页模板
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 默认模板定义
      */
     @GetMapping("/by-card-type/{cardTypeId}/default")
@@ -92,7 +92,7 @@ public class CardCreatePageTemplateController {
      * <p>
      * 用于前端动态渲染卡片创建表单，返回模板布局、字段配置和默认值。
      *
-     * @param cardTypeId 卡片类型ID
+     * @param cardTypeId __PLANKA_EINST__ID
      * @return 表单配置 VO
      */
     @GetMapping("/form")

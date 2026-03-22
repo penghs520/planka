@@ -38,12 +38,12 @@ public class MenuTreeNodeVO {
     private String viewType;
 
     /**
-     * 关联的卡片类型ID（视图专用）
+     * 关联的实体类型ID（视图专用）
      */
     private String cardTypeId;
 
     /**
-     * 关联的卡片类型名称（视图专用）
+     * 关联的实体类型名称（视图专用）
      */
     private String cardTypeName;
 

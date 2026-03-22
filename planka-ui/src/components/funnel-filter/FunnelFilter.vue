@@ -12,11 +12,11 @@ import SaveButton from '@/components/common/SaveButton.vue'
 import CancelButton from '@/components/common/CancelButton.vue'
 
 const props = defineProps<{
-  /** 卡片类型 ID */
+  /** 实体类型 ID */
   cardTypeId?: string
   /** 过滤条件 (v-model) */
   modelValue?: Condition | null
-  /** 根卡片类型名称（用于路径面包屑显示） */
+  /** 根实体类型名称（用于路径面包屑显示） */
   rootCardTypeName?: string
   /** 视图内置过滤条件描述（hover 问号图标时显示） */
   viewConditionDescription?: string

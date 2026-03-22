@@ -87,7 +87,7 @@ public class NotificationTemplateApplier {
         if (context.getCardSnapshot() != null) {
             CardSnapshot card = context.getCardSnapshot();
 
-            // 添加卡片类型名称作为 key
+            // 添加__PLANKA_EINST__名称作为 key
             expressionContext.put(card.getCardTypeName(), card.getFieldValues());
 
             // 添加所有字段值（支持 ${字段名} 格式）

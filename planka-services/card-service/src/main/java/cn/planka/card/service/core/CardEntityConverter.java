@@ -99,7 +99,7 @@ public class CardEntityConverter {
 
     /**
      * 处理标题生成
-     * 如果卡片类型配置了标题组合规则，则根据规则生成标题
+     * 如果__PLANKA_EINST__配置了标题组合规则，则根据规则生成标题
      */
     private CardTitle resolveTitle(CardTitle originalTitle, CardTypeId typeId, CardDTO contextCard) {
         String baseTitle = originalTitle.getValue();

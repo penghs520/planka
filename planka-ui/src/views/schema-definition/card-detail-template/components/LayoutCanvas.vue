@@ -808,7 +808,7 @@ function handleTabDrop(tabId: string, event: DragEvent) {
     <div class="detail-preview">
       <!-- 详情页头部 -->
       <div class="detail-header">
-        <!-- 元信息行：卡片类型 + 编号 + 状态 -->
+        <!-- 元信息行：实体类型 + 编号 + 状态 -->
         <div class="card-meta-row">
           <span class="card-type-name">需求卡片</span>
           <span class="card-code">#CARD-001</span>

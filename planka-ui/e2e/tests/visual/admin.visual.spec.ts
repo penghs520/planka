@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('管理后台视觉回归', () => {
-  test('卡片类型列表页', async ({ page }) => {
+  test('实体类型列表页', async ({ page }) => {
     await page.goto('/admin/card-type')
     await page.waitForLoadState('networkidle')
     await expect(page).toHaveScreenshot('admin-card-type-list.png')

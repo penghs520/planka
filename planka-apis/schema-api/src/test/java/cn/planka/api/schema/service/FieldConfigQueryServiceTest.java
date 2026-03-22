@@ -51,7 +51,7 @@ class FieldConfigQueryServiceTest {
     class GetFieldConfigsTests {
 
         @Test
-        @DisplayName("卡片类型不存在返回 DATA_NOT_FOUND")
+        @DisplayName("实体类型不存在返回 DATA_NOT_FOUND")
         void shouldReturnNotFoundWhenCardTypeNotExists() {
             // Given
             when(schemaDataProvider.getCardTypeById("not-exist")).thenReturn(Optional.empty());
@@ -65,12 +65,12 @@ class FieldConfigQueryServiceTest {
         }
 
         @Test
-        @DisplayName("属性集返回自身配置，无冲突检测")
+        @DisplayName("特征类型返回自身配置，无冲突检测")
         void shouldReturnOwnConfigForAbstractCardType() {
             // Given
             cn.planka.domain.schema.definition.cardtype.AbstractCardType abstractCardType =
                     new cn.planka.domain.schema.definition.cardtype.AbstractCardType(
-                    CardTypeId.of("abstract-1"), ORG_ID, "属性集");
+                    CardTypeId.of("abstract-1"), ORG_ID, "特征类型");
 
             when(schemaDataProvider.getCardTypeById("abstract-1")).thenReturn(Optional.of(abstractCardType));
             when(schemaDataProvider.getAllFieldConfigsByCardTypeId(anyString())).thenReturn(Collections.emptyList());
@@ -124,7 +124,7 @@ class FieldConfigQueryServiceTest {
             // 模拟属性配置
             SingleLineTextFieldConfig fieldConfig = createFieldConfig("config-1", "abstract-1", "field-1");
 
-            // 任意卡属性集返回空
+            // 任意卡特征类型返回空
             String rootCardTypeId = ORG_ID + ":any-trait";
             when(schemaDataProvider.getAllFieldConfigsByCardTypeId(rootCardTypeId)).thenReturn(Collections.emptyList());
 
@@ -145,9 +145,9 @@ class FieldConfigQueryServiceTest {
         }
 
         @Test
-        @DisplayName("非卡片类型 Schema 返回 BAD_REQUEST")
+        @DisplayName("非实体类型 Schema 返回 BAD_REQUEST")
         void shouldReturnBadRequestWhenNotCardType() {
-            // Given - getCardTypeById 返回空表示找到的不是卡片类型
+            // Given - getCardTypeById 返回空表示找到的不是实体类型
             when(schemaDataProvider.getCardTypeById("field-1")).thenReturn(Optional.empty());
 
             // When

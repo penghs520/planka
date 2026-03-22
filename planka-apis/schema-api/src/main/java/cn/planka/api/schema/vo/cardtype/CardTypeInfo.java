@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 卡片类型信息
+ * 实体类型信息
  */
 @Data
 @SuperBuilder

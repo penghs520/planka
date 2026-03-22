@@ -1021,7 +1021,7 @@ function isFieldValueChanged(_fieldId: string, fieldType: string, originalValue:
       <template v-if="card && template">
         <!-- 头部区域 -->
         <header class="detail-header">
-          <!-- 元信息行：图标 + 卡片类型 + 编号 + 价值流状态 + 分享按钮 -->
+          <!-- 元信息行：图标 + 实体类型 + 编号 + 价值流状态 + 分享按钮 -->
           <div class="card-meta-row">
             <span v-if="cardTypeInfo" class="card-type-name">{{ cardTypeInfo.name }}</span>
             <a-tooltip v-if="displayCode" content="点击复制编号和标题" position="bottom">

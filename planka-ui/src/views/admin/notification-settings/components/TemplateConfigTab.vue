@@ -104,14 +104,14 @@ const loading = ref(false)
 // 模板列表
 const templateList = ref<NotificationTemplateDefinition[]>([])
 
-// 卡片类型名称映射
+// 实体类型名称映射
 const cardTypeMap = ref<Map<string, string>>(new Map())
 
 // 抽屉状态
 const drawerVisible = ref(false)
 const editingTemplate = ref<NotificationTemplateDefinition | null>(null)
 
-// 加载卡片类型列表
+// 加载实体类型列表
 const loadCardTypes = async () => {
   try {
     const data = await cardTypeApi.list()
