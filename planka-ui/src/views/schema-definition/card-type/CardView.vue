@@ -216,12 +216,16 @@ onMounted(async () => {
                     </div>
                   </div>
                   <div class="type-card-tags">
-                    <a-tag :color="ct.enabled ? 'green' : 'gray'" size="small">
+                    <span
+                      class="type-meta-status"
+                      :class="ct.enabled ? 'type-meta-status--on' : 'type-meta-status--off'"
+                    >
+                      <span class="type-meta-dot" aria-hidden="true" />
                       {{ ct.enabled ? t('admin.status.enabled') : t('admin.status.disabled') }}
-                    </a-tag>
-                    <a-tag v-if="ct.systemCardType" color="blue" size="small">
+                    </span>
+                    <span v-if="ct.systemCardType" class="type-meta-pill type-meta-pill--neutral">
                       {{ t('admin.table.systemBuiltin') }}
-                    </a-tag>
+                    </span>
                   </div>
                   <div class="type-card-actions" @click.stop>
                     <a-tooltip v-if="!ct.systemCardType" :content="t('admin.action.edit')" mini>
@@ -278,20 +282,24 @@ onMounted(async () => {
                     </div>
                   </div>
                   <div class="type-card-tags">
-                    <a-tag :color="ct.enabled ? 'green' : 'gray'" size="small">
+                    <span
+                      class="type-meta-status"
+                      :class="ct.enabled ? 'type-meta-status--on' : 'type-meta-status--off'"
+                    >
+                      <span class="type-meta-dot" aria-hidden="true" />
                       {{ ct.enabled ? t('admin.status.enabled') : t('admin.status.disabled') }}
-                    </a-tag>
-                    <a-tag v-if="ct.systemCardType" color="blue" size="small">
+                    </span>
+                    <span v-if="ct.systemCardType" class="type-meta-pill type-meta-pill--neutral">
                       {{ t('admin.table.systemBuiltin') }}
-                    </a-tag>
+                    </span>
                   </div>
                   <div
                     v-if="'parentTypes' in ct && ct.parentTypes && ct.parentTypes.length > 0"
                     class="type-card-parents"
                   >
-                    <a-tag v-for="p in ct.parentTypes" :key="p.id" size="small" color="arcoblue">
+                    <span v-for="p in ct.parentTypes" :key="p.id" class="type-meta-pill type-meta-pill--link">
                       {{ p.name }}
-                    </a-tag>
+                    </span>
                   </div>
                   <div class="type-card-actions" @click.stop>
                     <a-tooltip v-if="!ct.systemCardType" :content="t('admin.action.edit')" mini>
@@ -411,10 +419,10 @@ onMounted(async () => {
 .group-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--color-border-1);
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 2px 0 10px;
+  border-bottom: 1px solid var(--color-border-2);
 }
 
 .group-icon {
@@ -422,11 +430,11 @@ onMounted(async () => {
 }
 
 .trait-color {
-  color: #722ED1;
+  color: #6b4f9e;
 }
 
 .entity-color {
-  color: #3370FF;
+  color: var(--color-primary);
 }
 
 .group-title {
@@ -440,28 +448,61 @@ onMounted(async () => {
   color: var(--color-text-3);
 }
 
-/* 卡片 */
+/* 卡片：白底 + 左侧类别色条，悬停微抬起 */
 .type-card {
   cursor: pointer;
-  transition: all 0.2s;
+  overflow: hidden;
   border-radius: 8px;
+  border: 1px solid var(--color-border-2);
+  background: var(--color-bg-1);
+  box-shadow: 0 1px 2px rgba(15, 73, 116, 0.06);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
+}
+
+.trait-card {
+  box-shadow:
+    inset 2px 0 0 0 rgba(107, 79, 158, 0.28),
+    0 1px 2px rgba(15, 73, 116, 0.06);
+}
+
+.entity-card {
+  box-shadow:
+    inset 2px 0 0 0 rgba(0, 131, 224, 0.28),
+    0 1px 2px rgba(15, 73, 116, 0.06);
 }
 
 .type-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-border-3);
+  transform: translateY(-2px);
+}
+
+.trait-card:hover {
+  box-shadow:
+    inset 2px 0 0 0 rgba(107, 79, 158, 0.38),
+    0 10px 24px rgba(15, 73, 116, 0.09);
+}
+
+.entity-card:hover {
+  box-shadow:
+    inset 2px 0 0 0 rgba(0, 131, 224, 0.38),
+    0 10px 24px rgba(15, 73, 116, 0.09);
 }
 
 .type-card :deep(.arco-card-body) {
-  padding: 14px 16px;
+  padding: 12px 14px 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
 }
 
 .type-card-header {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 8px;
 }
 
 .type-card-icon {
@@ -472,16 +513,20 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  color: #fff;
   flex-shrink: 0;
 }
 
+/* 图标区：与左侧色条同系的浅底 */
 .trait-bg {
-  background: linear-gradient(135deg, #722ED1, #9254DE);
+  background: linear-gradient(165deg, #f5f0ff 0%, #efe8fc 100%);
+  color: #574080;
+  border: 1px solid rgba(107, 79, 158, 0.1);
 }
 
 .entity-bg {
-  background: linear-gradient(135deg, #3370FF, #5B8FF9);
+  background: linear-gradient(165deg, #eef6fc 0%, #e5f0fa 100%);
+  color: var(--color-primary);
+  border: 1px solid rgba(0, 131, 224, 0.1);
 }
 
 .type-card-info {
@@ -510,35 +555,121 @@ onMounted(async () => {
 .type-card-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 启用/停用：圆点 + 文案，避免大块色底 */
+.type-meta-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.type-meta-status--on {
+  color: var(--color-text-2);
+}
+
+.type-meta-status--off {
+  color: var(--color-text-3);
+}
+
+.type-meta-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--color-text-4);
+}
+
+.type-meta-status--on .type-meta-dot {
+  background: var(--color-success);
+  box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.2);
+}
+
+.type-meta-status--off .type-meta-dot {
+  background: var(--color-fill-4);
+}
+
+/* 系统内置 / 父类型：轻量胶囊 */
+.type-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 7px;
+  height: 21px;
+  font-size: 11px;
+  line-height: 1;
+  border-radius: 4px;
+  font-weight: 500;
+  color: var(--color-text-3);
+  background: var(--color-fill-1);
+  border: 1px solid var(--color-border-2);
+}
+
+.type-meta-pill--neutral {
+  color: var(--color-text-3);
+}
+
+.type-meta-pill--link {
+  color: var(--color-primary-active);
+  background: rgba(0, 131, 224, 0.05);
+  border-color: rgba(0, 131, 224, 0.12);
+  font-size: 12px;
+  height: 22px;
+  padding: 0 8px;
 }
 
 .type-card-parents {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 .type-card-actions {
   display: flex;
   align-items: center;
-  gap: 2px;
-  padding-top: 6px;
-  border-top: 1px solid var(--color-border-1);
+  gap: 1px;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
   height: 0;
-  padding: 0;
-  border: none;
+  padding-bottom: 0;
   overflow: hidden;
   opacity: 0;
-  transition: height 0.2s, padding-top 0.2s, opacity 0.2s;
+  transition:
+    height 0.2s,
+    padding-top 0.2s,
+    margin-top 0.2s,
+    opacity 0.2s;
 }
 
 .type-card:hover .type-card-actions {
   height: auto;
-  padding-top: 6px;
+  margin-top: 4px;
+  padding: 2px 0 0;
   border-top: 1px solid var(--color-border-1);
   overflow: visible;
   opacity: 1;
+}
+
+/* 悬停条内的图标按钮：尽量贴齐一行高度 */
+.type-card-actions :deep(.arco-btn) {
+  min-height: 20px;
+  height: 20px;
+  padding: 0 1px;
+  line-height: 1;
+}
+
+.type-card-actions :deep(.arco-btn-icon) {
+  margin-right: 0;
+}
+
+.type-card-actions :deep(.arco-icon) {
+  font-size: 13px;
 }
 
 /* 空状态 */
