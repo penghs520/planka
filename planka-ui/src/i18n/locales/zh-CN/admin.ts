@@ -18,7 +18,7 @@ export default {
     formulaDefinition: '计算公式',
     bizRuleDefinition: '业务规则',
     linkType: '实体关系',
-    structure: '层级关系',
+    structure: '级联关系',
     view: '视图配置',
     menuConfig: '菜单配置',
     auditLog: '审计日志',
@@ -814,7 +814,7 @@ targetFieldsRequired: '请选择目标属性',
 
   // 架构线模块
   structure: {
-    title: '层级关系',
+    title: '级联关系',
     createButton: '新建架构线',
     emptyDescription: '暂无架构线定义',
     createTitle: '新建架构线',

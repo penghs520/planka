@@ -3,7 +3,7 @@ import { computed, type Component } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { usePermission } from '@/hooks/usePermission'
-import { IconSettings, IconBook, IconRobot, IconRobotAdd, IconBranch, IconCode } from '@arco-design/web-vue/es/icon'
+import { IconSettings, IconBook, IconRobot, IconRobotAdd, IconCode } from '@arco-design/web-vue/es/icon'
 import IconAuditLog from '@/components/icons/IconAuditLog.vue'
 import IconStructure from '@/components/icons/IconStructure.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
@@ -47,7 +47,6 @@ const sections: MenuSection[] = [
       { key: 'structure', titleKey: 'admin.menu.structure', icon: IconStructure, path: '/admin/structure' },
       { key: 'formula-definition', titleKey: 'admin.menu.formulaDefinition', icon: IconFormulaDefinition, path: '/admin/formula-definition' },
       { key: 'biz-rule-definition', titleKey: 'admin.menu.bizRuleDefinition', icon: IconThunderbolt, path: '/admin/biz-rule-definition' },
-      { key: 'workflow-definition', titleKey: 'admin.menu.workflowDefinition', icon: IconBranch, path: '/admin/workflow-definition' },
     ],
   },
   {
