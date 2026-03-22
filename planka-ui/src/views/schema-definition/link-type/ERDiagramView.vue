@@ -1378,7 +1378,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(135deg, #f8fbfd 0%, #fafcfd 50%, #f5f9fc 100%);
+  background: #ffffff;
 }
 
 .toolbar {
@@ -1460,7 +1460,7 @@ onMounted(() => {
 
 /* Fullscreen styles */
 .er-diagram-page:fullscreen {
-  background: linear-gradient(135deg, #f8fbfd 0%, #fafcfd 50%, #f5f9fc 100%);
+  background: #ffffff;
 }
 
 .er-diagram-page:fullscreen .toolbar {

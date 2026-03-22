@@ -139,6 +139,8 @@ export default {
     singleSelect: '单选',
     implementTypes: '实现类型',
     noImplementTypes: '暂无实现类型',
+    attributes: '属性',
+    noFields: '暂无属性',
   },
 
   // 条件

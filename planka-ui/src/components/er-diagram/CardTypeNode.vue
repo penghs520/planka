@@ -3,6 +3,7 @@ import { ref, computed, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Handle, Position } from '@vue-flow/core'
 import { IconDown, IconUp } from '@arco-design/web-vue/es/icon'
+import FieldTypeIcon from '@/components/field/FieldTypeIcon.vue'
 import type { FieldOption } from '@/types/field-option'
 import type { CardTypeInfo } from '@/types/link-type'
 
@@ -32,32 +33,14 @@ const props = defineProps<Props>()
 
 // Collapsible sections state
 const fieldsExpanded = ref(false)
-const linkFieldsExpanded = ref(false)
 const concretesExpanded = ref(true)
 
-// Get field type label
-function getFieldTypeLabel(fieldType: string): string {
-  const typeMap: Record<string, string> = {
-    SINGLE_LINE_TEXT: 'Text',
-    MULTI_LINE_TEXT: 'TextArea',
-    MARKDOWN: 'Markdown',
-    NUMBER: 'Integer',
-    DATE: 'Date',
-    ENUM: 'Enum',
-    ATTACHMENT: 'Attachment',
-    WEB_URL: 'URL',
-    STRUCTURE: 'Structure',
-    LINK: 'Link',
-  }
-  return typeMap[fieldType] || 'Text'
-}
-
-// Non-link fields for "All Fields" section
-const regularFields = computed(() => {
-  return (props.data.fields || []).filter(f => f.fieldType !== 'LINK')
+// All fields (regular + link) merged together
+const allFields = computed(() => {
+  const regular = (props.data.fields || []).filter(f => f.fieldType !== 'LINK')
+  const links = props.data.linkFields || []
+  return [...regular, ...links]
 })
-
-const linkFields = computed(() => props.data.linkFields || [])
 const abstractTypes = computed(() => props.data.abstractTypes || [])
 const concreteTypes = computed(() => props.data.concreteTypes || [])
 
@@ -67,13 +50,6 @@ function toggleFieldsSection() {
     loadFieldConfigs?.(props.data.entityId)
   }
   fieldsExpanded.value = !fieldsExpanded.value
-}
-
-function toggleLinkFieldsSection() {
-  if (!linkFieldsExpanded.value && !props.data.fieldsLoaded && !props.data.fieldsLoading) {
-    loadFieldConfigs?.(props.data.entityId)
-  }
-  linkFieldsExpanded.value = !linkFieldsExpanded.value
 }
 </script>
 
@@ -123,11 +99,11 @@ function toggleLinkFieldsSection() {
       </div>
     </div>
 
-    <!-- Single Mode: All Fields Section -->
+    <!-- Single Mode: Fields Section -->
     <template v-if="data.mode === 'single'">
       <div class="section-toggle" @click.stop="toggleFieldsSection">
         <component :is="fieldsExpanded ? IconUp : IconDown" class="toggle-icon" />
-        <span class="toggle-label">All Fields</span>
+        <span class="toggle-label">{{ t('common.erDiagram.attributes') }}</span>
         <span v-if="data.fieldsLoading" class="loading-indicator">...</span>
       </div>
       <div v-if="fieldsExpanded" class="fields-list" @wheel.stop>
@@ -135,34 +111,12 @@ function toggleLinkFieldsSection() {
           <span class="field-name">Loading...</span>
         </div>
         <template v-else>
-          <div v-for="field in regularFields" :key="field.id" class="field-row">
+          <div v-for="field in allFields" :key="field.id" class="field-row">
+            <FieldTypeIcon :field-type="field.fieldType" size="small" class="field-icon" />
             <span class="field-name">{{ field.name }}</span>
-            <span class="field-type">{{ getFieldTypeLabel(field.fieldType) }}</span>
           </div>
-          <div v-if="regularFields.length === 0" class="field-row empty">
-            <span class="field-name">No fields defined</span>
-          </div>
-        </template>
-      </div>
-
-      <!-- Single Mode: Association Fields Section -->
-      <div class="section-toggle association" @click.stop="toggleLinkFieldsSection">
-        <component :is="linkFieldsExpanded ? IconUp : IconDown" class="toggle-icon" />
-        <span class="toggle-label">Association Fields</span>
-        <span v-if="data.fieldsLoading" class="loading-indicator">...</span>
-      </div>
-      <div v-if="linkFieldsExpanded" class="fields-list association-fields" @wheel.stop>
-        <div v-if="data.fieldsLoading" class="field-row empty">
-          <span class="field-name">Loading...</span>
-        </div>
-        <template v-else>
-          <div v-for="field in linkFields" :key="field.id" class="field-row link-field">
-            <span class="field-indicator link"></span>
-            <span class="field-name">{{ field.name }}</span>
-            <span class="field-type">{{ getFieldTypeLabel(field.fieldType) }}</span>
-          </div>
-          <div v-if="linkFields.length === 0" class="field-row empty">
-            <span class="field-name">No associations</span>
+          <div v-if="allFields.length === 0" class="field-row empty">
+            <span class="field-name">{{ t('common.erDiagram.noFields') }}</span>
           </div>
         </template>
       </div>
@@ -276,23 +230,10 @@ function toggleLinkFieldsSection() {
   letter-spacing: 0.3px;
 }
 
-.node-actions {
-  display: flex;
-  gap: 2px;
-}
-
-.node-actions .arco-btn {
-  color: var(--color-text-3);
-}
-
-.node-actions .arco-btn:hover {
-  color: var(--color-text-1);
-}
-
 .field-row {
   display: flex;
   align-items: center;
-  padding: 7px 14px;
+  padding: 5px 14px;
   font-size: 12px;
   border-bottom: 1px solid #f0f0f0;
   transition: background 0.15s;
@@ -306,31 +247,18 @@ function toggleLinkFieldsSection() {
   border-bottom: none;
 }
 
-.field-row.link-field {
-  background: rgba(var(--warning-1), 0.2);
-}
-
-.field-row.link-field:hover {
-  background: rgba(var(--warning-1), 0.35);
-}
-
 .field-row.empty {
   color: var(--color-text-3);
   font-style: italic;
   justify-content: center;
+  padding: 8px 14px;
 }
 
-.field-indicator {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #8c8c8c;
+.field-icon {
+  font-size: 13px;
+  color: #8c8c8c;
   margin-right: 8px;
   flex-shrink: 0;
-}
-
-.field-indicator.link {
-  background: rgb(var(--warning-6));
 }
 
 .field-name {
@@ -339,16 +267,6 @@ function toggleLinkFieldsSection() {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 500;
-}
-
-.field-type {
-  color: #8c8c8c;
-  font-size: 11px;
-  margin-left: 8px;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .section-toggle {
@@ -362,21 +280,11 @@ function toggleLinkFieldsSection() {
   border-bottom: 1px solid #f0f0f0;
   background: #fafafa;
   transition: all 0.15s;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .section-toggle:hover {
   background: #f0f0f0;
   color: #262626;
-}
-
-.section-toggle.association {
-  color: rgb(var(--warning-6));
-}
-
-.section-toggle.association:hover {
-  background: rgba(var(--warning-1), 0.3);
 }
 
 .section-toggle.concrete {
@@ -405,10 +313,6 @@ function toggleLinkFieldsSection() {
 .fields-list {
   max-height: 200px;
   overflow-y: auto;
-}
-
-.association-fields {
-  border-radius: 0 0 4px 4px;
 }
 
 .concretes-list {

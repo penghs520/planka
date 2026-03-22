@@ -139,6 +139,8 @@ export default {
     singleSelect: 'Single-select',
     implementTypes: 'Implementation Types',
     noImplementTypes: 'No implementation types',
+    attributes: 'Attributes',
+    noFields: 'No attributes',
   },
 
   // Condition
