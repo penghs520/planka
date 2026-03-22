@@ -1393,16 +1393,17 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Create/Edit Drawer -->
-    <a-drawer
+    <!-- Create/Edit Modal -->
+    <a-modal
       v-model:visible="drawerVisible"
-      :width="660"
+      :width="700"
       :mask-closable="true"
       :esc-to-close="true"
       unmount-on-close
+      :footer="false"
     >
       <template #title>
-        <div class="drawer-title">
+        <div class="modal-title">
           <span>{{ drawerTitle }}</span>
           <LabelHelpTooltip :title="t('admin.linkType.configHelp.title')" width="400px">
             <div class="popover-tip-content">
@@ -1564,19 +1565,17 @@ onMounted(() => {
         </a-form-item>
       </a-form>
 
-      <template #footer>
-        <div class="drawer-footer">
-          <a-space>
-            <CancelButton @click="drawerVisible = false" />
-            <SaveButton
-              :loading="submitting"
-              :text="drawerMode === 'create' ? t('admin.action.create') : t('admin.action.save')"
-              @click="handleSubmit"
-            />
-          </a-space>
-        </div>
-      </template>
-    </a-drawer>
+      <div class="modal-footer">
+        <a-space>
+          <CancelButton @click="drawerVisible = false" />
+          <SaveButton
+            :loading="submitting"
+            :text="drawerMode === 'create' ? t('admin.action.create') : t('admin.action.save')"
+            @click="handleSubmit"
+          />
+        </a-space>
+      </div>
+    </a-modal>
 
     <!-- Reference Drawer -->
     <SchemaReferenceDrawer
@@ -1876,8 +1875,8 @@ onMounted(() => {
   margin-top: 24px;
 }
 
-/* Drawer Footer */
-.drawer-footer {
+/* Modal Footer */
+.modal-footer {
   display: flex;
   justify-content: flex-end;
   padding-top: 16px;
