@@ -18,8 +18,14 @@ public class UpdateLinkTypeRequest {
     /** 源端名称 */
     private String sourceName;
 
+    /** 源端编码 */
+    private String sourceCode;
+
     /** 目标端名称 */
     private String targetName;
+
+    /** 目标端编码 */
+    private String targetCode;
 
     /** 源端是否显示 */
     private Boolean sourceVisible;

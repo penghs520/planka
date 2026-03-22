@@ -29,8 +29,14 @@ public class LinkTypeVO {
     /** 源端名称（如"父卡片"） */
     private String sourceName;
 
+    /** 源端编码（如"parent"） */
+    private String sourceCode;
+
     /** 目标端名称（如"子卡片"） */
     private String targetName;
+
+    /** 目标端编码（如"children"） */
+    private String targetCode;
 
     /** 源端是否显示 */
     private boolean sourceVisible;

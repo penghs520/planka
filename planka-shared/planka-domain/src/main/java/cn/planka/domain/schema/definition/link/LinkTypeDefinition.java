@@ -40,10 +40,20 @@ public final class LinkTypeDefinition extends AbstractSchemaDefinition<LinkTypeI
     @JsonProperty("sourceName")
     private String sourceName;
 
+    /** 源端编码（如"parent"） */
+    @Setter
+    @JsonProperty("sourceCode")
+    private String sourceCode;
+
     /** 目标端名称（如"子卡片"） */
     @Setter
     @JsonProperty("targetName")
     private String targetName;
+
+    /** 目标端编码（如"children"） */
+    @Setter
+    @JsonProperty("targetCode")
+    private String targetCode;
 
     /** 源端是否显示 */
     @Setter

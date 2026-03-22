@@ -650,7 +650,9 @@ const submitting = ref(false)
 const formData = ref<CreateLinkTypeRequest | (UpdateLinkTypeRequest & { id: string })>({
   name: '',
   sourceName: '',
+  sourceCode: '',
   targetName: '',
+  targetCode: '',
   sourceVisible: true,
   targetVisible: true,
   sourceMultiSelect: false,
@@ -722,7 +724,9 @@ function handleCreate() {
   formData.value = {
     name: '',
     sourceName: '',
+    sourceCode: '',
     targetName: '',
+    targetCode: '',
     sourceVisible: true,
     targetVisible: true,
     sourceMultiSelect: false,
@@ -763,7 +767,9 @@ function onConnect(connection: Connection) {
   formData.value = {
     name: '',
     sourceName: '',
+    sourceCode: '',
     targetName: '',
+    targetCode: '',
     sourceVisible: true,
     targetVisible: true,
     sourceMultiSelect: false,
@@ -786,7 +792,9 @@ async function openEditDrawer(linkTypeId: string) {
       name: detail.name,
       description: detail.description,
       sourceName: detail.sourceName,
+      sourceCode: detail.sourceCode,
       targetName: detail.targetName,
+      targetCode: detail.targetCode,
       sourceVisible: detail.sourceVisible,
       targetVisible: detail.targetVisible,
       sourceCardTypeIds: detail.sourceCardTypes?.map((ct) => ct.id),
@@ -1495,6 +1503,30 @@ onMounted(() => {
           </a-col>
         </a-row>
 
+        <!-- 3. 填写属性编码 -->
+        <a-row :gutter="16" class="code-row">
+          <a-col :span="12">
+            <a-form-item :label="t('admin.linkType.sourceCode')">
+              <a-input
+                v-model="formData.sourceCode"
+                :placeholder="t('admin.linkType.sourceCodePlaceholder')"
+                :max-length="50"
+                :disabled="!sourceCardTypeName || !targetCardTypeName"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item :label="t('admin.linkType.targetCode')">
+              <a-input
+                v-model="formData.targetCode"
+                :placeholder="t('admin.linkType.targetCodePlaceholder')"
+                :max-length="50"
+                :disabled="!sourceCardTypeName || !targetCardTypeName"
+              />
+            </a-form-item>
+          </a-col>
+        </a-row>
+
         <div class="setting-section">
           <div class="section-title">{{ t('admin.linkType.relationConstraints') }}</div>
           <div class="setting-options">
@@ -1856,6 +1888,11 @@ onMounted(() => {
 /* Name Row Spacing */
 .name-row {
   margin-top: 8px;
+}
+
+/* Code Row Spacing */
+.code-row {
+  margin-top: 4px;
 }
 
 /* Setting Section */

@@ -151,7 +151,9 @@ public class LinkTypeService {
 
         linkType.setDescription(request.getDescription());
         linkType.setSourceName(request.getSourceName());
+        linkType.setSourceCode(request.getSourceCode());
         linkType.setTargetName(request.getTargetName());
+        linkType.setTargetCode(request.getTargetCode());
         linkType.setSourceVisible(request.isSourceVisible());
         linkType.setTargetVisible(request.isTargetVisible());
         linkType.setSourceCardTypeIds(sourceCardTypeIds);
@@ -227,9 +229,15 @@ public class LinkTypeService {
             linkType.setSourceName(request.getSourceName());
             nameNeedsUpdate = true;
         }
+        if (request.getSourceCode() != null) {
+            linkType.setSourceCode(request.getSourceCode());
+        }
         if (request.getTargetName() != null) {
             linkType.setTargetName(request.getTargetName());
             nameNeedsUpdate = true;
+        }
+        if (request.getTargetCode() != null) {
+            linkType.setTargetCode(request.getTargetCode());
         }
         if (nameNeedsUpdate) {
             linkType.setName(linkType.getSourceName() + "->" + linkType.getTargetName());
@@ -393,7 +401,9 @@ public class LinkTypeService {
                 .name(linkType.getName())
                 .description(linkType.getDescription())
                 .sourceName(linkType.getSourceName())
+                .sourceCode(linkType.getSourceCode())
                 .targetName(linkType.getTargetName())
+                .targetCode(linkType.getTargetCode())
                 .sourceVisible(linkType.isSourceVisible())
                 .targetVisible(linkType.isTargetVisible())
                 .sourceCardTypes(sourceCardTypes)

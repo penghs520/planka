@@ -23,7 +23,9 @@ export interface LinkTypeVO {
   name: string
   description?: string
   sourceName: string
+  sourceCode?: string
   targetName: string
+  targetCode?: string
   sourceVisible: boolean
   targetVisible: boolean
   sourceCardTypes?: CardTypeInfo[]
@@ -58,7 +60,9 @@ export interface CreateLinkTypeRequest {
   name: string
   description?: string
   sourceName: string
+  sourceCode?: string
   targetName: string
+  targetCode?: string
   sourceVisible?: boolean
   targetVisible?: boolean
   sourceCardTypeIds?: string[]
@@ -74,7 +78,9 @@ export interface UpdateLinkTypeRequest {
   name?: string
   description?: string
   sourceName?: string
+  sourceCode?: string
   targetName?: string
+  targetCode?: string
   sourceVisible?: boolean
   targetVisible?: boolean
   sourceCardTypeIds?: string[]

@@ -21,9 +21,15 @@ public class CreateLinkTypeRequest {
     @NotBlank(message = "源端名称不能为空")
     private String sourceName;
 
+    /** 源端编码（如"parent"） */
+    private String sourceCode;
+
     /** 目标端名称（如"子卡片"） */
     @NotBlank(message = "目标端名称不能为空")
     private String targetName;
+
+    /** 目标端编码（如"children"） */
+    private String targetCode;
 
     /** 源端是否显示 */
     private boolean sourceVisible = true;
