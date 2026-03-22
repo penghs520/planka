@@ -10,6 +10,7 @@ import 'virtual:uno.css'
 import './styles/theme.css'
 import './style.css'
 import './styles/admin-table.scss'
+import './styles/compact-notification.css'
 
 import App from './App.vue'
 import router from './router'
