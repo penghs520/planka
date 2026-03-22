@@ -3,17 +3,13 @@ import { ref, computed, onMounted, watch, markRaw, provide, nextTick } from 'vue
 import { useI18n } from 'vue-i18n'
 import { VueFlow } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
-import { Controls } from '@vue-flow/controls'
-import { MiniMap } from '@vue-flow/minimap'
 import type { Node, Edge, VueFlowStore, GraphEdge, NodeTypesObject, EdgeTypesObject, Connection } from '@vue-flow/core'
 import { MarkerType } from '@vue-flow/core'
 import { Message } from '@arco-design/web-vue'
 import {
   IconFullscreen,
   IconFullscreenExit,
-  IconMindMapping,
-  IconSearch,
-  IconQuestionCircle,
+  IconLayout,
 } from '@arco-design/web-vue/es/icon'
 import CardTypeNode from '@/components/er-diagram/CardTypeNode.vue'
 import CardinalityEdge from '@/components/er-diagram/CardinalityEdge.vue'
@@ -41,12 +37,6 @@ const fieldConfigs = ref<Map<string, FieldOption[]>>(new Map())
 // Canvas state
 const containerRef = ref<HTMLDivElement | null>(null)
 const isFullscreen = ref(false)
-
-// Filter state
-const selectedCardTypeIds = ref<string[]>([])
-const isFilterMode = computed(() => selectedCardTypeIds.value.length > 0)
-const isSingleSelectMode = computed(() => selectedCardTypeIds.value.length === 1)
-const selectPopupVisible = ref(false)
 
 // Focus mode state
 const isFocusMode = ref(false)
@@ -89,16 +79,6 @@ const abstractToConcreteMap = computed(() => {
   }
 
   return map
-})
-
-// Card type options for filter dropdown
-const filterCardTypeOptions = computed(() => {
-  return cardTypes.value
-    .map(ct => ({
-      value: ct.id!,
-      label: ct.name,
-    }))
-    .sort((a, b) => a.label.localeCompare(b.label))
 })
 
 // Helper function to generate consistent node key
@@ -154,79 +134,6 @@ function findConcreteImplementations(abstractTypes: CardTypeInfo[]): CardTypeInf
   }
 
   return Array.from(concretes.values())
-}
-
-// Map from card type ID to node IDs (use allNodes to avoid circular dependency)
-const cardTypeToNodeIds = computed(() => {
-  const map = new Map<string, Set<string>>()
-
-  for (const node of allNodes.value) {
-    const data = node.data
-    if (data.mode === 'single' && data.entityId) {
-      if (!map.has(data.entityId)) {
-        map.set(data.entityId, new Set())
-      }
-      map.get(data.entityId)!.add(node.id)
-    } else if (data.mode === 'combo') {
-      if (data.abstractTypes) {
-        for (const at of data.abstractTypes) {
-          if (!map.has(at.id)) {
-            map.set(at.id, new Set())
-          }
-          map.get(at.id)!.add(node.id)
-        }
-      }
-    }
-  }
-
-  return map
-})
-
-// Compute filtered node IDs (use allEdges to avoid circular dependency)
-const filteredNodeIds = computed<Set<string>>(() => {
-  if (!isFilterMode.value) return new Set()
-
-  const selectedNodeIds = new Set<string>()
-  for (const cardTypeId of selectedCardTypeIds.value) {
-    const nodeIds = cardTypeToNodeIds.value.get(cardTypeId)
-    if (nodeIds) {
-      nodeIds.forEach(id => selectedNodeIds.add(id))
-    }
-  }
-
-  if (isSingleSelectMode.value) {
-    const related = new Set<string>(selectedNodeIds)
-
-    for (const nodeId of selectedNodeIds) {
-      for (const edge of allEdges.value) {
-        if (edge.source === nodeId) {
-          related.add(edge.target)
-        } else if (edge.target === nodeId) {
-          related.add(edge.source)
-        }
-      }
-    }
-    return related
-  }
-
-  return selectedNodeIds
-})
-
-// Check if a node should be highlighted (directly selected)
-function isNodeHighlighted(_nodeId: string, data: Record<string, unknown>): boolean {
-  if (!isFilterMode.value) return false
-
-  if (data.mode === 'single' && data.entityId) {
-    return selectedCardTypeIds.value.includes(data.entityId as string)
-  }
-
-  if (data.mode === 'combo' && data.abstractTypes) {
-    return (data.abstractTypes as CardTypeInfo[]).some(at =>
-      selectedCardTypeIds.value.includes(at.id)
-    )
-  }
-
-  return false
 }
 
 // Build Vue Flow nodes and edges from data
@@ -423,45 +330,6 @@ function buildGraph() {
   nodes.value = [...layoutedNodes]
   edges.value = [...newEdges]
 }
-
-// Apply filter when selectedCardTypeIds changes
-function applyFilter() {
-  if (!isFilterMode.value) {
-    // No filter - show all nodes and edges
-    const showAllNodes: any[] = (allNodes.value as any[]).map((node: any) => ({
-      ...node,
-      hidden: false,
-      data: { ...node.data, isHighlighted: false },
-    }))
-    nodes.value = showAllNodes as Node[]
-    const showAllEdges: any[] = (allEdges.value as any[]).map((edge: any) => ({
-      ...edge,
-      hidden: false,
-    }))
-    edges.value = showAllEdges as Edge[]
-  } else {
-    // Apply filter
-    const visibleNodeIds = filteredNodeIds.value
-
-    const filteredNodes: any[] = (allNodes.value as any[]).map((node: any) => ({
-      ...node,
-      hidden: !visibleNodeIds.has(node.id),
-      data: {
-        ...node.data,
-        isHighlighted: isNodeHighlighted(node.id, node.data),
-      },
-    }))
-    nodes.value = filteredNodes as Node[]
-
-    const filteredEdges: any[] = (allEdges.value as any[]).map((edge: any) => ({
-      ...edge,
-      hidden: !visibleNodeIds.has(edge.source) || !visibleNodeIds.has(edge.target),
-    }))
-    edges.value = filteredEdges as Edge[]
-  }
-}
-
-watch(selectedCardTypeIds, applyFilter, { deep: true })
 
 // Watch nodes position changes to update edge handles
 watch(
@@ -837,11 +705,6 @@ async function fetchData() {
   }
 }
 
-// Clear filter
-function clearFilter() {
-  selectedCardTypeIds.value = []
-}
-
 // Toggle fullscreen
 function toggleFullscreen() {
   if (!containerRef.value) return
@@ -963,9 +826,6 @@ function onNodeDoubleClick({ node }: { node: Node }) {
 function enterFocusMode(nodeId: string) {
   // Check if we have data
   if (allNodes.value.length === 0) return
-
-  // Clear filter mode first
-  selectedCardTypeIds.value = []
 
   // Save current positions from allNodes (the source of truth)
   savedNodePositions.value.clear()
@@ -1158,71 +1018,14 @@ onMounted(() => {
         <CreateButton @click="handleCreate">
           {{ t('admin.linkType.createButton') }}
         </CreateButton>
-        <!-- Filter Dropdown -->
-        <div class="filter-box">
-          <a-select
-            v-model="selectedCardTypeIds"
-            v-model:popup-visible="selectPopupVisible"
-            placeholder="选择实体类型筛选..."
-            size="small"
-            multiple
-            allow-clear
-            allow-search
-            :style="{ width: '280px' }"
-            :options="filterCardTypeOptions"
-            :max-tag-count="2"
-            @clear="clearFilter"
-          >
-            <template #prefix>
-              <IconSearch />
-            </template>
-          </a-select>
-        </div>
-        <!-- Filter Mode Indicator -->
-        <a-tag v-if="isFilterMode" color="green" closable class="mode-tag" @close="clearFilter">
-          {{ isSingleSelectMode ? '显示关联节点' : '仅显示所选节点' }} ({{ selectedCardTypeIds.length }} 个)
-        </a-tag>
         <!-- Focus Mode Indicator -->
         <a-tag v-if="isFocusMode" color="arcoblue" closable class="mode-tag" @close="exitFocusMode">
           聚焦模式
         </a-tag>
       </div>
       <div class="toolbar-right">
-        <a-popover position="bottom" trigger="click" :content-style="{ padding: '16px', maxWidth: '320px' }">
-          <a-button size="small">
-            <template #icon><IconQuestionCircle /></template>
-          </a-button>
-          <template #content>
-            <div class="help-content">
-              <div class="help-title">操作说明</div>
-              <div class="help-section">
-                <div class="help-subtitle">节点操作</div>
-                <ul class="help-list">
-                  <li><span class="help-action">拖拽节点</span>移动位置</li>
-                  <li><span class="help-action">双击节点</span>进入聚焦模式，查看关联关系</li>
-                </ul>
-              </div>
-              <div class="help-section">
-                <div class="help-subtitle">连线操作</div>
-                <ul class="help-list">
-                  <li><span class="help-action">单击连线/标签</span>选中连线</li>
-                  <li><span class="help-action">双击连线</span>弹出操作菜单（编辑、引用关系、停用、删除）</li>
-                  <li><span class="help-action">双击标签</span>快捷编辑名称和多重性</li>
-                </ul>
-              </div>
-              <div class="help-section">
-                <div class="help-subtitle">画布操作</div>
-                <ul class="help-list">
-                  <li><span class="help-action">滚轮</span>缩放画布</li>
-                  <li><span class="help-action">拖拽空白区域</span>平移画布</li>
-                </ul>
-              </div>
-            </div>
-          </template>
-        </a-popover>
-        <a-divider direction="vertical" />
         <a-button size="small" @click="handleAutoLayout">
-          <template #icon><IconMindMapping /></template>
+          <template #icon><IconLayout /></template>
         </a-button>
         <a-divider direction="vertical" />
         <a-button size="small" @click="toggleFullscreen">
@@ -1235,7 +1038,7 @@ onMounted(() => {
     </div>
 
     <!-- Vue Flow Canvas -->
-    <div class="flow-container" @click="selectPopupVisible = false">
+    <div class="flow-container">
       <VueFlow
         v-model:nodes="nodes"
         v-model:edges="edges"
@@ -1253,8 +1056,6 @@ onMounted(() => {
         @connect="onConnect"
       >
         <Background pattern-color="#e2e8f0" :gap="20" />
-        <Controls position="bottom-right" />
-        <MiniMap position="bottom-left" />
       </VueFlow>
 
       <!-- Loading Overlay -->
@@ -1460,12 +1261,6 @@ onMounted(() => {
   gap: 4px;
 }
 
-.filter-box {
-  margin-left: 16px;
-  position: relative;
-  z-index: 100;
-}
-
 .mode-tag {
   margin-left: 12px;
   cursor: pointer;
@@ -1522,12 +1317,6 @@ onMounted(() => {
   margin-bottom: 12px;
 }
 
-.help-icon {
-  font-size: 14px;
-  color: rgb(var(--primary-6));
-  cursor: help;
-}
-
 .form-extra-text {
   font-size: 11px;
   color: var(--color-text-3);
@@ -1561,65 +1350,6 @@ onMounted(() => {
   font-weight: 500;
   color: var(--color-text-1);
   line-height: 1.4;
-}
-
-/* Help Content Styles */
-.help-content {
-  font-size: 13px;
-  color: var(--color-text-1);
-}
-
-.help-title {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--color-border-2);
-}
-
-.help-section {
-  margin-bottom: 12px;
-}
-
-.help-section:last-child {
-  margin-bottom: 0;
-}
-
-.help-subtitle {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--color-text-2);
-  margin-bottom: 6px;
-}
-
-.help-list {
-  margin: 0;
-  padding-left: 0;
-  list-style: none;
-}
-
-.help-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--color-text-2);
-  line-height: 1.6;
-  margin-bottom: 4px;
-}
-
-.help-list li:last-child {
-  margin-bottom: 0;
-}
-
-.help-action {
-  flex-shrink: 0;
-  background: var(--color-fill-2);
-  padding: 1px 6px;
-  border-radius: 3px;
-  font-size: 11px;
-  color: var(--color-text-1);
-  font-weight: 500;
 }
 
 /* Dynamic Label Styles */
@@ -1685,8 +1415,6 @@ onMounted(() => {
 /* Vue Flow global styles */
 @import '@vue-flow/core/dist/style.css';
 @import '@vue-flow/core/dist/theme-default.css';
-@import '@vue-flow/controls/dist/style.css';
-@import '@vue-flow/minimap/dist/style.css';
 
 .vue-flow__edge-path {
   stroke: #b8c5d3;
@@ -1729,13 +1457,4 @@ onMounted(() => {
   z-index: 1000 !important;
 }
 
-.vue-flow__controls {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.vue-flow__minimap {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
 </style>
