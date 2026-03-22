@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useWindowSize } from '@vueuse/core'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Message, Modal } from '@arco-design/web-vue'
@@ -67,6 +68,27 @@ const entityTypes = computed(() => {
   return filteredCardTypes.value.filter(
     (ct) => ct.schemaSubType === SchemaSubType.ENTITY_CARD_TYPE
   )
+})
+
+/** 与 a-col :xs="24" :sm="12" :md="8" :lg="6" 对齐的列数，用于瀑布流分列 */
+const { width: windowWidth } = useWindowSize()
+const entityMasonryColumnCount = computed(() => {
+  const w = windowWidth.value || 1200
+  if (w >= 992) return 4
+  if (w >= 768) return 3
+  if (w >= 576) return 2
+  return 1
+})
+
+/** 按列轮询分配，每列独立纵向堆叠，实现不等高卡片的向上对齐（瀑布流） */
+const entityTypeColumns = computed(() => {
+  const list = entityTypes.value
+  const n = entityMasonryColumnCount.value
+  const cols: CardTypeDefinition[][] = Array.from({ length: n }, () => [])
+  list.forEach((ct, i) => {
+    cols[i % n]!.push(ct)
+  })
+  return cols
 })
 
 // 数据加载
@@ -269,9 +291,15 @@ onMounted(async () => {
               <span class="group-title">{{ t('admin.cardType.schemaSubType.ENTITY_CARD_TYPE') }}</span>
               <span class="group-count">({{ entityTypes.length }})</span>
             </div>
-            <a-row :gutter="[16, 16]" class="card-grid">
-              <a-col v-for="ct in entityTypes" :key="ct.id" :xs="24" :sm="12" :md="8" :lg="6">
-                <a-card class="type-card entity-card" hoverable @click="handleEdit(ct)">
+            <div class="entity-masonry">
+              <div v-for="(col, ci) in entityTypeColumns" :key="ci" class="entity-masonry-col">
+                <a-card
+                  v-for="ct in col"
+                  :key="ct.id"
+                  class="type-card entity-card"
+                  hoverable
+                  @click="handleEdit(ct)"
+                >
                   <div class="type-card-header">
                     <div class="type-card-icon entity-bg">
                       <IconFile />
@@ -335,8 +363,8 @@ onMounted(async () => {
                     </a-tooltip>
                   </div>
                 </a-card>
-              </a-col>
-            </a-row>
+              </div>
+            </div>
           </div>
 
           <!-- 空状态 -->
@@ -449,6 +477,22 @@ onMounted(async () => {
 .group-count {
   font-size: 12px;
   color: var(--color-text-3);
+}
+
+/* 实体类型：瀑布流（列内向上堆叠，避免整行被最高卡片撑开） */
+.entity-masonry {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+.entity-masonry-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* 卡片：白底 + 左侧类别色条，悬停微抬起 */
