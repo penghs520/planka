@@ -356,7 +356,7 @@ targetFieldsRequired: 'Please select target fields',
       inheritedLinkRelation: 'Inherited link from {name}',
       // Simplified version
       ownProperty: 'Own Property',
-      inheritedProperty: 'Inherited from {name}',
+      inheritedProperty: '{name}',
       // Value sources
       valueSourceManual: 'Manual Input',
       valueSourceFormula: 'Formula',

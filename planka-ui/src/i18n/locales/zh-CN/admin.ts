@@ -388,7 +388,7 @@ targetFieldsRequired: '请选择目标属性',
       inheritedLinkRelation: '继承自{name}的关联关系',
       // 简化版本
       ownProperty: '自有属性',
-      inheritedProperty: '继承自{name}',
+      inheritedProperty: '{name}',
       // Value sources
       valueSourceManual: '手动输入',
       valueSourceFormula: '计算公式',
