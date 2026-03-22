@@ -287,12 +287,13 @@ async function handleFieldConfigCreated() {
         <template v-else>
           <div class="edit-mode-shell">
             <div class="edit-mode-panel">
-              <BasicInfoForm
-                v-show="activeTab === 'basic'"
-                v-model:form-ref="formRef"
-                :form-data="formData"
-                :mode="effectiveMode"
-              />
+              <div v-show="activeTab === 'basic'" class="edit-mode-tab-scroll">
+                <BasicInfoForm
+                  v-model:form-ref="formRef"
+                  :form-data="formData"
+                  :mode="effectiveMode"
+                />
+              </div>
 
               <!-- 单根包裹：FieldConfigTab 为多根片段，v-show 直接打在子组件上无法隐藏全部根节点 -->
               <div
@@ -308,41 +309,65 @@ async function handleFieldConfigCreated() {
                 />
               </div>
 
-              <ValueStreamTab
+              <div
                 v-if="activeTab === 'valueStream' && formData?.id"
-                ref="valueStreamTabRef"
-                :card-type-id="formData.id"
-              />
+                class="edit-mode-tab-scroll"
+              >
+                <ValueStreamTab
+                  ref="valueStreamTabRef"
+                  :card-type-id="formData.id"
+                />
+              </div>
 
-              <PageLayoutTab
+              <div
                 v-if="isEntityType && activeTab === 'pageLayout' && formData?.id"
-                :card-type-id="formData.id"
-                :card-type-name="formData.name"
-              />
+                class="edit-mode-tab-scroll"
+              >
+                <PageLayoutTab
+                  :card-type-id="formData.id"
+                  :card-type-name="formData.name"
+                />
+              </div>
 
-              <PermissionTab
+              <div
                 v-if="isEntityType && activeTab === 'permission' && formData?.id"
-                :card-type-id="formData.id"
-                :org-id="orgStore.currentOrgId!"
-              />
+                class="edit-mode-tab-scroll"
+              >
+                <PermissionTab
+                  :card-type-id="formData.id"
+                  :org-id="orgStore.currentOrgId!"
+                />
+              </div>
 
-              <CardActionsTab
+              <div
                 v-if="isEntityType && activeTab === 'cardButtons' && formData?.id"
-                :card-type-id="formData.id"
-                :card-type-name="formData.name"
-              />
+                class="edit-mode-tab-scroll"
+              >
+                <CardActionsTab
+                  :card-type-id="formData.id"
+                  :card-type-name="formData.name"
+                />
+              </div>
 
-              <FlowManagementTab
+              <div
                 v-if="isEntityType && activeTab === 'flowManagement' && formData?.id"
-                :card-type-id="formData.id"
-                :card-type-name="formData.name"
-              />
+                class="edit-mode-tab-scroll"
+              >
+                <FlowManagementTab
+                  :card-type-id="formData.id"
+                  :card-type-name="formData.name"
+                />
+              </div>
 
-              <BizRulesTab
+              <div
                 v-if="isEntityType && activeTab === 'businessRules' && formData?.id"
-                :card-type-id="formData.id"
-                :card-type-name="formData.name"
-              />
+                class="edit-mode-tab-scroll"
+              >
+                <BizRulesTab
+                  :card-type-id="formData.id"
+                  :card-type-name="formData.name"
+                />
+              </div>
             </div>
           </div>
         </template>
@@ -398,8 +423,27 @@ async function handleFieldConfigCreated() {
 .edit-mode-panel {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   padding-top: 12px;
+}
+
+/* 可滚动 Tab：基础信息、价值流等 */
+.edit-mode-tab-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* 字段管理：仅表格内部纵向滚动，避免与外层双重滚动条 */
+.edit-mode-tab-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* 标题行：左侧图标+名称，右侧可换行标签（与关闭按钮同一 header 行） */

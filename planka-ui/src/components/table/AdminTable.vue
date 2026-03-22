@@ -75,6 +75,7 @@ function handleRowClick(record: unknown) {
 <style scoped>
 .admin-table-container {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -82,7 +83,11 @@ function handleRowClick(record: unknown) {
 
 .admin-table-spin {
   flex: 1;
-  overflow: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /* 由 a-table 的 scroll.y 承担纵向滚动，避免与外层容器形成双滚动条 */
+  overflow: hidden;
 }
 
 /* 表格内链接样式：默认黑色，hover 时蓝色 */

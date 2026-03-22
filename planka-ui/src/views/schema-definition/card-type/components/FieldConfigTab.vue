@@ -124,116 +124,115 @@ async function handleDeleteFieldConfig(config: FieldConfig) {
 </script>
 
 <template>
-  <div class="field-mgmt-tab-root">
-    <div v-if="fieldList && fieldList.fields.length > 0" class="fields-tab-content">
-      <!-- 工具栏：右侧搜索 + 主按钮（飞书字段管理布局） -->
-      <div class="field-mgmt-toolbar">
-        <a-input-search
-          v-model="searchKeyword"
-          class="field-mgmt-search"
-          :placeholder="t('admin.cardType.fieldConfig.listSearchPlaceholder')"
-          allow-clear
-        />
-        <a-button type="primary" class="field-mgmt-create-btn btn-primary" @click="handleCreateNewField">
-          <template #icon>
-            <IconPlus />
-          </template>
-          {{ t('admin.cardType.fieldConfig.createNew') }}
-        </a-button>
-      </div>
-      <AdminTable
-        :data="filteredData"
-        row-key="fieldId"
-        class="field-config-table field-mgmt-table"
-        :scroll="{ y: '100%' }"
-        row-class="clickable-row field-mgmt-row"
-        @row-click="(record: unknown) => handleOpenFieldConfigDetail(record as FieldConfig)"
-      >
-        <a-table-column :title="t('admin.cardType.fieldConfig.fieldName')" data-index="name" :min-width="168" fixed="left">
-          <template #cell="{ record }">
-            <div class="field-name-cell">
-              <a-link class="name-link" @click="handleOpenFieldConfigDetail(record)">
-                <HighlightText :text="record.name" :keyword="searchKeyword" />
-              </a-link>
-            </div>
-          </template>
-        </a-table-column>
-        <a-table-column :title="t('admin.cardType.fieldConfig.fieldType')" :min-width="128">
-          <template #cell="{ record }">
-            <span
-              class="ft-field-pill"
-              :class="fieldTypePillClass(record.schemaSubType)"
-            >{{ getFieldTypeLabel(record.schemaSubType) }}</span>
-          </template>
-        </a-table-column>
-        <a-table-column :title="t('admin.table.code')" data-index="fieldId" :min-width="120">
-          <template #cell="{ record }">
-            <span class="cell-text wrap-text">{{ record.code }}</span>
-          </template>
-        </a-table-column>
-        <a-table-column :title="t('admin.cardType.fieldConfig.source')" :min-width="180">
-          <template #cell="{ record }">
-            <div class="source-cell" @click="handleSourceClick">
-              <span class="source-text wrap-text" v-html="getSourceLabel(record, fieldList)" />
-            </div>
-          </template>
-        </a-table-column>
-        <a-table-column :title="t('admin.cardType.fieldConfig.valueSource')" :min-width="100">
-          <template #cell="{ record }">
-            <span class="cell-text wrap-text">{{ getValueSourceLabel(record.valueSource) }}</span>
-          </template>
-        </a-table-column>
-        <a-table-column :title="t('admin.cardType.fieldConfig.systemField')" :min-width="90">
-          <template #cell="{ record }">
-            <span class="cell-text wrap-text">{{ record.systemField ? t('common.yes') : t('common.no') }}</span>
-          </template>
-        </a-table-column>
-        <a-table-column :title="t('admin.table.operations')" :width="100" fixed="right">
-          <template #cell="{ record }">
-            <a-button
-              v-if="getSourceType(record, fieldList) === 'own-config'"
-              type="text"
-              size="mini"
-              status="danger"
-              @click.stop="handleDeleteFieldConfig(record)"
-            >
-              {{ t('admin.action.delete') }}
-            </a-button>
-            <span v-else class="text-placeholder">-</span>
-          </template>
-        </a-table-column>
-      </AdminTable>
-    </div>
-    <div v-else class="empty-container field-mgmt-empty">
-      <a-empty :description="t('admin.cardType.fieldConfig.emptyDescription')" />
-      <a-button type="primary" class="btn-primary mt-4" @click="handleCreateNewField">
+  <div v-if="fieldList && fieldList.fields.length > 0" class="fields-tab-content">
+    <!-- 工具栏：右侧搜索 + 主按钮（飞书字段管理布局） -->
+    <div class="field-mgmt-toolbar">
+      <a-input-search
+        v-model="searchKeyword"
+        class="field-mgmt-search"
+        :placeholder="t('admin.cardType.fieldConfig.listSearchPlaceholder')"
+        allow-clear
+      />
+      <a-button type="primary" class="field-mgmt-create-btn btn-primary" @click="handleCreateNewField">
         <template #icon>
           <IconPlus />
         </template>
         {{ t('admin.cardType.fieldConfig.createNew') }}
       </a-button>
     </div>
-
-    <!-- 引用关系抽屉 -->
-    <SchemaReferenceDrawer
-      v-model:visible="referenceDrawerVisible"
-      :schema-id="referenceSchemaId"
-    />
+    <AdminTable
+      :data="filteredData"
+      row-key="fieldId"
+      class="field-config-table field-mgmt-table"
+      :scroll="{ x: 1100, y: '100%' }"
+      row-class="clickable-row field-mgmt-row"
+      @row-click="(record: unknown) => handleOpenFieldConfigDetail(record as FieldConfig)"
+    >
+      <a-table-column :title="t('admin.cardType.fieldConfig.fieldName')" data-index="name" :min-width="168" fixed="left">
+        <template #cell="{ record }">
+          <div class="field-name-cell">
+            <a-link class="name-link" @click="handleOpenFieldConfigDetail(record)">
+              <HighlightText :text="record.name" :keyword="searchKeyword" />
+            </a-link>
+          </div>
+        </template>
+      </a-table-column>
+      <a-table-column :title="t('admin.cardType.fieldConfig.fieldType')" :min-width="128">
+        <template #cell="{ record }">
+          <span
+            class="ft-field-pill"
+            :class="fieldTypePillClass(record.schemaSubType)"
+          >{{ getFieldTypeLabel(record.schemaSubType) }}</span>
+        </template>
+      </a-table-column>
+      <a-table-column :title="t('admin.table.code')" data-index="fieldId" :min-width="120">
+        <template #cell="{ record }">
+          <span class="cell-text wrap-text">{{ record.code }}</span>
+        </template>
+      </a-table-column>
+      <a-table-column :title="t('admin.cardType.fieldConfig.source')" :min-width="180">
+        <template #cell="{ record }">
+          <div class="source-cell" @click="handleSourceClick">
+            <span class="source-text wrap-text" v-html="getSourceLabel(record, fieldList)" />
+          </div>
+        </template>
+      </a-table-column>
+      <a-table-column :title="t('admin.cardType.fieldConfig.valueSource')" :min-width="100">
+        <template #cell="{ record }">
+          <span class="cell-text wrap-text">{{ getValueSourceLabel(record.valueSource) }}</span>
+        </template>
+      </a-table-column>
+      <a-table-column :title="t('admin.cardType.fieldConfig.systemField')" :min-width="90">
+        <template #cell="{ record }">
+          <span class="cell-text wrap-text">{{ record.systemField ? t('common.yes') : t('common.no') }}</span>
+        </template>
+      </a-table-column>
+      <a-table-column :title="t('admin.table.operations')" :width="100" fixed="right">
+        <template #cell="{ record }">
+          <a-button
+            v-if="getSourceType(record, fieldList) === 'own-config'"
+            type="text"
+            size="mini"
+            status="danger"
+            @click.stop="handleDeleteFieldConfig(record)"
+          >
+            {{ t('admin.action.delete') }}
+          </a-button>
+          <span v-else class="text-placeholder">-</span>
+        </template>
+      </a-table-column>
+    </AdminTable>
   </div>
+  <div v-else class="empty-container">
+    <a-empty :description="t('admin.cardType.fieldConfig.emptyDescription')" />
+    <a-button type="primary" class="btn-primary mt-4" @click="handleCreateNewField">
+      <template #icon>
+        <IconPlus />
+      </template>
+      {{ t('admin.cardType.fieldConfig.createNew') }}
+    </a-button>
+  </div>
+
+  <!-- 引用关系抽屉 -->
+  <SchemaReferenceDrawer
+    v-model:visible="referenceDrawerVisible"
+    :schema-id="referenceSchemaId"
+  />
 </template>
 
 <style scoped>
-/* 抵消实体类型抽屉 body 的左右 padding（16px），收紧字段管理与内容区左对齐 */
-.field-mgmt-tab-root {
-  margin-left: -8px;
-  margin-right: -8px;
-}
-
 .fields-tab-content {
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+/* 与 AdminTable 根节点合并 class，保证在 flex 链上占满剩余高度 */
+.field-config-table {
+  flex: 1;
+  min-height: 0;
 }
 
 .field-mgmt-toolbar {
@@ -407,12 +406,6 @@ async function handleDeleteFieldConfig(config: FieldConfig) {
   border-bottom: 1px solid var(--color-border-2) !important;
 }
 
-/* 首列再收紧左侧留白（AdminTable 默认单元格约 12px） */
-.field-mgmt-table :deep(.arco-table-th:first-child .arco-table-cell),
-.field-mgmt-table :deep(.arco-table-td:first-child .arco-table-cell) {
-  padding-left: 8px;
-}
-
 .field-mgmt-table :deep(.arco-table-td) {
   border-bottom: 1px solid var(--color-border-2);
 }
@@ -423,5 +416,10 @@ async function handleDeleteFieldConfig(config: FieldConfig) {
 
 .field-mgmt-table :deep(.clickable-row) {
   cursor: pointer;
+}
+
+/* 减轻固定列 + 纵向滚动条区域的多余竖线感 */
+.field-mgmt-table :deep(.arco-table-content-scroll) {
+  border-right: none;
 }
 </style>
