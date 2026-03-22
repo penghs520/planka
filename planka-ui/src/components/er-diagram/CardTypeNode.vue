@@ -194,37 +194,32 @@ function toggleLinkFieldsSection() {
 .card-type-node {
   min-width: 240px;
   max-width: 300px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    0 1px 4px rgba(0, 0, 0, 0.04);
-  border: 1.5px solid #dcfce7;
-  transition: box-shadow 0.2s, transform 0.1s;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d9d9d9;
+  transition: all 0.2s;
+  overflow: hidden;
 }
 
 .card-type-node:hover {
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #b3b3b3;
 }
 
 .card-type-node.is-selected {
-  box-shadow:
-    0 0 0 2px rgb(var(--primary-6)),
-    0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 2px solid rgb(var(--primary-6));
+  box-shadow: 0 4px 16px rgba(var(--primary-6), 0.3);
 }
 
 .card-type-node.is-highlighted {
-  box-shadow:
-    0 0 0 2px rgb(var(--success-6)),
-    0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 2px solid rgb(var(--warning-6));
+  box-shadow: 0 4px 16px rgba(var(--warning-6), 0.3);
 }
 
 .card-type-node.is-combo {
-  border-color: rgba(var(--primary-1), 0.8);
-  background: linear-gradient(135deg, rgba(var(--primary-1), 0.5), rgba(255, 255, 255, 0.95));
+  border-color: rgb(var(--primary-5));
+  background: linear-gradient(to bottom, rgba(var(--primary-1), 0.3), #ffffff);
 }
 
 /* Vue Flow Handles - hidden but functional */
@@ -256,17 +251,16 @@ function toggleLinkFieldsSection() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
-  border-bottom: 1px solid #bbf7d0;
-  background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
-  border-radius: 6px 6px 0 0;
+  padding: 10px 14px;
+  border-bottom: 2px solid #e8e8e8;
+  background: linear-gradient(to bottom, #fafafa, #f5f5f5);
 }
 
 .combo-header {
   flex-direction: column;
   align-items: flex-start;
   gap: 6px;
-  background: linear-gradient(135deg, rgba(var(--primary-1), 0.8), rgba(var(--primary-2), 0.5));
+  background: linear-gradient(to bottom, rgba(var(--primary-1), 0.6), rgba(var(--primary-1), 0.3));
 }
 
 .abstract-types {
@@ -276,9 +270,10 @@ function toggleLinkFieldsSection() {
 }
 
 .node-name {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  color: #1d2129;
+  color: #1f1f1f;
+  letter-spacing: 0.3px;
 }
 
 .node-actions {
@@ -297,9 +292,14 @@ function toggleLinkFieldsSection() {
 .field-row {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  font-size: 13px;
-  border-bottom: 1px solid var(--color-border-1);
+  padding: 7px 14px;
+  font-size: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+}
+
+.field-row:hover {
+  background: #fafafa;
 }
 
 .field-row:last-child {
@@ -307,20 +307,26 @@ function toggleLinkFieldsSection() {
 }
 
 .field-row.link-field {
-  background: rgba(var(--warning-1), 0.3);
+  background: rgba(var(--warning-1), 0.2);
+}
+
+.field-row.link-field:hover {
+  background: rgba(var(--warning-1), 0.35);
 }
 
 .field-row.empty {
   color: var(--color-text-3);
   font-style: italic;
+  justify-content: center;
 }
 
 .field-indicator {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: rgb(var(--danger-6));
+  background: #8c8c8c;
   margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .field-indicator.link {
@@ -329,32 +335,40 @@ function toggleLinkFieldsSection() {
 
 .field-name {
   flex: 1;
-  color: #4e5969;
+  color: #262626;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .field-type {
-  color: #86909c;
-  font-size: 12px;
+  color: #8c8c8c;
+  font-size: 11px;
   margin-left: 8px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .section-toggle {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
+  padding: 7px 14px;
   cursor: pointer;
-  color: rgb(var(--primary-6));
-  font-size: 13px;
-  font-weight: 500;
-  border-bottom: 1px solid var(--color-border-1);
-  transition: background 0.15s;
+  color: #595959;
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .section-toggle:hover {
-  background: rgba(var(--primary-1), 0.5);
+  background: #f0f0f0;
+  color: #262626;
 }
 
 .section-toggle.association {
@@ -362,30 +376,30 @@ function toggleLinkFieldsSection() {
 }
 
 .section-toggle.association:hover {
-  background: rgba(var(--warning-1), 0.5);
+  background: rgba(var(--warning-1), 0.3);
 }
 
 .section-toggle.concrete {
-  color: rgb(var(--success-6));
+  color: rgb(var(--primary-6));
 }
 
 .section-toggle.concrete:hover {
-  background: rgba(var(--success-1), 0.5);
+  background: rgba(var(--primary-1), 0.3);
 }
 
 .toggle-icon {
-  font-size: 12px;
+  font-size: 11px;
   margin-right: 6px;
 }
 
 .toggle-label {
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .loading-indicator {
   margin-left: auto;
   color: var(--color-text-3);
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .fields-list {
@@ -394,34 +408,34 @@ function toggleLinkFieldsSection() {
 }
 
 .association-fields {
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 4px 4px;
 }
 
 .concretes-list {
   max-height: 200px;
   overflow-y: auto;
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 4px 4px;
 }
 
 .concrete-item {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--color-border-1);
+  padding: 7px 14px;
+  border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .concrete-item:last-child {
   border-bottom: none;
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 4px 4px;
 }
 
 .concrete-item:hover {
-  background: rgba(var(--success-1), 0.5);
+  background: rgba(var(--primary-1), 0.3);
 }
 
 .concrete-name {
-  font-size: 13px;
-  color: #4e5969;
+  font-size: 12px;
+  color: #262626;
   font-weight: 500;
 }
 </style>
