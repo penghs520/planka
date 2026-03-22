@@ -208,7 +208,7 @@ onMounted(async () => {
             </div>
             <a-row :gutter="[16, 16]" class="card-grid">
               <a-col v-for="ct in traitTypes" :key="ct.id" :xs="24" :sm="12" :md="8" :lg="6">
-                <a-card class="type-card trait-card" hoverable @click="handleEdit(ct)">
+                <a-card class="type-card" hoverable @click="handleEdit(ct)">
                   <div class="type-card-header">
                     <div class="type-card-icon trait-bg">
                       <IconTag />
@@ -270,7 +270,7 @@ onMounted(async () => {
             </div>
             <a-row :gutter="[16, 16]" class="card-grid">
               <a-col v-for="ct in entityTypes" :key="ct.id" :xs="24" :sm="12" :md="8" :lg="6">
-                <a-card class="type-card entity-card" hoverable @click="handleEdit(ct)">
+                <a-card class="type-card" hoverable @click="handleEdit(ct)">
                   <div class="type-card-header">
                     <div class="type-card-icon entity-bg">
                       <IconFile />
