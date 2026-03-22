@@ -181,6 +181,10 @@ onMounted(async () => {
   <div class="card-view-page">
     <div class="card-view-content">
       <div class="content-header">
+        <CreateButton @click="handleCreate">
+          {{ t('admin.cardType.createButton') }}
+        </CreateButton>
+        <div class="header-spacer" />
         <a-input-search
           v-model="searchKeyword"
           :placeholder="t('admin.search.placeholder')"
@@ -188,10 +192,6 @@ onMounted(async () => {
           size="small"
           allow-clear
         />
-        <div class="header-spacer" />
-        <CreateButton @click="handleCreate">
-          {{ t('admin.cardType.createButton') }}
-        </CreateButton>
       </div>
 
       <div class="card-view-container">
