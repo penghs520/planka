@@ -100,6 +100,9 @@ export default {
     title: '实体类型',
     createButton: '新建实体类型',
     createTitle: '新建实体类型',
+    createWizardNext: '下一步',
+    /** 新建弹窗第二步：提交创建 */
+    createSubmit: '提交',
     editTitle: '编辑实体类型',
     editTitleWithName: '编辑实体类型 - {name}',
     /** 抽屉底部：保存基础信息（不关闭抽屉） */
@@ -125,6 +128,7 @@ export default {
       sectionBasic: '基础信息配置',
       sectionNumberingAndTitle: '编号与标题',
       subType: '实体类型种类',
+      subTypePlaceholder: '请选择类型',
       name: '名称',
       namePlaceholder: '请输入实体类型名称',
       nameRequired: '请输入实体类型名称',

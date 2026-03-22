@@ -99,6 +99,8 @@ export default {
     title: 'Entity Types',
     createButton: 'New Entity Type',
     createTitle: 'Create Entity Type',
+    createWizardNext: 'Next',
+    createSubmit: 'Submit',
     editTitle: 'Edit Entity Type',
     editTitleWithName: 'Edit Entity Type - {name}',
     /** Drawer footer: save basic info without closing */
@@ -125,6 +127,7 @@ export default {
       sectionBasic: 'Basic information',
       sectionNumberingAndTitle: 'Numbering and title',
       subType: 'Entity Type Category',
+      subTypePlaceholder: 'Select type',
       name: 'Name',
       namePlaceholder: 'Enter entity type name',
       nameRequired: 'Please enter entity type name',

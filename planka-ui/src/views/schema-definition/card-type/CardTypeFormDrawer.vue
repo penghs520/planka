@@ -52,11 +52,35 @@ const fieldList = ref<FieldConfigListWithSource | null>(null)
 /** 与 props.mode 同步；创建成功后置为 edit，便于继续配置其它 Tab */
 const effectiveMode = ref<'create' | 'edit'>('create')
 
+/** 新建：两步弹窗当前步（1=选类型，2=填表） */
+const createStep = ref<1 | 2>(1)
+
 const showFooter = computed(
-  () =>
-    effectiveMode.value === 'create'
-    || (effectiveMode.value === 'edit' && activeTab.value === 'basic'),
+  () => effectiveMode.value === 'edit' && activeTab.value === 'basic',
 )
+
+const createModalVisible = computed({
+  get: () =>
+    props.visible
+    && props.mode === 'create'
+    && effectiveMode.value === 'create',
+  set: (v: boolean) => {
+    if (!v) {
+      emit('update:visible', false)
+    }
+  },
+})
+
+const editDrawerVisible = computed({
+  get: () =>
+    props.visible
+    && (props.mode === 'edit' || effectiveMode.value === 'edit'),
+  set: (v: boolean) => {
+    if (!v) {
+      emit('update:visible', false)
+    }
+  },
+})
 
 // 属性配置详情抽屉
 const fieldConfigDrawerVisible = ref(false)
@@ -65,10 +89,6 @@ const currentFieldConfig = ref<FieldConfig | null>(null)
 // ValueStreamTab 组件引用
 const valueStreamTabRef = ref<InstanceType<typeof ValueStreamTab> | null>(null)
 
-const drawerVisible = computed({
-  get: () => props.visible,
-  set: (value) => emit('update:visible', value),
-})
 
 const isEntityType = computed(() => formData.value?.schemaSubType === SchemaSubType.ENTITY_CARD_TYPE)
 
@@ -103,13 +123,6 @@ const cardTypeEditTabItems = computed(() => {
   ]
 })
 
-const drawerTitle = computed(() => {
-  if (props.mode === 'create') {
-    return t('admin.cardType.createTitle')
-  }
-  return formData.value ? t('admin.cardType.editTitleWithName', { name: formData.value.name }) : t('admin.cardType.editTitle')
-})
-
 // 监听 selectedSubType 变化（仅新建模式）
 watch(selectedSubType, (newSubType) => {
   if (effectiveMode.value === 'create' && orgStore.currentOrgId) {
@@ -132,11 +145,12 @@ watch(activeTab, async (newTab) => {
   }
 })
 
-// 初始化抽屉数据
+// 初始化抽屉 / 新建弹窗数据
 async function initDrawer() {
   effectiveMode.value = props.mode
   activeTab.value = 'basic'
   fieldList.value = null
+  createStep.value = 1
 
   if (props.mode === 'create') {
     selectedSubType.value = SchemaSubType.ENTITY_CARD_TYPE
@@ -150,7 +164,7 @@ async function initDrawer() {
     } catch (error) {
       console.error('Failed to fetch:', error)
       Message.error(t('admin.cardType.fetchCardTypeFailed'))
-      drawerVisible.value = false
+      emit('update:visible', false)
     } finally {
       loading.value = false
     }
@@ -225,23 +239,98 @@ async function handleFieldConfigCreated() {
   // 刷新属性配置列表
   await handleFieldConfigRefresh()
 }
+
+watch(
+  () => props.visible,
+  (visible) => {
+    if (visible) {
+      void initDrawer()
+    }
+  },
+  { immediate: true },
+)
+
+function handleCreateWizardNext() {
+  createStep.value = 2
+}
+
+function handleCreateWizardBack() {
+  createStep.value = 1
+}
+
+/** 第一步仅选类型，弹窗不必过宽；第二步表单字段多，保持较宽 */
+const createModalWidth = computed(() => (createStep.value === 1 ? '420px' : '720px'))
+
+const createModalBodyStyle = computed(() => ({
+  maxHeight: createStep.value === 1 ? 'min(50vh, 320px)' : 'min(70vh, 640px)',
+  overflowY: 'auto' as const,
+}))
 </script>
 
 <template>
+  <!-- 新建：两步弹窗（先选实体/特征类型，再填表） -->
+  <a-modal
+    v-model:visible="createModalVisible"
+    class="card-type-create-modal"
+    :title="t('admin.cardType.createTitle')"
+    :width="createModalWidth"
+    :mask-closable="true"
+    :esc-to-close="true"
+    unmount-on-close
+    :body-style="createModalBodyStyle"
+  >
+    <div v-if="formData" class="card-type-create-body">
+        <div v-if="createStep === 1" class="card-type-create-step">
+          <BasicInfoForm
+            v-model:form-ref="formRef"
+            v-model:selected-sub-type="selectedSubType"
+            :form-data="formData"
+            mode="create"
+            sub-type-only
+          />
+        </div>
+        <div v-else class="card-type-create-step">
+          <BasicInfoForm
+            v-model:form-ref="formRef"
+            v-model:selected-sub-type="selectedSubType"
+            :form-data="formData"
+            mode="create"
+            omit-sub-type-in-create
+          />
+        </div>
+      </div>
+    <template #footer>
+      <div class="card-type-create-footer">
+        <template v-if="createStep === 1">
+          <a-button @click="createModalVisible = false">{{ t('admin.action.cancel') }}</a-button>
+          <a-button type="primary" @click="handleCreateWizardNext">
+            {{ t('admin.cardType.createWizardNext') }}
+          </a-button>
+        </template>
+        <template v-else>
+          <a-button @click="handleCreateWizardBack">{{ t('admin.action.back') }}</a-button>
+          <SaveButton
+            :loading="saving"
+            :text="t('admin.cardType.createSubmit')"
+            @click="handleSubmit"
+          />
+        </template>
+      </div>
+    </template>
+  </a-modal>
+
   <a-drawer
-    v-model:visible="drawerVisible"
+    v-model:visible="editDrawerVisible"
     class="card-type-form-drawer"
-    :width="effectiveMode === 'create' ? 800 : 1100"
+    :width="1100"
     :body-class="effectiveMode === 'edit' ? 'card-type-form-drawer-body' : undefined"
     :footer="showFooter"
     :mask-closable="true"
     :esc-to-close="true"
     unmount-on-close
-    @before-open="initDrawer"
   >
     <template #title>
-      <template v-if="effectiveMode === 'create'">{{ drawerTitle }}</template>
-      <div v-else class="feishu-drawer-header-row">
+      <div class="feishu-drawer-header-row">
         <div class="feishu-drawer-brand">
           <span
             class="feishu-entity-icon-wrap"
@@ -273,19 +362,7 @@ async function handleFieldConfigCreated() {
     </template>
     <a-spin :loading="loading && effectiveMode === 'edit'" class="drawer-spin">
       <div v-if="formData" class="drawer-content">
-        <!-- 新建模式：基础表单 -->
-        <template v-if="effectiveMode === 'create'">
-          <BasicInfoForm
-            v-model:form-ref="formRef"
-            v-model:selected-sub-type="selectedSubType"
-            :form-data="formData"
-            :mode="effectiveMode"
-          />
-        </template>
-
-        <!-- 编辑模式：标签在标题行，内容区仅面板 -->
-        <template v-else>
-          <div class="edit-mode-shell">
+        <div class="edit-mode-shell">
             <div class="edit-mode-panel">
               <div v-show="activeTab === 'basic'" class="edit-mode-tab-scroll">
                 <BasicInfoForm
@@ -370,7 +447,6 @@ async function handleFieldConfigCreated() {
               </div>
             </div>
           </div>
-        </template>
       </div>
     </a-spin>
 
@@ -567,5 +643,13 @@ async function handleFieldConfigCreated() {
 .card-type-form-drawer-body.arco-drawer-body {
   background-color: var(--color-main-panel);
   padding: 0 16px 16px;
+}
+
+.card-type-create-modal .card-type-create-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 </style>

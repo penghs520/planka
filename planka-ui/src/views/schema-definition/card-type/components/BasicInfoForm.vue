@@ -22,6 +22,10 @@ const props = defineProps<{
   formData: CardTypeDefinition
   mode: 'create' | 'edit'
   selectedSubType?: SchemaSubType.TRAIT_CARD_TYPE | SchemaSubType.ENTITY_CARD_TYPE
+  /** 新建向导第一步：仅展示「实体类型种类」 */
+  subTypeOnly?: boolean
+  /** 新建向导第二步：种类已在第一步选择，隐藏该项 */
+  omitSubTypeInCreate?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -255,16 +259,19 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
 <template>
   <div class="basic-info-form-container">
     <a-form ref="formRef" :model="formData" :rules="formRules" layout="vertical">
-      <section class="bio-section" aria-labelledby="bio-section-basic">
-        <header class="bio-section__head">
+      <section
+        class="bio-section"
+        :aria-labelledby="subTypeOnly ? undefined : 'bio-section-basic'"
+      >
+        <header v-if="!subTypeOnly" class="bio-section__head">
           <h3 id="bio-section-basic" class="bio-section__title">
             <span class="bio-section__bar" aria-hidden="true" />
             {{ t('admin.cardType.form.sectionBasic') }}
           </h3>
         </header>
 
-      <!-- 新建模式：实体类型种类选择 -->
-    <a-form-item v-if="mode === 'create'">
+      <!-- 新建模式：实体类型种类选择（向导第二步通过 omitSubTypeInCreate 隐藏） -->
+    <a-form-item v-if="subTypeOnly || (mode === 'create' && !omitSubTypeInCreate)">
       <template #label>
         <span>{{ t('admin.cardType.form.subType') }}</span>
         <LabelHelpTooltip :title="t('admin.cardType.help.subTypeTitle')" position="rt" width="420px">
@@ -301,16 +308,16 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
           </div>
         </LabelHelpTooltip>
       </template>
-      <a-radio-group
+      <a-select
+        class="bio-subtype-select"
         :model-value="selectedSubType"
+        :options="subTypeOptions"
+        :placeholder="t('admin.cardType.form.subTypePlaceholder')"
         @update:model-value="emit('update:selectedSubType', $event)"
-      >
-        <a-radio v-for="option in subTypeOptions" :key="option.value" :value="option.value">
-          {{ option.label }}
-        </a-radio>
-      </a-radio-group>
+      />
     </a-form-item>
 
+    <template v-if="!subTypeOnly">
     <!-- 名称和编码 -->
     <a-row :gutter="24">
       <a-col :span="12">
@@ -384,10 +391,12 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
         :auto-size="{ minRows: 3, maxRows: 6 }"
       />
     </a-form-item>
+      </template>
+
       </section>
 
       <section
-        v-if="formData.schemaSubType === SchemaSubType.ENTITY_CARD_TYPE"
+        v-if="!subTypeOnly && formData.schemaSubType === SchemaSubType.ENTITY_CARD_TYPE"
         class="bio-section"
         aria-labelledby="bio-section-rules"
       >
@@ -613,6 +622,25 @@ const fetchFieldsByLinkFieldId = async (linkFieldId: string): Promise<FieldOptio
 
 :deep(.bio-input-surface.arco-input-wrapper.arco-input-focus),
 :deep(.bio-input-surface.arco-textarea-wrapper:focus-within) {
+  background-color: var(--color-bg-2) !important;
+}
+
+.bio-subtype-select {
+  width: 100%;
+}
+
+:deep(.bio-subtype-select.arco-select .arco-select-view-single) {
+  background-color: var(--color-fill-1) !important;
+  border-color: var(--color-border-2);
+  border-radius: var(--radius-md);
+}
+
+:deep(.bio-subtype-select.arco-select:hover .arco-select-view-single) {
+  background-color: var(--color-fill-2) !important;
+  border-color: var(--color-border-3);
+}
+
+:deep(.bio-subtype-select.arco-select.arco-select-focused .arco-select-view-single) {
   background-color: var(--color-bg-2) !important;
 }
 

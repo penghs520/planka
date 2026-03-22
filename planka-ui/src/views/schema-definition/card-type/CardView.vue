@@ -281,6 +281,9 @@ onMounted(async () => {
                       <div v-if="ct.code" class="type-card-code">{{ ct.code }}</div>
                     </div>
                   </div>
+                  <div v-if="ct.description" class="entity-card-description">
+                    {{ ct.description }}
+                  </div>
                   <div class="type-card-tags">
                     <span
                       class="type-meta-status"
@@ -550,6 +553,18 @@ onMounted(async () => {
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-top: 2px;
+}
+
+.entity-card-description {
+  font-size: 12px;
+  color: var(--color-text-3);
+  line-height: 1.5;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 .type-card-tags {
