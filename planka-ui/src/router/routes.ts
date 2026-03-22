@@ -212,31 +212,11 @@ export const routes: RouteRecordRaw[] = [
           {
             path: 'link-type',
             name: 'LinkType',
-            redirect: '/admin/link-type/list',
+            component: () => import('@/views/schema-definition/link-type/ERDiagramView.vue'),
             meta: {
               titleKey: 'admin.linkType.title',
               activeMenu: 'link-type',
             },
-            children: [
-              {
-                path: 'list',
-                name: 'LinkTypeList',
-                component: () => import('@/views/schema-definition/link-type/ListView.vue'),
-                meta: {
-                  titleKey: 'common.route.linkTypeList',
-                  activeMenu: 'link-type',
-                },
-              },
-              {
-                path: 'graph',
-                name: 'LinkTypeGraph',
-                component: () => import('@/views/schema-definition/link-type/ERDiagramView.vue'),
-                meta: {
-                  titleKey: 'common.route.linkTypeGraph',
-                  activeMenu: 'link-type',
-                },
-              },
-            ],
           },
           // 架构线定义
           {

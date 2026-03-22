@@ -19,7 +19,6 @@ import CardTypeNode from '@/components/er-diagram/CardTypeNode.vue'
 import CardinalityEdge from '@/components/er-diagram/CardinalityEdge.vue'
 import SaveButton from '@/components/common/SaveButton.vue'
 import CancelButton from '@/components/common/CancelButton.vue'
-import ViewSwitcher from '@/components/link-type/ViewSwitcher.vue'
 import CardTypeSelect from '@/components/card-type/CardTypeSelect.vue'
 import SchemaReferenceDrawer from '@/components/schema/SchemaReferenceDrawer.vue'
 import { cardTypeApi, linkTypeApi } from '@/api'
@@ -1140,8 +1139,6 @@ onMounted(() => {
     <!-- Top Toolbar -->
     <div class="toolbar">
       <div class="toolbar-left">
-        <ViewSwitcher />
-        <div class="toolbar-divider"></div>
         <!-- Filter Dropdown -->
         <div class="filter-box">
           <a-select
