@@ -90,33 +90,36 @@ export const routes: RouteRecordRaw[] = [
       },
       {
         path: 'structure/:structureId/node/:nodeId',
+        component: () => import('@/views/structure-node/StructureNodeLayout.vue'),
         redirect: (to) => ({
           path: `/structure/${to.params.structureId}/node/${to.params.nodeId}/issues`,
         }),
-      },
-      {
-        path: 'structure/:structureId/node/:nodeId/issues',
-        name: 'StructureNodeIssues',
-        component: () => import('@/views/structure-node/StructureNodeIssuesView.vue'),
-        meta: {
-          titleKey: 'sidebar.teamIssues',
-        },
-      },
-      {
-        path: 'structure/:structureId/node/:nodeId/projects',
-        name: 'StructureNodeProjects',
-        component: () => import('@/views/structure-node/StructureNodeProjectsView.vue'),
-        meta: {
-          titleKey: 'sidebar.teamProjects',
-        },
-      },
-      {
-        path: 'structure/:structureId/node/:nodeId/views',
-        name: 'StructureNodeViews',
-        component: () => import('@/views/structure-node/StructureNodeViewsView.vue'),
-        meta: {
-          titleKey: 'sidebar.teamViews',
-        },
+        children: [
+          {
+            path: 'issues',
+            name: 'StructureNodeIssues',
+            component: () => import('@/views/structure-node/StructureNodeIssuesView.vue'),
+            meta: {
+              titleKey: 'sidebar.teamIssues',
+            },
+          },
+          {
+            path: 'projects',
+            name: 'StructureNodeProjects',
+            component: () => import('@/views/structure-node/StructureNodeProjectsView.vue'),
+            meta: {
+              titleKey: 'sidebar.teamProjects',
+            },
+          },
+          {
+            path: 'views',
+            name: 'StructureNodeViews',
+            component: () => import('@/views/structure-node/StructureNodeViewsView.vue'),
+            meta: {
+              titleKey: 'sidebar.teamViews',
+            },
+          },
+        ],
       },
       {
         path: 'team/:teamId',
@@ -252,26 +255,6 @@ export const routes: RouteRecordRaw[] = [
             meta: {
               titleKey: 'admin.structure.title',
               activeMenu: 'structure',
-            },
-          },
-          // 视图配置
-          {
-            path: 'view',
-            name: 'ViewList',
-            component: () => import('@/views/schema-definition/view/ListView.vue'),
-            meta: {
-              titleKey: 'admin.view.title',
-              activeMenu: 'view',
-            },
-          },
-          // 菜单配置
-          {
-            path: 'menu',
-            name: 'MenuConfig',
-            component: () => import('@/views/schema-definition/menu/MenuConfigView.vue'),
-            meta: {
-              titleKey: 'admin.menuConfig.title',
-              activeMenu: 'menu',
             },
           },
           // 详情页模板

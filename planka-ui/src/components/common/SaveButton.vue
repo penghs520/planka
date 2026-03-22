@@ -5,6 +5,7 @@ const { t } = useI18n()
 
 defineProps<{
   loading?: boolean
+  disabled?: boolean
   text?: string
   size?: 'mini' | 'small' | 'medium' | 'large'
 }>()
@@ -15,7 +16,14 @@ defineEmits<{
 </script>
 
 <template>
-  <a-button class="save-btn" :class="size ? `save-btn-${size}` : ''" type="primary" :loading="loading" @click="$emit('click', $event)">
+  <a-button
+    class="save-btn"
+    :class="size ? `save-btn-${size}` : ''"
+    type="primary"
+    :loading="loading"
+    :disabled="disabled"
+    @click="$emit('click', $event)"
+  >
     <slot>{{ text || t('common.action.save') }}</slot>
   </a-button>
 </template>
@@ -40,6 +48,24 @@ defineEmits<{
 
 .save-btn:active {
   background: var(--color-primary-active) !important;
+}
+
+/* 禁用：需覆盖上方 !important，否则与可点击主按钮难以区分 */
+.save-btn.arco-btn-disabled,
+.save-btn[disabled] {
+  background: var(--color-fill-2) !important;
+  color: var(--color-text-4) !important;
+  cursor: not-allowed !important;
+}
+
+.save-btn.arco-btn-disabled:hover,
+.save-btn[disabled]:hover,
+.save-btn.arco-btn-disabled:active,
+.save-btn[disabled]:active,
+.save-btn.arco-btn-disabled:focus-visible,
+.save-btn[disabled]:focus-visible {
+  background: var(--color-fill-2) !important;
+  color: var(--color-text-4) !important;
 }
 
 /* 小尺寸 */

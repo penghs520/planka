@@ -239,6 +239,22 @@ export const useStructureNavStore = defineStore('structureNav', () => {
     nodeProjects.value = { ...nodeProjects.value, [k]: list }
   }
 
+  function findNode(structureId: string, nodeId: string): StructureNodeDTO | undefined {
+    const tree = trees.value[structureId]
+    if (!tree) return undefined
+    function walk(nodes: StructureNodeDTO[]): StructureNodeDTO | undefined {
+      for (const n of nodes) {
+        if (n.id === nodeId) return n
+        if (n.children?.length) {
+          const found = walk(n.children)
+          if (found) return found
+        }
+      }
+      return undefined
+    }
+    return walk(tree)
+  }
+
   function subtreeContains(structureId: string, subtreeRootId: string, routeNodeId: string): boolean {
     if (routeNodeId === subtreeRootId) {
       return true
@@ -283,6 +299,7 @@ export const useStructureNavStore = defineStore('structureNav', () => {
     ensureTree,
     ensureNodeProjects,
     subtreeContains,
+    findNode,
     nodeCacheKey,
   }
 })

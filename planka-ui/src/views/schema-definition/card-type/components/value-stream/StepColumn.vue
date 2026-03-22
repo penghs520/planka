@@ -18,9 +18,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   'edit-step': [step: StepConfig]
   'delete-step': [step: StepConfig]
-  'add-status': [stepId: string | null, insertIndex: number]
-  'edit-status': [status: StatusConfig]
-  'delete-status': [stepId: string | null, status: StatusConfig]
+  /** 传入阶段对象引用：多个未保存阶段的 id 均为 null，不能仅用 id 定位 */
+  'add-status': [step: StepConfig, insertIndex: number]
+  'edit-status': [step: StepConfig, status: StatusConfig]
+  'delete-status': [step: StepConfig, status: StatusConfig]
   'status-insert-hover': [hovered: boolean]
 }>()
 
@@ -74,15 +75,15 @@ function handleDeleteStep() {
 }
 
 function handleAddStatus(insertIndex: number) {
-  emit('add-status', props.step.id, insertIndex)
+  emit('add-status', props.step, insertIndex)
 }
 
 function handleEditStatus(status: StatusConfig) {
-  emit('edit-status', status)
+  emit('edit-status', props.step, status)
 }
 
 function handleDeleteStatus(status: StatusConfig) {
-  emit('delete-status', props.step.id, status)
+  emit('delete-status', props.step, status)
 }
 </script>
 
@@ -130,7 +131,7 @@ function handleDeleteStatus(status: StatusConfig) {
         </a-button>
       </div>
 
-      <template v-for="(item, index) in displayStatusList" :key="item.status.id">
+      <template v-for="(item, index) in displayStatusList" :key="item.status.id ?? `new-status-${index}`">
         <div class="status-wrapper">
           <StatusCard
             :status="item.status"

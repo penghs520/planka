@@ -136,8 +136,11 @@ const stepInsertIndex = ref(0)
 const statusModalVisible = ref(false)
 const statusModalMode = ref<'create' | 'edit'>('create')
 const editingStatus = ref<StatusConfig | null>(null)
-const statusStepId = ref<string | null>(null)
+/** 新建状态要插入到的阶段（未保存阶段 id 均为 null，必须用引用定位） */
+const statusTargetStep = ref<StepConfig | null>(null)
 const statusInsertIndex = ref(0)
+/** 编辑状态打开时记录所在阶段与下标（多个 id 为 null 时不能仅靠 id 或异步确认后的引用） */
+const statusEditContext = ref<{ step: StepConfig; index: number } | null>(null)
 
 // 状态迁移弹窗状态
 const migrationModalVisible = ref(false)
@@ -209,19 +212,24 @@ function handleStepConfirm(step: StepConfig) {
     newStepList.splice(stepInsertIndex.value, 0, step)
     emit('update:stepList', newStepList)
   } else {
-    // 更新阶段
-    const newStepList = props.stepList.map((s) => (s.id === step.id ? step : s))
+    // 更新阶段（id 为 null 的未保存阶段不能仅用 id 匹配，否则全部 null 会一起被替换）
+    const orig = editingStep.value
+    const newStepList = props.stepList.map((s) => {
+      if (step.id != null && s.id === step.id) return step
+      if (step.id == null && orig != null && s === orig) return step
+      return s
+    })
     emit('update:stepList', newStepList)
   }
 }
 
 // 状态操作
-function handleAddStatus(stepId: string | null, insertIndex: number) {
+function handleAddStatus(step: StepConfig, insertIndex: number) {
   if (!props.stepList) return
-  const step = props.stepList.find((s) => s.id === stepId)
-  if (!step) return
+  if (!props.stepList.includes(step)) return
 
-  statusStepId.value = stepId
+  statusTargetStep.value = step
+  statusEditContext.value = null
   statusInsertIndex.value = insertIndex
   statusModalMode.value = 'create'
   editingStatus.value = {
@@ -233,31 +241,28 @@ function handleAddStatus(stepId: string | null, insertIndex: number) {
   statusModalVisible.value = true
 }
 
-function handleEditStatus(status: StatusConfig) {
+function handleEditStatus(step: StepConfig, status: StatusConfig) {
   if (!props.stepList) return
   statusModalMode.value = 'edit'
   editingStatus.value = status
-  // 找到状态所属的阶段
-  const step = props.stepList.find((s) => s.statusList.some((st) => st.id === status.id))
-  if (step) {
-    statusStepId.value = step.id
-  }
+  const idx = step.statusList.indexOf(status)
+  statusEditContext.value = idx >= 0 ? { step, index: idx } : null
   statusModalVisible.value = true
 }
 
-function handleDeleteStatus(stepId: string | null, status: StatusConfig) {
+function handleDeleteStatus(step: StepConfig, status: StatusConfig) {
   if (!props.stepList) return
 
   // 如果是新建未保存的状态（id 为 null），直接从阶段中删除
   if (status.id === null) {
-    const newStepList = props.stepList.map((step) => {
-      if (step.id === stepId) {
+    const newStepList = props.stepList.map((s) => {
+      if (s === step) {
         return {
-          ...step,
-          statusList: step.statusList.filter((s) => s !== status),
+          ...s,
+          statusList: s.statusList.filter((st) => st !== status),
         }
       }
-      return step
+      return s
     })
     emit('update:stepList', newStepList)
     return
@@ -278,9 +283,11 @@ function handleDeleteStatus(stepId: string | null, status: StatusConfig) {
 function handleStatusConfirm(status: StatusConfig) {
   if (!props.stepList) return
   if (statusModalMode.value === 'create') {
-    // 插入新状态
+    const target = statusTargetStep.value
+    if (!target) return
+    // 插入新状态（目标阶段可能 id 为 null，用引用匹配）
     const newStepList = props.stepList.map((step) => {
-      if (step.id === statusStepId.value) {
+      if (step === target) {
         const newStatusList = [...step.statusList]
         newStatusList.splice(statusInsertIndex.value, 0, status)
         return { ...step, statusList: newStatusList }
@@ -289,11 +296,34 @@ function handleStatusConfirm(status: StatusConfig) {
     })
     emit('update:stepList', newStepList)
   } else {
-    // 更新状态
-    const newStepList = props.stepList.map((step) => ({
-      ...step,
-      statusList: step.statusList.map((s) => (s.id === status.id ? status : s)),
-    }))
+    const ctx = statusEditContext.value
+    const canUseContext =
+      ctx != null &&
+      ctx.index >= 0 &&
+      props.stepList.some((st) => st === ctx.step)
+
+    let newStepList: StepConfig[]
+    if (canUseContext && ctx) {
+      newStepList = props.stepList.map((st) => {
+        if (st !== ctx.step) return st
+        return {
+          ...st,
+          statusList: st.statusList.map((s, i) => (i === ctx.index ? status : s)),
+        }
+      })
+    } else {
+      const orig = editingStatus.value
+      newStepList = props.stepList.map((st) => ({
+        ...st,
+        statusList: st.statusList.map((s) => {
+          if (status.id != null && s.id === status.id) return status
+          if (status.id == null && orig != null && s === orig) return status
+          return s
+        }),
+      }))
+    }
+
+    statusEditContext.value = null
     emit('update:stepList', newStepList)
   }
 }
@@ -385,7 +415,7 @@ async function handleMigrationConfirm(migrationMap: Record<string, string>) {
         </a-button>
       </div>
 
-      <template v-for="(step, index) in displayStepList" :key="step.id">
+      <template v-for="(step, index) in displayStepList" :key="step.id ?? `new-step-${index}`">
         <StepColumn
           :step="step"
           @edit-step="handleEditStep"

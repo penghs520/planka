@@ -30,10 +30,12 @@ public class ViewDataController implements ViewDataClient {
     @PostMapping("/{viewId}")
     public Result<ViewDataResponse> queryByViewId(
             @PathVariable("viewId") String viewId,
+            @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorId,
+            @RequestParam(value = "structureNodeId", required = false) String structureNodeId,
             @RequestBody ViewDataRequest request) {
         log.debug("查询视图数据, viewId={}, operatorId={}", viewId, operatorId);
-        return viewDataService.queryByViewId(viewId, request, operatorId);
+        return viewDataService.queryByViewId(viewId, request, operatorId, orgId, structureNodeId);
     }
 
     @Override
@@ -49,13 +51,17 @@ public class ViewDataController implements ViewDataClient {
     @Override
     @PostMapping("/preview")
     public Result<ViewDataResponse> preview(
+            @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorId,
+            @RequestParam(value = "structureNodeId", required = false) String structureNodeId,
             @RequestBody ViewPreviewRequest request) {
         log.debug("预览视图数据, operatorId={}", operatorId);
         return viewDataService.preview(
                 request.getViewDefinition(),
                 request.getDataRequestOrDefault(),
-                operatorId
+                operatorId,
+                orgId,
+                structureNodeId
         );
     }
 }

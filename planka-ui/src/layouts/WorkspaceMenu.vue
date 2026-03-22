@@ -6,11 +6,17 @@ import {
   IconSearch,
   IconApps,
 } from '@arco-design/web-vue/es/icon'
-import { menuApi } from '@/api/menu'
+import { Message } from '@arco-design/web-vue'
+import { menuNavApi } from '@/api/menu-nav'
+import { viewApi } from '@/api/view'
+import { useOrgStore } from '@/stores/org'
 import type { MenuTreeVO, MenuTreeNodeVO } from '@/types/menu'
+import type { ListViewDefinition } from '@/types/view'
 import MenuNode from './components/MenuNode.vue'
+import ViewEditForm from '@/views/schema-definition/view/ViewEditForm.vue'
 
 const { t } = useI18n()
+const orgStore = useOrgStore()
 const route = useRoute()
 
 const props = withDefaults(
@@ -18,6 +24,8 @@ const props = withDefaults(
     modelValue?: string
     /** 嵌入 App 侧栏时使用：隐藏分区标题、紧凑样式、随侧栏滚动 */
     variant?: 'default' | 'sidebar'
+    /** 架构节点页传入当前 nodeId，用于拉取 STRUCTURE_NODE 视图 */
+    structureNodeId?: string
   }>(),
   { variant: 'default' },
 )
@@ -33,6 +41,8 @@ const menuTree = ref<MenuTreeVO | null>(null)
 const searchKeyword = ref('')
 const expandedGroups = ref<Set<string>>(new Set())
 const pinnedMenus = ref<MenuTreeNodeVO[]>([])
+const createViewVisible = ref(false)
+const createViewSaving = ref(false)
 
 // 过滤后的菜单树
 const filteredRoots = computed(() => {
@@ -42,6 +52,19 @@ const filteredRoots = computed(() => {
   const keyword = searchKeyword.value.toLowerCase()
   return filterNodes(menuTree.value.roots, keyword)
 })
+
+const filteredUngrouped = computed(() => {
+  const ug = menuTree.value?.ungroupedViews ?? []
+  if (!searchKeyword.value) {
+    return ug
+  }
+  const keyword = searchKeyword.value.toLowerCase()
+  return ug.filter((n) => n.name.toLowerCase().includes(keyword))
+})
+
+const hasAnyNavItems = computed(
+  () => filteredRoots.value.length > 0 || filteredUngrouped.value.length > 0,
+)
 
 // 递归过滤节点
 function filterNodes(nodes: MenuTreeNodeVO[], keyword: string): MenuTreeNodeVO[] {
@@ -79,15 +102,18 @@ function collectExpandedGroups(nodes: MenuTreeNodeVO[]) {
   })
 }
 
-// 加载菜单树
+// 加载 Schema 菜单树（分组 + 视图，已按可见性过滤）
 async function fetchMenuTree() {
   loading.value = true
   try {
-    menuTree.value = await menuApi.getMenuTree()
-    // 默认展开所有分组（递归处理）
+    const params = props.structureNodeId ? { structureNodeId: props.structureNodeId } : undefined
+    menuTree.value = await menuNavApi.nav(params)
     collectExpandedGroups(menuTree.value.roots)
+    if (menuTree.value.ungroupedViews?.length) {
+      collectExpandedGroups(menuTree.value.ungroupedViews)
+    }
   } catch (error) {
-    console.error('Failed to fetch menu tree:', error)
+    console.error('Failed to fetch workspace nav:', error)
   } finally {
     loading.value = false
   }
@@ -113,6 +139,23 @@ function handleSelectView(viewId: string) {
   emit('select', viewId)
 }
 
+async function handleCreateViewSave(def: ListViewDefinition) {
+  createViewSaving.value = true
+  try {
+    const created = await viewApi.create(def)
+    Message.success(t('common.state.success'))
+    createViewVisible.value = false
+    await fetchMenuTree()
+    if (created.id) {
+      handleSelectView(created.id)
+    }
+  } catch {
+    Message.error(t('sidebar.createViewFailed'))
+  } finally {
+    createViewSaving.value = false
+  }
+}
+
 // 判断是否选中
 function isSelected(viewId: string): boolean {
   return props.modelValue === viewId
@@ -132,6 +175,13 @@ watch(
 onMounted(() => {
   fetchMenuTree()
 })
+
+watch(
+  () => props.structureNodeId,
+  () => {
+    void fetchMenuTree()
+  },
+)
 </script>
 
 <template>
@@ -179,10 +229,20 @@ onMounted(() => {
             <span class="section-title">{{ t('common.layout.allMenus') }}</span>
           </div>
           <div class="section-content">
-            <template v-if="filteredRoots.length > 0">
+            <template v-if="hasAnyNavItems">
               <MenuNode
                 v-for="node in filteredRoots"
                 :key="node.id"
+                :node="node"
+                :level="0"
+                :is-expanded="isExpanded"
+                :is-selected="isSelected"
+                @toggle-group="toggleGroup"
+                @select-view="handleSelectView"
+              />
+              <MenuNode
+                v-for="node in filteredUngrouped"
+                :key="`ug-${node.id}`"
                 :node="node"
                 :level="0"
                 :is-expanded="isExpanded"
@@ -196,6 +256,23 @@ onMounted(() => {
         </div>
       </div>
     </a-spin>
+
+    <button
+      type="button"
+      class="workspace-create-view-btn"
+      :disabled="createViewSaving || !orgStore.currentOrgId"
+      @click="createViewVisible = true"
+    >
+      + {{ t('sidebar.createView') }}
+    </button>
+
+    <ViewEditForm
+      v-model:visible="createViewVisible"
+      mode="create"
+      :structure-node-context-id="props.structureNodeId"
+      :save-loading="createViewSaving"
+      @save="handleCreateViewSave"
+    />
   </div>
 </template>
 
@@ -368,6 +445,35 @@ onMounted(() => {
     max-height: none;
     padding: 2px 0 4px;
   }
+}
+
+.workspace-create-view-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 28px;
+  margin-top: 4px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  font-family: var(--sidebar-nav-font-family, inherit);
+  font-size: var(--sidebar-nav-font-size, 13px);
+  font-weight: var(--sidebar-nav-font-weight, 400);
+  color: var(--sidebar-text-secondary, var(--color-text-2));
+  cursor: pointer;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.workspace-create-view-btn:hover:not(:disabled) {
+  background: var(--sidebar-bg-hover, var(--color-fill-2));
+  color: var(--sidebar-accent, rgb(var(--primary-6)));
+}
+
+.workspace-create-view-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 </style>

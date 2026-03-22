@@ -14,8 +14,12 @@ export const viewDataApi = {
   /**
    * 根据视图 ID 查询数据（body 与后端 ViewDataRequest 对齐）
    */
-  queryByViewId(viewId: string, body: Record<string, unknown> = {}): Promise<ViewDataResponse> {
-    return request.post(`${VIEW_DATA_URL}/${viewId}`, body)
+  queryByViewId(
+    viewId: string,
+    body: Record<string, unknown> = {},
+    options?: { structureNodeId?: string },
+  ): Promise<ViewDataResponse> {
+    return request.post(`${VIEW_DATA_URL}/${viewId}`, body, { params: options })
   },
 
   /**
@@ -33,7 +37,10 @@ export const viewDataApi = {
    *
    * @param request 预览请求
    */
-  preview(previewRequest: ViewPreviewRequest): Promise<ViewDataResponse> {
-    return request.post(`${VIEW_DATA_URL}/preview`, previewRequest)
+  preview(
+    previewRequest: ViewPreviewRequest,
+    options?: { structureNodeId?: string },
+  ): Promise<ViewDataResponse> {
+    return request.post(`${VIEW_DATA_URL}/preview`, previewRequest, { params: options })
   },
 }

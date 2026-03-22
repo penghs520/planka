@@ -1,21 +1,29 @@
 package cn.planka.card.service.action;
 
 import cn.planka.api.card.dto.CardDTO;
+import cn.planka.api.card.request.CreateCardRequest;
 import cn.planka.api.card.request.LinkFieldUpdate;
 import cn.planka.api.card.request.MoveCardRequest;
 import cn.planka.api.card.request.UpdateCardRequest;
+import cn.planka.api.card.request.UpdateLinkRequest;
 import cn.planka.card.repository.CardRepository;
 import cn.planka.card.service.core.CardService;
+import cn.planka.card.service.core.LinkCardService;
 import cn.planka.common.exception.CommonErrorCode;
 import cn.planka.common.result.Result;
 import cn.planka.domain.card.CardId;
+import cn.planka.domain.card.CardTitle;
 import cn.planka.domain.card.CardTypeId;
 import cn.planka.domain.field.*;
+import cn.planka.domain.link.LinkFieldIdUtils;
+import cn.planka.domain.link.LinkPosition;
 import cn.planka.domain.schema.CardActionId;
 import cn.planka.domain.stream.StatusId;
 import cn.planka.domain.schema.definition.action.*;
 import cn.planka.domain.schema.definition.action.assignment.*;
 import cn.planka.infra.cache.schema.query.CardActionCacheQuery;
+import cn.planka.infra.expression.TextExpressionTemplateResolver;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,6 +48,9 @@ public class CardActionExecutionService {
     private final CardActionCacheQuery cardActionCacheQuery;
     private final CardRepository cardRepository;
     private final CardService cardService;
+    private final LinkCardService linkCardService;
+    private final TextExpressionTemplateResolver templateResolver;
+    private final ObjectMapper objectMapper;
 
     /**
      * 获取卡片可用的动作列表
@@ -85,10 +96,13 @@ public class CardActionExecutionService {
     /**
      * 执行卡片动作
      *
-     * @param actionId   动作配置ID
-     * @param cardId     卡片ID
-     * @param operatorId 操作人ID
-     * @param userInputs 用户输入的字段值（可选）
+     * @param actionId               动作配置ID
+     * @param cardId                 卡片ID
+     * @param operatorId             操作人ID
+     * @param userInputs             用户输入的字段值（可选）
+     * @param linkedCardTitle        创建关联卡片弹窗提交标题（可选）
+     * @param linkedCardLinkUpdates   新建卡片上的关联更新（可选）
+     * @param linkedCardFieldValues   弹窗提交的 FieldValue 形态字段（可选）
      * @return 执行结果
      */
     @Transactional
@@ -96,7 +110,10 @@ public class CardActionExecutionService {
             CardActionId actionId,
             CardId cardId,
             CardId operatorId,
-            Map<String, FixedValue> userInputs) {
+            Map<String, FixedValue> userInputs,
+            String linkedCardTitle,
+            List<LinkFieldUpdate> linkedCardLinkUpdates,
+            Map<String, Object> linkedCardFieldValues) {
         try {
             // 获取动作配置
             Optional<CardActionConfigDefinition> actionOpt = cardActionCacheQuery.getById(actionId);
@@ -118,7 +135,14 @@ public class CardActionExecutionService {
             // 目前先跳过条件检查，后续实现条件评估逻辑
 
             // 执行动作
-            ActionExecutionResult result = executeAction(action, card, operatorId, userInputs);
+            ActionExecutionResult result = executeAction(
+                    action,
+                    card,
+                    operatorId,
+                    userInputs,
+                    linkedCardTitle,
+                    linkedCardLinkUpdates,
+                    linkedCardFieldValues);
 
             // 返回成功消息
             if (result.type() == ActionExecutionResult.ResultType.SUCCESS && action.getSuccessMessage() != null) {
@@ -139,7 +163,10 @@ public class CardActionExecutionService {
             CardActionConfigDefinition action,
             CardDTO card,
             CardId operatorId,
-            Map<String, FixedValue> userInputs) {
+            Map<String, FixedValue> userInputs,
+            String linkedCardTitle,
+            List<LinkFieldUpdate> linkedCardLinkUpdates,
+            Map<String, Object> linkedCardFieldValues) {
 
         if (action.isBuiltIn()) {
             return executeBuiltInAction(action.getBuiltInActionType(), card, operatorId, userInputs);
@@ -158,10 +185,24 @@ public class CardActionExecutionService {
             return executeCallExternalApi(callApi, card);
         } else if (executionType instanceof TriggerBuiltInExecution triggerBuiltIn) {
             return executeBuiltInAction(triggerBuiltIn.getBuiltInActionType(), card, operatorId, userInputs);
+        } else if (executionType instanceof CreateLinkedCardExecution createLinked) {
+            return executeCreateLinkedCard(
+                    createLinked,
+                    card,
+                    operatorId,
+                    userInputs,
+                    linkedCardTitle,
+                    linkedCardLinkUpdates,
+                    linkedCardFieldValues);
         } else {
             return ActionExecutionResult.error("不支持的执行类型: " + executionType.getType());
         }
     }
+
+    /**
+     * 未配置标题模板时的默认新卡标题
+     */
+    private static final String DEFAULT_LINKED_CARD_TITLE = "关联卡片";
 
     /**
      * 丢弃原因字段ID
@@ -327,6 +368,162 @@ public class CardActionExecutionService {
         } catch (Exception e) {
             log.error("执行更新卡片动作失败: cardId={}", card.getId(), e);
             return ActionExecutionResult.error("执行更新卡片动作失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 执行创建关联卡片动作：创建目标类型卡片并在当前卡片上建立关联（SOURCE 端 linkFieldId）
+     */
+    private ActionExecutionResult executeCreateLinkedCard(
+            CreateLinkedCardExecution execution,
+            CardDTO card,
+            CardId operatorId,
+            Map<String, FixedValue> userInputs,
+            String linkedCardTitle,
+            List<LinkFieldUpdate> linkedCardLinkUpdates,
+            Map<String, Object> linkedCardFieldValues) {
+
+        try {
+            if (execution.getLinkTypeId() == null || execution.getLinkTypeId().isBlank()) {
+                return ActionExecutionResult.error("创建关联卡片失败: 未配置关联类型");
+            }
+            if (execution.getTargetCardTypeId() == null || execution.getTargetCardTypeId().isBlank()) {
+                return ActionExecutionResult.error("创建关联卡片失败: 未配置目标卡片类型");
+            }
+
+            String resolvedTitle;
+            if (linkedCardTitle != null && !linkedCardTitle.isBlank()) {
+                resolvedTitle = linkedCardTitle.trim();
+            } else {
+                resolvedTitle = execution.getTitleTemplate();
+                if (resolvedTitle == null || resolvedTitle.isBlank()) {
+                    resolvedTitle = DEFAULT_LINKED_CARD_TITLE;
+                } else {
+                    resolvedTitle = templateResolver.resolve(resolvedTitle, card.getId(), operatorId);
+                    if (resolvedTitle == null || resolvedTitle.isBlank()) {
+                        resolvedTitle = DEFAULT_LINKED_CARD_TITLE;
+                    }
+                }
+            }
+
+            Map<String, FieldValue<?>> fieldValues = new HashMap<>();
+            if (execution.getFieldAssignments() != null) {
+                for (FieldAssignment assignment : execution.getFieldAssignments()) {
+                    FixedValue fixedValue = getFixedValueFromAssignment(assignment, card, operatorId, userInputs);
+                    if (fixedValue instanceof LinkValue) {
+                        log.warn("创建关联卡片动作暂不支持在目标卡上通过赋值配置关联字段: fieldId={}",
+                                assignment.getFieldId());
+                    } else if (fixedValue != null) {
+                        FieldValue<?> fieldValue = convertFixedValueToFieldValue(assignment.getFieldId(), fixedValue);
+                        if (fieldValue != null) {
+                            fieldValues.put(assignment.getFieldId(), fieldValue);
+                        }
+                    } else {
+                        FieldValue<?> fieldValue = processSpecialAssignment(assignment, card, operatorId);
+                        if (fieldValue != null) {
+                            fieldValues.put(assignment.getFieldId(), fieldValue);
+                        }
+                    }
+                }
+            }
+
+            if (linkedCardFieldValues != null && !linkedCardFieldValues.isEmpty()) {
+                mergeLinkedCardFieldValuesFromJson(fieldValues, linkedCardFieldValues);
+            } else {
+                mergeLinkedCardDialogFieldValues(fieldValues, userInputs);
+            }
+
+            List<LinkFieldUpdate> newCardLinks = linkedCardLinkUpdates != null && !linkedCardLinkUpdates.isEmpty()
+                    ? linkedCardLinkUpdates
+                    : null;
+
+            CardTypeId targetTypeId = CardTypeId.of(execution.getTargetCardTypeId());
+            CreateCardRequest createRequest = new CreateCardRequest(
+                    card.getOrgId(),
+                    targetTypeId,
+                    CardTitle.pure(resolvedTitle),
+                    null,
+                    fieldValues.isEmpty() ? null : fieldValues,
+                    newCardLinks
+            );
+
+            Result<CardId> createResult = cardService.create(createRequest, operatorId, null);
+            if (!createResult.isSuccess()) {
+                return ActionExecutionResult.error("创建关联卡片失败: " + createResult.getMessage());
+            }
+
+            CardId newCardId = createResult.getData();
+            String linkFieldId = LinkFieldIdUtils.build(execution.getLinkTypeId(), LinkPosition.SOURCE);
+            UpdateLinkRequest linkRequest = UpdateLinkRequest.builder()
+                    .cardId(card.getId().asStr())
+                    .linkFieldId(linkFieldId)
+                    .targetCardIds(List.of(newCardId.asStr()))
+                    .build();
+
+            Result<Void> linkResult = linkCardService.updateLink(
+                    linkRequest,
+                    card.getOrgId().value(),
+                    String.valueOf(operatorId.value()),
+                    null
+            );
+
+            if (!linkResult.isSuccess()) {
+                log.warn("创建关联卡片后建立关联失败: sourceCardId={}, newCardId={}, error={}",
+                        card.getId(), newCardId, linkResult.getMessage());
+            }
+
+            log.info("执行创建关联卡片动作成功: sourceCardId={}, newCardId={}, linkFieldId={}",
+                    card.getId(), newCardId, linkFieldId);
+
+            return ActionExecutionResult.success("已创建关联卡片");
+        } catch (Exception e) {
+            log.error("执行创建关联卡片动作失败: cardId={}", card.getId(), e);
+            return ActionExecutionResult.error("执行创建关联卡片动作失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 将弹窗提交的 FieldValue JSON 合并到新卡字段
+     */
+    private void mergeLinkedCardFieldValuesFromJson(
+            Map<String, FieldValue<?>> fieldValues,
+            Map<String, Object> raw) {
+        if (raw == null || raw.isEmpty()) {
+            return;
+        }
+        for (Map.Entry<String, Object> e : raw.entrySet()) {
+            if (e.getValue() == null) {
+                continue;
+            }
+            try {
+                FieldValue<?> fv = objectMapper.convertValue(e.getValue(), FieldValue.class);
+                if (fv != null) {
+                    fieldValues.put(e.getKey(), fv);
+                }
+            } catch (IllegalArgumentException ex) {
+                log.warn("弹窗字段值解析失败: fieldId={}, err={}", e.getKey(), ex.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 将弹窗提交的 userInputs 合并到新卡字段（覆盖与 fieldAssignments 同名的项；跳过 LINK，由 linkedCardLinkUpdates 处理）
+     */
+    private void mergeLinkedCardDialogFieldValues(
+            Map<String, FieldValue<?>> fieldValues,
+            Map<String, FixedValue> userInputs) {
+        if (userInputs == null || userInputs.isEmpty()) {
+            return;
+        }
+        for (Map.Entry<String, FixedValue> e : userInputs.entrySet()) {
+            FixedValue fv = e.getValue();
+            if (fv instanceof LinkValue) {
+                continue;
+            }
+            FieldValue<?> converted = convertFixedValueToFieldValue(e.getKey(), fv);
+            if (converted != null) {
+                fieldValues.put(e.getKey(), converted);
+            }
         }
     }
 

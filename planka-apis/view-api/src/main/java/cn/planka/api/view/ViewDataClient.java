@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -33,7 +34,9 @@ public interface ViewDataClient {
     @PostMapping("/{viewId}")
     Result<ViewDataResponse> queryByViewId(
             @PathVariable("viewId") String viewId,
+            @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorId,
+            @RequestParam(value = "structureNodeId", required = false) String structureNodeId,
             @RequestBody ViewDataRequest request);
 
     /**
@@ -64,6 +67,8 @@ public interface ViewDataClient {
      */
     @PostMapping("/preview")
     Result<ViewDataResponse> preview(
+            @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorId,
+            @RequestParam(value = "structureNodeId", required = false) String structureNodeId,
             @RequestBody ViewPreviewRequest request);
 }

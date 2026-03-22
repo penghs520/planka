@@ -42,19 +42,17 @@ const modalVisible = computed({
 const modalTitle = computed(() => (props.mode === 'create' ? '新建状态' : '编辑状态'))
 
 watch(
-  () => props.visible,
-  (visible) => {
-    if (visible) {
-      if (props.mode === 'edit' && props.status) {
-        formData.value = { ...props.status }
-      } else {
-        // 新建模式：ID为null，由后端生成
-        formData.value = {
-          id: null,
-          name: '',
-          workType: StatusWorkType.WORKING,
-          sortOrder: 0,
-        }
+  () => [props.visible, props.mode, props.status] as const,
+  ([visible]) => {
+    if (!visible) return
+    if (props.mode === 'edit' && props.status) {
+      formData.value = { ...props.status }
+    } else {
+      formData.value = {
+        id: null,
+        name: '',
+        workType: StatusWorkType.WORKING,
+        sortOrder: 0,
       }
     }
   },

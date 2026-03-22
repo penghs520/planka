@@ -17,6 +17,13 @@ export const viewApi = {
   },
 
   /**
+   * 当前用户可见的视图（工作区或架构节点）
+   */
+  nav(params?: { structureNodeId?: string }): Promise<ViewListItemVO[]> {
+    return request.get(`${VIEW_URL}/nav`, { params })
+  },
+
+  /**
    * 根据 ID 获取视图定义
    */
   getById(viewId: string): Promise<ListViewDefinition> {

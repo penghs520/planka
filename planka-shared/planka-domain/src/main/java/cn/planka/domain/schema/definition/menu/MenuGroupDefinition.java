@@ -2,6 +2,10 @@ package cn.planka.domain.schema.definition.menu;
 
 import cn.planka.domain.schema.*;
 import cn.planka.domain.schema.definition.AbstractSchemaDefinition;
+import cn.planka.domain.schema.definition.condition.Condition;
+import cn.planka.domain.schema.definition.view.NavVisibilitySubject;
+import cn.planka.domain.schema.definition.view.ViewVisibilityScope;
+import cn.planka.domain.schema.definition.view.ViewVisibilityValidation;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,14 +24,14 @@ import java.util.stream.Collectors;
  * <ul>
  *     <li>多级菜单分组（通过 parentId 实现）</li>
  *     <li>视图多重归属（同一视图可在多个分组中）</li>
- *     <li>分组级别权限控制</li>
+ *     <li>与列表视图一致的可见性模型</li>
  *     <li>分组内独立排序</li>
  * </ul>
  */
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGroupId> {
+public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGroupId> implements NavVisibilitySubject {
 
     /** 父分组ID（根分组为null） */
     @JsonProperty("parentId")
@@ -45,9 +49,25 @@ public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGrou
     @JsonProperty("expanded")
     private boolean expanded = true;
 
-    /** 可见性配置 */
-    @JsonProperty("visibility")
-    private VisibilityConfig visibility;
+    /** 是否公开（其他用户可见），与视图定义语义一致 */
+    @JsonProperty("shared")
+    private boolean shared = true;
+
+    /** 可见性范围（用户ID列表，空表示所有人可见） */
+    @JsonProperty("visibleTo")
+    private List<String> visibleTo;
+
+    @JsonProperty("viewVisibilityScope")
+    private ViewVisibilityScope viewVisibilityScope;
+
+    @JsonProperty("visibleTeamCardIds")
+    private List<String> visibleTeamCardIds;
+
+    @JsonProperty("visibleStructureNodeIds")
+    private List<String> visibleStructureNodeIds;
+
+    @JsonProperty("visibilityAudienceCondition")
+    private Condition visibilityAudienceCondition;
 
     @JsonCreator
     public MenuGroupDefinition(
@@ -56,6 +76,16 @@ public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGrou
             @JsonProperty("name") String name) {
         super(id, orgId, name);
         this.viewItems = new ArrayList<>();
+    }
+
+    public ViewVisibilityScope getEffectiveViewVisibilityScope() {
+        if (viewVisibilityScope != null) {
+            return viewVisibilityScope;
+        }
+        if (!shared) {
+            return ViewVisibilityScope.PRIVATE;
+        }
+        return ViewVisibilityScope.WORKSPACE;
     }
 
     @Override
@@ -70,12 +100,11 @@ public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGrou
 
     @Override
     public SchemaId belongTo() {
-        return parentId; // 子分组从属于父分组
+        return parentId;
     }
 
     @Override
     public Set<SchemaId> secondKeys() {
-        // 收集所有引用的视图ID作为二级索引
         if (viewItems == null || viewItems.isEmpty()) {
             return Set.of();
         }
@@ -90,9 +119,16 @@ public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGrou
         return MenuGroupId.generate();
     }
 
-    /**
-     * 添加视图项
-     */
+    @Override
+    public void validate() {
+        super.validate();
+        ViewVisibilityValidation.validateScopeAndAudience(
+                getEffectiveViewVisibilityScope(),
+                visibleTeamCardIds,
+                visibleStructureNodeIds,
+                visibilityAudienceCondition);
+    }
+
     public void addViewItem(ViewMenuItem item) {
         if (this.viewItems == null) {
             this.viewItems = new ArrayList<>();
@@ -100,41 +136,28 @@ public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGrou
         this.viewItems.add(item);
     }
 
-    /**
-     * 移除视图项
-     */
     public boolean removeViewItem(String viewId) {
-        if (this.viewItems == null) return false;
+        if (this.viewItems == null) {
+            return false;
+        }
         return this.viewItems.removeIf(item ->
                 item.getViewId() != null && item.getViewId().value().equals(viewId));
     }
 
-    /**
-     * 是否为根分组
-     */
     public boolean isRoot() {
         return parentId == null;
     }
 
-    // ==================== 内部类定义 ====================
-
-    /**
-     * 视图菜单项
-     * 表示分组内的一个视图引用及其排序信息
-     */
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ViewMenuItem {
-        /** 视图ID */
         @JsonProperty("viewId")
         private ViewId viewId;
 
-        /** 在当前分组内的排序号 */
         @JsonProperty("sortOrder")
         private Integer sortOrder;
 
-        /** 自定义显示名称（可选，不填则使用视图原名） */
         @JsonProperty("displayName")
         private String displayName;
 
@@ -151,60 +174,5 @@ public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGrou
             this.sortOrder = sortOrder;
             this.displayName = displayName;
         }
-    }
-
-    /**
-     * 可见性配置
-     */
-    @Getter
-    @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class VisibilityConfig {
-        /** 可见性类型 */
-        @JsonProperty("type")
-        private VisibilityType type = VisibilityType.ALL;
-
-        /** 允许的用户ID列表（当 type = SPECIFIED_USERS 时有效） */
-        @JsonProperty("allowedUserIds")
-        private Set<String> allowedUserIds;
-
-        /** 允许的角色ID列表（当 type = SPECIFIED_ROLES 时有效） */
-        @JsonProperty("allowedRoleIds")
-        private Set<String> allowedRoleIds;
-
-        public VisibilityConfig() {
-        }
-
-        public static VisibilityConfig forAll() {
-            VisibilityConfig config = new VisibilityConfig();
-            config.setType(VisibilityType.ALL);
-            return config;
-        }
-
-        public static VisibilityConfig forUsers(Set<String> userIds) {
-            VisibilityConfig config = new VisibilityConfig();
-            config.setType(VisibilityType.SPECIFIED_USERS);
-            config.setAllowedUserIds(userIds);
-            return config;
-        }
-
-        public static VisibilityConfig forRoles(Set<String> roleIds) {
-            VisibilityConfig config = new VisibilityConfig();
-            config.setType(VisibilityType.SPECIFIED_ROLES);
-            config.setAllowedRoleIds(roleIds);
-            return config;
-        }
-    }
-
-    /**
-     * 可见性类型枚举
-     */
-    public enum VisibilityType {
-        /** 所有用户可见 */
-        ALL,
-        /** 指定用户可见 */
-        SPECIFIED_USERS,
-        /** 指定角色可见 */
-        SPECIFIED_ROLES
     }
 }

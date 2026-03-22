@@ -19,10 +19,10 @@ describe('schema-navigation', () => {
   describe('isNavigableSchemaType', () => {
     it('should return true for navigable types', () => {
       expect(isNavigableSchemaType(SchemaType.CARD_TYPE)).toBe(true)
-      expect(isNavigableSchemaType(SchemaType.VIEW)).toBe(true)
     })
 
     it('should return false for non-navigable types', () => {
+      expect(isNavigableSchemaType(SchemaType.VIEW)).toBe(false)
       expect(isNavigableSchemaType(SchemaType.MENU)).toBe(false)
       expect(isNavigableSchemaType('UNKNOWN_TYPE')).toBe(false)
     })

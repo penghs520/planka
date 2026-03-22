@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { IconApps, IconDown, IconRight } from '@arco-design/web-vue/es/icon'
+import { RouterLink } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router'
 import type { MenuTreeNodeVO } from '@/types/menu'
 
 defineProps<{
@@ -7,6 +9,8 @@ defineProps<{
   level: number
   isExpanded: (groupId: string) => boolean
   isSelected: (viewId: string) => boolean
+  /** 若提供，视图节点渲染为路由链接（如架构节点页跳转工作区） */
+  viewTo?: (viewId: string) => RouteLocationRaw
 }>()
 
 const emit = defineEmits<{
@@ -37,6 +41,7 @@ const emit = defineEmits<{
         :level="level + 1"
         :is-expanded="isExpanded"
         :is-selected="isSelected"
+        :view-to="viewTo"
         @toggle-group="emit('toggle-group', $event)"
         @select-view="emit('select-view', $event)"
       />
@@ -44,6 +49,17 @@ const emit = defineEmits<{
   </div>
 
   <!-- 视图节点 -->
+  <RouterLink
+    v-else-if="viewTo"
+    :to="viewTo(node.id)"
+    active-class=""
+    exact-active-class=""
+    :class="['menu-item', { active: isSelected(node.id) }]"
+    :style="{ paddingLeft: `${level * 12 + 12}px` }"
+  >
+    <IconApps class="item-icon" />
+    <span class="item-name">{{ node.name }}</span>
+  </RouterLink>
   <div
     v-else
     :class="['menu-item', { active: isSelected(node.id) }]"
@@ -111,6 +127,10 @@ const emit = defineEmits<{
       color: #fff;
     }
   }
+}
+
+a.menu-item {
+  color: inherit;
 }
 
 .item-icon {

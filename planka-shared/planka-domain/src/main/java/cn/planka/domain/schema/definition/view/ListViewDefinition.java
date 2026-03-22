@@ -91,7 +91,11 @@ public final class ListViewDefinition extends AbstractViewDefinition {
     @Override
     public void validate() {
         super.validate();
-        // 可以添加列表视图特定的验证逻辑
+        ViewVisibilityValidation.validateScopeAndAudience(
+                getEffectiveViewVisibilityScope(),
+                visibleTeamCardIds,
+                visibleStructureNodeIds,
+                visibilityAudienceCondition);
     }
 
     // ==================== 内部类定义 ====================

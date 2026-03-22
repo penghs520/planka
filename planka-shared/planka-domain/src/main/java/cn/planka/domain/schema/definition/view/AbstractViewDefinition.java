@@ -3,6 +3,7 @@ package cn.planka.domain.schema.definition.view;
 import cn.planka.domain.schema.SchemaType;
 import cn.planka.domain.schema.ViewId;
 import cn.planka.domain.schema.definition.AbstractSchemaDefinition;
+import cn.planka.domain.schema.definition.condition.Condition;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import java.util.List;
 @Setter
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class AbstractViewDefinition extends AbstractSchemaDefinition<ViewId> {
+public abstract class AbstractViewDefinition extends AbstractSchemaDefinition<ViewId> implements NavVisibilitySubject {
 
     /** 是否为默认视图 */
     @JsonProperty("defaultView")
@@ -32,8 +33,42 @@ public abstract class AbstractViewDefinition extends AbstractSchemaDefinition<Vi
     @JsonProperty("visibleTo")
     protected List<String> visibleTo;
 
+    /**
+     * 可见性范围基数（新模型，持久化推荐显式写入；未写时由 {@link #getEffectiveViewVisibilityScope()} 从 shared 推导）
+     */
+    @JsonProperty("viewVisibilityScope")
+    protected ViewVisibilityScope viewVisibilityScope;
+
+    /** 团队可见时的团队卡 ID 列表 */
+    @JsonProperty("visibleTeamCardIds")
+    protected List<String> visibleTeamCardIds;
+
+    /** 架构节点可见时的节点 ID 列表 */
+    @JsonProperty("visibleStructureNodeIds")
+    protected List<String> visibleStructureNodeIds;
+
+    /**
+     * 受众条件（可选）；与列表数据过滤条件分离。
+     * 当前服务端对非空根条件尚未实现求值，保存时将被拒绝。
+     */
+    @JsonProperty("visibilityAudienceCondition")
+    protected Condition visibilityAudienceCondition;
+
     protected AbstractViewDefinition(ViewId id, String orgId, String name) {
         super(id, orgId, name);
+    }
+
+    /**
+     * 有效可见性范围：新字段优先，否则按旧 shared 字段兼容推导。
+     */
+    public ViewVisibilityScope getEffectiveViewVisibilityScope() {
+        if (viewVisibilityScope != null) {
+            return viewVisibilityScope;
+        }
+        if (!shared) {
+            return ViewVisibilityScope.PRIVATE;
+        }
+        return ViewVisibilityScope.WORKSPACE;
     }
 
     @Override

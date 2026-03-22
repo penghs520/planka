@@ -13,6 +13,8 @@ import cn.planka.domain.schema.changelog.ChangeDetail;
 import cn.planka.domain.schema.definition.AbstractSchemaDefinition;
 import cn.planka.domain.schema.definition.SchemaDefinition;
 import cn.planka.domain.schema.definition.cardtype.CardTypeDefinition;
+import cn.planka.domain.schema.definition.menu.MenuGroupDefinition;
+import cn.planka.domain.schema.definition.view.AbstractViewDefinition;
 import cn.planka.domain.schema.definition.fieldconfig.FieldConfig;
 import cn.planka.domain.schema.definition.link.LinkTypeDefinition;
 import cn.planka.event.schema.SchemaCreatedEvent;
@@ -26,6 +28,7 @@ import cn.planka.schema.repository.SchemaRepository;
 import cn.planka.schema.service.common.diff.SchemaDiffService;
 import cn.planka.schema.service.common.lifecycle.SchemaLifecycleHandler;
 import cn.planka.schema.service.common.lifecycle.SchemaLifecycleHandlerRegistry;
+import cn.planka.schema.service.view.ViewDefinitionWriteAuthService;
 import cn.planka.schema.service.common.reference.SchemaReferenceAnalyzer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +61,7 @@ public class SchemaCommonService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final SchemaLifecycleHandlerRegistry lifecycleHandlerRegistry;
     private final SchemaQuery schemaQuery;
+    private final ViewDefinitionWriteAuthService viewDefinitionWriteAuthService;
 
     @Autowired
     public SchemaCommonService(
@@ -69,7 +73,8 @@ public class SchemaCommonService {
             SchemaDiffService diffService,
             @Autowired(required = false) KafkaTemplate<String, Object> kafkaTemplate,
             SchemaLifecycleHandlerRegistry lifecycleHandlerRegistry,
-            SchemaQuery schemaQuery) {
+            SchemaQuery schemaQuery,
+            ViewDefinitionWriteAuthService viewDefinitionWriteAuthService) {
         this.schemaRepository = schemaRepository;
         this.referenceMapper = referenceMapper;
         this.changelogMapper = changelogMapper;
@@ -79,6 +84,7 @@ public class SchemaCommonService {
         this.kafkaTemplate = kafkaTemplate;
         this.lifecycleHandlerRegistry = lifecycleHandlerRegistry;
         this.schemaQuery = schemaQuery;
+        this.viewDefinitionWriteAuthService = viewDefinitionWriteAuthService;
     }
 
     // ==================== 基础 CRUD ====================
@@ -175,6 +181,16 @@ public class SchemaCommonService {
             return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无法修改已删除的Schema");
         }
 
+        if (schema instanceof AbstractViewDefinition viewDefinition) {
+            if (!viewDefinitionWriteAuthService.canModify(viewDefinition, operatorId, viewDefinition.getOrgId())) {
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无权修改该视图定义");
+            }
+        } else if (schema instanceof MenuGroupDefinition menuGroup) {
+            if (!viewDefinitionWriteAuthService.canModify(menuGroup, operatorId, menuGroup.getOrgId())) {
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无权修改该菜单分组定义");
+            }
+        }
+
         // 系统内置类型校验：检查是否修改了受保护的字段
         if (request.getDefinition() != null) {
             Result<Void> systemTypeCheckResult = validateSystemTypeModification(schema, request.getDefinition());
@@ -259,6 +275,16 @@ public class SchemaCommonService {
         }
 
         AbstractSchemaDefinition<?> schema = (AbstractSchemaDefinition<?>) schemaOpt.get();
+
+        if (schema instanceof AbstractViewDefinition viewDefinition) {
+            if (!viewDefinitionWriteAuthService.canModify(viewDefinition, operatorId, viewDefinition.getOrgId())) {
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无权删除该视图定义");
+            }
+        } else if (schema instanceof MenuGroupDefinition menuGroup) {
+            if (!viewDefinitionWriteAuthService.canModify(menuGroup, operatorId, menuGroup.getOrgId())) {
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无权删除该菜单分组定义");
+            }
+        }
 
         // 检查是否为系统内置类型（系统内置类型不可删除）
         if (schema instanceof CardTypeDefinition cardTypeDef && cardTypeDef.isSystemType()) {

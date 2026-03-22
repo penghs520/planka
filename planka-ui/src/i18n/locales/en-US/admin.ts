@@ -1086,6 +1086,12 @@ targetFieldsRequired: 'Please select target fields',
       targetCardTypePlaceholder: 'Select card type to create',
       showCreateDialog: 'Show Create Dialog',
       fieldAssignments: 'New Card Field Assignments',
+      modalTitle: 'New {name}',
+      modalTitleFallback: 'New card',
+      submitCreate: 'Create and link',
+      createCard: 'Create',
+      titleRequired: 'Please enter a card title',
+      missingTargetType: 'Target card type is not configured',
     },
     // Trigger built-in configuration
     triggerBuiltIn: {

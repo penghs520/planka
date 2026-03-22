@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 视图列表项 VO
@@ -69,6 +70,26 @@ public class ViewListItemVO {
      * 是否共享
      */
     private boolean shared;
+
+    /**
+     * 可见性范围基数（PRIVATE/WORKSPACE/TEAMS/STRUCTURE_NODE）
+     */
+    private String viewVisibilityScope;
+
+    /**
+     * 团队可见时的团队卡 ID
+     */
+    private List<String> visibleTeamCardIds;
+
+    /**
+     * 架构节点可见时的节点 ID
+     */
+    private List<String> visibleStructureNodeIds;
+
+    /**
+     * 创建人成员卡 ID
+     */
+    private String createdBy;
 
     /**
      * 是否启用

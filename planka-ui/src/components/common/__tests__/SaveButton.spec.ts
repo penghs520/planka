@@ -61,14 +61,13 @@ describe('SaveButton.vue', () => {
         global: {
           stubs: {
               'a-button': {
-                template: '<button :disabled="loading"><slot /></button>',
+                template: '<button data-testid="btn" :data-loading="loading"><slot /></button>',
                 props: ['loading']
               }
           }
         }
       })
-      // Use attributes or check disabled state directly since finding component props might be tricky with stubs
-      expect(wrapper.find('button').attributes('disabled')).toBeDefined()
+      expect(wrapper.get('[data-testid="btn"]').attributes('data-loading')).toBe('true')
   })
 
   it('emits click event', async () => {

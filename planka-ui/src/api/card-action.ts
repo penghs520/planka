@@ -8,6 +8,24 @@ import type {
 const CARD_ACTION_URL = '/api/v1/schemas/card-actions'
 const CARD_EXECUTE_URL = '/api/v1/cards'
 
+/** 执行「创建关联卡片」等动作时，弹窗提交的扩展载荷 */
+export interface ExecuteCardActionPayload {
+  userInputs?: Record<string, unknown>
+  linkedCardTitle?: string
+  linkedCardFieldValues?: Record<string, unknown>
+  linkedCardLinkUpdates?: Array<{ linkFieldId: string; targetCardIds: string[] }>
+}
+
+function isNonEmptyExecutePayload(p: ExecuteCardActionPayload | undefined): boolean {
+  if (!p) return false
+  return !!(
+    (p.userInputs && Object.keys(p.userInputs).length > 0)
+    || (p.linkedCardTitle != null && String(p.linkedCardTitle).trim() !== '')
+    || (p.linkedCardFieldValues && Object.keys(p.linkedCardFieldValues).length > 0)
+    || (p.linkedCardLinkUpdates && p.linkedCardLinkUpdates.length > 0)
+  )
+}
+
 /**
  * 卡片动作配置 API
  */
@@ -116,11 +134,19 @@ export const cardActionExecuteApi = {
    * 执行卡片动作
    * @param actionId 动作配置ID
    * @param cardId 卡片ID
-   * @param userInputs 用户输入的字段值（可选）
+   * @param payload 用户输入 / 创建关联卡片弹窗载荷（可选）
    */
-  execute(actionId: string, cardId: string, userInputs?: Record<string, unknown>): Promise<ActionExecutionResult> {
-    return request.post(`${CARD_EXECUTE_URL}/actions/${actionId}/execute`, userInputs ? { userInputs } : null, {
-      params: { cardId },
-    })
+  execute(
+    actionId: string,
+    cardId: string,
+    payload?: ExecuteCardActionPayload,
+  ): Promise<ActionExecutionResult> {
+    return request.post(
+      `${CARD_EXECUTE_URL}/actions/${actionId}/execute`,
+      isNonEmptyExecutePayload(payload) ? payload : null,
+      {
+        params: { cardId },
+      },
+    )
   },
 }

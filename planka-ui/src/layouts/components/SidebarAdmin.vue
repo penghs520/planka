@@ -10,8 +10,6 @@ import IconStructure from '@/components/icons/IconStructure.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
 import IconFormulaDefinition from '@/components/icons/IconFormulaDefinition.vue'
 import IconCardType from '@/components/icons/IconCardType.vue'
-import IconView from '@/components/icons/IconView.vue'
-import IconMenuConfig from '@/components/icons/IconMenuConfig.vue'
 import IconNotification from '@/components/icons/IconNotification.vue'
 
 const { t } = useI18n()
@@ -49,14 +47,6 @@ const sections: MenuSection[] = [
       { key: 'link-type', titleKey: 'admin.menu.linkType', icon: IconLinkType, path: '/admin/link-type' },
       { key: 'formula-definition', titleKey: 'admin.menu.formulaDefinition', icon: IconFormulaDefinition, path: '/admin/formula-definition' },
       { key: 'structure', titleKey: 'admin.menu.structure', icon: IconStructure, path: '/admin/structure' },
-    ],
-  },
-  {
-    key: 'config',
-    labelKey: 'admin.menuGroup.configuration',
-    items: [
-      { key: 'view', titleKey: 'admin.menu.view', icon: IconView, path: '/admin/view' },
-      { key: 'menu', titleKey: 'admin.menu.menuConfig', icon: IconMenuConfig, path: '/admin/menu' },
     ],
   },
   {

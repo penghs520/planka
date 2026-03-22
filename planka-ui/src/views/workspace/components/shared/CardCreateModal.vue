@@ -5,6 +5,7 @@
  * 根据 CreatePageFormVO 动态渲染表单，支持各种字段类型
  */
 import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Message } from '@arco-design/web-vue'
 import dayjs from 'dayjs'
 import { cardApi, cardCreatePageTemplateApi } from '@/api'
@@ -29,14 +30,30 @@ const props = defineProps<{
   visible: boolean
   /** 卡片类型 ID */
   cardTypeId: string
+  /**
+   * createApi：调用创建卡片接口；
+   * emitLinkedExecutePayload：组装载荷并触发 linkedExecutePayload，由父组件调用「创建关联卡片」动作执行接口
+   */
+  submitBehavior?: 'createApi' | 'emitLinkedExecutePayload'
 }>()
 
 const emit = defineEmits<{
   (e: 'update:visible', visible: boolean): void
   (e: 'success'): void
+  (
+    e: 'linkedExecutePayload',
+    payload: {
+      linkedCardTitle: string
+      linkedCardFieldValues: Record<string, unknown>
+      linkedCardLinkUpdates: LinkFieldUpdate[]
+    }
+  ): void
 }>()
 
+const { t } = useI18n()
 const orgStore = useOrgStore()
+
+const submitBehavior = computed(() => props.submitBehavior ?? 'createApi')
 
 // 状态
 const loading = ref(false)
@@ -47,7 +64,9 @@ const formData = ref<Record<string, any>>({})
 
 // 计算属性
 const modalTitle = computed(() =>
-  formConfig.value?.cardTypeName ? `新建${formConfig.value.cardTypeName}` : '新建卡片'
+  formConfig.value?.cardTypeName
+    ? t('admin.cardAction.createLinkedCard.modalTitle', { name: formConfig.value.cardTypeName })
+    : t('admin.cardAction.createLinkedCard.modalTitleFallback')
 )
 
 const fields = computed(() => formConfig.value?.fields || [])
@@ -57,14 +76,15 @@ function getFieldLabel(field: CreatePageFieldVO): string {
   return field.name
 }
 
-// 监听可见性变化
+// 监听可见性变化（须 immediate：父级用 v-if 挂载且首帧即为 visible=true 时，否则不会触发加载，表单空白）
 watch(
-  () => props.visible,
-  async (visible) => {
-    if (visible && props.cardTypeId) {
+  () => [props.visible, props.cardTypeId] as const,
+  async ([visible, cardTypeId]) => {
+    if (visible && cardTypeId) {
       await loadFormConfig()
     }
-  }
+  },
+  { immediate: true }
 )
 
 // 加载表单配置
@@ -164,6 +184,44 @@ async function handleSubmit() {
 
   submitting.value = true
   try {
+    if (submitBehavior.value === 'emitLinkedExecutePayload') {
+      const titleRaw = String(formData.value['$title'] ?? '').trim()
+      if (!titleRaw) {
+        Message.warning(t('admin.cardAction.createLinkedCard.titleRequired'))
+        submitting.value = false
+        return
+      }
+      const linkedCardFieldValues: Record<string, unknown> = {}
+      const linkUpdates: LinkFieldUpdate[] = []
+      for (const field of fields.value) {
+        if (field.fieldId === '$title') {
+          continue
+        }
+        const value = formData.value[field.fieldId]
+        if (field.fieldType === 'LINK') {
+          const selectedCards = value as LinkedCard[] | undefined
+          if (selectedCards && selectedCards.length > 0) {
+            linkUpdates.push({
+              linkFieldId: field.fieldId,
+              targetCardIds: selectedCards.map(c => c.cardId),
+            })
+          }
+          continue
+        }
+        if (value != null && value !== '') {
+          linkedCardFieldValues[field.fieldId] = buildFieldValue(field, value)
+        }
+      }
+      emit('linkedExecutePayload', {
+        linkedCardTitle: titleRaw,
+        linkedCardFieldValues,
+        linkedCardLinkUpdates: linkUpdates,
+      })
+      handleClose()
+      submitting.value = false
+      return
+    }
+
     const fieldValues: Record<string, any> = {}
     const linkUpdates: LinkFieldUpdate[] = []
 
@@ -530,7 +588,11 @@ function shouldShowTime(field: DateFieldVO): boolean {
       <a-space>
         <a-button :disabled="submitting" @click="handleClose">取消</a-button>
         <a-button type="primary" :loading="submitting" @click="handleSubmit">
-          创建
+          {{
+            submitBehavior === 'emitLinkedExecutePayload'
+              ? t('admin.cardAction.createLinkedCard.submitCreate')
+              : t('admin.cardAction.createLinkedCard.createCard')
+          }}
         </a-button>
       </a-space>
     </template>

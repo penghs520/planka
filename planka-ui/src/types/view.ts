@@ -17,7 +17,7 @@ export interface ListViewDefinition extends SchemaDefinition {
   /** 列配置列表 */
   columnConfigs?: ColumnConfig[]
 
-  /** 分组字段 ID（可选） */
+  /** 分组依据字段 ID（可选）：如 `$statusId`（价值流状态）、枚举类或 LINK 类型属性 ID */
   groupBy?: string
 
   /** 排序配置列表 */
@@ -38,6 +38,16 @@ export interface ListViewDefinition extends SchemaDefinition {
 
   /** 可见性范围（用户 ID 列表，空表示所有人可见） */
   visibleTo?: string[]
+
+  /** 可见性范围基数（新模型） */
+  viewVisibilityScope?: 'PRIVATE' | 'WORKSPACE' | 'TEAMS' | 'STRUCTURE_NODE'
+
+  visibleTeamCardIds?: string[]
+
+  visibleStructureNodeIds?: string[]
+
+  /** 受众条件（可选，与数据过滤 condition 分离） */
+  visibilityAudienceCondition?: Condition
 }
 
 /**
@@ -129,6 +139,14 @@ export interface ViewListItemVO {
   /** 是否共享 */
   shared: boolean
 
+  viewVisibilityScope?: string
+
+  visibleTeamCardIds?: string[]
+
+  visibleStructureNodeIds?: string[]
+
+  createdBy?: string
+
   /** 是否启用 */
   enabled: boolean
 
@@ -144,6 +162,20 @@ export interface ViewListItemVO {
 
 // ==================== 工具函数 ====================
 
+/** 列表视图默认排序：创建时间降序 */
+export const DEFAULT_LIST_VIEW_SORTS: SortField[] = [
+  { field: '$createdAt', direction: 'DESC' },
+]
+
+/**
+ * 若未配置排序，则填充默认排序（创建时间降序）
+ */
+export function ensureDefaultListViewSorts(d: ListViewDefinition): void {
+  if (!d.sorts?.length) {
+    d.sorts = DEFAULT_LIST_VIEW_SORTS.map((s) => ({ ...s }))
+  }
+}
+
 /**
  * 创建空的列表视图定义
  */
@@ -158,7 +190,7 @@ export function createEmptyListView(orgId: string): ListViewDefinition {
     contentVersion: 0,
     cardTypeId: '',
     columnConfigs: [],
-    sorts: [],
+    sorts: DEFAULT_LIST_VIEW_SORTS.map((s) => ({ ...s })),
     pageConfig: {
       defaultPageSize: 20,
       pageSizeOptions: [10, 20, 50, 100],
@@ -166,6 +198,9 @@ export function createEmptyListView(orgId: string): ListViewDefinition {
     },
     defaultView: false,
     shared: true,
+    viewVisibilityScope: 'WORKSPACE',
+    visibleTeamCardIds: [],
+    visibleStructureNodeIds: [],
   }
 }
 

@@ -5,13 +5,16 @@ import cn.planka.common.result.Result;
 import cn.planka.domain.schema.SchemaType;
 import cn.planka.domain.schema.definition.SchemaDefinition;
 import cn.planka.domain.schema.definition.view.ListViewDefinition;
+import cn.planka.domain.schema.definition.view.ViewVisibilityScope;
 import cn.planka.schema.repository.SchemaRepository;
 import cn.planka.schema.service.common.SchemaQuery;
+import cn.planka.schema.service.view.ViewNavService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
@@ -33,6 +36,7 @@ public class ViewController {
 
     private final SchemaRepository schemaRepository;
     private final SchemaQuery schemaQuery;
+    private final ViewNavService viewNavService;
 
     /**
      * 查询视图列表（简化版）
@@ -53,6 +57,19 @@ public class ViewController {
                 .collect(Collectors.toList());
 
         return Result.success(voList);
+    }
+
+    /**
+     * 当前用户可见的视图列表（工作区或架构节点侧栏）
+     *
+     * @param structureNodeId 架构节点 ID；工作区全局不传或空
+     */
+    @GetMapping("/nav")
+    public Result<List<ViewListItemVO>> nav(
+            @RequestHeader("X-Org-Id") String orgId,
+            @RequestHeader("X-Member-Card-Id") String operatorMemberCardId,
+            @RequestParam(name = "structureNodeId", required = false) String structureNodeId) {
+        return Result.success(viewNavService.listNav(orgId, operatorMemberCardId, structureNodeId));
     }
 
     /**
@@ -87,6 +104,7 @@ public class ViewController {
      */
     private ViewListItemVO toVO(ListViewDefinition view, Map<String, String> cardTypeNames) {
         String cardTypeId = view.getCardTypeId() != null ? view.getCardTypeId().value() : null;
+        ViewVisibilityScope scope = view.getEffectiveViewVisibilityScope();
 
         return ViewListItemVO.builder()
                 .id(view.getId().value())
@@ -100,6 +118,10 @@ public class ViewController {
                 .columnCount(view.getColumnConfigs() != null ? view.getColumnConfigs().size() : 0)
                 .defaultView(view.isDefaultView())
                 .shared(view.isShared())
+                .viewVisibilityScope(scope != null ? scope.name() : null)
+                .visibleTeamCardIds(view.getVisibleTeamCardIds())
+                .visibleStructureNodeIds(view.getVisibleStructureNodeIds())
+                .createdBy(view.getCreatedBy())
                 .enabled(view.isEnabled())
                 .contentVersion(view.getContentVersion())
                 .createdAt(view.getCreatedAt())

@@ -44,7 +44,13 @@ const PAGE_SIZE = 40
 
 const props = defineProps<{
   viewId: string
+  /** 架构节点页传入，用于视图数据可见性校验 */
+  structureNodeId?: string
 }>()
+
+const viewDataQueryOpts = computed(() =>
+  props.structureNodeId ? { structureNodeId: props.structureNodeId } : undefined,
+)
 
 const { t } = useI18n()
 const route = useRoute()
@@ -182,7 +188,11 @@ async function fetchData() {
 
   try {
     const body = await buildViewQueryBody()
-    const response = await viewDataApi.queryByViewId(props.viewId, body) as ListViewDataResponse
+    const response = await viewDataApi.queryByViewId(
+      props.viewId,
+      body,
+      viewDataQueryOpts.value,
+    ) as ListViewDataResponse
     viewData.value = response
     accumulatedCards.value = response.cards || []
 
@@ -209,7 +219,11 @@ async function loadMore() {
 
   try {
     const body = await buildViewQueryBody()
-    const response = await viewDataApi.queryByViewId(props.viewId, body) as ListViewDataResponse
+    const response = await viewDataApi.queryByViewId(
+      props.viewId,
+      body,
+      viewDataQueryOpts.value,
+    ) as ListViewDataResponse
     viewData.value = response
     accumulatedCards.value = [...accumulatedCards.value, ...(response.cards || [])]
 

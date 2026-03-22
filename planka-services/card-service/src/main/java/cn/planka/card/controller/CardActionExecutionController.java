@@ -60,7 +60,10 @@ public class CardActionExecutionController {
                 CardActionId.of(actionId),
                 CardId.of(cardId),
                 CardId.of(operatorId),
-                request != null ? request.getUserInputs() : null
+                request != null ? request.getUserInputs() : null,
+                request != null ? request.getLinkedCardTitle() : null,
+                request != null ? request.getLinkedCardLinkUpdates() : null,
+                request != null ? request.getLinkedCardFieldValues() : null
         );
     }
 }

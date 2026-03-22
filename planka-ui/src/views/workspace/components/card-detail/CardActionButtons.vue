@@ -8,10 +8,17 @@ import { useI18n } from 'vue-i18n'
 import { Message, Modal } from '@arco-design/web-vue'
 import { IconMore } from '@arco-design/web-vue/es/icon'
 import { cardActionApi, cardActionExecuteApi } from '@/api/card-action'
-import type { CardActionConfigDefinition, FieldAssignment, RequiredInput } from '@/types/card-action'
+import type {
+  ActionExecutionResult,
+  CardActionConfigDefinition,
+  CreateLinkedCardExecution,
+  FieldAssignment,
+  RequiredInput,
+} from '@/types/card-action'
 import { ActionCategory, BuiltInActionType, ActionExecutionResultType, AssignmentTypeEnum, ExecutionTypeEnum } from '@/types/card-action'
 import type { CardDTO } from '@/types/card'
 import ActionInputModal from './ActionInputModal.vue'
+import CardCreateModal from '@/views/workspace/components/shared/CardCreateModal.vue'
 
 const { t } = useI18n()
 
@@ -37,6 +44,18 @@ const requiredInputModalVisible = ref(false)
 const requiredInputs = ref<RequiredInput[]>([])
 const requiredInputValues = ref<Record<string, string>>({})
 const pendingActionForRequiredInput = ref<CardActionConfigDefinition | null>(null)
+
+/** 创建关联卡片（弹窗模式） */
+const linkedCreateModalVisible = ref(false)
+const linkedCreateCardTypeId = ref('')
+const pendingLinkedAction = ref<CardActionConfigDefinition | null>(null)
+
+watch(linkedCreateModalVisible, (v) => {
+  if (!v) {
+    pendingLinkedAction.value = null
+    linkedCreateCardTypeId.value = ''
+  }
+})
 
 // 获取可用的动作列表
 const availableActions = computed(() => {
@@ -120,9 +139,42 @@ function hasUserInputAssignments(action: CardActionConfigDefinition): boolean {
   return assignments.some(a => a.assignmentType === AssignmentTypeEnum.USER_INPUT)
 }
 
+function isCreateLinkedWithDialog(action: CardActionConfigDefinition): boolean {
+  const ex = action.executionType
+  if (!ex || ex.type !== ExecutionTypeEnum.CREATE_LINKED_CARD) {
+    return false
+  }
+  return (ex as CreateLinkedCardExecution).showCreateDialog === true
+}
+
 // 执行动作
 async function handleExecuteAction(action: CardActionConfigDefinition) {
   if (!action.id) return
+
+  if (isCreateLinkedWithDialog(action)) {
+    const ex = action.executionType as CreateLinkedCardExecution
+    if (!ex.targetCardTypeId) {
+      Message.error(t('admin.cardAction.createLinkedCard.missingTargetType'))
+      return
+    }
+    const openModal = () => {
+      pendingLinkedAction.value = action
+      linkedCreateCardTypeId.value = ex.targetCardTypeId!
+      linkedCreateModalVisible.value = true
+    }
+    if (action.confirmMessage) {
+      Modal.confirm({
+        title: t('admin.cardAction.confirmTitle'),
+        content: action.confirmMessage,
+        okText: t('admin.action.confirm'),
+        modalClass: 'arco-modal-simple',
+        onOk: openModal,
+      })
+    } else {
+      openModal()
+    }
+    return
+  }
 
   // 检查是否需要用户输入
   if (hasUserInputAssignments(action)) {
@@ -182,45 +234,90 @@ function handleInputCancel() {
   currentActionForInput.value = null
 }
 
+function handleLinkedExecutePayload(payload: {
+  linkedCardTitle: string
+  linkedCardFieldValues: Record<string, unknown>
+  linkedCardLinkUpdates: { linkFieldId: string; targetCardIds: string[] }[]
+}) {
+  const action = pendingLinkedAction.value
+  if (!action?.id) {
+    return
+  }
+  pendingLinkedAction.value = null
+  void doExecuteLinkedAction(action, payload)
+}
+
+function applyExecutionResult(action: CardActionConfigDefinition, result: ActionExecutionResult) {
+  if (result.type === ActionExecutionResultType.SUCCESS) {
+    const message = result.message || action.successMessage || t('admin.cardAction.message.executeSuccess')
+    Message.success(message)
+    emit('refresh')
+  } else if (result.type === ActionExecutionResultType.NAVIGATE) {
+    if (result.navigateUrl) {
+      let url = result.navigateUrl
+      if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
+        url = 'https://' + url
+      }
+      if (result.openInNewWindow) {
+        window.open(url, '_blank')
+      } else {
+        window.location.href = url
+      }
+    }
+  } else if (result.type === ActionExecutionResultType.REQUIRE_INPUT) {
+    if (result.requiredInputs && result.requiredInputs.length > 0) {
+      requiredInputs.value = result.requiredInputs
+      requiredInputValues.value = {}
+      pendingActionForRequiredInput.value = action
+      requiredInputModalVisible.value = true
+    }
+  } else if (result.type === ActionExecutionResultType.ERROR) {
+    Message.error(result.message || t('admin.cardAction.message.executeFailed'))
+  }
+}
+
+async function doExecuteLinkedAction(
+  action: CardActionConfigDefinition,
+  payload: {
+    linkedCardTitle: string
+    linkedCardFieldValues: Record<string, unknown>
+    linkedCardLinkUpdates: { linkFieldId: string; targetCardIds: string[] }[]
+  },
+) {
+  if (!action.id) {
+    return
+  }
+
+  executingActionId.value = action.id
+  try {
+    const result = await cardActionExecuteApi.execute(action.id, props.card.id, {
+      linkedCardTitle: payload.linkedCardTitle,
+      linkedCardFieldValues:
+        Object.keys(payload.linkedCardFieldValues).length > 0 ? payload.linkedCardFieldValues : undefined,
+      linkedCardLinkUpdates:
+        payload.linkedCardLinkUpdates.length > 0 ? payload.linkedCardLinkUpdates : undefined,
+    })
+    applyExecutionResult(action, result)
+  } catch (error: any) {
+    console.error('Failed to execute action:', error)
+    Message.error(error.message || t('admin.cardAction.message.executeFailed'))
+  } finally {
+    executingActionId.value = null
+  }
+}
+
 // 实际执行动作
 async function doExecuteAction(action: CardActionConfigDefinition, userInputs?: Record<string, unknown>) {
   if (!action.id) return
 
   executingActionId.value = action.id
   try {
-    const result = await cardActionExecuteApi.execute(action.id, props.card.id, userInputs)
-
-    if (result.type === ActionExecutionResultType.SUCCESS) {
-      // 显示成功提示 - 优先使用API返回的消息，其次使用动作配置的消息，最后使用通用消息
-      const message = result.message || action.successMessage || t('admin.cardAction.message.executeSuccess')
-      Message.success(message)
-      // 刷新卡片数据
-      emit('refresh')
-    } else if (result.type === ActionExecutionResultType.NAVIGATE) {
-      // 跳转页面
-      if (result.navigateUrl) {
-        // 确保 URL 有协议前缀
-        let url = result.navigateUrl
-        if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
-          url = 'https://' + url
-        }
-        if (result.openInNewWindow) {
-          window.open(url, '_blank')
-        } else {
-          window.location.href = url
-        }
-      }
-    } else if (result.type === ActionExecutionResultType.REQUIRE_INPUT) {
-      // 后端要求用户输入（如丢弃原因）
-      if (result.requiredInputs && result.requiredInputs.length > 0) {
-        requiredInputs.value = result.requiredInputs
-        requiredInputValues.value = {}
-        pendingActionForRequiredInput.value = action
-        requiredInputModalVisible.value = true
-      }
-    } else if (result.type === ActionExecutionResultType.ERROR) {
-      Message.error(result.message || t('admin.cardAction.message.executeFailed'))
-    }
+    const result = await cardActionExecuteApi.execute(
+      action.id,
+      props.card.id,
+      userInputs && Object.keys(userInputs).length > 0 ? { userInputs } : undefined,
+    )
+    applyExecutionResult(action, result)
   } catch (error: any) {
     console.error('Failed to execute action:', error)
     Message.error(error.message || t('admin.cardAction.message.executeFailed'))
@@ -322,6 +419,14 @@ watch(
     :card-type-id="props.card.typeId"
     @confirm="handleInputConfirm"
     @cancel="handleInputCancel"
+  />
+
+  <CardCreateModal
+    v-if="linkedCreateCardTypeId"
+    v-model:visible="linkedCreateModalVisible"
+    :card-type-id="linkedCreateCardTypeId"
+    submit-behavior="emitLinkedExecutePayload"
+    @linked-execute-payload="handleLinkedExecutePayload"
   />
 
   <!-- 后端要求输入的弹窗（如丢弃原因） -->

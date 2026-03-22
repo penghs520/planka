@@ -1316,6 +1316,12 @@ targetFieldsRequired: '请选择目标属性',
       targetCardTypePlaceholder: '选择要创建的卡片类型',
       showCreateDialog: '显示创建弹窗',
       fieldAssignments: '新卡片字段赋值',
+      modalTitle: '新建{name}',
+      modalTitleFallback: '新建卡片',
+      submitCreate: '创建并关联',
+      createCard: '创建',
+      titleRequired: '请输入卡片标题',
+      missingTargetType: '未配置目标卡片类型，无法打开创建弹窗',
     },
     // 触发内置操作配置
     triggerBuiltIn: {

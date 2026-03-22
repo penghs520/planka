@@ -10,6 +10,7 @@ import oss from './oss'
 import sidebar from './sidebar'
 import workspaceList from './workspaceList'
 import workspaceMembers from './workspaceMembers'
+import viewForm from './view-form'
 
 export default {
   admin,
@@ -21,4 +22,5 @@ export default {
   sidebar,
   workspaceList,
   workspaceMembers,
+  viewForm,
 }

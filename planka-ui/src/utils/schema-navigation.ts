@@ -38,8 +38,8 @@ const SCHEMA_ROUTE_MAP: Record<string, SchemaRouteConfig> = {
     navigable: true,
   },
   [SchemaType.VIEW]: {
-    path: '/admin/view',
-    navigable: true,
+    path: '',
+    navigable: false,
   },
   [SchemaType.CARD_DETAIL_TEMPLATE]: {
     path: '/admin/card-detail-template',

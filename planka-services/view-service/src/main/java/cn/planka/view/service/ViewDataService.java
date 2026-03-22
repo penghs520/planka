@@ -3,6 +3,7 @@ package cn.planka.view.service;
 import cn.planka.api.view.request.ViewDataRequest;
 import cn.planka.api.view.response.GroupedCardData;
 import cn.planka.api.view.response.ViewDataResponse;
+import cn.planka.common.exception.CommonErrorCode;
 import cn.planka.common.result.Result;
 import cn.planka.domain.schema.definition.SchemaDefinition;
 import cn.planka.domain.schema.definition.view.AbstractViewDefinition;
@@ -27,6 +28,7 @@ public class ViewDataService {
 
     private final SchemaCacheService schemaCacheService;
     private final ViewExecutorRegistry executorRegistry;
+    private final ViewDataVisibilityService viewDataVisibilityService;
 
     /**
      * 根据视图ID查询数据
@@ -38,10 +40,18 @@ public class ViewDataService {
      */
     public Result<ViewDataResponse> queryByViewId(String viewId,
                                                    ViewDataRequest request,
-                                                   String operatorId) {
+                                                   String operatorId,
+                                                   String orgId,
+                                                   String structureNodeId) {
         try {
             // 1. 获取视图定义
             AbstractViewDefinition viewDef = getViewDefinition(viewId);
+            if (orgId != null && !orgId.equals(viewDef.getOrgId())) {
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "组织与视图不匹配");
+            }
+            if (!viewDataVisibilityService.canQuery(viewDef, operatorId, structureNodeId)) {
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无权访问该视图");
+            }
 
             // 2. 执行查询
             return executeQuery(viewDef, request, operatorId);
@@ -79,8 +89,16 @@ public class ViewDataService {
      */
     public Result<ViewDataResponse> preview(AbstractViewDefinition viewDef,
                                              ViewDataRequest request,
-                                             String operatorId) {
+                                             String operatorId,
+                                             String orgId,
+                                             String structureNodeId) {
         try {
+            if (orgId != null && viewDef.getOrgId() != null && !orgId.equals(viewDef.getOrgId())) {
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "组织与视图不匹配");
+            }
+            if (!viewDataVisibilityService.canQuery(viewDef, operatorId, structureNodeId)) {
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无权预览该视图");
+            }
             return executeQuery(viewDef, request, operatorId);
         } catch (Exception e) {
             log.error("视图预览失败", e);

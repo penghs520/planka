@@ -22,6 +22,17 @@ export default {
   expandViewsMenu: 'Expand views menu',
   collapseViewsMenu: 'Collapse views menu',
   members: 'Members',
+  createView: 'New view',
+  createViewFailed: 'Failed to create view',
+  createViewPickTypeTitle: 'Choose view type',
+  createViewDetailsTitle: 'View details',
+  createViewPickTypeHint: 'Pick a view type. Each type uses a different layout and interactions.',
+  createViewPickTypeRequired: 'Please select a view type first',
+  createViewNext: 'Next',
+  createViewBack: 'Back',
+  createViewTypeListHelp: 'Table layout with columns, sorting, and filters.',
+  createViewTypeComingSoon: 'Coming soon.',
+  createViewStructureScopeHint: 'This view will only appear in the sidebar and navigation for this structure node.',
   createTeam: 'Create team',
   newTeamDefaultName: 'New team',
   teamIssues: 'Issues',
@@ -46,4 +57,5 @@ export default {
   structureViewsHint:
     'Views from the org menu. If the view targets issues, results are limited to issues in projects under this structure node.',
   structureViewsEmpty: 'No views in the org menu',
+  structureNodeSectionNav: 'Structure node sections',
 }

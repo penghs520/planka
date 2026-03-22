@@ -18,10 +18,13 @@ export interface MenuGroupDefinition extends SchemaDefinition {
   viewItems: ViewMenuItem[]
   /** 是否展开 */
   expanded?: boolean
-  /** 可见性配置（旧版，保留兼容） */
-  visibility?: VisibilityConfig
-  /** 可见性条件（基于成员属性的条件表达式） */
-  visibilityCondition?: Condition
+  /** 与列表视图一致的可见性（默认 shared=true → 工作区可见） */
+  shared?: boolean
+  visibleTo?: string[]
+  viewVisibilityScope?: 'PRIVATE' | 'WORKSPACE' | 'TEAMS' | 'STRUCTURE_NODE'
+  visibleTeamCardIds?: string[]
+  visibleStructureNodeIds?: string[]
+  visibilityAudienceCondition?: Condition
 }
 
 /**
@@ -35,17 +38,6 @@ export interface ViewMenuItem {
   /** 自定义显示名称 */
   displayName?: string
 }
-
-/**
- * 可见性配置
- */
-export interface VisibilityConfig {
-  type: VisibilityType
-  allowedUserIds?: string[]
-  allowedRoleIds?: string[]
-}
-
-export type VisibilityType = 'ALL' | 'SPECIFIED_USERS' | 'SPECIFIED_ROLES'
 
 // ==================== VO 类型 ====================
 
@@ -134,6 +126,7 @@ export function createEmptyMenuGroup(orgId: string): MenuGroupDefinition {
     orgId,
     name: '',
     enabled: true,
+    shared: true,
     state: EntityState.ACTIVE,
     contentVersion: 0,
     viewItems: [],
@@ -153,15 +146,6 @@ export function isGroupNode(node: MenuTreeNodeVO): boolean {
  */
 export function isViewNode(node: MenuTreeNodeVO): boolean {
   return node.type === 'VIEW'
-}
-
-/**
- * 可见性类型配置
- */
-export const VisibilityTypeConfig: Record<VisibilityType, { label: string; description: string }> = {
-  ALL: { label: '所有人可见', description: '组织内所有用户都可以看到此分组' },
-  SPECIFIED_USERS: { label: '指定用户', description: '仅指定的用户可以看到此分组' },
-  SPECIFIED_ROLES: { label: '指定角色', description: '仅指定角色的用户可以看到此分组' },
 }
 
 /**
