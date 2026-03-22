@@ -169,8 +169,6 @@ async function handleAutoCreateLinkType(record: LevelBinding): Promise<void> {
       targetCardTypeIds: targetCardTypeIds,
       sourceMultiSelect: false,
       targetMultiSelect: true,
-      sourceVisible: true,
-      targetVisible: false,
     })
 
     // 更新 levelBindings

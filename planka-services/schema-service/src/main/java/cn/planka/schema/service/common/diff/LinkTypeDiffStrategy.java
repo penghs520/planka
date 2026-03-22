@@ -37,8 +37,6 @@ public class LinkTypeDiffStrategy implements SchemaDiffStrategy {
         STRING_FIELDS.put("targetName", "目标端名称");
 
         BOOLEAN_FIELDS.put("enabled", "启用状态");
-        BOOLEAN_FIELDS.put("sourceVisible", "源端显示");
-        BOOLEAN_FIELDS.put("targetVisible", "目标端显示");
         BOOLEAN_FIELDS.put("sourceMultiSelect", "源端多选");
         BOOLEAN_FIELDS.put("targetMultiSelect", "目标端多选");
         BOOLEAN_FIELDS.put("systemLinkType", "系统内置");

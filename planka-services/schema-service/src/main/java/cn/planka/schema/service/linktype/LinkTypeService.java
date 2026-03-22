@@ -154,8 +154,6 @@ public class LinkTypeService {
         linkType.setSourceCode(request.getSourceCode());
         linkType.setTargetName(request.getTargetName());
         linkType.setTargetCode(request.getTargetCode());
-        linkType.setSourceVisible(request.isSourceVisible());
-        linkType.setTargetVisible(request.isTargetVisible());
         linkType.setSourceCardTypeIds(sourceCardTypeIds);
         linkType.setTargetCardTypeIds(targetCardTypeIds);
         linkType.setSourceMultiSelect(request.isSourceMultiSelect());
@@ -241,12 +239,6 @@ public class LinkTypeService {
         }
         if (nameNeedsUpdate) {
             linkType.setName(linkType.getSourceName() + "->" + linkType.getTargetName());
-        }
-        if (request.getSourceVisible() != null) {
-            linkType.setSourceVisible(request.getSourceVisible());
-        }
-        if (request.getTargetVisible() != null) {
-            linkType.setTargetVisible(request.getTargetVisible());
         }
         if (request.getSourceMultiSelect() != null) {
             linkType.setSourceMultiSelect(request.getSourceMultiSelect());
@@ -404,8 +396,6 @@ public class LinkTypeService {
                 .sourceCode(linkType.getSourceCode())
                 .targetName(linkType.getTargetName())
                 .targetCode(linkType.getTargetCode())
-                .sourceVisible(linkType.isSourceVisible())
-                .targetVisible(linkType.isTargetVisible())
                 .sourceCardTypes(sourceCardTypes)
                 .targetCardTypes(targetCardTypes)
                 .sourceMultiSelect(linkType.isSourceMultiSelect())
@@ -427,8 +417,6 @@ public class LinkTypeService {
                 .name(linkType.getName())
                 .sourceName(linkType.getSourceName())
                 .targetName(linkType.getTargetName())
-                .sourceVisible(linkType.isSourceVisible())
-                .targetVisible(linkType.isTargetVisible())
                 .sourceMultiSelect(linkType.isSourceMultiSelect())
                 .targetMultiSelect(linkType.isTargetMultiSelect())
                 .build();

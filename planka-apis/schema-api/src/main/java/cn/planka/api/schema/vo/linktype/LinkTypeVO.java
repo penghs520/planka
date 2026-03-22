@@ -38,12 +38,6 @@ public class LinkTypeVO {
     /** 目标端编码（如"children"） */
     private String targetCode;
 
-    /** 源端是否显示 */
-    private boolean sourceVisible;
-
-    /** 目标端是否显示 */
-    private boolean targetVisible;
-
     /** 源端允许的实体类型 */
     private List<CardTypeInfo> sourceCardTypes;
 

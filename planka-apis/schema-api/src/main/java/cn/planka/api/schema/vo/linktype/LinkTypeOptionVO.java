@@ -22,12 +22,6 @@ public class LinkTypeOptionVO {
     /** 目标端名称 */
     private String targetName;
 
-    /** 源端是否显示 */
-    private boolean sourceVisible;
-
-    /** 目标端是否显示 */
-    private boolean targetVisible;
-
     /** 源端是否多选 */
     private boolean sourceMultiSelect;
 

@@ -27,12 +27,6 @@ public class UpdateLinkTypeRequest {
     /** 目标端编码 */
     private String targetCode;
 
-    /** 源端是否显示 */
-    private Boolean sourceVisible;
-
-    /** 目标端是否显示 */
-    private Boolean targetVisible;
-
     /** 源端允许的实体类型ID列表 */
     private List<String> sourceCardTypeIds;
 

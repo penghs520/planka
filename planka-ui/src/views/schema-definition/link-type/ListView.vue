@@ -67,8 +67,6 @@ const formData = ref<CreateLinkTypeRequest | (UpdateLinkTypeRequest & { id: stri
   name: '',
   sourceName: '',
   targetName: '',
-  sourceVisible: true,
-  targetVisible: true,
   sourceMultiSelect: false,
   targetMultiSelect: false,
 })
@@ -174,8 +172,6 @@ function handleCreate() {
     name: '',
     sourceName: '',
     targetName: '',
-    sourceVisible: true,
-    targetVisible: true,
     sourceMultiSelect: false,
     targetMultiSelect: false,
   }
@@ -196,8 +192,6 @@ async function handleEdit(linkType: LinkTypeVO) {
       description: detail.description,
       sourceName: detail.sourceName,
       targetName: detail.targetName,
-      sourceVisible: detail.sourceVisible,
-      targetVisible: detail.targetVisible,
       sourceCardTypeIds: detail.sourceCardTypes?.map((ct) => ct.id),
       targetCardTypeIds: detail.targetCardTypes?.map((ct) => ct.id),
       sourceMultiSelect: detail.sourceMultiSelect,
@@ -614,33 +608,6 @@ onMounted(async () => {
               <span v-else class="setting-desc">{{ t('admin.linkType.targetMultiSelectDesc') }}</span>
             </div>
             <a-switch v-model="formData.targetMultiSelect" />
-          </div>
-          <!-- 显示配置 -->
-          <div class="setting-item">
-            <div class="setting-label">
-              <span v-if="sourceCardTypeName && formData.sourceName" class="setting-title">
-                在 <span class="type-highlight">{{ sourceCardTypeName }}</span> 中显示 <span class="link-highlight">{{ formData.sourceName }}</span>
-              </span>
-              <span v-else class="setting-title">{{ t('admin.linkType.sourceVisible') }}</span>
-              <span v-if="sourceCardTypeName" class="setting-desc">
-                在 <span class="type-highlight">{{ sourceCardTypeName }}</span> 中可见此关联
-              </span>
-              <span v-else class="setting-desc">{{ t('admin.linkType.sourceVisibleDesc') }}</span>
-            </div>
-            <a-switch v-model="formData.sourceVisible" />
-          </div>
-          <div class="setting-item">
-            <div class="setting-label">
-              <span v-if="targetCardTypeName && formData.targetName" class="setting-title">
-                在 <span class="type-highlight">{{ targetCardTypeName }}</span> 中显示 <span class="link-highlight">{{ formData.targetName }}</span>
-              </span>
-              <span v-else class="setting-title">{{ t('admin.linkType.targetVisible') }}</span>
-              <span v-if="targetCardTypeName" class="setting-desc">
-                在 <span class="type-highlight">{{ targetCardTypeName }}</span> 中可见此关联
-              </span>
-              <span v-else class="setting-desc">{{ t('admin.linkType.targetVisibleDesc') }}</span>
-            </div>
-            <a-switch v-model="formData.targetVisible" />
           </div>
         </div>
       </div>

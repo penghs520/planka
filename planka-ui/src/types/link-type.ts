@@ -26,8 +26,6 @@ export interface LinkTypeVO {
   sourceCode?: string
   targetName: string
   targetCode?: string
-  sourceVisible: boolean
-  targetVisible: boolean
   sourceCardTypes?: CardTypeInfo[]
   targetCardTypes?: CardTypeInfo[]
   sourceMultiSelect: boolean
@@ -47,8 +45,6 @@ export interface LinkTypeOptionVO {
   name: string
   sourceName: string
   targetName: string
-  sourceVisible: boolean
-  targetVisible: boolean
   sourceMultiSelect: boolean
   targetMultiSelect: boolean
 }
@@ -63,8 +59,6 @@ export interface CreateLinkTypeRequest {
   sourceCode?: string
   targetName: string
   targetCode?: string
-  sourceVisible?: boolean
-  targetVisible?: boolean
   sourceCardTypeIds?: string[]
   targetCardTypeIds?: string[]
   sourceMultiSelect?: boolean
@@ -81,8 +75,6 @@ export interface UpdateLinkTypeRequest {
   sourceCode?: string
   targetName?: string
   targetCode?: string
-  sourceVisible?: boolean
-  targetVisible?: boolean
   sourceCardTypeIds?: string[]
   targetCardTypeIds?: string[]
   sourceMultiSelect?: boolean

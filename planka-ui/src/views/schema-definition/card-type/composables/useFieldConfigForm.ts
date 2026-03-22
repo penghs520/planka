@@ -186,8 +186,6 @@ export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseField
         targetCardTypeIds: targetCardTypeIds,
         sourceMultiSelect: false,
         targetMultiSelect: true,
-        sourceVisible: true,
-        targetVisible: false,
       })
 
       record.linkFieldId = `${linkType.id}:SOURCE`

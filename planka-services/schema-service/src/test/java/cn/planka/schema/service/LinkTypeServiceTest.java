@@ -177,8 +177,6 @@ class LinkTypeServiceTest {
             CreateLinkTypeRequest request = new CreateLinkTypeRequest();
             request.setSourceName("父卡片");
             request.setTargetName("子卡片");
-            request.setSourceVisible(true);
-            request.setTargetVisible(true);
             request.setSourceMultiSelect(true);
             request.setTargetMultiSelect(true);
 
@@ -196,8 +194,6 @@ class LinkTypeServiceTest {
             assertThat(result.getData().getName()).isEqualTo("父卡片->子卡片");
             assertThat(result.getData().getSourceName()).isEqualTo("父卡片");
             assertThat(result.getData().getTargetName()).isEqualTo("子卡片");
-            assertThat(result.getData().isSourceVisible()).isTrue();
-            assertThat(result.getData().isTargetVisible()).isTrue();
 
             verify(schemaCommonService).create(eq(ORG_ID), eq(OPERATOR_ID), any(CreateSchemaRequest.class));
         }

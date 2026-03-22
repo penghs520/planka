@@ -31,12 +31,6 @@ public class CreateLinkTypeRequest {
     /** 目标端编码（如"children"） */
     private String targetCode;
 
-    /** 源端是否显示 */
-    private boolean sourceVisible = true;
-
-    /** 目标端是否显示 */
-    private boolean targetVisible = true;
-
     /** 源端允许的实体类型ID列表 */
     @NotEmpty(message = "源端实体类型不能为空")
     private List<String> sourceCardTypeIds;
