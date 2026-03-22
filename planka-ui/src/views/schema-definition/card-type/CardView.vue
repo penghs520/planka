@@ -227,24 +227,34 @@ onMounted(async () => {
                     </a-tag>
                   </div>
                   <div class="type-card-actions" @click.stop>
-                    <a-button v-if="!ct.systemCardType" size="mini" type="text" @click="handleEdit(ct)">
-                      <template #icon><IconEdit /></template>
-                    </a-button>
-                    <a-button size="mini" type="text" @click="handleReference(ct)">
-                      <template #icon><IconLink /></template>
-                    </a-button>
-                    <a-button size="mini" type="text" @click="handleChangelog(ct)">
-                      <template #icon><IconHistory /></template>
-                    </a-button>
-                    <a-button size="mini" type="text" @click="handleToggleEnabled(ct)">
-                      <template #icon>
-                        <IconCheckCircle v-if="!ct.enabled" />
-                        <IconMinusCircle v-else />
-                      </template>
-                    </a-button>
-                    <a-button v-if="!ct.systemCardType" size="mini" type="text" status="danger" @click="handleDelete(ct)">
-                      <template #icon><IconDelete /></template>
-                    </a-button>
+                    <a-tooltip v-if="!ct.systemCardType" :content="t('admin.action.edit')" mini>
+                      <a-button size="mini" type="text" @click="handleEdit(ct)">
+                        <template #icon><IconEdit /></template>
+                      </a-button>
+                    </a-tooltip>
+                    <a-tooltip :content="t('admin.action.reference')" mini>
+                      <a-button size="mini" type="text" @click="handleReference(ct)">
+                        <template #icon><IconLink /></template>
+                      </a-button>
+                    </a-tooltip>
+                    <a-tooltip :content="t('admin.action.changelog')" mini>
+                      <a-button size="mini" type="text" @click="handleChangelog(ct)">
+                        <template #icon><IconHistory /></template>
+                      </a-button>
+                    </a-tooltip>
+                    <a-tooltip :content="ct.enabled ? t('admin.action.disable') : t('admin.action.enable')" mini>
+                      <a-button size="mini" type="text" @click="handleToggleEnabled(ct)">
+                        <template #icon>
+                          <IconCheckCircle v-if="!ct.enabled" />
+                          <IconMinusCircle v-else />
+                        </template>
+                      </a-button>
+                    </a-tooltip>
+                    <a-tooltip v-if="!ct.systemCardType" :content="t('admin.action.delete')" mini>
+                      <a-button size="mini" type="text" status="danger" @click="handleDelete(ct)">
+                        <template #icon><IconDelete /></template>
+                      </a-button>
+                    </a-tooltip>
                   </div>
                 </a-card>
               </a-col>
@@ -287,24 +297,34 @@ onMounted(async () => {
                     </a-tag>
                   </div>
                   <div class="type-card-actions" @click.stop>
-                    <a-button v-if="!ct.systemCardType" size="mini" type="text" @click="handleEdit(ct)">
-                      <template #icon><IconEdit /></template>
-                    </a-button>
-                    <a-button size="mini" type="text" @click="handleReference(ct)">
-                      <template #icon><IconLink /></template>
-                    </a-button>
-                    <a-button size="mini" type="text" @click="handleChangelog(ct)">
-                      <template #icon><IconHistory /></template>
-                    </a-button>
-                    <a-button size="mini" type="text" @click="handleToggleEnabled(ct)">
-                      <template #icon>
-                        <IconCheckCircle v-if="!ct.enabled" />
-                        <IconMinusCircle v-else />
-                      </template>
-                    </a-button>
-                    <a-button v-if="!ct.systemCardType" size="mini" type="text" status="danger" @click="handleDelete(ct)">
-                      <template #icon><IconDelete /></template>
-                    </a-button>
+                    <a-tooltip v-if="!ct.systemCardType" :content="t('admin.action.edit')" mini>
+                      <a-button size="mini" type="text" @click="handleEdit(ct)">
+                        <template #icon><IconEdit /></template>
+                      </a-button>
+                    </a-tooltip>
+                    <a-tooltip :content="t('admin.action.reference')" mini>
+                      <a-button size="mini" type="text" @click="handleReference(ct)">
+                        <template #icon><IconLink /></template>
+                      </a-button>
+                    </a-tooltip>
+                    <a-tooltip :content="t('admin.action.changelog')" mini>
+                      <a-button size="mini" type="text" @click="handleChangelog(ct)">
+                        <template #icon><IconHistory /></template>
+                      </a-button>
+                    </a-tooltip>
+                    <a-tooltip :content="ct.enabled ? t('admin.action.disable') : t('admin.action.enable')" mini>
+                      <a-button size="mini" type="text" @click="handleToggleEnabled(ct)">
+                        <template #icon>
+                          <IconCheckCircle v-if="!ct.enabled" />
+                          <IconMinusCircle v-else />
+                        </template>
+                      </a-button>
+                    </a-tooltip>
+                    <a-tooltip v-if="!ct.systemCardType" :content="t('admin.action.delete')" mini>
+                      <a-button size="mini" type="text" status="danger" @click="handleDelete(ct)">
+                        <template #icon><IconDelete /></template>
+                      </a-button>
+                    </a-tooltip>
                   </div>
                 </a-card>
               </a-col>
@@ -523,11 +543,19 @@ onMounted(async () => {
   gap: 2px;
   padding-top: 6px;
   border-top: 1px solid var(--color-border-1);
+  height: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: height 0.2s, padding-top 0.2s, opacity 0.2s;
 }
 
 .type-card:hover .type-card-actions {
+  height: auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--color-border-1);
+  overflow: visible;
   opacity: 1;
 }
 
