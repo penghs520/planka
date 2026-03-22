@@ -26,6 +26,7 @@ import { cardTypeApi, linkTypeApi } from '@/api'
 import type { CardTypeDefinition } from '@/types/card-type'
 import type { FieldOption } from '@/types/field-option'
 import type { LinkTypeVO, CardTypeInfo, UpdateLinkTypeRequest } from '@/types/link-type'
+import { applyDagreLayout } from '@/utils/dagre-layout'
 
 // Vue Flow store reference (will be set when VueFlow is ready)
 const vueFlowRef = ref<VueFlowStore | null>(null)
@@ -232,25 +233,8 @@ function buildGraph() {
   const newNodes: Node[] = []
   const newEdges: Edge[] = []
   const processedKeys = new Set<string>()
-  const nodePositions = new Map<string, { x: number; y: number }>()
 
-  // Grid layout parameters
-  const startX = 100
-  const startY = 100
-  const nodeWidth = 280
-  const nodeHeight = 200
-  const horizontalGap = 150
-  const verticalGap = 100
-  const nodesPerRow = 4
-
-  let nodeIndex = 0
-
-  // Helper to calculate and store position
-  const getNodePosition = (index: number) => ({
-    x: startX + (index % nodesPerRow) * (nodeWidth + horizontalGap),
-    y: startY + Math.floor(index / nodesPerRow) * (nodeHeight + verticalGap),
-  })
-
+  // 第一遍：创建节点和边（位置由 dagre 计算）
   for (const linkType of linkTypes.value) {
     // Process source side
     if (linkType.sourceCardTypes && linkType.sourceCardTypes.length > 0) {
@@ -258,8 +242,6 @@ function buildGraph() {
 
       if (!processedKeys.has(nodeKey)) {
         processedKeys.add(nodeKey)
-        const position = getNodePosition(nodeIndex)
-        nodePositions.set(nodeKey, position)
 
         if (linkType.sourceCardTypes.length === 1) {
           const ct = linkType.sourceCardTypes[0]
@@ -267,7 +249,7 @@ function buildGraph() {
             newNodes.push({
               id: ct.id,
               type: 'cardType',
-              position,
+              position: { x: 0, y: 0 },  // 临时位置，由 dagre 计算
               data: {
                 mode: 'single',
                 entityId: ct.id,
@@ -284,7 +266,7 @@ function buildGraph() {
           newNodes.push({
             id: nodeKey,
             type: 'cardType',
-            position,
+            position: { x: 0, y: 0 },  // 临时位置，由 dagre 计算
             data: {
               mode: 'combo',
               entityId: nodeKey,
@@ -293,7 +275,6 @@ function buildGraph() {
             },
           })
         }
-        nodeIndex++
       }
     }
 
@@ -303,8 +284,6 @@ function buildGraph() {
 
       if (!processedKeys.has(nodeKey)) {
         processedKeys.add(nodeKey)
-        const position = getNodePosition(nodeIndex)
-        nodePositions.set(nodeKey, position)
 
         if (linkType.targetCardTypes.length === 1) {
           const ct = linkType.targetCardTypes[0]
@@ -312,7 +291,7 @@ function buildGraph() {
             newNodes.push({
               id: ct.id,
               type: 'cardType',
-              position,
+              position: { x: 0, y: 0 },  // 临时位置，由 dagre 计算
               data: {
                 mode: 'single',
                 entityId: ct.id,
@@ -329,7 +308,7 @@ function buildGraph() {
           newNodes.push({
             id: nodeKey,
             type: 'cardType',
-            position,
+            position: { x: 0, y: 0 },  // 临时位置，由 dagre 计算
             data: {
               mode: 'combo',
               entityId: nodeKey,
@@ -338,35 +317,23 @@ function buildGraph() {
             },
           })
         }
-        nodeIndex++
       }
     }
 
-    // Create edge with calculated handles
+    // Create edge (handle 由后续计算)
     if (linkType.sourceCardTypes?.length && linkType.targetCardTypes?.length) {
       const sourceKey = generateNodeKey(linkType.sourceCardTypes)
       const targetKey = generateNodeKey(linkType.targetCardTypes)
-
-      const sourcePos = nodePositions.get(sourceKey)
-      const targetPos = nodePositions.get(targetKey)
-
-      let sourceHandle = 'right'
-      let targetHandle = 'left'
-
-      if (sourcePos && targetPos) {
-        const handles = calculateHandles(sourcePos, targetPos, nodeWidth, nodeHeight)
-        sourceHandle = handles.sourceHandle
-        targetHandle = handles.targetHandle
-      }
 
       newEdges.push({
         id: `edge-${linkType.id}`,
         source: sourceKey,
         target: targetKey,
-        sourceHandle,
-        targetHandle,
+        sourceHandle: 'right',  // 临时值，后续根据 dagre 位置计算
+        targetHandle: 'left',
         type: 'cardinality',
         animated: false,
+        zIndex: 1000,  // 连线层级高于节点
         label: `${linkType.sourceName} → ${linkType.targetName}`,
         style: { stroke: '#b8c5d3', strokeWidth: 1.5 },
         markerEnd: {
@@ -381,21 +348,48 @@ function buildGraph() {
     }
   }
 
-  // Calculate handle variants for edges between same node pairs to avoid overlap
+  // 第二遍：dagre 布局计算位置
+  const layoutedNodes = applyDagreLayout(newNodes, newEdges)
+
+  // 第三遍：基于 dagre 位置重新计算 handle
+  const nodePositions = new Map<string, { x: number; y: number }>()
+  for (const node of layoutedNodes) {
+    nodePositions.set(node.id, { ...node.position })
+  }
+
+  const nodeWidth = 280
+  const nodeHeight = 200
+
+  // 为每条边计算最佳 handle
+  for (let i = 0; i < newEdges.length; i++) {
+    const edge = newEdges[i]
+    if (!edge) continue
+
+    const sourcePos = nodePositions.get(edge.source)
+    const targetPos = nodePositions.get(edge.target)
+
+    if (sourcePos && targetPos) {
+      const handles = calculateHandles(sourcePos, targetPos, nodeWidth, nodeHeight)
+      newEdges[i] = {
+        ...edge,
+        sourceHandle: handles.sourceHandle,
+        targetHandle: handles.targetHandle,
+      }
+    }
+  }
+
+  // 第四遍：为平行边分配不同的 handle variant
   const edgePairCount = new Map<string, number>()
   const edgePairIndex = new Map<string, number>()
 
-  // First pass: count edges between each node pair
   for (const edge of newEdges) {
     const pairKey = [edge.source, edge.target].sort().join('|')
     edgePairCount.set(pairKey, (edgePairCount.get(pairKey) || 0) + 1)
   }
 
-  // Handle variants: for horizontal edges use top/bottom, for vertical use left/right
-  const horizontalVariants = ['-top', '', '-bottom'] // for left/right handles
-  const verticalVariants = ['-left', '', '-right']   // for top/bottom handles
+  const horizontalVariants = ['-top', '', '-bottom']
+  const verticalVariants = ['-left', '', '-right']
 
-  // Second pass: assign different handles to edges with multiple connections
   for (let i = 0; i < newEdges.length; i++) {
     const edge = newEdges[i]
     if (!edge) continue
@@ -407,13 +401,11 @@ function buildGraph() {
       const currentIndex = edgePairIndex.get(pairKey) || 0
       edgePairIndex.set(pairKey, currentIndex + 1)
 
-      // Check if this is a vertical connection
       const isVertical = edge.sourceHandle === 'top' || edge.sourceHandle === 'bottom'
       const variants = isVertical ? verticalVariants : horizontalVariants
       const variantIndex = currentIndex % variants.length
       const suffix = variants[variantIndex]
 
-      // Update handles with variant
       const baseSourceHandle = edge.sourceHandle || 'right'
       const baseTargetHandle = edge.targetHandle || 'left'
 
@@ -425,12 +417,9 @@ function buildGraph() {
     }
   }
 
-  // Store original data
-  allNodes.value = newNodes
+  allNodes.value = layoutedNodes
   allEdges.value = newEdges
-
-  // Initialize visible nodes and edges
-  nodes.value = [...newNodes]
+  nodes.value = [...layoutedNodes]
   edges.value = [...newEdges]
 }
 
@@ -932,7 +921,13 @@ function handleAutoLayout() {
   if (isFocusMode.value) {
     exitFocusMode()
   }
-  buildGraph()
+
+  // 用 dagre 重新布局
+  const layoutedNodes = applyDagreLayout(allNodes.value as Node[], allEdges.value as Edge[])
+  allNodes.value = layoutedNodes
+  nodes.value = [...layoutedNodes]
+  updateEdgeHandles()
+
   setTimeout(() => {
     vueFlowRef.value?.fitView({ padding: 0.2 })
   }, 100)
@@ -1634,6 +1629,11 @@ onMounted(() => {
 /* 选中边的箭头也变色 */
 .vue-flow__edge.selected marker path {
   fill: #f59e0b;
+}
+
+/* 连线标签容器层级提升，避免被节点覆盖 */
+.vue-flow__edge-labels {
+  z-index: 1000 !important;
 }
 
 .vue-flow__controls {

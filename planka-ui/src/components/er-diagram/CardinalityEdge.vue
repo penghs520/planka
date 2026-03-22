@@ -39,6 +39,7 @@ const path = computed(() =>
     targetX: props.targetX,
     targetY: props.targetY,
     targetPosition: props.targetPosition,
+    borderRadius: 0,  // 直角折线，类似 PowerDesigner
   })
 )
 
@@ -217,6 +218,16 @@ function handleDelete() {
     class="edge-interaction-path"
     @dblclick="onEdgeDoubleClick"
   />
+  <!-- White background stroke for tunnel effect -->
+  <path
+    :d="path[0]"
+    fill="none"
+    stroke="white"
+    :stroke-width="isSelected ? 8 : 6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="edge-background-path"
+  />
   <!-- Visible edge path -->
   <path
     :id="id"
@@ -239,7 +250,7 @@ function handleDelete() {
         transform: `translate(-50%, -50%) translate(${sourceLabelPosition.x}px, ${sourceLabelPosition.y}px)`,
         pointerEvents: 'all',
         cursor: 'pointer',
-        zIndex: isSelected ? 1000 : 1,
+        zIndex: isSelected ? 1001 : 1000,
       }"
       class="edge-label-group nodrag nopan"
       :class="{ selected: isSelected }"
@@ -258,7 +269,7 @@ function handleDelete() {
         transform: `translate(-50%, -50%) translate(${targetLabelPosition.x}px, ${targetLabelPosition.y}px)`,
         pointerEvents: 'all',
         cursor: 'pointer',
-        zIndex: isSelected ? 1000 : 1,
+        zIndex: isSelected ? 1001 : 1000,
       }"
       class="edge-label-group nodrag nopan"
       :class="{ selected: isSelected }"

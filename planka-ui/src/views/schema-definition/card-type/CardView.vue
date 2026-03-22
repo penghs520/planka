@@ -161,7 +161,7 @@ async function handleFormSuccess() {
 async function handleEditFromRoute() {
   const editId = route.query.edit as string | undefined
   if (editId) {
-    router.replace({ path: '/admin/card-type/card', query: {} })
+    router.replace({ path: '/admin/card-type', query: {} })
     const cardType = cardTypes.value.find((ct) => ct.id === editId)
     if (cardType) {
       handleEdit(cardType)
@@ -199,29 +199,20 @@ onMounted(async () => {
           <!-- 特征类型分组 -->
           <div v-if="traitTypes.length > 0" class="card-group">
             <div class="group-header">
-              <IconTag class="group-icon trait-color" />
               <span class="group-title">{{ t('admin.cardType.schemaSubType.TRAIT_CARD_TYPE') }}</span>
-              <span class="group-count">({{ traitTypes.length }})</span>
+              <span class="group-count">{{ traitTypes.length }}</span>
             </div>
-            <a-row :gutter="[16, 16]" class="card-grid">
+            <a-row :gutter="[12, 12]" class="card-grid">
               <a-col v-for="ct in traitTypes" :key="ct.id" :xs="24" :sm="12" :md="8" :lg="6">
-                <a-card class="type-card trait-card" hoverable @click="handleEdit(ct)">
-                  <div class="type-card-header">
-                    <div class="type-card-icon trait-bg">
-                      <IconTag />
-                    </div>
+                <div class="type-card" @click="handleEdit(ct)">
+                  <div class="type-card-main">
+                    <IconTag class="type-card-icon" />
                     <div class="type-card-info">
                       <div class="type-card-name">{{ ct.name }}</div>
                       <div v-if="ct.code" class="type-card-code">{{ ct.code }}</div>
                     </div>
-                  </div>
-                  <div class="type-card-tags">
-                    <a-tag :color="ct.enabled ? 'green' : 'gray'" size="small">
-                      {{ ct.enabled ? t('admin.status.enabled') : t('admin.status.disabled') }}
-                    </a-tag>
-                    <a-tag v-if="ct.systemCardType" color="blue" size="small">
-                      {{ t('admin.table.systemBuiltin') }}
-                    </a-tag>
+                    <span v-if="!ct.enabled" class="type-card-disabled">{{ t('admin.status.disabled') }}</span>
+                    <span v-if="ct.systemCardType" class="type-card-system">{{ t('admin.table.systemBuiltin') }}</span>
                   </div>
                   <div class="type-card-actions" @click.stop>
                     <a-tooltip v-if="!ct.systemCardType" :content="t('admin.action.edit')" mini>
@@ -253,7 +244,7 @@ onMounted(async () => {
                       </a-button>
                     </a-tooltip>
                   </div>
-                </a-card>
+                </div>
               </a-col>
             </a-row>
           </div>
@@ -261,37 +252,26 @@ onMounted(async () => {
           <!-- 实体类型分组 -->
           <div v-if="entityTypes.length > 0" class="card-group">
             <div class="group-header">
-              <IconFile class="group-icon entity-color" />
               <span class="group-title">{{ t('admin.cardType.schemaSubType.ENTITY_CARD_TYPE') }}</span>
-              <span class="group-count">({{ entityTypes.length }})</span>
+              <span class="group-count">{{ entityTypes.length }}</span>
             </div>
-            <a-row :gutter="[16, 16]" class="card-grid">
+            <a-row :gutter="[12, 12]" class="card-grid">
               <a-col v-for="ct in entityTypes" :key="ct.id" :xs="24" :sm="12" :md="8" :lg="6">
-                <a-card class="type-card entity-card" hoverable @click="handleEdit(ct)">
-                  <div class="type-card-header">
-                    <div class="type-card-icon entity-bg">
-                      <IconFile />
-                    </div>
+                <div class="type-card" @click="handleEdit(ct)">
+                  <div class="type-card-main">
+                    <IconFile class="type-card-icon" />
                     <div class="type-card-info">
                       <div class="type-card-name">{{ ct.name }}</div>
                       <div v-if="ct.code" class="type-card-code">{{ ct.code }}</div>
                     </div>
-                  </div>
-                  <div class="type-card-tags">
-                    <a-tag :color="ct.enabled ? 'green' : 'gray'" size="small">
-                      {{ ct.enabled ? t('admin.status.enabled') : t('admin.status.disabled') }}
-                    </a-tag>
-                    <a-tag v-if="ct.systemCardType" color="blue" size="small">
-                      {{ t('admin.table.systemBuiltin') }}
-                    </a-tag>
+                    <span v-if="!ct.enabled" class="type-card-disabled">{{ t('admin.status.disabled') }}</span>
+                    <span v-if="ct.systemCardType" class="type-card-system">{{ t('admin.table.systemBuiltin') }}</span>
                   </div>
                   <div
                     v-if="'parentTypes' in ct && ct.parentTypes && ct.parentTypes.length > 0"
                     class="type-card-parents"
                   >
-                    <a-tag v-for="p in ct.parentTypes" :key="p.id" size="small" color="arcoblue">
-                      {{ p.name }}
-                    </a-tag>
+                    <span v-for="p in ct.parentTypes" :key="p.id" class="parent-label">{{ p.name }}</span>
                   </div>
                   <div class="type-card-actions" @click.stop>
                     <a-tooltip v-if="!ct.systemCardType" :content="t('admin.action.edit')" mini>
@@ -323,7 +303,7 @@ onMounted(async () => {
                       </a-button>
                     </a-tooltip>
                   </div>
-                </a-card>
+                </div>
               </a-col>
             </a-row>
           </div>
@@ -401,7 +381,7 @@ onMounted(async () => {
 
 /* 分组 */
 .card-group {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .card-group:last-child {
@@ -412,76 +392,48 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--color-border-1);
-}
-
-.group-icon {
-  font-size: 16px;
-}
-
-.trait-color {
-  color: #722ED1;
-}
-
-.entity-color {
-  color: #3370FF;
+  margin-bottom: 10px;
 }
 
 .group-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text-1);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-3);
 }
 
 .group-count {
   font-size: 12px;
-  color: var(--color-text-3);
+  color: var(--color-text-4);
 }
 
 /* 卡片 */
 .type-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--color-bg-2);
+  border: 1px solid var(--color-border-1);
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .type-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-border-3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-.type-card :deep(.arco-card-body) {
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.type-card-header {
+.type-card-main {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .type-card-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #fff;
+  font-size: 16px;
+  color: var(--color-text-3);
   flex-shrink: 0;
-}
-
-.trait-bg {
-  background: linear-gradient(135deg, #722ED1, #9254DE);
-}
-
-.entity-bg {
-  background: linear-gradient(135deg, #3370FF, #5B8FF9);
 }
 
 .type-card-info {
@@ -490,8 +442,8 @@ onMounted(async () => {
 }
 
 .type-card-name {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--color-text-1);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -499,44 +451,53 @@ onMounted(async () => {
 }
 
 .type-card-code {
-  font-size: 12px;
-  color: var(--color-text-3);
+  font-size: 11px;
+  color: var(--color-text-4);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
-.type-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+.type-card-disabled {
+  font-size: 11px;
+  color: var(--color-text-4);
+  flex-shrink: 0;
+}
+
+.type-card-system {
+  font-size: 11px;
+  color: var(--color-text-4);
+  flex-shrink: 0;
 }
 
 .type-card-parents {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+  padding-left: 24px;
+}
+
+.parent-label {
+  font-size: 11px;
+  color: var(--color-text-3);
+  background: var(--color-fill-1);
+  padding: 1px 6px;
+  border-radius: 3px;
 }
 
 .type-card-actions {
   display: flex;
   align-items: center;
   gap: 2px;
-  padding-top: 6px;
-  border-top: 1px solid var(--color-border-1);
   height: 0;
-  padding: 0;
-  border: none;
   overflow: hidden;
   opacity: 0;
-  transition: height 0.2s, padding-top 0.2s, opacity 0.2s;
+  transition: height 0.15s, opacity 0.15s;
 }
 
 .type-card:hover .type-card-actions {
   height: auto;
-  padding-top: 6px;
-  border-top: 1px solid var(--color-border-1);
   overflow: visible;
   opacity: 1;
 }

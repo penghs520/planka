@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.57.0",
+    "@dagrejs/dagre": "^2.0.4",
     "@tiptap/core": "^3.18.0",
     "@tiptap/extension-bubble-menu": "^3.18.0",
     "@tiptap/extension-code-block-lowlight": "^3.18.0",
