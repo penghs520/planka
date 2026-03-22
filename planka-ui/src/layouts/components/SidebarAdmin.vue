@@ -43,9 +43,9 @@ const sections: MenuSection[] = [
     items: [
       { key: 'card-type', titleKey: 'admin.menu.cardType', icon: IconCardType, path: '/admin/card-type' },
       { key: 'link-type', titleKey: 'admin.menu.linkType', icon: IconLinkType, path: '/admin/link-type' },
+      { key: 'structure', titleKey: 'admin.menu.structure', icon: IconStructure, path: '/admin/structure' },
       { key: 'formula-definition', titleKey: 'admin.menu.formulaDefinition', icon: IconFormulaDefinition, path: '/admin/formula-definition' },
       { key: 'biz-rule-definition', titleKey: 'admin.menu.bizRuleDefinition', icon: IconThunderbolt, path: '/admin/biz-rule-definition' },
-      { key: 'structure', titleKey: 'admin.menu.structure', icon: IconStructure, path: '/admin/structure' },
     ],
   },
   {

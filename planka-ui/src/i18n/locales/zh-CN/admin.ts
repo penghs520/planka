@@ -4,7 +4,7 @@
 export default {
   // 侧边栏菜单分组
   menuGroup: {
-    schemaDefinition: '定义管理',
+    schemaDefinition: '建模',
     configuration: '配置',
     operations: '运营',
     administration: '管理',
@@ -12,12 +12,12 @@ export default {
 
   // 侧边栏菜单
   menu: {
-    cardType: '实体类型定义',
-    fieldDefinition: '属性定义',
+    cardType: '实体类型',
+    fieldDefinition: '属性',
     formulaDefinition: '计算公式',
-    bizRuleDefinition: '业务规则定义',
-    linkType: '实体关系定义',
-    structure: '架构线',
+    bizRuleDefinition: '业务规则',
+    linkType: '实体关系',
+    structure: '层级关系',
     view: '视图配置',
     menuConfig: '菜单配置',
     auditLog: '审计日志',
@@ -796,7 +796,7 @@ targetFieldsRequired: '请选择目标属性',
 
   // 架构线模块
   structure: {
-    title: '架构线',
+    title: '层级关系',
     createButton: '新建架构线',
     emptyDescription: '暂无架构线定义',
     createTitle: '新建架构线',
@@ -992,9 +992,9 @@ targetFieldsRequired: '请选择目标属性',
     },
   },
 
-  // 业务规则定义（跨实体类型列表页）
+  // 业务规则（跨实体类型列表页）
   bizRuleDefinition: {
-    title: '业务规则定义',
+    title: '业务规则',
     filterNamePlaceholder: '名称',
     filterCardType: '实体类型',
     entityTypeColumn: '实体类型',

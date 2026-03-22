@@ -4,7 +4,7 @@
 export default {
   // Sidebar menu groups
   menuGroup: {
-    schemaDefinition: 'DEFINITIONS',
+    schemaDefinition: 'MODELING',
     configuration: 'CONFIGURATION',
     operations: 'OPERATIONS',
     administration: 'ADMINISTRATION',
@@ -12,12 +12,12 @@ export default {
 
   // Sidebar menu
   menu: {
-    cardType: 'Entity Type Definitions',
-    fieldDefinition: 'Field Definitions',
+    cardType: 'Entity Types',
+    fieldDefinition: 'Fields',
     formulaDefinition: 'Formulas',
-    bizRuleDefinition: 'Business Rule Definitions',
-    linkType: 'Entity Relation Definitions',
-    structure: 'Structure Lines',
+    bizRuleDefinition: 'Business Rules',
+    linkType: 'Entity Relations',
+    structure: 'Hierarchy',
     view: 'View Configuration',
     menuConfig: 'Menu Configuration',
     auditLog: 'Audit Log',
@@ -752,7 +752,7 @@ targetFieldsRequired: 'Please select target fields',
 
   // Structure Lines module
   structure: {
-    title: 'Structure Lines',
+    title: 'Hierarchy',
     createButton: 'New Structure Line',
     emptyDescription: 'No structure line definitions',
     createTitle: 'Create Structure Line',
@@ -1152,7 +1152,7 @@ targetFieldsRequired: 'Please select target fields',
 
   // Business rule definitions (cross entity type list)
   bizRuleDefinition: {
-    title: 'Business Rule Definitions',
+    title: 'Business Rules',
     filterNamePlaceholder: 'Name',
     filterCardType: 'Entity type',
     entityTypeColumn: 'Entity type',
