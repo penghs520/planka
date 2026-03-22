@@ -125,6 +125,7 @@ export default {
   // View types
   viewType: {
     list: 'List',
+    card: 'Card',
     graph: 'Graph',
   },
 
@@ -336,6 +337,8 @@ export default {
     changePassword: 'Change Password',
     linkTypeList: 'Link Type List',
     linkTypeGraph: 'Link Type Graph',
+    cardTypeList: 'Card Type List',
+    cardTypeCard: 'Card Type Cards',
     detailTemplate: 'Detail Template',
     createDetailTemplate: 'Create Detail Template',
     editDetailTemplate: 'Edit Detail Template',

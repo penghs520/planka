@@ -125,6 +125,7 @@ export default {
   // 视图类型
   viewType: {
     list: '列表',
+    card: '卡片',
     graph: '图形',
   },
 
@@ -336,6 +337,8 @@ export default {
     changePassword: '修改密码',
     linkTypeList: '关联类型列表',
     linkTypeGraph: '关联类型图',
+    cardTypeList: '实体类型列表',
+    cardTypeCard: '实体类型卡片',
     detailTemplate: '详情页模板',
     createDetailTemplate: '新建详情页模板',
     editDetailTemplate: '编辑详情页模板',

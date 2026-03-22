@@ -14,6 +14,7 @@ import {
 import { cardTypeApi } from '@/api'
 import HighlightText from '@/components/common/HighlightText.vue'
 import CreateButton from '@/components/common/CreateButton.vue'
+import ViewSwitcher from '@/components/card-type/ViewSwitcher.vue'
 import SchemaReferenceDrawer from '@/components/schema/SchemaReferenceDrawer.vue'
 import SchemaChangelogDrawer from '@/components/schema/SchemaChangelogDrawer.vue'
 import { AdminTable, AdminTableActions } from '@/components/table'
@@ -216,6 +217,8 @@ onMounted(async () => {
   <div class="card-type-page">
     <div class="card-type-content">
       <div class="content-header">
+        <ViewSwitcher />
+        <div class="header-divider"></div>
         <a-input-search
           v-model="searchKeyword"
           :placeholder="t('admin.search.placeholder')"
@@ -357,6 +360,13 @@ onMounted(async () => {
 
 .header-spacer {
   flex: 1;
+}
+
+.header-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border-2);
+  margin: 0 4px;
 }
 
 /* 表格名称列 */

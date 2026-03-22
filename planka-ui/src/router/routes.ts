@@ -201,12 +201,32 @@ export const routes: RouteRecordRaw[] = [
           // 实体类型管理
           {
             path: 'card-type',
-            name: 'CardTypeList',
-            component: () => import('@/views/schema-definition/card-type/ListView.vue'),
+            name: 'CardType',
+            redirect: '/admin/card-type/list',
             meta: {
               titleKey: 'admin.cardType.title',
               activeMenu: 'card-type',
             },
+            children: [
+              {
+                path: 'list',
+                name: 'CardTypeList',
+                component: () => import('@/views/schema-definition/card-type/ListView.vue'),
+                meta: {
+                  titleKey: 'common.route.cardTypeList',
+                  activeMenu: 'card-type',
+                },
+              },
+              {
+                path: 'card',
+                name: 'CardTypeCard',
+                component: () => import('@/views/schema-definition/card-type/CardView.vue'),
+                meta: {
+                  titleKey: 'common.route.cardTypeCard',
+                  activeMenu: 'card-type',
+                },
+              },
+            ],
           },
           // 关联类型管理
           {
