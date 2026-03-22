@@ -324,7 +324,7 @@ export const routes: RouteRecordRaw[] = [
               activeMenu: 'billing',
             },
           },
-          // 审计日志
+          // 变更日志
           {
             path: 'audit-log',
             name: 'AuditLog',

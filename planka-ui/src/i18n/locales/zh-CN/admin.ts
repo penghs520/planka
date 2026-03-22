@@ -21,7 +21,7 @@ export default {
     structure: '级联关系',
     view: '视图配置',
     menuConfig: '菜单配置',
-    auditLog: '审计日志',
+    auditLog: '变更日志',
     documentManagement: '文档管理',
     workflowDefinition: '工作流',
     ai: 'AI',
@@ -68,7 +68,7 @@ export default {
     enable: '启用',
     disable: '停用',
     reference: '引用关系',
-    changelog: '审计日志',
+    changelog: '变更日志',
     save: '保存',
     cancel: '取消',
     back: '返回',
@@ -922,15 +922,15 @@ targetFieldsRequired: '请选择目标属性',
     title: '计费',
   },
 
-  // 审计日志模块
+  // 变更日志模块
   auditLog: {
-    title: '审计日志',
+    title: '变更日志',
     searchPlaceholder: '搜索Schema名称、变更摘要',
     selectType: '选择类型',
     selectOperator: '选择操作人',
     allTypes: '全部类型',
     allOperators: '全部操作人',
-    empty: '暂无审计日志',
+    empty: '暂无变更日志',
   },
 
   documentManagement: {
@@ -953,12 +953,12 @@ targetFieldsRequired: '请选择目标属性',
     comingSoon: '功能建设中',
   },
 
-  // 审计日志
+  // 变更日志
   changelog: {
-    title: '审计日志',
-    titleWithName: '审计日志 - {name}',
-    empty: '暂无审计日志',
-    loadFailed: '获取审计日志失败',
+    title: '变更日志',
+    titleWithName: '变更日志 - {name}',
+    empty: '暂无变更日志',
+    loadFailed: '获取变更日志失败',
     loadingMore: '加载中...',
     loadedAll: '已加载全部',
     operator: '操作人',

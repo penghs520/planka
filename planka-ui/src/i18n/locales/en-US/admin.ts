@@ -21,7 +21,7 @@ export default {
     structure: 'Hierarchy',
     view: 'View Configuration',
     menuConfig: 'Menu Configuration',
-    auditLog: 'Audit Log',
+    auditLog: 'Change Log',
     documentManagement: 'Documents',
     workflowDefinition: 'Workflows',
     ai: 'AI',
@@ -67,7 +67,7 @@ export default {
     enable: 'Enable',
     disable: 'Disable',
     reference: 'References',
-    changelog: 'Audit Log',
+    changelog: 'Change Log',
     save: 'Save',
     cancel: 'Cancel',
     back: 'Back',
@@ -878,12 +878,12 @@ targetFieldsRequired: 'Please select target fields',
     title: 'Billing',
   },
 
-  // Audit Log
+  // Change Log
   changelog: {
-    title: 'Audit Log',
-    titleWithName: 'Audit Log - {name}',
-    empty: 'No audit logs',
-    loadFailed: 'Failed to fetch audit logs',
+    title: 'Change Log',
+    titleWithName: 'Change Log - {name}',
+    empty: 'No change logs',
+    loadFailed: 'Failed to fetch change logs',
     loadingMore: 'Loading...',
     loadedAll: 'All loaded',
     operator: 'Operator',
@@ -963,15 +963,15 @@ targetFieldsRequired: 'Please select target fields',
     },
   },
 
-  // Audit Log module
+  // Change Log module
   auditLog: {
-    title: 'Audit Log',
+    title: 'Change Log',
     searchPlaceholder: 'Search schema name, summary',
     selectType: 'Select Type',
     selectOperator: 'Select Operator',
     allTypes: 'All Types',
     allOperators: 'All Operators',
-    empty: 'No audit logs',
+    empty: 'No change logs',
   },
 
   documentManagement: {

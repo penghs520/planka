@@ -171,7 +171,7 @@ public interface CardServiceClient {
     /**
      * 批量查询卡片名称
      * <p>
-     * 轻量级查询接口，只返回卡片ID和标题映射，用于审计日志、下拉框等只需要显示名称的场景
+     * 轻量级查询接口，只返回卡片ID和标题映射，用于变更日志、下拉框等只需要显示名称的场景
      *
      * @param operatorId 操作人ID（成员卡片ID）
      * @param cardIds 卡片ID列表

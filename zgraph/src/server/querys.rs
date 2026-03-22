@@ -283,7 +283,7 @@ fn build_filter_context<'a, T: Transaction<'a>>(
 
 /// 查询卡片标题
 ///
-/// 轻量级查询接口，只返回卡片ID和标题映射，用于审计日志、下拉框等只需要显示名称的场景
+/// 轻量级查询接口，只返回卡片ID和标题映射，用于变更日志、下拉框等只需要显示名称的场景
 pub fn query_card_titles<D: Database>(
     request: QueryCardTitlesRequest,
     db: &D,

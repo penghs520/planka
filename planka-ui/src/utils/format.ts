@@ -71,7 +71,7 @@ export function getRelativeTime(dateStr?: string): RelativeTimeResult {
 
 /**
  * 格式化日期时间含秒 (YYYY-MM-DD HH:mm:ss)
- * 用于审计日志等需要精确到秒的场景
+ * 用于变更日志等需要精确到秒的场景
  * @param value 日期字符串或时间戳
  */
 export function formatDateTimeWithSeconds(value?: string | number): string {

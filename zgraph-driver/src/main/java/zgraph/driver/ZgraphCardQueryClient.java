@@ -123,7 +123,7 @@ public class ZgraphCardQueryClient {
     /**
      * 批量查询卡片标题
      * <p>
-     * 轻量级查询，只返回卡片ID和proto Title的映射，用于审计日志等场景
+     * 轻量级查询，只返回卡片ID和proto Title的映射，用于变更日志等场景
      *
      * @param cardIds 卡片ID列表
      * @return 卡片ID到标题的映射 (proto Title)

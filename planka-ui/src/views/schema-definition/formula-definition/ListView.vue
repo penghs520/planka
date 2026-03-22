@@ -149,7 +149,7 @@
       :schema-type="SchemaType.FORMULA_DEFINITION"
     />
 
-    <!-- 审计日志抽屉 -->
+    <!-- 变更日志抽屉 -->
     <SchemaChangelogDrawer
       v-model:visible="changelogDrawerVisible"
       :schema-id="currentChangelogSchemaId"
@@ -199,7 +199,7 @@ const editFormulaId = ref<string | undefined>(undefined)
 const referenceDrawerVisible = ref(false)
 const currentReferenceSchemaId = ref<string | undefined>(undefined)
 
-// 审计日志抽屉状态
+// 变更日志抽屉状态
 const changelogDrawerVisible = ref(false)
 const currentChangelogSchemaId = ref<string | undefined>(undefined)
 const currentChangelogSchemaName = ref<string | undefined>(undefined)
@@ -352,7 +352,7 @@ function handleShowReference(formulaId: string) {
   referenceDrawerVisible.value = true
 }
 
-// 显示审计日志
+// 显示变更日志
 function handleShowChangelog(formulaId: string, formulaName: string) {
   currentChangelogSchemaId.value = formulaId
   currentChangelogSchemaName.value = formulaName

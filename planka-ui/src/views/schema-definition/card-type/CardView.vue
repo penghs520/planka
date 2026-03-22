@@ -40,7 +40,7 @@ const editingCardType = ref<CardTypeDefinition | null>(null)
 const referenceDrawerVisible = ref(false)
 const currentReferenceSchemaId = ref<string | undefined>(undefined)
 
-// 审计日志抽屉状态
+// 变更日志抽屉状态
 const changelogDrawerVisible = ref(false)
 const currentChangelogSchemaId = ref<string | undefined>(undefined)
 const currentChangelogSchemaName = ref<string | undefined>(undefined)
@@ -144,7 +144,7 @@ function handleReference(cardType: CardTypeDefinition) {
   referenceDrawerVisible.value = true
 }
 
-// 打开审计日志抽屉
+// 打开变更日志抽屉
 function handleChangelog(cardType: CardTypeDefinition) {
   if (!cardType.id) return
   currentChangelogSchemaId.value = cardType.id
@@ -358,7 +358,7 @@ onMounted(async () => {
       :schema-id="currentReferenceSchemaId"
     />
 
-    <!-- 审计日志抽屉 -->
+    <!-- 变更日志抽屉 -->
     <SchemaChangelogDrawer
       v-model:visible="changelogDrawerVisible"
       :schema-id="currentChangelogSchemaId"

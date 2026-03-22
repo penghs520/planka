@@ -129,7 +129,7 @@ public interface CardRepository {
     /**
      * 批量查询卡片名称
      * <p>
-     * 轻量级查询，只返回卡片ID和标题的映射，用于审计日志等场景
+     * 轻量级查询，只返回卡片ID和标题的映射，用于变更日志等场景
      *
      * @param cardIds 卡片ID列表
      * @param operatorId 操作人ID（用于权限控制）
