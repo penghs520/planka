@@ -489,9 +489,9 @@ async function handleFieldConfigCreated() {
   margin-right: 8px;
 }
 
-/* body-class 渲染在 Drawer 内部 */
+/* body-class 渲染在 Drawer 内部；与主内容区白底一致，避免 fill-1 灰底 */
 .card-type-form-drawer-body.arco-drawer-body {
-  background-color: var(--color-fill-1);
+  background-color: var(--color-main-panel);
   padding: 0 16px 16px;
 }
 </style>
