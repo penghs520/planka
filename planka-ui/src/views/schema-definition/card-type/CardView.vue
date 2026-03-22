@@ -223,7 +223,7 @@ onMounted(async () => {
                       {{ ct.enabled ? t('admin.status.enabled') : t('admin.status.disabled') }}
                     </a-tag>
                     <a-tag v-if="ct.systemCardType" color="blue" size="small">
-                      {{ t('admin.status.systemBuiltin') }}
+                      {{ t('admin.table.systemBuiltin') }}
                     </a-tag>
                   </div>
                   <div class="type-card-actions" @click.stop>
@@ -275,7 +275,7 @@ onMounted(async () => {
                       {{ ct.enabled ? t('admin.status.enabled') : t('admin.status.disabled') }}
                     </a-tag>
                     <a-tag v-if="ct.systemCardType" color="blue" size="small">
-                      {{ t('admin.status.systemBuiltin') }}
+                      {{ t('admin.table.systemBuiltin') }}
                     </a-tag>
                   </div>
                   <div
