@@ -6,7 +6,7 @@ import { Message } from '@arco-design/web-vue'
 import { cardTypeApi } from '@/api'
 import SaveButton from '@/components/common/SaveButton.vue'
 import CancelButton from '@/components/common/CancelButton.vue'
-import FieldTypeIcon from '@/components/field/FieldTypeIcon.vue'
+import SelectFieldTypeModal from './components/SelectFieldTypeModal.vue'
 import { SchemaSubType } from '@/types/schema'
 import { DateFormat } from '@/types/field'
 import { getFieldTypeLabelI18n, supportsValueSource } from './formatters'
@@ -116,19 +116,6 @@ const formData = ref<{
   levelBindings: [],
 })
 
-// 支持的字段类型列表
-const fieldTypes = [
-  SchemaSubType.TEXT_FIELD,
-  SchemaSubType.MULTI_LINE_TEXT_FIELD,
-  SchemaSubType.DATE_FIELD,
-  SchemaSubType.NUMBER_FIELD,
-  SchemaSubType.ENUM_FIELD,
-  SchemaSubType.STRUCTURE_FIELD,
-  SchemaSubType.MARKDOWN_FIELD,
-  SchemaSubType.ATTACHMENT_FIELD,
-  SchemaSubType.WEB_URL_FIELD,
-]
-
 function getFieldTypeLabel(subType: SchemaSubType): string {
   return getFieldTypeLabelI18n(subType, t)
 }
@@ -167,7 +154,8 @@ const isTextType = computed(() => {
 /** 值来源是否为手动输入 */
 const valueSourceIsManual = computed(() => formData.value.valueSource === 'MANUAL')
 
-function handleSelectFieldType(type: SchemaSubType): void {
+/** 选中类型后写入表单默认值（不含步骤切换） */
+function applyTypeDefaults(type: SchemaSubType): void {
   selectedType.value = type
   switch (type) {
     case SchemaSubType.NUMBER_FIELD:
@@ -194,7 +182,13 @@ function handleSelectFieldType(type: SchemaSubType): void {
       formData.value.structureId = ''
       formData.value.levelBindings = []
       break
+    default:
+      break
   }
+}
+
+function handleFieldTypePicked(type: SchemaSubType): void {
+  applyTypeDefaults(type)
   step.value = 2
 }
 
@@ -338,30 +332,11 @@ async function handleSave(): Promise<void> {
 </script>
 
 <template>
-  <!-- 步骤1：类型选择弹窗 -->
-  <a-modal
+  <SelectFieldTypeModal
     :visible="drawerVisible && step === 1"
-    :title="t('admin.cardType.fieldConfig.selectFieldType')"
-    :width="560"
-    :mask-closable="true"
-    :esc-to-close="true"
-    :footer="false"
     @cancel="handleCancel"
-  >
-    <div class="field-type-selection-modal">
-      <div class="field-type-grid-modal">
-        <div
-          v-for="type in fieldTypes"
-          :key="type"
-          class="field-type-card-modal"
-          @click="handleSelectFieldType(type)"
-        >
-          <FieldTypeIcon :field-type="type" class="field-type-icon-modal" />
-          <div class="field-type-name-modal">{{ getFieldTypeLabel(type) }}</div>
-        </div>
-      </div>
-    </div>
-  </a-modal>
+    @confirm="handleFieldTypePicked"
+  />
 
   <!-- 步骤2：配置表单抽屉 -->
   <a-drawer
@@ -498,57 +473,6 @@ async function handleSave(): Promise<void> {
 </template>
 
 <style scoped>
-/* 类型选择弹窗 */
-.field-type-selection-modal {
-  padding: 8px 0;
-}
-
-.field-type-grid-modal {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.field-type-card-modal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 16px;
-  border: 1px solid var(--color-border-2);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--color-bg-2);
-}
-
-.field-type-card-modal:hover {
-  border-color: rgb(var(--primary-5));
-  background: rgb(var(--primary-1));
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.field-type-icon-modal {
-  font-size: 28px !important;
-  margin-bottom: 8px;
-  color: var(--color-text-2) !important;
-  transition: color 0.2s;
-}
-
-.field-type-card-modal:hover .field-type-icon-modal {
-  color: rgb(var(--primary-6)) !important;
-}
-
-.field-type-name-modal {
-  font-size: 14px;
-  color: var(--color-text-1);
-  white-space: nowrap;
-}
-
-.field-type-card-modal:hover .field-type-name-modal {
-  color: rgb(var(--primary-6));
-}
-
 /* 表单配置样式 */
 .field-config-form {
   padding: 4px 0;
