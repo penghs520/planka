@@ -54,7 +54,7 @@ export const cardApi = {
   },
 
   /**
-   * 丢弃卡片（放入回收站）
+   * 回收卡片（放入回收站）
    */
   discard(cardId: string, reason?: string): Promise<void> {
     const params = reason ? { discardReason: reason } : {}
@@ -62,7 +62,7 @@ export const cardApi = {
   },
 
   /**
-   * 批量归档卡片
+   * 批量存档卡片
    */
   batchArchive(data: BatchOperationRequest): Promise<void> {
     return request.post(`${CARD_URL}/archive`, data)
@@ -76,7 +76,7 @@ export const cardApi = {
   },
 
   /**
-   * 批量丢弃卡片
+   * 批量回收卡片
    */
   batchDiscard(data: BatchOperationRequest): Promise<void> {
     return request.delete(`${CARD_URL}/batch`, { data })

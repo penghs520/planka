@@ -99,7 +99,7 @@ public final class LinkTypeDefinition extends AbstractSchemaDefinition<LinkTypeI
     private boolean systemLinkType = false;
 
     /**
-     * 值来源是否为系统更新，例如创建人、丢弃人、归档人
+     * 值来源是否为系统更新，例如创建人、回收人、存档人
      */
     @Setter
     @JsonProperty("systemInput")

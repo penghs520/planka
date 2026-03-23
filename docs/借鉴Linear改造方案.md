@@ -155,7 +155,7 @@ Response: PageResult<{ id, title, code, cardTypeName, status }>
 ### 后端
 
 - `planka-common`：`SystemSchemaIds` 扩展 Team/Project/Issue 及 link、field ID。
-- `user-service`：`BuiltinCardTypeService.java`（合并原成员特征类型/成员类型、任意卡特征类型与创建人/归档人/丢弃人、Team/Project/Issue）；`OrganizationService.createOrganization` 中按序调用；`BuiltinCardTypeMigrationRunner.java`。
+- `user-service`：`BuiltinCardTypeService.java`（合并原成员特征类型/成员类型、任意卡特征类型与创建人/存档人/回收人、Team/Project/Issue）；`OrganizationService.createOrganization` 中按序调用；`BuiltinCardTypeMigrationRunner.java`。
 - **不新增** `TeamController` / `sys_team` 表；列表与 CRUD 走现有 **card-service** 分页查询与卡片 API。
 
 ### 前端（Linear 式侧栏）

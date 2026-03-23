@@ -11,14 +11,14 @@ import cn.planka.domain.schema.CardActionId;
 public enum BuiltInActionType {
 
     /**
-     * 丢弃
+     * 回收
      * <p>
      * 将卡片状态设置为 DISCARDED
      */
     DISCARD,
 
     /**
-     * 归档
+     * 存档
      * <p>
      * 将卡片状态设置为 ARCHIVED
      */
@@ -50,8 +50,8 @@ public enum BuiltInActionType {
      */
     public String getDefaultName() {
         return switch (this) {
-            case DISCARD -> "丢弃";
-            case ARCHIVE -> "归档";
+            case DISCARD -> "回收";
+            case ARCHIVE -> "存档";
             case RESTORE -> "还原";
             case BLOCK_TOGGLE -> "阻塞/解阻";
             case HIGHLIGHT_TOGGLE -> "点亮/暂停";

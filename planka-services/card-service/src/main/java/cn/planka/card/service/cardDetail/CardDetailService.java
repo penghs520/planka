@@ -336,13 +336,13 @@ public class CardDetailService {
 
         // 2. 自定义字段：按字段类型排列，每行四列（25%）
         // 独占一行的类型：TEXTAREA(多行文本)、MARKDOWN、ATTACHMENT(附件)
-        // 排除字段：归档人、丢弃人
+        // 排除字段：存档人、回收人
         boolean isFirstField = true;
         if (CollectionUtils.isNotEmpty(fieldConfigs)) {
             for (cn.planka.domain.schema.definition.fieldconfig.FieldConfig fieldConfig : fieldConfigs) {
                 String fieldId = fieldConfig.getFieldId().value();
 
-                // 排除归档人和丢弃人字段
+                // 排除存档人和回收人字段
                 if (isArchiverOrDiscarderField(fieldId)) {
                     continue;
                 }
@@ -429,7 +429,7 @@ public class CardDetailService {
     }
 
     /**
-     * 判断是否为归档人或丢弃人字段
+     * 判断是否为存档人或回收人字段
      */
     private boolean isArchiverOrDiscarderField(String fieldId) {
         return fieldId.contains(SystemSchemaIds.LINK_ARCHIVER_PATTERN)

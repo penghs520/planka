@@ -205,7 +205,7 @@ fn test_state_condition() {
     // 执行查询
     let response = query_cards(request, &test_db.db).unwrap();
 
-    // 验证结果 - 应该只返回已归档的卡片
+    // 验证结果 - 应该只返回已存档的卡片
     assert_eq!(response.cards.len(), 1);
     assert_eq!(response.cards[0].id, 2);
 }

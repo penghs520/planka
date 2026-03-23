@@ -45,9 +45,9 @@ public final class DateConditionItem extends AbstractConditionItem {
         CREATED_AT,
         /** 更新时间 */
         UPDATED_AT,
-        /** 丢弃时间 */
+        /** 回收时间 */
         DISCARDED_AT,
-        /** 归档时间 */
+        /** 存档时间 */
         ARCHIVED_AT
     }
 

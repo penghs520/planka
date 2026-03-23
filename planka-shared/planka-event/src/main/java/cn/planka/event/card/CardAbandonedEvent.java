@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 卡片丢弃事件
+ * 卡片回收事件
  */
 @Getter
 public class CardAbandonedEvent extends CardEvent {
@@ -14,7 +14,7 @@ public class CardAbandonedEvent extends CardEvent {
     private static final String EVENT_TYPE = "card.abandoned";
 
     /**
-     * 丢弃原因
+     * 回收原因
      */
     @Setter
     private String reason;

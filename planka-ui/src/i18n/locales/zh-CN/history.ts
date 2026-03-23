@@ -5,8 +5,8 @@ export default {
   // 操作类型
   operation: {
     CARD_CREATED: '创建卡片',
-    CARD_ARCHIVED: '归档卡片',
-    CARD_ABANDONED: '丢弃卡片',
+    CARD_ARCHIVED: '存档卡片',
+    CARD_ABANDONED: '回收卡片',
     CARD_RESTORED: '还原卡片',
     CARD_TYPE_CHANGED: '切换实体类型',
     FIELD_TITLE_UPDATED: '修改标题',
@@ -76,9 +76,9 @@ export default {
   // 消息模板 (对应后端 messageKey)
   message: {
     cardCreated: '创建卡片',
-    cardArchived: '归档卡片',
-    cardAbandoned: '丢弃卡片',
-    cardAbandonedWithReason: '丢弃卡片，原因：{0}',
+    cardArchived: '存档卡片',
+    cardAbandoned: '回收卡片',
+    cardAbandonedWithReason: '回收卡片，原因：{0}',
     cardRestored: '还原卡片',
     fieldUpdated: '将 {fieldName} 从 {oldValue} 修改为 {newValue}',
     fieldAdded: '设置 {fieldName} 为 {value}',

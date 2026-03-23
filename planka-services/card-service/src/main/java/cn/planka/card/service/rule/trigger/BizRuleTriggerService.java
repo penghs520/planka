@@ -45,14 +45,14 @@ public class BizRuleTriggerService {
     }
 
     /**
-     * 触发卡片丢弃规则
+     * 触发卡片回收规则
      */
     public void triggerOnDiscard(CardDTO card, String operatorId) {
         trigger(card, BizRuleDefinition.TriggerEvent.ON_DISCARD, operatorId, false);
     }
 
     /**
-     * 触发卡片归档规则
+     * 触发卡片存档规则
      */
     public void triggerOnArchive(CardDTO card, String operatorId) {
         trigger(card, BizRuleDefinition.TriggerEvent.ON_ARCHIVE, operatorId, false);

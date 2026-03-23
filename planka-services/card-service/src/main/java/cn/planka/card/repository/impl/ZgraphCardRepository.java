@@ -190,12 +190,12 @@ public class ZgraphCardRepository implements CardRepository {
         try {
             CompletableFuture<BatchCardCommonResponse> future = writeClient.batchUpdateCardField(batchRequest);
             BatchCardCommonResponse response = future.get(DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-            logger.info("批量丢弃卡片完成，成功: {}, 失败: {}",
+            logger.info("批量回收卡片完成，成功: {}, 失败: {}",
                     response.getSuccess(), response.getFailedIdsCount());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            logger.error("批量丢弃卡片失败", e);
+            logger.error("批量回收卡片失败", e);
             Thread.currentThread().interrupt();
-            throw new RuntimeException("批量丢弃卡片失败: " + e.getMessage(), e);
+            throw new RuntimeException("批量回收卡片失败: " + e.getMessage(), e);
         }
     }
 
@@ -221,12 +221,12 @@ public class ZgraphCardRepository implements CardRepository {
         try {
             CompletableFuture<BatchCardCommonResponse> future = writeClient.batchUpdateCardField(batchRequest);
             BatchCardCommonResponse response = future.get(DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-            logger.info("批量归档卡片完成，成功: {}, 失败: {}",
+            logger.info("批量存档卡片完成，成功: {}, 失败: {}",
                     response.getSuccess(), response.getFailedIdsCount());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            logger.error("批量归档卡片失败", e);
+            logger.error("批量存档卡片失败", e);
             Thread.currentThread().interrupt();
-            throw new RuntimeException("批量归档卡片失败: " + e.getMessage(), e);
+            throw new RuntimeException("批量存档卡片失败: " + e.getMessage(), e);
         }
     }
 

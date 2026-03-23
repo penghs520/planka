@@ -97,7 +97,7 @@ public class CardHistoryEventListener {
         );
 
         cardHistoryService.recordHistory(command);
-        log.debug("记录卡片归档历史: cardId={}", event.getCardId());
+        log.debug("记录卡片存档历史: cardId={}", event.getCardId());
     }
 
     private void handleCardAbandoned(CardAbandonedEvent event) {
@@ -122,7 +122,7 @@ public class CardHistoryEventListener {
         );
 
         cardHistoryService.recordHistory(command);
-        log.debug("记录卡片丢弃历史: cardId={}", event.getCardId());
+        log.debug("记录卡片回收历史: cardId={}", event.getCardId());
     }
 
     private void handleCardRestored(CardRestoredEvent event) {

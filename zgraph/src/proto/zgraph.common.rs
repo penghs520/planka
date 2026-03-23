@@ -6,9 +6,9 @@
 pub enum CardState {
     /// 进行中
     Active = 0,
-    /// 已丢弃
+    /// 已回收
     Discarded = 1,
-    /// 已归档
+    /// 已存档
     Archived = 2,
 }
 impl CardState {

@@ -23,8 +23,8 @@ import { createEmptyTemplate } from '@/types/card-detail-template'
 const DETAIL_BUILTIN_FIELDS: (FieldConfig & { builtin: true })[] = [
   { fieldId: '$createdAt', name: '创建时间', schemaSubType: 'DATE_FIELD', builtin: true },
   { fieldId: '$updatedAt', name: '更新时间', schemaSubType: 'DATE_FIELD', builtin: true },
-  { fieldId: '$archivedAt', name: '归档时间', schemaSubType: 'DATE_FIELD', builtin: true },
-  { fieldId: '$discardedAt', name: '丢弃时间', schemaSubType: 'DATE_FIELD', builtin: true },
+  { fieldId: '$archivedAt', name: '存档时间', schemaSubType: 'DATE_FIELD', builtin: true },
+  { fieldId: '$discardedAt', name: '回收时间', schemaSubType: 'DATE_FIELD', builtin: true },
   { fieldId: '$description', name: '详情描述', schemaSubType: 'MARKDOWN_FIELD', builtin: true },
 ]
 

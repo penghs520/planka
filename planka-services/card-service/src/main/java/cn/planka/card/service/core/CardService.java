@@ -247,11 +247,11 @@ public class CardService {
             eventPublisher.publishAbandoned(cardOpt.get(), String.valueOf(operatorId.value()), sourceIp, discardReason);
             return Result.success();
         } catch (Exception e) {
-            logger.error("丢弃卡片失败", e);
+            logger.error("回收卡片失败", e);
             if (e instanceof PermissionDeniedException permissionDeniedException) {
                 return Result.failure(permissionDeniedException.getErrorCode(), e.getMessage());
             }
-            return Result.failure(CommonErrorCode.INTERNAL_ERROR, "丢弃卡片失败: " + e.getMessage());
+            return Result.failure(CommonErrorCode.INTERNAL_ERROR, "回收卡片失败: " + e.getMessage());
         }
     }
 
@@ -272,11 +272,11 @@ public class CardService {
             eventPublisher.publishArchived(cardOpt.get(), String.valueOf(operatorId.value()), sourceIp);
             return Result.success();
         } catch (Exception e) {
-            logger.error("归档卡片失败", e);
+            logger.error("存档卡片失败", e);
             if (e instanceof PermissionDeniedException permissionDeniedException) {
                 return Result.failure(permissionDeniedException.getErrorCode(), e.getMessage());
             }
-            return Result.failure(CommonErrorCode.INTERNAL_ERROR, "归档卡片失败: " + e.getMessage());
+            return Result.failure(CommonErrorCode.INTERNAL_ERROR, "存档卡片失败: " + e.getMessage());
         }
     }
 
@@ -331,7 +331,7 @@ public class CardService {
             BatchPermissionCheckResult checkResult = permissionService.batchCheckCardOperation(
                     CardOperation.DISCARD, cardIds, operatorId);
             if (checkResult.isAllDenied()) {
-                return Result.failure(CommonErrorCode.PERMISSION_DENIED, "无权限丢弃任何卡片");
+                return Result.failure(CommonErrorCode.PERMISSION_DENIED, "无权限回收任何卡片");
             }
 
             List<CardId> allowedCardIds = checkResult.getAllowed();
@@ -341,11 +341,11 @@ public class CardService {
             eventPublisher.publishAllAbandoned(cards, String.valueOf(operatorId.value()), sourceIp, discardReason);
             return Result.success();
         } catch (Exception e) {
-            logger.error("批量丢弃卡片失败", e);
+            logger.error("批量回收卡片失败", e);
             if (e instanceof PermissionDeniedException permissionDeniedException) {
                 return Result.failure(permissionDeniedException.getErrorCode(), e.getMessage());
             }
-            return Result.failure(CommonErrorCode.INTERNAL_ERROR, "批量丢弃卡片失败: " + e.getMessage());
+            return Result.failure(CommonErrorCode.INTERNAL_ERROR, "批量回收卡片失败: " + e.getMessage());
         }
     }
 
@@ -358,7 +358,7 @@ public class CardService {
             BatchPermissionCheckResult checkResult = permissionService.batchCheckCardOperation(
                     CardOperation.ARCHIVE, cardIds, operatorId);
             if (checkResult.isAllDenied()) {
-                return Result.failure(CommonErrorCode.PERMISSION_DENIED, "无权限归档任何卡片");
+                return Result.failure(CommonErrorCode.PERMISSION_DENIED, "无权限存档任何卡片");
             }
 
             List<CardId> allowedCardIds = checkResult.getAllowed();
@@ -368,11 +368,11 @@ public class CardService {
             eventPublisher.publishAllArchived(cards, String.valueOf(operatorId.value()), sourceIp);
             return Result.success();
         } catch (Exception e) {
-            logger.error("批量归档卡片失败", e);
+            logger.error("批量存档卡片失败", e);
             if (e instanceof PermissionDeniedException permissionDeniedException) {
                 return Result.failure(permissionDeniedException.getErrorCode(), e.getMessage());
             }
-            return Result.failure(CommonErrorCode.INTERNAL_ERROR, "批量归档卡片失败: " + e.getMessage());
+            return Result.failure(CommonErrorCode.INTERNAL_ERROR, "批量存档卡片失败: " + e.getMessage());
         }
     }
 

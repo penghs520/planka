@@ -205,7 +205,7 @@ public class CardActionExecutionService {
     private static final String DEFAULT_LINKED_CARD_TITLE = "关联卡片";
 
     /**
-     * 丢弃原因字段ID
+     * 回收原因字段ID
      */
     private static final String DISCARD_REASON_FIELD_ID = "discardReason";
 
@@ -224,37 +224,37 @@ public class CardActionExecutionService {
 
         return switch (builtInType) {
             case DISCARD -> {
-                // 检查是否提供了丢弃原因
+                // 检查是否提供了回收原因
                 String discardReason = extractDiscardReason(userInputs);
                 if (discardReason == null || discardReason.isBlank()) {
-                    // 需要用户输入丢弃原因
-                    log.info("丢弃动作需要用户输入丢弃原因: cardId={}", card.getId());
+                    // 需要用户输入回收原因
+                    log.info("回收动作需要用户输入回收原因: cardId={}", card.getId());
                     yield ActionExecutionResult.requireInput(
-                            "请输入丢弃原因",
+                            "请输入回收原因",
                             List.of(ActionExecutionResult.RequiredInput.textarea(
                                     DISCARD_REASON_FIELD_ID,
-                                    "丢弃原因",
-                                    "请输入丢弃该卡片的原因",
+                                    "回收原因",
+                                    "请输入回收该卡片的原因",
                                     true
                             ))
                     );
                 }
 
-                log.info("执行丢弃动作: cardId={}, reason={}", card.getId(), discardReason);
+                log.info("执行回收动作: cardId={}, reason={}", card.getId(), discardReason);
                 Result<Void> result = cardService.discard(card.getId(), discardReason, operatorId);
                 if (result.isSuccess()) {
-                    yield ActionExecutionResult.success("卡片已丢弃");
+                    yield ActionExecutionResult.success("卡片已回收");
                 } else {
-                    yield ActionExecutionResult.error("丢弃卡片失败: " + result.getMessage());
+                    yield ActionExecutionResult.error("回收卡片失败: " + result.getMessage());
                 }
             }
             case ARCHIVE -> {
-                log.info("执行归档动作: cardId={}", card.getId());
+                log.info("执行存档动作: cardId={}", card.getId());
                 Result<Void> result = cardService.archive(card.getId(), operatorId);
                 if (result.isSuccess()) {
-                    yield ActionExecutionResult.success("卡片已归档");
+                    yield ActionExecutionResult.success("卡片已存档");
                 } else {
-                    yield ActionExecutionResult.error("归档卡片失败: " + result.getMessage());
+                    yield ActionExecutionResult.error("存档卡片失败: " + result.getMessage());
                 }
             }
             case RESTORE -> {
@@ -787,10 +787,10 @@ public class CardActionExecutionService {
     }
 
     /**
-     * 从用户输入中提取丢弃原因
+     * 从用户输入中提取回收原因
      *
      * @param userInputs 用户输入
-     * @return 丢弃原因，如果未提供则返回 null
+     * @return 回收原因，如果未提供则返回 null
      */
     private String extractDiscardReason(Map<String, FixedValue> userInputs) {
         if (userInputs == null || !userInputs.containsKey(DISCARD_REASON_FIELD_ID)) {

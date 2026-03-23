@@ -125,10 +125,10 @@ public final class SystemSchemaIds {
     /** 关联类型 ID 模式：创建人 */
     public static final String LINK_CREATOR_PATTERN = ":link:creator:";
 
-    /** 关联类型 ID 模式：归档人 */
+    /** 关联类型 ID 模式：存档人 */
     public static final String LINK_ARCHIVER_PATTERN = ":link:archiver:";
 
-    /** 关联类型 ID 模式：丢弃人 */
+    /** 关联类型 ID 模式：回收人 */
     public static final String LINK_DISCARDER_PATTERN = ":link:discarder:";
 
     /**
@@ -144,24 +144,24 @@ public final class SystemSchemaIds {
     }
 
     /**
-     * 归档人关联类型 ID
+     * 存档人关联类型 ID
      * <p>
      * 格式：{orgId}:link:archiver
      *
      * @param orgId 组织ID
-     * @return 归档人关联类型ID
+     * @return 存档人关联类型ID
      */
     public static String archiverLinkTypeId(String orgId) {
         return orgId + LINK_ARCHIVER_PATTERN.substring(0, LINK_ARCHIVER_PATTERN.length() - 1);
     }
 
     /**
-     * 丢弃人关联类型 ID
+     * 回收人关联类型 ID
      * <p>
      * 格式：{orgId}:link:discarder
      *
      * @param orgId 组织ID
-     * @return 丢弃人关联类型ID
+     * @return 回收人关联类型ID
      */
     public static String discarderLinkTypeId(String orgId) {
         return orgId + LINK_DISCARDER_PATTERN.substring(0, LINK_DISCARDER_PATTERN.length() - 1);

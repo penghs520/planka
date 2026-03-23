@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 /**
- * 丢弃卡片动作
+ * 回收卡片动作
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class DiscardCardAction implements RuleAction {

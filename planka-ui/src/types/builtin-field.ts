@@ -22,8 +22,8 @@ export const BUILTIN_FIELDS: BuiltinFieldDef[] = [
   { id: '$updatedAt', name: '更新时间', fieldType: 'DATE', sortable: true, editable: false },
   { id: '$statusId', name: '价值流状态', fieldType: 'ENUM', sortable: false, editable: true },
   { id: '$cardCycle', name: '卡片周期', fieldType: 'ENUM', sortable: true, editable: false },
-  { id: '$archivedAt', name: '归档时间', fieldType: 'DATE', sortable: true, editable: false },
-  { id: '$discardedAt', name: '丢弃时间', fieldType: 'DATE', sortable: true, editable: false },
+  { id: '$archivedAt', name: '存档时间', fieldType: 'DATE', sortable: true, editable: false },
+  { id: '$discardedAt', name: '回收时间', fieldType: 'DATE', sortable: true, editable: false },
   { id: '$code', name: '卡片编号', fieldType: 'TEXT', sortable: true, editable: false },
   { id: '$description', name: '详情描述', fieldType: 'MARKDOWN', sortable: false, editable: true },
 ]
@@ -51,8 +51,8 @@ export function getBuiltinField(fieldId: string): BuiltinFieldDef | undefined {
  */
 export const CARD_CYCLE_LABELS: Record<string, string> = {
   ACTIVE: `活跃`,
-  ARCHIVED: '已归档',
-  DISCARDED: '已丢弃',
+  ARCHIVED: '已存档',
+  DISCARDED: '已回收',
 }
 
 /**

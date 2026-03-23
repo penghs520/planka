@@ -256,13 +256,13 @@ mod tests {
 
         println!("存档状态的卡片IDs:");
         for card in &archived_cards {
-            println!("存档卡片: {}", card.card_id);
+            println!("存档项: {}", card.card_id);
         }
 
         // 验证结果 - 应该只返回Archived状态的卡片ID
         assert_eq!(query_response.ids.len(), archived_cards.len());
 
-        // 检查每个存档卡片是否在结果中
+        // 检查每个存档项是否在结果中
         for card in archived_cards {
             assert!(query_response.ids.contains(&card.card_id));
         }

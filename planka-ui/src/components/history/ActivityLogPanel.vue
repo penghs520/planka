@@ -293,7 +293,7 @@ function renderMessage(record: CardHistoryRecord): string {
       return escapeHtml(t('history.message.cardAbandoned'))
 
     case 'history.card.abandoned.with_reason':
-      // 丢弃卡片（有原因）：使用消息模板翻译，传入原因参数
+      // 回收卡片（有原因）：使用消息模板翻译，传入原因参数
       if (args && args.length > 0) {
         const reason = args[0]?.value || args[0]?.displayValue || ''
         return escapeHtml(t('history.message.cardAbandonedWithReason', [reason]))

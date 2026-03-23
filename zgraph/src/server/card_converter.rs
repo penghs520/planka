@@ -101,7 +101,7 @@ fn do_fill_linked_cards<'a, T: Transaction<'a>>(
         Some(vec![CardState::Active, CardState::Archived])
     };
 
-    // 构建邻居查询参数，排除丢弃状态的节点
+    // 构建邻居查询参数，排除回收状态的节点
     let query = NeighborQuery {
         src_vertex_ids: vec![vertex.card_id],
         edge_descriptor: descriptor,

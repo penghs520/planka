@@ -8,8 +8,8 @@ option java_multiple_files = true;
 // 卡片状态
 enum CardState {
   Active = 0;//进行中
-  Discarded = 1;//已丢弃
-  Archived = 2;//已归档
+  Discarded = 1;//已回收
+  Archived = 2;//已存档
 }
 
 // 拼接标题区域枚举，表示前缀还是后缀

@@ -295,7 +295,7 @@
 //             };
 //
 //             let vertices = txn.query_vertices(query).unwrap();
-//             assert!(vertices.len() > 0, "应该至少有一些卡片被修改为归档状态");
+//             assert!(vertices.len() > 0, "应该至少有一些卡片被修改为存档状态");
 //         }
 //
 //         // 清理数据库文件

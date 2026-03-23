@@ -80,13 +80,13 @@ public class FieldConfigQueryService {
                 .build();
     }
 
-    // 系统内置的 LinkType ID 模式（创建人、归档人、丢弃人）
+    // 系统内置的 LinkType ID 模式（创建人、存档人、回收人）
     private static final String LINK_CREATOR_PATTERN = ":link:creator:";
     private static final String LINK_ARCHIVER_PATTERN = ":link:archiver:";
     private static final String LINK_DISCARDER_PATTERN = ":link:discarder:";
 
     /**
-     * 判断是否为系统内置的 LinkFieldConfig（创建人、归档人、丢弃人）
+     * 判断是否为系统内置的 LinkFieldConfig（创建人、存档人、回收人）
      * 这些字段虽然是 LinkFieldConfig，但应该被视为普通属性配置显示
      */
     private boolean isSystemBuiltInLinkField(String fieldId) {

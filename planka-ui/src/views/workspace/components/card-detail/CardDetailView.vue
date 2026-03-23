@@ -83,14 +83,14 @@ const statusEnumOptions = computed<EnumOptionDTO[]>(() => {
   }]
 })
 
-// 卡片丢弃/归档状态标签（仅非活跃状态显示）
+// 卡片回收/存档状态标签（仅非活跃状态显示）
 const cardCycleLabel = computed(() => {
   const style = card.value?.cardCycle
   if (!style || style === 'ACTIVE') return ''
   return CARD_CYCLE_LABELS[style] || ''
 })
 
-// 卡片丢弃/归档状态颜色
+// 卡片回收/存档状态颜色
 const cardCycleColor = computed(() => {
   const style = card.value?.cardCycle
   if (!style || style === 'ACTIVE') return ''
@@ -1066,7 +1066,7 @@ function isFieldValueChanged(_fieldId: string, fieldType: string, originalValue:
                 :options="statusEnumOptions"
               />
             </span>
-            <!-- 丢弃/归档状态标签 -->
+            <!-- 回收/存档状态标签 -->
             <span
               v-if="cardCycleLabel"
               class="card-style-tag"

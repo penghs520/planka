@@ -139,10 +139,10 @@ public class BizRuleEventListener {
     }
 
     /**
-     * 处理卡片归档事件
+     * 处理卡片存档事件
      */
     private void handleArchivedEvent(CardArchivedEvent event) {
-        log.debug("处理卡片归档事件: cardId={}", event.getCardId());
+        log.debug("处理卡片存档事件: cardId={}", event.getCardId());
         Optional<CardDTO> cardOpt = loadCard(event.getCardId(), event.getOperatorId());
         if (cardOpt.isEmpty()) {
             return;
@@ -151,10 +151,10 @@ public class BizRuleEventListener {
     }
 
     /**
-     * 处理卡片丢弃事件
+     * 处理卡片回收事件
      */
     private void handleAbandonedEvent(CardAbandonedEvent event) {
-        log.debug("处理卡片丢弃事件: cardId={}", event.getCardId());
+        log.debug("处理卡片回收事件: cardId={}", event.getCardId());
         Optional<CardDTO> cardOpt = loadCard(event.getCardId(), event.getOperatorId());
         if (cardOpt.isEmpty()) {
             return;

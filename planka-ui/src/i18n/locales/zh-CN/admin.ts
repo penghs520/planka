@@ -43,7 +43,7 @@ export default {
     definitionLevel: '定义级别',
     updatedAt: '更新时间',
     createdAt: '创建时间',
-    discardedAt: '丢弃时间',
+    discardedAt: '回收时间',
     operations: '操作',
     description: '描述',
     email: '邮箱',
@@ -272,8 +272,8 @@ export default {
         EDIT: '编辑卡片',
         MOVE: '移动状态',
         ROLLBACK: '回退状态',
-        ARCHIVE: '归档卡片',
-        DISCARD: '丢弃卡片',
+        ARCHIVE: '存档卡片',
+        DISCARD: '回收卡片',
       },
       fieldOperations: {
         READ: '查看',
@@ -1069,8 +1069,8 @@ targetFieldsRequired: '请选择目标属性',
     // 触发事件类型
     triggerEvent: {
       ON_CREATE: '创建时',
-      ON_DISCARD: '丢弃时',
-      ON_ARCHIVE: '归档时',
+      ON_DISCARD: '回收时',
+      ON_ARCHIVE: '存档时',
       ON_RESTORE: '还原时',
       ON_STATUS_MOVE: '状态前进时',
       ON_STATUS_ROLLBACK: '状态回退时',
@@ -1079,8 +1079,8 @@ targetFieldsRequired: '请选择目标属性',
     },
     // 动作类型
     actionType: {
-      DISCARD_CARD: '丢弃卡片',
-      ARCHIVE_CARD: '归档卡片',
+      DISCARD_CARD: '回收卡片',
+      ARCHIVE_CARD: '存档卡片',
       RESTORE_CARD: '还原卡片',
       MOVE_CARD: '移动卡片',
       UPDATE_CARD: '更新卡片',
@@ -1131,9 +1131,9 @@ targetFieldsRequired: '请选择目标属性',
       // 移动卡片
       toStatus: '目标状态',
       toStatusPlaceholder: '请选择目标状态',
-      // 丢弃卡片
-      reason: '丢弃原因',
-      reasonPlaceholder: '输入丢弃原因模板，支持 ${字段ID} 引用',
+      // 回收卡片
+      reason: '回收原因',
+      reasonPlaceholder: '输入回收原因模板，支持 ${字段ID} 引用',
       // 创建卡片
       targetCardType: '目标实体类型',
       targetCardTypePlaceholder: '输入目标实体类型ID',
@@ -1255,8 +1255,8 @@ targetFieldsRequired: '请选择目标属性',
     },
     // 内置动作类型
     builtInType: {
-      DISCARD: '丢弃',
-      ARCHIVE: '归档',
+      DISCARD: '回收',
+      ARCHIVE: '存档',
       RESTORE: '还原',
       BLOCK_TOGGLE: '阻塞/解阻',
       HIGHLIGHT_TOGGLE: '点亮/暂停',

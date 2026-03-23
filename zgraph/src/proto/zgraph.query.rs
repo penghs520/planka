@@ -1465,7 +1465,7 @@ pub struct SortDateField {
     #[prost(string, tag = "1")]
     pub field_id: ::prost::alloc::string::String,
 }
-/// 内置属性：标题、编号、__PLANKA_EINST__、创建时间、更新时间、创建人、更新人、丢弃时间、归档时间
+/// 内置属性：标题、编号、__PLANKA_EINST__、创建时间、更新时间、创建人、更新人、回收时间、存档时间
 #[derive(serde::Serialize, serde::Deserialize)]
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]

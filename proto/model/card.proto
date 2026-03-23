@@ -35,8 +35,8 @@ message Card {
   // ==================== 审计信息 ====================
   int64 created_at = 13;
   int64 updated_at = 14;
-  int64 discarded_at = 15;                // 丢弃时间
-  int64 archived_at = 16;                // 归档时间
+  int64 discarded_at = 15;                // 回收时间
+  int64 archived_at = 16;                // 存档时间
 }
 
 // 标题

@@ -12,7 +12,7 @@ import cn.planka.domain.schema.definition.rule.action.DiscardCardAction;
 import org.springframework.stereotype.Component;
 
 /**
- * 丢弃卡片动作执行器
+ * 回收卡片动作执行器
  */
 @Component
 public class DiscardCardActionExecutor extends AbstractRuleActionExecutor<DiscardCardAction> {
@@ -42,7 +42,7 @@ public class DiscardCardActionExecutor extends AbstractRuleActionExecutor<Discar
         CardId memberCardId = context.getOperatorId() != null ? CardId.of(context.getOperatorId()) : null;
         String reason = action.getReasonTemplate() != null
                 ? templateResolver.resolve(action.getReasonTemplate(), context.getCardId(), memberCardId)
-                : "由业务规则自动丢弃";
+                : "由业务规则自动回收";
         Result<Void> result = cardService.discard(
                 targetCard.getId(),
                 reason,
@@ -51,7 +51,7 @@ public class DiscardCardActionExecutor extends AbstractRuleActionExecutor<Discar
         );
 
         if (!result.isSuccess()) {
-            throw new RuntimeException("丢弃卡片失败: " + result.getMessage());
+            throw new RuntimeException("回收卡片失败: " + result.getMessage());
         }
 
         return targetCard.getId();

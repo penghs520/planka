@@ -51,10 +51,10 @@ pub struct Card {
     pub created_at: i64,
     #[prost(int64, tag = "14")]
     pub updated_at: i64,
-    /// 丢弃时间
+    /// 回收时间
     #[prost(int64, tag = "15")]
     pub discarded_at: i64,
-    /// 归档时间
+    /// 存档时间
     #[prost(int64, tag = "16")]
     pub archived_at: i64,
 }

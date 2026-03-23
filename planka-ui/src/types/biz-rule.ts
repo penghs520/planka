@@ -9,9 +9,9 @@ import type { Condition } from './condition'
 export enum TriggerEvent {
   /** 创建时 */
   ON_CREATE = 'ON_CREATE',
-  /** 丢弃时 */
+  /** 回收时 */
   ON_DISCARD = 'ON_DISCARD',
-  /** 归档时 */
+  /** 存档时 */
   ON_ARCHIVE = 'ON_ARCHIVE',
   /** 还原时 */
   ON_RESTORE = 'ON_RESTORE',
@@ -110,7 +110,7 @@ export interface BaseRuleAction {
 }
 
 /**
- * 丢弃卡片动作
+ * 回收卡片动作
  */
 export interface DiscardCardAction extends BaseRuleAction {
   actionType: RuleActionType.DISCARD_CARD
@@ -119,7 +119,7 @@ export interface DiscardCardAction extends BaseRuleAction {
 }
 
 /**
- * 归档卡片动作
+ * 存档卡片动作
  */
 export interface ArchiveCardAction extends BaseRuleAction {
   actionType: RuleActionType.ARCHIVE_CARD

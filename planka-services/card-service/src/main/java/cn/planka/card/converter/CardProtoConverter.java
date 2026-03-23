@@ -198,7 +198,7 @@ public class CardProtoConverter {
     /**
      * 将 UpdateCardRequest 转换为 proto Card
      */
-    //TODO 缺少丢弃时间等字段
+    //TODO 缺少回收时间等字段
     public static Card toProtoCard(CardEntity cardEntity) {
         if (cardEntity == null) {
             return null;

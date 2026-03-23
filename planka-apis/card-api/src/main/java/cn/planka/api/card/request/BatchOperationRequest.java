@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 批量操作请求
  * <p>
- * 用于批量归档、还原、丢弃等操作
+ * 用于批量存档、还原、回收等操作
  */
 @Data
 public class BatchOperationRequest {
@@ -18,7 +18,7 @@ public class BatchOperationRequest {
     private List<CardId> cardIds;
 
     /**
-     * 丢弃原因（仅丢弃操作使用）
+     * 回收原因（仅回收操作使用）
      */
     private String discardReason;
 }

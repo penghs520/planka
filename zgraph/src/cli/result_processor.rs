@@ -169,8 +169,8 @@ impl ResultProcessor {
             // 时间字段
             "created_at" => "创建时间".to_string(),
             "updated_at" => "更新时间".to_string(),
-            "archived_at" => "归档时间".to_string(),
-            "discarded_at" => "丢弃时间".to_string(),
+            "archived_at" => "存档时间".to_string(),
+            "discarded_at" => "回收时间".to_string(),
 
             // 编码字段
             "code" | "code_in_org" => "编码".to_string(),
@@ -217,8 +217,8 @@ impl ResultProcessor {
         use crate::proto::zgraph::common::CardState;
         match CardState::try_from(state_value) {
             Ok(CardState::Active) => "活跃".to_string(),
-            Ok(CardState::Archived) => "已归档".to_string(),
-            Ok(CardState::Discarded) => "已丢弃".to_string(),
+            Ok(CardState::Archived) => "已存档".to_string(),
+            Ok(CardState::Discarded) => "已回收".to_string(),
             Err(_) => format!("未知状态({})", state_value),
         }
     }

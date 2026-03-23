@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 /**
- * 卡片归档事件
+ * 卡片存档事件
  */
 @Getter
 public class CardArchivedEvent extends CardEvent {

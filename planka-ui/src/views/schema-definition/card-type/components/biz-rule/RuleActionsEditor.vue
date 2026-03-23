@@ -376,13 +376,13 @@ function updateAction(index: number, updates: Partial<RuleAction>) {
   actions.value = newActions
 }
 
-// 获取丢弃原因
+// 获取回收原因
 function getDiscardReason(action: RuleAction): string {
   const a = action as DiscardCardAction
   return a.reasonTemplate || ''
 }
 
-// 设置丢弃原因
+// 设置回收原因
 function setDiscardReason(index: number, value: string) {
   const action = actions.value[index] as DiscardCardAction
   updateAction(index, {

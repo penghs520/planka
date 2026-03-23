@@ -250,7 +250,7 @@ public class HistoryTestDataBuilder {
     }
 
     public static CardAbandonedEvent createCardAbandonedEvent() {
-        return createCardAbandonedEvent("测试丢弃原因");
+        return createCardAbandonedEvent("测试回收原因");
     }
 
     public static CardAbandonedEvent createCardAbandonedEvent(String reason) {

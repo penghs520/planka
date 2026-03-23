@@ -1708,20 +1708,20 @@ class ZgraphCardRepositoryQueryIT {
 
     @Test
     @Order(73)
-    @DisplayName("测试按丢弃时间(DISCARDED_AT)查询")
+    @DisplayName("测试按回收时间(DISCARDED_AT)查询")
     void testQueryByDiscardedAt() {
         String testCaseId = generateTestCaseId("discarded-at");
         String orgId = "org-" + testCaseId;
         String cardTypeId = "type-" + testCaseId;
 
-        // Given - 创建卡片并丢弃其中一张
-        CardId cardId1 = createTestCard(testCaseId, orgId, cardTypeId, "卡片A-将被丢弃", CardCycle.ACTIVE);
+        // Given - 创建卡片并回收其中一张
+        CardId cardId1 = createTestCard(testCaseId, orgId, cardTypeId, "卡片A-将被回收", CardCycle.ACTIVE);
         createTestCard(testCaseId, orgId, cardTypeId, "卡片B-保留", CardCycle.ACTIVE);
 
-        // 丢弃卡片A
-        repository.discard(cardId1, "测试丢弃", TEST_OPERATOR_ID);
+        // 回收卡片A
+        repository.discard(cardId1, "测试回收", TEST_OPERATOR_ID);
 
-        // When - 查询有丢弃时间的卡片（IS_NOT_EMPTY）
+        // When - 查询有回收时间的卡片（IS_NOT_EMPTY）
         DateConditionItem condition = new DateConditionItem(
                 new DateConditionItem.DateSubject.SystemDateSubject(null, DateConditionItem.SystemDateField.DISCARDED_AT),
                 new DateConditionItem.DateOperator.IsNotEmpty()
@@ -1729,7 +1729,7 @@ class ZgraphCardRepositoryQueryIT {
         CardQueryRequest request = createQueryRequest(orgId, cardTypeId, condition);
         List<CardDTO> result = repository.query(request);
 
-        // Then - 应该返回被丢弃的卡片A
+        // Then - 应该返回被回收的卡片A
         assertThat(result)
                 .hasSize(1)
                 .extracting(CardDTO::getId)
@@ -1738,20 +1738,20 @@ class ZgraphCardRepositoryQueryIT {
 
     @Test
     @Order(74)
-    @DisplayName("测试按归档时间(ARCHIVED_AT)查询")
+    @DisplayName("测试按存档时间(ARCHIVED_AT)查询")
     void testQueryByArchivedAt() {
         String testCaseId = generateTestCaseId("archived-at");
         String orgId = "org-" + testCaseId;
         String cardTypeId = "type-" + testCaseId;
 
-        // Given - 创建卡片并归档其中一张
-        CardId cardId1 = createTestCard(testCaseId, orgId, cardTypeId, "卡片A-将被归档", CardCycle.ACTIVE);
+        // Given - 创建卡片并存档其中一张
+        CardId cardId1 = createTestCard(testCaseId, orgId, cardTypeId, "卡片A-将被存档", CardCycle.ACTIVE);
         createTestCard(testCaseId, orgId, cardTypeId, "卡片B-保留", CardCycle.ACTIVE);
 
-        // 归档卡片A
+        // 存档卡片A
         repository.archive(cardId1, TEST_OPERATOR_ID);
 
-        // When - 查询有归档时间的卡片（IS_NOT_EMPTY）
+        // When - 查询有存档时间的卡片（IS_NOT_EMPTY）
         DateConditionItem condition = new DateConditionItem(
                 new DateConditionItem.DateSubject.SystemDateSubject(null, DateConditionItem.SystemDateField.ARCHIVED_AT),
                 new DateConditionItem.DateOperator.IsNotEmpty()
@@ -1759,7 +1759,7 @@ class ZgraphCardRepositoryQueryIT {
         CardQueryRequest request = createQueryRequest(orgId, cardTypeId, condition);
         List<CardDTO> result = repository.query(request);
 
-        // Then - 应该返回被归档的卡片A
+        // Then - 应该返回被存档的卡片A
         assertThat(result)
                 .hasSize(1)
                 .extracting(CardDTO::getId)
@@ -1768,7 +1768,7 @@ class ZgraphCardRepositoryQueryIT {
 
     @Test
     @Order(75)
-    @DisplayName("测试按归档时间(ARCHIVED_AT)范围查询")
+    @DisplayName("测试按存档时间(ARCHIVED_AT)范围查询")
     void testQueryByArchivedAtBetween() {
         String testCaseId = generateTestCaseId("archived-at-between");
         String orgId = "org-" + testCaseId;
@@ -1785,7 +1785,7 @@ class ZgraphCardRepositoryQueryIT {
             Thread.currentThread().interrupt();
         }
 
-        // 归档卡片
+        // 存档卡片
         repository.archive(cardId1, TEST_OPERATOR_ID);
 
         try {
@@ -1796,7 +1796,7 @@ class ZgraphCardRepositoryQueryIT {
 
         long afterArchiveMillis = System.currentTimeMillis();
 
-        // When - 查询归档时间在范围内的卡片
+        // When - 查询存档时间在范围内的卡片
         DateConditionItem condition = new DateConditionItem(
                 new DateConditionItem.DateSubject.SystemDateSubject(null, DateConditionItem.SystemDateField.ARCHIVED_AT),
                 new DateConditionItem.DateOperator.Between(

@@ -18,14 +18,14 @@ public enum OperationType {
     CARD_CREATED("card.created", "创建卡片"),
 
     /**
-     * 归档卡片
+     * 存档卡片
      */
-    CARD_ARCHIVED("card.archived", "归档卡片"),
+    CARD_ARCHIVED("card.archived", "存档卡片"),
 
     /**
-     * 丢弃卡片
+     * 回收卡片
      */
-    CARD_ABANDONED("card.abandoned", "丢弃卡片"),
+    CARD_ABANDONED("card.abandoned", "回收卡片"),
 
     /**
      * 还原卡片

@@ -1359,7 +1359,7 @@ fn apply_card_attribute_updates(vertex: &mut Vertex, request: &UpdateCardFieldRe
         has_updates = true;
     }
 
-    // 更新归档日期
+    // 更新存档日期
     if let Some(archived_at) = request.archived_at {
         vertex.archived_at = if archived_at > 0 {
             Some(archived_at as u64)

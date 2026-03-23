@@ -75,9 +75,9 @@ export enum CardOperation {
   MOVE = 'MOVE',
   /** 回退卡片（改变状态） */
   ROLLBACK = 'ROLLBACK',
-  /** 归档卡片 */
+  /** 存档卡片 */
   ARCHIVE = 'ARCHIVE',
-  /** 丢弃卡片 */
+  /** 回收卡片 */
   DISCARD = 'DISCARD',
 }
 
@@ -158,8 +158,8 @@ export const CardOperationLabels: Record<CardOperation, string> = {
   [CardOperation.EDIT]: '编辑卡片',
   [CardOperation.MOVE]: '移动状态',
   [CardOperation.ROLLBACK]: '回退状态',
-  [CardOperation.ARCHIVE]: '归档卡片',
-  [CardOperation.DISCARD]: '丢弃卡片',
+  [CardOperation.ARCHIVE]: '存档卡片',
+  [CardOperation.DISCARD]: '回收卡片',
 }
 
 /**

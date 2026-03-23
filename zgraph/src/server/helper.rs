@@ -273,7 +273,7 @@ fn get_ref_on_vertex_ids<'a, T: Transaction<'a>>(
     }
 }
 
-/// last_level_contains_discard: 只有最后一级包含丢弃节点
+/// last_level_contains_discard: 只有最后一级包含回收节点
 pub fn get_related_vertex_ids<'a, T: Transaction<'a>>(
     vertex: &VertexId,
     path: &crate::proto::zgraph::common::Path,

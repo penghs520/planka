@@ -195,7 +195,7 @@ pub fn count_cards_by_group<D: Database>(
                 t: EdgeType::from_str(&lt_id).unwrap(),
                 direction,
             },
-            dest_vertex_states: None, // 默认只返回活跃和归档的节点
+            dest_vertex_states: None, // 默认只返回活跃和存档的节点
         };
 
         // 查询邻居顶点

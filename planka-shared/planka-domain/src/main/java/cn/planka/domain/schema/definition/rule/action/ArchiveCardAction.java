@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 /**
- * 归档卡片动作
+ * 存档卡片动作
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class ArchiveCardAction implements RuleAction {

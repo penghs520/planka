@@ -20,7 +20,7 @@ pub struct Vertex {
     pub container_id: ContainerId,
     /// 流程信息，包含价值流ID、步骤ID和状态ID
     pub stream_info: StreamInfo,
-    /// 卡片状态（进行中、已归档、已放弃）
+    /// 卡片状态（进行中、已存档、已回收）
     pub state: CardState,
     /// 卡片标题
     pub title: VertexTitle,
@@ -36,11 +36,11 @@ pub struct Vertex {
     pub created_at: u64,
     /// 卡片更新时间戳
     pub updated_at: u64,
-    /// 卡片归档日期（可选）
+    /// 卡片存档日期（可选）
     pub archived_at: Option<u64>,
-    /// 卡片丢弃日期（可选）
+    /// 卡片回收日期（可选）
     pub discarded_at: Option<u64>,
-    /// 卡片丢弃原因（可选）
+    /// 卡片回收原因（可选）
     pub discard_reason: Option<String>,
     /// 卡片还原原因（可选）
     pub restore_reason: Option<String>,
@@ -209,9 +209,9 @@ impl Eq for Vertex {}
 pub enum CardState {
     /// 活跃 - 卡片处于活跃状态
     Active,
-    /// 已归档 - 卡片已完成且归档
+    /// 已存档 - 卡片已完成且存档
     Archived,
-    /// 已丢弃 - 卡片已被丢弃
+    /// 已回收 - 卡片已被回收
     Discarded,
 }
 

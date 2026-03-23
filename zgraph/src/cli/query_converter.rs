@@ -566,8 +566,8 @@ impl QueryConverter {
         match field_name {
             "created_at" => "创建时间".to_string(),
             "updated_at" => "更新时间".to_string(),
-            "archived_at" => "归档时间".to_string(),
-            "discarded_at" => "放弃时间".to_string(),
+            "archived_at" => "存档时间".to_string(),
+            "discarded_at" => "回收时间".to_string(),
             _ => field_name.to_string(),
         }
     }

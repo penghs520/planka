@@ -183,11 +183,11 @@ public final class PermissionConfig {
          */
         ROLLBACK,
         /**
-         * 归档卡片
+         * 存档卡片
          */
         ARCHIVE,
         /**
-         * 丢弃卡片
+         * 回收卡片
          */
         DISCARD,
     }

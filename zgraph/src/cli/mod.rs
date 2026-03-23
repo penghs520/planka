@@ -401,7 +401,7 @@ impl ZGraphClient {
         println!("    • stream_id            - 流程ID");
         println!("    • step_id              - 步骤ID");
         println!("    • status_id            - 状态ID");
-        println!("    • archived_at         - 归档日期");
+        println!("    • archived_at         - 存档日期");
         println!("    • discarded_at         - 放弃日期");
         println!("    • comment_date         - 评论日期");
         println!("    • discard_reason       - 放弃原因");

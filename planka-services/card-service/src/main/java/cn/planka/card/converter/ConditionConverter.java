@@ -982,8 +982,8 @@ public class ConditionConverter {
      * zgraph 使用以下字段名表示系统日期字段：
      * - created_at: 创建时间
      * - updated_at: 更新时间
-     * - discarded_at: 丢弃时间
-     * - archived_at: 归档时间
+     * - discarded_at: 回收时间
+     * - archived_at: 存档时间
      */
     private static String mapSystemDateField(DateConditionItem.SystemDateField systemField) {
         return switch (systemField) {

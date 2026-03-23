@@ -429,7 +429,7 @@ watch(
     @linked-execute-payload="handleLinkedExecutePayload"
   />
 
-  <!-- 后端要求输入的弹窗（如丢弃原因） -->
+  <!-- 后端要求输入的弹窗（如回收原因） -->
   <a-modal
     v-model:visible="requiredInputModalVisible"
     :title="t('admin.cardAction.requiredInputModal.title')"

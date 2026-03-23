@@ -15,14 +15,14 @@ public enum CardCycle {
     ACTIVE("活跃"),
 
     /**
-     * 已归档 - 卡片已完成归档
+     * 已存档 - 卡片已完成存档
      */
-    ARCHIVED("已归档"),
+    ARCHIVED("已存档"),
 
     /**
-     * 已丢弃 - 卡片被丢弃
+     * 已回收 - 卡片被回收
      */
-    DISCARDED("已丢弃");
+    DISCARDED("已回收");
 
     private final String description;
 

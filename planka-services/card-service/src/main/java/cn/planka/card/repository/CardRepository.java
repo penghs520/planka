@@ -35,7 +35,7 @@ public interface CardRepository {
     void update(CardEntity cardEntity);
 
     /**
-     * 丢弃卡片
+     * 回收卡片
      */
     void discard(CardId cardId, String discardReason, String operatorId);
 
@@ -50,12 +50,12 @@ public interface CardRepository {
     BatchCardCommonResponse batchUpdate(List<CardEntity> cardEntities);
 
     /**
-     * 批量丢弃卡片
+     * 批量回收卡片
      */
     void batchDiscard(List<CardId> cardIds, String discardReason, String operatorId);
 
     /**
-     * 批量归档卡片
+     * 批量存档卡片
      */
     void batchArchive(List<CardId> cardIds, String operatorId);
 
@@ -65,7 +65,7 @@ public interface CardRepository {
     void batchRestore(List<CardId> cardIds, String operatorId);
 
     /**
-     * 归档卡片
+     * 存档卡片
      */
     void archive(CardId cardId, String operatorId);
 

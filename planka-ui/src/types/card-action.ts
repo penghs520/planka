@@ -20,9 +20,9 @@ export enum ActionCategory {
  * 内置动作类型
  */
 export enum BuiltInActionType {
-  /** 丢弃 */
+  /** 回收 */
   DISCARD = 'DISCARD',
-  /** 归档 */
+  /** 存档 */
   ARCHIVE = 'ARCHIVE',
   /** 还原 */
   RESTORE = 'RESTORE',
@@ -391,8 +391,8 @@ export const ActionCategoryConfig: Record<ActionCategory, { label: string }> = {
  * 内置动作类型显示配置
  */
 export const BuiltInActionTypeConfig: Record<BuiltInActionType, { label: string; icon?: string }> = {
-  [BuiltInActionType.DISCARD]: { label: '丢弃', icon: 'icon-delete' },
-  [BuiltInActionType.ARCHIVE]: { label: '归档', icon: 'icon-archive' },
+  [BuiltInActionType.DISCARD]: { label: '回收', icon: 'icon-delete' },
+  [BuiltInActionType.ARCHIVE]: { label: '存档', icon: 'icon-archive' },
   [BuiltInActionType.RESTORE]: { label: '还原', icon: 'icon-undo' },
   [BuiltInActionType.BLOCK_TOGGLE]: { label: '阻塞/解阻', icon: 'icon-stop' },
   [BuiltInActionType.HIGHLIGHT_TOGGLE]: { label: '点亮/暂停', icon: 'icon-highlight' },

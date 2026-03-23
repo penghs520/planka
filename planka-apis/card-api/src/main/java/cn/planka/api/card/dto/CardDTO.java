@@ -112,12 +112,12 @@ public class CardDTO {
     private LocalDateTime updatedAt;
 
     /**
-     * 丢弃时间
+     * 回收时间
      */
     private LocalDateTime abandonedAt;
 
     /**
-     * 归档时间
+     * 存档时间
      */
     private LocalDateTime archivedAt;
 

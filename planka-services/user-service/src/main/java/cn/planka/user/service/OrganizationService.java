@@ -49,7 +49,7 @@ public class OrganizationService {
         String memberCardTypeId = builtinCardTypeService.createMemberCardType(org.getId(), memberAbstractCardTypeId);
         org.setMemberCardTypeId(memberCardTypeId);
 
-        // 4. 创建通用特征类型及关联（创建人/归档人/丢弃人，关联目标为成员特征类型）
+        // 4. 创建通用特征类型及关联（创建人/存档人/回收人，关联目标为成员特征类型）
         builtinCardTypeService.createAnyTraitAndSystemMemberLinks(org.getId());
 
         // 5. 内置 Team / Project / Issue 及业务关联

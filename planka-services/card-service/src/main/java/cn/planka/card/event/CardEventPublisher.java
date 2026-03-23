@@ -120,7 +120,7 @@ public class CardEventPublisher {
     }
 
     /**
-     * 发布卡片归档事件
+     * 发布卡片存档事件
      */
     public void publishArchived(CardDTO card, String operatorId, String sourceIp) {
         CardArchivedEvent event = new CardArchivedEvent(
@@ -131,11 +131,11 @@ public class CardEventPublisher {
                 card.getTypeId().value(),
                 card.getId().value());
         eventPublisher.publishAsync(applyOperationSource(event));
-        logger.debug("发布卡片归档事件: cardId={}", card.getId());
+        logger.debug("发布卡片存档事件: cardId={}", card.getId());
     }
 
     /**
-     * 批量发布卡片归档事件
+     * 批量发布卡片存档事件
      */
     public void publishAllArchived(List<CardDTO> cards, String operatorId, String sourceIp) {
         List<CardArchivedEvent> events = cards.stream()
@@ -148,11 +148,11 @@ public class CardEventPublisher {
                         card.getId().value())))
                 .toList();
         eventPublisher.publishAll(events);
-        logger.debug("批量发布卡片归档事件: count={}", events.size());
+        logger.debug("批量发布卡片存档事件: count={}", events.size());
     }
 
     /**
-     * 发布卡片丢弃事件
+     * 发布卡片回收事件
      */
     public void publishAbandoned(CardDTO card, String operatorId, String sourceIp, String reason) {
         CardAbandonedEvent event = new CardAbandonedEvent(
@@ -164,11 +164,11 @@ public class CardEventPublisher {
                 card.getId().value(),
                 reason);
         eventPublisher.publishAsync(applyOperationSource(event));
-        logger.debug("发布卡片丢弃事件: cardId={}", card.getId());
+        logger.debug("发布卡片回收事件: cardId={}", card.getId());
     }
 
     /**
-     * 批量发布卡片丢弃事件
+     * 批量发布卡片回收事件
      */
     public void publishAllAbandoned(List<CardDTO> cards, String operatorId, String sourceIp, String reason) {
         List<CardAbandonedEvent> events = cards.stream()
@@ -182,7 +182,7 @@ public class CardEventPublisher {
                         reason)))
                 .toList();
         eventPublisher.publishAll(events);
-        logger.debug("批量发布卡片丢弃事件: count={}", events.size());
+        logger.debug("批量发布卡片回收事件: count={}", events.size());
     }
 
     /**

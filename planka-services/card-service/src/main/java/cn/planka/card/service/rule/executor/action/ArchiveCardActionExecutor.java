@@ -11,7 +11,7 @@ import cn.planka.domain.schema.definition.rule.action.ArchiveCardAction;
 import org.springframework.stereotype.Component;
 
 /**
- * 归档卡片动作执行器
+ * 存档卡片动作执行器
  */
 @Component
 public class ArchiveCardActionExecutor extends AbstractRuleActionExecutor<ArchiveCardAction> {
@@ -42,7 +42,7 @@ public class ArchiveCardActionExecutor extends AbstractRuleActionExecutor<Archiv
         );
 
         if (!result.isSuccess()) {
-            throw new RuntimeException("归档卡片失败: " + result.getMessage());
+            throw new RuntimeException("存档卡片失败: " + result.getMessage());
         }
 
         return targetCard.getId();

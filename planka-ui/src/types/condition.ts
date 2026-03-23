@@ -69,7 +69,7 @@ export const NodeType = {
   CODE: 'CODE',
   LINK: 'LINK',
   WEB_URL: 'WEB_URL',
-  // 卡片生命周期（活跃/丢弃/归档）
+  // 卡片生命周期（活跃/回收/存档）
   CARD_CYCLE: 'CARD_CYCLE',
   // 注：STATE 已移除，使用 CARD_CYCLE 替代
   // 注：系统日期字段（CREATED_AT, UPDATED_AT, DISCARDED_AT, ARCHIVED_AT）
@@ -280,8 +280,8 @@ export type StatusOperator =
  */
 export enum LifecycleState {
   ACTIVE = 'ACTIVE',         // 活跃
-  DISCARDED = 'DISCARDED',   // 丢弃
-  ARCHIVED = 'ARCHIVED',     // 归档
+  DISCARDED = 'DISCARDED',   // 回收
+  ARCHIVED = 'ARCHIVED',     // 存档
 }
 
 // ==================== 标题条件（TITLE - 系统字段） ====================
@@ -320,7 +320,7 @@ export type WebUrlOperator =
   | { type: 'IS_EMPTY' }      // 为空
   | { type: 'IS_NOT_EMPTY' }  // 不为空
 
-// ==================== 卡片生命周期条件（CARD_CYCLE - 活跃/丢弃/归档） ====================
+// ==================== 卡片生命周期条件（CARD_CYCLE - 活跃/回收/存档） ====================
 
 export interface CardCycleConditionItem {
   nodeType: 'CARD_CYCLE'

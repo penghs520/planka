@@ -44,7 +44,7 @@ pub struct NeighborQuery {
     pub edge_descriptor: EdgeDescriptor,
     
     /// 目标节点状态过滤（可选）
-    /// 默认只返回活跃和归档的节点，不包括已放弃的
+    /// 默认只返回活跃和存档的节点，不包括已回收的
     pub dest_vertex_states: Option<Vec<CardState>>,
 }
 
@@ -62,7 +62,7 @@ pub struct EdgeQuery {
     pub edge_descriptor: EdgeDescriptor,
     
     /// 目标节点状态过滤（可选）
-    /// 默认只返回连接到活跃和归档节点的边，不包括已放弃的
+    /// 默认只返回连接到活跃和存档节点的边，不包括已回收的
     pub dest_vertex_states: Option<Vec<CardState>>,
 }
 

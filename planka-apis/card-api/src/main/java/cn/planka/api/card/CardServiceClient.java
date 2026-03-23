@@ -46,11 +46,11 @@ public interface CardServiceClient {
                         @RequestBody UpdateCardRequest request);
 
     /**
-     * 丢弃卡片 (放入回收站)
+     * 回收卡片 (放入回收站)
      *
      * @param cardId        卡片ID
      * @param operatorId    操作人ID（成员卡片ID）
-     * @param discardReason 丢弃原因
+     * @param discardReason 回收原因
      */
     @DeleteMapping("/{cardId}")
     Result<Void> discard(@PathVariable("cardId") String cardId,
@@ -69,17 +69,17 @@ public interface CardServiceClient {
                                              @RequestBody List<CreateCardRequest> requests);
 
     /**
-     * 批量丢弃卡片
+     * 批量回收卡片
      *
      * @param operatorId 操作人ID（成员卡片ID）
-     * @param request    批量丢弃请求
+     * @param request    批量回收请求
      */
     @DeleteMapping("/batch")
     Result<Void> batchDiscard(@RequestHeader("X-Member-Card-Id") String operatorId,
                               @RequestBody BatchOperationRequest request);
 
     /**
-     * 批量归档卡片
+     * 批量存档卡片
      *
      * @param operatorId 操作人ID（成员卡片ID）
      * @param request    批量操作请求

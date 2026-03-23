@@ -116,9 +116,9 @@ public final class BizRuleDefinition extends AbstractSchemaDefinition<BizRuleId>
     public enum TriggerEvent {
         /** 创建时 */
         ON_CREATE,
-        /** 丢弃时 */
+        /** 回收时 */
         ON_DISCARD,
-        /** 归档时 */
+        /** 存档时 */
         ON_ARCHIVE,
         /** 还原时 */
         ON_RESTORE,

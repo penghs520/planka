@@ -396,8 +396,8 @@ public class CardTypeDiffStrategy implements SchemaDiffStrategy {
             case "EDIT" -> "编辑卡片";
             case "MOVE" -> "移动卡片";
             case "ROLLBACK" -> "回退卡片";
-            case "ARCHIVE" -> "归档卡片";
-            case "DISCARD" -> "丢弃卡片";
+            case "ARCHIVE" -> "存档卡片";
+            case "DISCARD" -> "回收卡片";
             default -> operation;
         };
     }

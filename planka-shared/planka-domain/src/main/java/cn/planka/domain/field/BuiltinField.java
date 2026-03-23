@@ -28,19 +28,19 @@ public enum BuiltinField {
     STATUS_ID("$statusId", "价值流状态", FieldType.ENUM, true, true),
 
     /**
-     * 卡片周期（活跃/已归档/已丢弃）
+     * 卡片周期（活跃/已存档/已回收）
      */
     CARD_CYCLE("$cardCycle", "卡片周期", FieldType.ENUM, true, false),
 
     /**
-     * 归档时间
+     * 存档时间
      */
-    ARCHIVED_AT("$archivedAt", "归档时间", FieldType.DATE, true, false),
+    ARCHIVED_AT("$archivedAt", "存档时间", FieldType.DATE, true, false),
 
     /**
-     * 丢弃时间
+     * 回收时间
      */
-    DISCARDED_AT("$discardedAt", "丢弃时间", FieldType.DATE, true, false),
+    DISCARDED_AT("$discardedAt", "回收时间", FieldType.DATE, true, false),
 
     /**
      * 卡片编号（优先 customCode，其次 codeInOrg）

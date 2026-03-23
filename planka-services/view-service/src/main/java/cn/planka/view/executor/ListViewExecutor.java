@@ -318,8 +318,8 @@ public class ListViewExecutor implements ViewExecutor<ListViewDefinition, ListVi
                             .multiSelect(false)
                             .options(List.of(
                                     EnumOptionDTO.builder().id("ACTIVE").label("进行中").color("#52c41a").enabled(true).build(),
-                                    EnumOptionDTO.builder().id("ARCHIVED").label("已归档").color("#8c8c8c").enabled(true).build(),
-                                    EnumOptionDTO.builder().id("DISCARDED").label("已丢弃").color("#ff4d4f").enabled(true).build()
+                                    EnumOptionDTO.builder().id("ARCHIVED").label("已存档").color("#8c8c8c").enabled(true).build(),
+                                    EnumOptionDTO.builder().id("DISCARDED").label("已回收").color("#ff4d4f").enabled(true).build()
                             ))
                             .build();
             case STATUS_ID ->

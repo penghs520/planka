@@ -185,8 +185,8 @@ export default {
     number: '编号',
     createdAt: '创建时间',
     updatedAt: '更新时间',
-    discardedAt: '丢弃时间',
-    archivedAt: '归档时间',
+    discardedAt: '回收时间',
+    archivedAt: '存档时间',
   },
 
   // 条件操作符
@@ -227,8 +227,8 @@ export default {
   // 卡片生命周期状态
   lifecycleState: {
     ACTIVE: '活跃',
-    DISCARDED: '丢弃',
-    ARCHIVED: '归档',
+    DISCARDED: '已回收',
+    ARCHIVED: '已存档',
   },
 
   // 时间单位
@@ -428,14 +428,14 @@ export default {
 
   // 卡片操作
   card: {
-    confirmArchive: '确认归档',
-    archiveConfirmContent: '确定要归档卡片「{title}」吗？',
-    archive: '归档',
-    archiveSuccess: '归档成功',
-    confirmDiscard: '确认丢弃',
-    discardConfirmContent: '确定要丢弃卡片「{title}」吗？',
-    discard: '丢弃',
-    discardSuccess: '丢弃成功',
+    confirmArchive: '确认存档',
+    archiveConfirmContent: '确定要存档卡片「{title}」吗？',
+    archive: '存档',
+    archiveSuccess: '存档成功',
+    confirmDiscard: '确认回收',
+    discardConfirmContent: '确定要回收卡片「{title}」吗？',
+    discard: '回收',
+    discardSuccess: '回收成功',
     notFound: '找不到对应的卡片',
     selectTargetStatus: '请选择目标状态',
     noValueStream: '卡片未配置价值流',

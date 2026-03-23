@@ -232,9 +232,9 @@ export interface CardDTO {
   updatedAt?: string
   /** 更新人 ID */
   updatedBy?: string
-  /** 丢弃时间 */
+  /** 回收时间 */
   abandonedAt?: string
-  /** 归档时间 */
+  /** 存档时间 */
   archivedAt?: string
 }
 

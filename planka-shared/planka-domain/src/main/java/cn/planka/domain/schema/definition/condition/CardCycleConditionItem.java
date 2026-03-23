@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 卡片生命周期条件项
  * <p>
- * 用于查询卡片的生命周期状态（活跃、归档、丢弃）。
+ * 用于查询卡片的生命周期状态（活跃、存档、回收）。
  * nodeType 为 CARD_CYCLE。
  */
 @Getter

@@ -122,7 +122,7 @@ public class BuiltinCardTypeService {
     }
 
     /**
-     * 通用特征类型 + 创建人/归档人/丢弃人（目标端为成员特征类型）
+     * 通用特征类型 + 创建人/存档人/回收人（目标端为成员特征类型）
      *
      * @return 通用特征类型 ID（{orgId}:universal-trait）
      */
@@ -144,9 +144,9 @@ public class BuiltinCardTypeService {
         ensureSystemMemberLink(orgId, rootCardTypeId, memberAbstractCardTypeId,
                 SystemSchemaIds.creatorLinkTypeId(orgId), "创建人", "创建的卡", CREATOR_LINK_CODE);
         ensureSystemMemberLink(orgId, rootCardTypeId, memberAbstractCardTypeId,
-                SystemSchemaIds.archiverLinkTypeId(orgId), "归档人", "归档的卡", ARCHIVER_LINK_CODE);
+                SystemSchemaIds.archiverLinkTypeId(orgId), "存档人", "存档项", ARCHIVER_LINK_CODE);
         ensureSystemMemberLink(orgId, rootCardTypeId, memberAbstractCardTypeId,
-                SystemSchemaIds.discarderLinkTypeId(orgId), "丢弃人", "丢弃的卡", DISCARDER_LINK_CODE);
+                SystemSchemaIds.discarderLinkTypeId(orgId), "回收人", "回收项", DISCARDER_LINK_CODE);
         return rootCardTypeId;
     }
 
