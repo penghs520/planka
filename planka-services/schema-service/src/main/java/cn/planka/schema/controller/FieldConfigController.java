@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * <p>
  * 提供__PLANKA_EINST__的属性配置查询和保存接口。
  * <p>
- * 继承优先级：自身 > 显式父类 > 任意卡特征类型
+ * 继承优先级：自身 > 显式父类 > 通用特征类型
  */
 @RestController
 @RequestMapping("/api/v1/schemas/field-configs")

@@ -100,7 +100,7 @@ public class MemberService {
      * @param keyword 搜索关键字（可选，匹配成员卡片名称）
      */
     public Result<PageResult<MemberOptionDTO>> getMemberOptions(String orgId, int page, int size, String keyword) {
-        // 1. 获取成员__PLANKA_EINST__ID
+        // 1. 获取成员实体类型 ID
         String memberCardTypeId = SystemSchemaIds.memberCardTypeId(orgId);
 
         // 2. 构建查询请求
@@ -141,7 +141,7 @@ public class MemberService {
         queryContext.setOperatorId("system");
         queryRequest.setQueryContext(queryContext);
 
-        // 2. 查询范围：指定成员__PLANKA_EINST__和活跃状态
+        // 2. 查询范围：指定成员实体类型与活跃状态
         QueryScope queryScope = new QueryScope();
         queryScope.setCardTypeIds(List.of(memberCardTypeId));
         queryScope.setCardCycles(List.of(CardCycle.ACTIVE));
@@ -234,10 +234,10 @@ public class MemberService {
         userOrg.setStatus("ACTIVE");
         userOrg.setInvitedBy(operatorId);
 
-        // 6. 确定成员__PLANKA_EINST__
+        // 6. 确定成员实体类型
         String memberCardTypeId = request.cardTypeId();
         if (memberCardTypeId == null || memberCardTypeId.isBlank()) {
-            // 使用默认成员__PLANKA_EINST__
+            // 使用默认成员实体类型
             memberCardTypeId = org.getMemberCardTypeId();
         } else {
             // 验证指定类型是否继承成员特征类型
@@ -258,29 +258,29 @@ public class MemberService {
     }
 
     /**
-     * 验证成员__PLANKA_EINST__是否有效（继承成员特征类型）
+     * 验证成员实体类型是否有效（须继承成员特征类型）
      *
      * @param orgId      组织ID
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型 ID
      * @return 验证结果
      */
     private Result<Void> validateMemberCardType(String orgId, String cardTypeId) {
-        // 查询继承成员特征类型的所有__PLANKA_EINST__
+        // 校验是否为继承成员特征类型的实体类型
         String memberAbstractTypeId = SystemSchemaIds.memberAbstractCardTypeId(orgId);
         Optional<CardTypeDefinition> cardTypeOpt = cardTypeCacheQuery.getById(CardTypeId.of(cardTypeId));
         if (cardTypeOpt.isEmpty()) {
-            return Result.failure("MEMBER_005", "指定的__PLANKA_EINST__不存在");
+            return Result.failure("MEMBER_005", "指定的成员实体类型不存在");
         }
 
         CardTypeDefinition cardTypeDefinition = cardTypeOpt.get();
 
         if (!(cardTypeDefinition instanceof EntityCardType entityCardType)) {
-            return Result.failure("MEMBER_006", "指定的__PLANKA_EINST__不能是特征类型");
+            return Result.failure("MEMBER_006", "指定的成员实体类型不能是特征类型");
         }
 
         Set<CardTypeId> parentTypeIds = entityCardType.getParentTypeIds();
         if (CollectionUtils.isEmpty(parentTypeIds) || !parentTypeIds.stream().map(CardTypeId::value).toList().contains(memberAbstractTypeId)){
-            return Result.failure("MEMBER_007", "指定的__PLANKA_EINST__不是有效的成员类型");
+            return Result.failure("MEMBER_007", "指定的成员实体类型不是有效的成员类型");
         }
 
         return Result.success(null);

@@ -50,16 +50,31 @@ public final class SystemSchemaIds {
         return orgId + ":email";
     }
 
+    /** 通用特征类型（隐式根特征）系统标识后缀，与 {@link #anyTraitTypeId(String)} 一致 */
+    public static final String UNIVERSAL_TRAIT_SUFFIX = "universal-trait";
+
+    /** 历史任意卡特征类型后缀；存量数据可能仍为 {@code {orgId}:any-trait} */
+    public static final String LEGACY_ANY_TRAIT_SUFFIX = "any-trait";
+
     /**
-     * 任意卡特征类型 ID
+     * 通用特征类型 ID（所有实体类型隐式继承的根特征类型）
      * <p>
-     * 格式：{orgId}:any-trait
+     * 格式：{orgId}:universal-trait
      *
      * @param orgId 组织ID
-     * @return 任意卡特征类型ID
+     * @return 通用特征类型 ID
      */
     public static String anyTraitTypeId(String orgId) {
-        return orgId + ":any-trait";
+        return orgId + ":" + UNIVERSAL_TRAIT_SUFFIX;
+    }
+
+    /**
+     * 历史任意卡特征类型 ID（仅用于兼容升级前已创建的组织）
+     * <p>
+     * 格式：{orgId}:any-trait
+     */
+    public static String legacyAnyTraitTypeId(String orgId) {
+        return orgId + ":" + LEGACY_ANY_TRAIT_SUFFIX;
     }
 
     // ---------- Team / Project / Issue __PLANKA_EINST__ ----------

@@ -17,10 +17,10 @@ import java.util.*;
  * <p>
  * 负责解析实体类型的完整属性配置（包括普通属性和关联属性），处理继承链遍历和配置合并。
  * <p>
- * 继承优先级（从高到低）：自身 > 显式父类 > 任意卡特征类型
+ * 继承优先级（从高到低）：自身 > 显式父类 > 通用特征类型（隐式根特征）
  * <p>
  * 使用 LinkedHashMap + put() 实现覆盖语义：
- * 1. 先添加任意卡特征类型配置（最低优先级）
+ * 1. 先添加通用特征类型配置（最低优先级）
  * 2. 按声明顺序添加显式父类配置（后声明覆盖先声明）
  * 3. 最后添加自身配置（最高优先级）
  */
@@ -61,14 +61,18 @@ class FieldConfigResolver {
      */
     private List<String> buildInheritanceChain(CardTypeDefinition cardType) {
         String cardTypeId = cardType.getId().value();
-        String rootCardTypeId = SystemSchemaIds.anyTraitTypeId(cardType.getOrgId());
-        boolean isRootCardType = cardTypeId.equals(rootCardTypeId);
+        String orgId = cardType.getOrgId();
+        String preferredRootId = SystemSchemaIds.anyTraitTypeId(orgId);
+        String legacyRootId = SystemSchemaIds.legacyAnyTraitTypeId(orgId);
+        String resolvedRootId = resolveImplicitRootTraitTypeId(orgId);
+        boolean isImplicitRootTrait =
+                cardTypeId.equals(preferredRootId) || cardTypeId.equals(legacyRootId);
 
         List<String> chain = new ArrayList<>();
 
-        // 1. 任意卡特征类型（最低优先级，排除自身）
-        if (!isRootCardType) {
-            chain.add(rootCardTypeId);
+        // 1. 通用特征类型（最低优先级，排除自身；兼容存量 {orgId}:any-trait）
+        if (!isImplicitRootTrait) {
+            chain.add(resolvedRootId);
         }
 
         // 2. 显式父类（按声明顺序）
@@ -82,6 +86,22 @@ class FieldConfigResolver {
         chain.add(cardTypeId);
 
         return chain;
+    }
+
+    /**
+     * 解析隐式根特征类型在数据中的实际 ID：优先 universal-trait，否则兼容 any-trait；
+     * 均不存在时返回规范新 ID（与新组织创建路径一致）。
+     */
+    private String resolveImplicitRootTraitTypeId(String orgId) {
+        String preferred = SystemSchemaIds.anyTraitTypeId(orgId);
+        if (dataProvider.getCardTypeById(preferred).isPresent()) {
+            return preferred;
+        }
+        String legacy = SystemSchemaIds.legacyAnyTraitTypeId(orgId);
+        if (dataProvider.getCardTypeById(legacy).isPresent()) {
+            return legacy;
+        }
+        return preferred;
     }
 
     /** 解析过程中的上下文 */

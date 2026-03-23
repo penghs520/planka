@@ -7,6 +7,7 @@ import cn.planka.common.result.Result;
 import cn.planka.domain.card.CardTypeId;
 import cn.planka.domain.field.FieldConfigId;
 import cn.planka.domain.field.FieldId;
+import cn.planka.domain.schema.definition.cardtype.AbstractCardType;
 import cn.planka.domain.schema.definition.cardtype.EntityCardType;
 import cn.planka.domain.schema.definition.fieldconfig.SingleLineTextFieldConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,12 +39,19 @@ class FieldConfigQueryServiceTest {
     private FieldConfigQueryService fieldConfigQueryService;
 
     private static final String ORG_ID = "org-1";
+    private static final String ROOT_TRAIT_TYPE_ID = ORG_ID + ":universal-trait";
+    private static final String LEGACY_ROOT_TRAIT_TYPE_ID = ORG_ID + ":any-trait";
 
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
         fieldConfigQueryService = new FieldConfigQueryService(schemaDataProvider);
+        lenient().when(schemaDataProvider.getCardTypeById(ROOT_TRAIT_TYPE_ID))
+                .thenReturn(Optional.of(new AbstractCardType(
+                        CardTypeId.of(ROOT_TRAIT_TYPE_ID), ORG_ID, "通用特征类型")));
+        lenient().when(schemaDataProvider.getCardTypeById(LEGACY_ROOT_TRAIT_TYPE_ID))
+                .thenReturn(Optional.empty());
     }
 
     @Nested
@@ -124,9 +132,8 @@ class FieldConfigQueryServiceTest {
             // 模拟属性配置
             SingleLineTextFieldConfig fieldConfig = createFieldConfig("config-1", "abstract-1", "field-1");
 
-            // 任意卡特征类型返回空
-            String rootCardTypeId = ORG_ID + ":any-trait";
-            when(schemaDataProvider.getAllFieldConfigsByCardTypeId(rootCardTypeId)).thenReturn(Collections.emptyList());
+            // 通用特征类型返回空
+            when(schemaDataProvider.getAllFieldConfigsByCardTypeId(ROOT_TRAIT_TYPE_ID)).thenReturn(Collections.emptyList());
 
             // 只在 abstract-1 返回配置
             when(schemaDataProvider.getAllFieldConfigsByCardTypeId("abstract-1")).thenReturn(List.of(fieldConfig));

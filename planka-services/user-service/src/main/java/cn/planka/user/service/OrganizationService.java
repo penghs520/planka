@@ -45,11 +45,11 @@ public class OrganizationService {
         // 2. 创建成员特征类型（包含用户名、邮箱、电话字段定义）
         String memberAbstractCardTypeId = builtinCardTypeService.createMemberAbstractCardType(org.getId());
 
-        // 3. 创建成员__PLANKA_EINST__（继承特征类型）
+        // 3. 创建成员实体类型（继承特征类型）
         String memberCardTypeId = builtinCardTypeService.createMemberCardType(org.getId(), memberAbstractCardTypeId);
         org.setMemberCardTypeId(memberCardTypeId);
 
-        // 4. 创建任意卡特征类型及关联（创建人/归档人/丢弃人，关联目标为成员特征类型）
+        // 4. 创建通用特征类型及关联（创建人/归档人/丢弃人，关联目标为成员特征类型）
         builtinCardTypeService.createAnyTraitAndSystemMemberLinks(org.getId());
 
         // 5. 内置 Team / Project / Issue 及业务关联

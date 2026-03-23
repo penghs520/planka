@@ -5,6 +5,7 @@ import cn.planka.domain.card.CardTypeId;
 import cn.planka.domain.field.FieldConfigId;
 import cn.planka.domain.field.FieldId;
 import cn.planka.domain.link.LinkPosition;
+import cn.planka.domain.schema.definition.cardtype.AbstractCardType;
 import cn.planka.domain.schema.definition.cardtype.EntityCardType;
 import cn.planka.domain.schema.definition.fieldconfig.SingleLineTextFieldConfig;
 import cn.planka.domain.schema.definition.linkconfig.LinkFieldConfig;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +28,7 @@ import static org.mockito.Mockito.*;
 /**
  * FieldConfigResolver 单元测试
  * <p>
- * 测试继承优先级：自身 > 显式父类 > 任意卡特征类型
+ * 测试继承优先级：自身 > 显式父类 > 通用特征类型
  */
 @ExtendWith(MockitoExtension.class)
 class FieldConfigResolverTest {
@@ -37,11 +39,17 @@ class FieldConfigResolverTest {
     private FieldConfigResolver resolver;
 
     private static final String ORG_ID = "org-1";
-    private static final String ROOT_CARD_TYPE_ID = "org-1:any-trait";
+    private static final String ROOT_CARD_TYPE_ID = ORG_ID + ":universal-trait";
+    private static final String LEGACY_ROOT_CARD_TYPE_ID = ORG_ID + ":any-trait";
 
     @BeforeEach
     void setUp() {
         resolver = new FieldConfigResolver(schemaDataProvider);
+        lenient().when(schemaDataProvider.getCardTypeById(ROOT_CARD_TYPE_ID))
+                .thenReturn(Optional.of(new AbstractCardType(
+                        CardTypeId.of(ROOT_CARD_TYPE_ID), ORG_ID, "通用特征类型")));
+        lenient().when(schemaDataProvider.getCardTypeById(LEGACY_ROOT_CARD_TYPE_ID))
+                .thenReturn(Optional.empty());
     }
 
     @Nested
@@ -49,12 +57,12 @@ class FieldConfigResolverTest {
     class InheritancePriorityTests {
 
         @Test
-        @DisplayName("显式父类配置覆盖任意卡特征类型配置")
+        @DisplayName("显式父类配置覆盖通用特征类型配置")
         void parentConfigOverridesRootConfig() {
             // Given
             EntityCardType cardType = createEntityCardType("concrete-1", "需求", Set.of("abstract-1"));
 
-            // 任意卡特征类型的配置
+            // 通用特征类型的配置
             SingleLineTextFieldConfig rootConfig = createFieldConfig("root-config", ROOT_CARD_TYPE_ID, "field-1");
             rootConfig.setDefaultValue("顶级默认值");
 
@@ -76,7 +84,7 @@ class FieldConfigResolverTest {
             // When
             FieldConfigResolver.ResolvedFieldConfigs result = resolver.resolve(cardType);
 
-            // Then - 父类配置应该覆盖任意卡特征类型配置
+            // Then - 父类配置应该覆盖通用特征类型配置
             assertThat(result.fieldConfigs()).containsKey("field-1");
             SingleLineTextFieldConfig effectiveConfig = (SingleLineTextFieldConfig) result.fieldConfigs().get("field-1");
             assertThat(effectiveConfig.getDefaultValue()).isEqualTo("父类默认值");
@@ -206,7 +214,7 @@ class FieldConfigResolverTest {
     class LinkConfigResolveTests {
 
         @Test
-        @DisplayName("继承任意卡特征类型关联配置")
+        @DisplayName("继承通用特征类型关联配置")
         void inheritRootLinkConfig() {
             // Given
             EntityCardType cardType = createEntityCardType("concrete-1", "需求", null);
@@ -232,7 +240,7 @@ class FieldConfigResolverTest {
         }
 
         @Test
-        @DisplayName("自身关联配置覆盖任意卡特征类型")
+        @DisplayName("自身关联配置覆盖通用特征类型")
         void ownLinkConfigOverridesRoot() {
             // Given
             EntityCardType cardType = createEntityCardType("concrete-1", "需求", null);
@@ -314,10 +322,36 @@ class FieldConfigResolverTest {
         }
 
         @Test
-        @DisplayName("任意卡特征类型自身不继承任意卡特征类型配置")
+        @DisplayName("存量仅存在 any-trait 时从旧根类型继承配置")
+        void legacyAnyTraitIdUsedWhenUniversalNotPresent() {
+            when(schemaDataProvider.getCardTypeById(ROOT_CARD_TYPE_ID)).thenReturn(Optional.empty());
+            when(schemaDataProvider.getCardTypeById(LEGACY_ROOT_CARD_TYPE_ID)).thenReturn(Optional.of(
+                    new AbstractCardType(CardTypeId.of(LEGACY_ROOT_CARD_TYPE_ID), ORG_ID, "任意卡特征类型")));
+
+            EntityCardType cardType = createEntityCardType("concrete-1", "需求", null);
+            SingleLineTextFieldConfig legacyRootConfig =
+                    createFieldConfig("root-config", LEGACY_ROOT_CARD_TYPE_ID, "field-1");
+            legacyRootConfig.setDefaultValue("legacy-root");
+
+            when(schemaDataProvider.getAllFieldConfigsByCardTypeId(LEGACY_ROOT_CARD_TYPE_ID))
+                    .thenReturn(List.of(legacyRootConfig));
+            when(schemaDataProvider.getAllFieldConfigsByCardTypeId("concrete-1"))
+                    .thenReturn(Collections.emptyList());
+            when(schemaDataProvider.getLinkTypesByCardTypeId(anyString())).thenReturn(Collections.emptyList());
+
+            FieldConfigResolver.ResolvedFieldConfigs result = resolver.resolve(cardType);
+
+            assertThat(result.fieldConfigs()).containsKey("field-1");
+            assertThat(((SingleLineTextFieldConfig) result.fieldConfigs().get("field-1")).getDefaultValue())
+                    .isEqualTo("legacy-root");
+            assertThat(result.configSources().get("field-1")).isEqualTo(LEGACY_ROOT_CARD_TYPE_ID);
+        }
+
+        @Test
+        @DisplayName("通用特征类型自身不继承隐式根特征配置")
         void rootCardTypeDoesNotInheritFromItself() {
             // Given
-            EntityCardType rootCardType = createEntityCardType(ROOT_CARD_TYPE_ID, "任意卡特征类型", null);
+            EntityCardType rootCardType = createEntityCardType(ROOT_CARD_TYPE_ID, "通用特征类型", null);
 
             SingleLineTextFieldConfig rootConfig = createFieldConfig("root-config", ROOT_CARD_TYPE_ID, "field-1");
 
@@ -329,7 +363,7 @@ class FieldConfigResolverTest {
             // When
             FieldConfigResolver.ResolvedFieldConfigs result = resolver.resolve(rootCardType);
 
-            // Then - 应该只查询一次（自身），不会重复查询任意卡特征类型
+            // Then - 应该只查询一次（自身），不会重复查询隐式根特征
             verify(schemaDataProvider, times(1))
                     .getAllFieldConfigsByCardTypeId(ROOT_CARD_TYPE_ID);
             assertThat(result.fieldConfigs()).containsKey("field-1");

@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
  * <p>
  * 提供__PLANKA_EINST__属性配置的获取和保存功能。
  * <p>
- * 继承优先级（从高到低）：自身 > 显式父类 > 任意卡特征类型
+ * 继承优先级（从高到低）：自身 > 显式父类 > 通用特征类型
  */
 @Slf4j
 @Service

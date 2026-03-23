@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * 属性配置查询服务
- * 提供实体类型属性配置的获取功能： 继承优先级（从高到低）：自身 > 显式父类 > 任意卡特征类型
+ * 提供实体类型属性配置的获取功能： 继承优先级（从高到低）：自身 > 显式父类 > 通用特征类型
  */
 public class FieldConfigQueryService {
 
