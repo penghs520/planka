@@ -247,7 +247,9 @@ function handleNext(): void {
   flex: 1;
   min-width: 0;
   overflow-y: auto;
-  padding: 6px 0 6px 14px;
+  /* 右侧留白 + 预留滚动条槽位，避免遮挡最右列卡片 */
+  padding: 6px 16px 6px 14px;
+  scrollbar-gutter: stable;
 }
 
 .picker-section {
