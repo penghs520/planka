@@ -11,10 +11,13 @@ interface Props {
   multiSelect: boolean
   options: EnumOptionDTO[]
   disabled?: boolean
+  /** 为 true 时禁止切换单选/多选（由类型选择入口决定） */
+  lockMultiSelect?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
+  lockMultiSelect: false,
 })
 
 const emit = defineEmits<{
@@ -86,7 +89,7 @@ const enumOptionHelpContent = computed(() => `
     </div>
 
     <div class="config-row">
-      <a-checkbox v-model="multiSelectValue" :disabled="disabled">
+      <a-checkbox v-model="multiSelectValue" :disabled="disabled || lockMultiSelect">
         {{ t('admin.cardType.fieldConfig.multiSelect') }}
       </a-checkbox>
     </div>

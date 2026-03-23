@@ -134,7 +134,7 @@ export default {
     reference: '引用关系',
     disable: '停用',
     sourceName: '源侧名称',
-    targetName: '对侧名称',
+    targetName: '对侧字段名称',
     multiSelect: '多选',
     singleSelect: '单选',
     implementTypes: '实现类型',

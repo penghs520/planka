@@ -3,10 +3,16 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { FormInstance } from '@arco-design/web-vue'
 import { Message } from '@arco-design/web-vue'
-import { cardTypeApi } from '@/api'
+import { cardTypeApi, linkTypeApi } from '@/api'
 import SaveButton from '@/components/common/SaveButton.vue'
 import CancelButton from '@/components/common/CancelButton.vue'
 import SelectFieldTypeModal from './components/SelectFieldTypeModal.vue'
+import LinkFieldQuickCreateSection from './components/LinkFieldQuickCreateSection.vue'
+import type { FieldTypeModalConfirmPayload } from './components/field-type-modal-payload'
+import {
+  defaultLinkFieldQuickCreateState,
+  type LinkFieldQuickCreateState,
+} from './components/link-field-quick-types'
 import { SchemaSubType } from '@/types/schema'
 import { DateFormat } from '@/types/field'
 import { getFieldTypeLabelI18n, supportsValueSource } from './formatters'
@@ -46,6 +52,8 @@ const saving = ref(false)
 const formRef = ref<FormInstance>()
 const selectedType = ref<SchemaSubType | null>(null)
 const step = ref<1 | 2>(1)
+const linkQuick = ref<LinkFieldQuickCreateState>(defaultLinkFieldQuickCreateState(false))
+const linkQuickSectionRef = ref<InstanceType<typeof LinkFieldQuickCreateSection> | null>(null)
 
 // 表单验证规则
 const formRules = {
@@ -136,6 +144,18 @@ function handleValueSourceChange(value: ValueSourceType): void {
 
 /** 动态生成抽屉标题 */
 const drawerTitle = computed(() => {
+  if (selectedType.value === SchemaSubType.LINK_FIELD) {
+    const typeLabel = linkQuick.value.targetMultiSelect
+      ? t('admin.fieldType.LINK_MULTI')
+      : t('admin.fieldType.LINK_SINGLE')
+    return t('admin.cardType.fieldConfig.createNewWithType', { type: typeLabel })
+  }
+  if (selectedType.value === SchemaSubType.ENUM_FIELD) {
+    const typeLabel = formData.value.multiSelect
+      ? t('admin.fieldType.ENUM_MULTI')
+      : t('admin.fieldType.ENUM_SINGLE')
+    return t('admin.cardType.fieldConfig.createNewWithType', { type: typeLabel })
+  }
   if (selectedType.value) {
     return t('admin.cardType.fieldConfig.createNewWithType', { type: getFieldTypeLabel(selectedType.value) })
   }
@@ -154,8 +174,13 @@ const isTextType = computed(() => {
 /** 值来源是否为手动输入 */
 const valueSourceIsManual = computed(() => formData.value.valueSource === 'MANUAL')
 
+interface ApplyTypeOptions {
+  linkTargetMulti?: boolean
+  enumMultiSelect?: boolean
+}
+
 /** 选中类型后写入表单默认值（不含步骤切换） */
-function applyTypeDefaults(type: SchemaSubType): void {
+function applyTypeDefaults(type: SchemaSubType, opts?: ApplyTypeOptions): void {
   selectedType.value = type
   switch (type) {
     case SchemaSubType.NUMBER_FIELD:
@@ -168,7 +193,7 @@ function applyTypeDefaults(type: SchemaSubType): void {
       formData.value.useNowAsDefault = false
       break
     case SchemaSubType.ENUM_FIELD:
-      formData.value.multiSelect = false
+      formData.value.multiSelect = opts?.enumMultiSelect ?? false
       formData.value.enumOptions = []
       break
     case SchemaSubType.ATTACHMENT_FIELD:
@@ -182,13 +207,19 @@ function applyTypeDefaults(type: SchemaSubType): void {
       formData.value.structureId = ''
       formData.value.levelBindings = []
       break
+    case SchemaSubType.LINK_FIELD:
+      linkQuick.value = defaultLinkFieldQuickCreateState(opts?.linkTargetMulti ?? false)
+      break
     default:
       break
   }
 }
 
-function handleFieldTypePicked(type: SchemaSubType): void {
-  applyTypeDefaults(type)
+function handleFieldTypePicked(payload: FieldTypeModalConfirmPayload): void {
+  applyTypeDefaults(payload.schemaSubType, {
+    linkTargetMulti: payload.linkTargetMulti,
+    enumMultiSelect: payload.enumMultiSelect,
+  })
   step.value = 2
 }
 
@@ -223,6 +254,7 @@ function resetForm(): void {
     structureId: '',
     levelBindings: [],
   }
+  linkQuick.value = defaultLinkFieldQuickCreateState(false)
 }
 
 function handleCancel(): void {
@@ -234,8 +266,64 @@ async function handleSave(): Promise<void> {
   const errors = await formRef.value?.validate()
   if (errors) return
 
+  if (selectedType.value === SchemaSubType.LINK_FIELD) {
+    if (!linkQuickSectionRef.value?.validate()) return
+  }
+
   saving.value = true
   try {
+    if (selectedType.value === SchemaSubType.LINK_FIELD) {
+      const q = linkQuick.value
+      const sourceName = formData.value.name.trim()
+      const sourceCode = formData.value.code?.trim() || undefined
+      const relationName = `${sourceName}-${q.targetName.trim()}`
+
+      const linkType = await linkTypeApi.create({
+        name: relationName,
+        description: q.description || undefined,
+        sourceName,
+        targetName: q.targetName.trim(),
+        sourceCode,
+        targetCode: q.targetCode || undefined,
+        sourceCardTypeIds: [props.cardTypeId],
+        targetCardTypeIds: [...q.peerCardTypeIds],
+        sourceMultiSelect: false,
+        targetMultiSelect: q.targetMultiSelect,
+      })
+
+      if (!linkType.id) {
+        Message.error(t('admin.cardType.fieldConfig.createFailed'))
+        return
+      }
+
+      const position = 'SOURCE'
+      const fieldConfig: Record<string, unknown> = {
+        schemaSubType: SchemaSubType.LINK_FIELD,
+        name: formData.value.name,
+        code: formData.value.code,
+        fieldId: `${linkType.id}:${position}`,
+        required: formData.value.required,
+        readOnly: formData.value.readOnly,
+        cardTypeId: props.cardTypeId,
+        systemField: false,
+      }
+
+      try {
+        await cardTypeApi.saveFieldConfig(
+          props.cardTypeId,
+          fieldConfig as unknown as Parameters<typeof cardTypeApi.saveFieldConfig>[1]
+        )
+        Message.success(t('admin.cardType.fieldConfig.createSuccess'))
+        emit('created')
+        drawerVisible.value = false
+        resetForm()
+      } catch (saveErr) {
+        console.error('Failed to save link field config after link type created:', saveErr)
+        Message.warning(t('admin.cardType.fieldConfig.linkFieldQuickCreate.saveFieldPartialFail'))
+      }
+      return
+    }
+
     const fieldConfig: Record<string, unknown> = {
       schemaSubType: selectedType.value,
       name: formData.value.name,
@@ -431,6 +519,7 @@ async function handleSave(): Promise<void> {
         v-if="selectedType === SchemaSubType.ENUM_FIELD"
         v-model:multi-select="formData.multiSelect"
         v-model:options="formData.enumOptions"
+        lock-multi-select
       />
 
       <!-- 附件类型配置 -->
@@ -456,6 +545,13 @@ async function handleSave(): Promise<void> {
         v-model:level-bindings="formData.levelBindings"
         :card-type-id="props.cardTypeId"
         :field-name="formData.name"
+      />
+
+      <LinkFieldQuickCreateSection
+        v-if="selectedType === SchemaSubType.LINK_FIELD"
+        ref="linkQuickSectionRef"
+        v-model="linkQuick"
+        :card-type-id="props.cardTypeId"
       />
     </a-form>
 

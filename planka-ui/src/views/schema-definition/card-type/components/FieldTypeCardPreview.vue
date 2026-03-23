@@ -3,6 +3,10 @@ import { SchemaSubType } from '@/types/schema'
 
 defineProps<{
   schemaSubType: SchemaSubType
+  /** 仅 LINK：对侧多选入口时为 true */
+  linkTargetMulti?: boolean
+  /** 仅 ENUM：多选枚举入口时为 true */
+  enumMultiSelect?: boolean
 }>()
 </script>
 
@@ -33,10 +37,21 @@ defineProps<{
       </div>
     </div>
 
-    <!-- 枚举：下拉选择 -->
-    <div v-else-if="schemaSubType === SchemaSubType.ENUM_FIELD" class="mock mock-select">
+    <!-- 枚举：单选为单标签下拉；多选为多个标签 -->
+    <div
+      v-else-if="schemaSubType === SchemaSubType.ENUM_FIELD"
+      class="mock mock-select"
+      :class="{ 'mock-select--multi': enumMultiSelect }"
+    >
       <div class="mock-select-inner">
-        <span class="mock-pill" />
+        <div class="mock-select-pills">
+          <template v-if="enumMultiSelect">
+            <span class="mock-pill mock-pill--sm" />
+            <span class="mock-pill mock-pill--sm" />
+            <span class="mock-pill mock-pill--sm mock-pill--narrow" />
+          </template>
+          <span v-else class="mock-pill" />
+        </div>
         <span class="mock-chevron" />
       </div>
     </div>
@@ -64,6 +79,31 @@ defineProps<{
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 关联类型：双卡片 + 连线；多选入口展示多个标签块 -->
+    <div
+      v-else-if="schemaSubType === SchemaSubType.LINK_FIELD"
+      class="mock mock-link"
+      :class="{ 'mock-link--multi': linkTargetMulti }"
+    >
+      <div class="mock-link-row">
+        <div class="mock-link-card">
+          <span class="mock-link-card-bar" />
+        </div>
+        <span class="mock-link-join" />
+        <div class="mock-link-card mock-link-card--to">
+          <span class="mock-link-card-bar mock-link-card-bar--short" />
+        </div>
+      </div>
+      <div class="mock-link-tags">
+        <template v-if="linkTargetMulti">
+          <span class="mock-link-tag-pill mock-link-tag-pill--sm" />
+          <span class="mock-link-tag-pill mock-link-tag-pill--sm" />
+          <span class="mock-link-tag-pill mock-link-tag-pill--sm" />
+        </template>
+        <span v-else class="mock-link-tag-pill" />
       </div>
     </div>
 
@@ -215,6 +255,29 @@ defineProps<{
   border: 1px solid rgba(var(--primary-6), 0.25);
 }
 
+.mock-select-pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mock-select--multi .mock-select-pills {
+  row-gap: 3px;
+}
+
+.mock-pill--sm {
+  width: 30%;
+  max-width: 36px;
+  height: 8px;
+}
+
+.mock-pill--narrow {
+  max-width: 28px;
+}
+
 .mock-chevron {
   width: 0;
   height: 0;
@@ -355,6 +418,95 @@ defineProps<{
   margin-left: 6px;
   padding-left: 8px;
   border-left: 1px solid var(--color-border-2);
+}
+
+/* 关联 */
+.mock-link {
+  gap: 6px;
+  min-height: 54px;
+}
+
+.mock-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.mock-link-card {
+  flex: 1;
+  min-width: 0;
+  max-width: 38%;
+  height: 26px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border-2);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.mock-link-card--to {
+  max-width: 36%;
+}
+
+.mock-link-card-bar {
+  height: 6px;
+  width: 70%;
+  border-radius: 2px;
+  background: var(--color-fill-3);
+}
+
+.mock-link-card-bar--short {
+  width: 55%;
+}
+
+.mock-link-join {
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgb(var(--primary-5));
+  opacity: 0.55;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.mock-link-join::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 3px solid transparent;
+  border-left: 4px solid rgb(var(--primary-5));
+  opacity: 0.65;
+}
+
+.mock-link-tags {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.mock-link-tag-pill {
+  height: 10px;
+  width: 52%;
+  max-width: 120px;
+  border-radius: 3px;
+  background: rgb(var(--primary-1));
+  border: 1px solid rgba(var(--primary-6), 0.3);
+}
+
+.mock-link-tag-pill--sm {
+  width: 22%;
+  max-width: 36px;
+  height: 8px;
+}
+
+.mock-link--multi .mock-link-card--to .mock-link-card-bar--short {
+  width: 65%;
 }
 
 /* 日期 */

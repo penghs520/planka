@@ -134,7 +134,7 @@ export default {
     reference: 'References',
     disable: 'Disable',
     sourceName: 'Source-side name',
-    targetName: 'Opposite-side name',
+    targetName: 'Opposite-side field name',
     multiSelect: 'Multi-select',
     singleSelect: 'Single-select',
     implementTypes: 'Implementation Types',

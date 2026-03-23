@@ -6,7 +6,12 @@ import CancelButton from '@/components/common/CancelButton.vue'
 import { SchemaSubType } from '@/types/schema'
 import FieldTypeCardPreview from './FieldTypeCardPreview.vue'
 import { getFieldTypeLabelI18n } from '../formatters'
-import { FIELD_TYPE_CATEGORIES, type FieldTypeCategoryId } from './field-type-picker'
+import {
+  FIELD_TYPE_CATEGORIES,
+  type FieldTypeCategoryId,
+  type FieldTypePickerItem,
+} from './field-type-picker'
+import type { FieldTypeModalConfirmPayload } from './field-type-modal-payload'
 
 const props = defineProps<{
   visible: boolean
@@ -14,12 +19,12 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   cancel: []
-  confirm: [subType: SchemaSubType]
+  confirm: [payload: FieldTypeModalConfirmPayload]
 }>()
 
 const { t } = useI18n()
 
-const highlightedSubType = ref<SchemaSubType | null>(null)
+const highlightedItem = ref<FieldTypePickerItem | null>(null)
 const activeCategoryId = ref<FieldTypeCategoryId>('text')
 const scrollEl = ref<HTMLElement | null>(null)
 
@@ -27,7 +32,7 @@ watch(
   () => props.visible,
   (v) => {
     if (v) {
-      highlightedSubType.value = null
+      highlightedItem.value = null
       activeCategoryId.value = 'text'
     }
   }
@@ -45,18 +50,54 @@ function scrollToCategory(catId: FieldTypeCategoryId): void {
   el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-function handleCardClick(subType: SchemaSubType): void {
-  highlightedSubType.value = subType
-  const cat = FIELD_TYPE_CATEGORIES.find((c) => c.subTypes.includes(subType))
+function handleCardClick(item: FieldTypePickerItem): void {
+  highlightedItem.value = item
+  const cat = FIELD_TYPE_CATEGORIES.find((c) => c.items.some((i) => i.key === item.key))
   if (cat) activeCategoryId.value = cat.id
 }
 
-function fieldTypeHelpKey(subType: SchemaSubType): string {
-  return `admin.cardType.fieldConfig.fieldTypeHelp.${subType}`
+function fieldTypeHelpKey(item: FieldTypePickerItem): string {
+  if (
+    item.schemaSubType === SchemaSubType.LINK_FIELD &&
+    item.linkTargetMulti === false
+  ) {
+    return 'admin.cardType.fieldConfig.fieldTypeHelp.LINK_FIELD_SINGLE'
+  }
+  if (
+    item.schemaSubType === SchemaSubType.LINK_FIELD &&
+    item.linkTargetMulti === true
+  ) {
+    return 'admin.cardType.fieldConfig.fieldTypeHelp.LINK_FIELD_MULTI'
+  }
+  if (
+    item.schemaSubType === SchemaSubType.ENUM_FIELD &&
+    item.enumMultiSelect === false
+  ) {
+    return 'admin.cardType.fieldConfig.fieldTypeHelp.ENUM_FIELD_SINGLE'
+  }
+  if (
+    item.schemaSubType === SchemaSubType.ENUM_FIELD &&
+    item.enumMultiSelect === true
+  ) {
+    return 'admin.cardType.fieldConfig.fieldTypeHelp.ENUM_FIELD_MULTI'
+  }
+  return `admin.cardType.fieldConfig.fieldTypeHelp.${item.schemaSubType}`
 }
 
-function labelFor(subType: SchemaSubType): string {
-  return getFieldTypeLabelI18n(subType, t)
+function labelFor(item: FieldTypePickerItem): string {
+  if (item.schemaSubType === SchemaSubType.LINK_FIELD && item.linkTargetMulti === false) {
+    return t('admin.fieldType.LINK_SINGLE')
+  }
+  if (item.schemaSubType === SchemaSubType.LINK_FIELD && item.linkTargetMulti === true) {
+    return t('admin.fieldType.LINK_MULTI')
+  }
+  if (item.schemaSubType === SchemaSubType.ENUM_FIELD && item.enumMultiSelect === false) {
+    return t('admin.fieldType.ENUM_SINGLE')
+  }
+  if (item.schemaSubType === SchemaSubType.ENUM_FIELD && item.enumMultiSelect === true) {
+    return t('admin.fieldType.ENUM_MULTI')
+  }
+  return getFieldTypeLabelI18n(item.schemaSubType, t)
 }
 
 function handleCancel(): void {
@@ -64,11 +105,21 @@ function handleCancel(): void {
 }
 
 function handleNext(): void {
-  if (!highlightedSubType.value) {
+  if (!highlightedItem.value) {
     Message.warning(t('admin.cardType.fieldConfig.selectTypeFirstHint'))
     return
   }
-  emit('confirm', highlightedSubType.value)
+  const h = highlightedItem.value
+  const payload: FieldTypeModalConfirmPayload = {
+    schemaSubType: h.schemaSubType,
+  }
+  if (h.schemaSubType === SchemaSubType.LINK_FIELD && h.linkTargetMulti !== undefined) {
+    payload.linkTargetMulti = h.linkTargetMulti
+  }
+  if (h.schemaSubType === SchemaSubType.ENUM_FIELD && h.enumMultiSelect !== undefined) {
+    payload.enumMultiSelect = h.enumMultiSelect
+  }
+  emit('confirm', payload)
 }
 </script>
 
@@ -112,19 +163,23 @@ function handleNext(): void {
           </h3>
           <div class="card-grid">
             <button
-              v-for="subType in cat.subTypes"
-              :key="subType"
+              v-for="pickerItem in cat.items"
+              :key="pickerItem.key"
               type="button"
               class="type-card"
-              :class="{ 'type-card--selected': highlightedSubType === subType }"
-              @click="handleCardClick(subType)"
+              :class="{ 'type-card--selected': highlightedItem?.key === pickerItem.key }"
+              @click="handleCardClick(pickerItem)"
             >
               <div class="type-card-preview">
-                <FieldTypeCardPreview :schema-sub-type="subType" />
+                <FieldTypeCardPreview
+                  :schema-sub-type="pickerItem.schemaSubType"
+                  :link-target-multi="pickerItem.linkTargetMulti"
+                  :enum-multi-select="pickerItem.enumMultiSelect"
+                />
               </div>
               <div class="type-card-body">
-                <div class="type-card-title">{{ labelFor(subType) }}</div>
-                <p class="type-card-desc">{{ t(fieldTypeHelpKey(subType)) }}</p>
+                <div class="type-card-title">{{ labelFor(pickerItem) }}</div>
+                <p class="type-card-desc">{{ t(fieldTypeHelpKey(pickerItem)) }}</p>
               </div>
             </button>
           </div>
@@ -137,7 +192,7 @@ function handleNext(): void {
         <a-button
           type="primary"
           class="btn-primary"
-          :disabled="!highlightedSubType"
+          :disabled="!highlightedItem"
           @click="handleNext"
         >
           {{ t('admin.cardType.fieldConfig.nextStep') }}
