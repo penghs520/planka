@@ -75,7 +75,6 @@ function handleNext(): void {
 <template>
   <a-modal
     :visible="visible"
-    :title="t('admin.cardType.fieldConfig.selectFieldType')"
     :width="800"
     :mask-closable="true"
     :esc-to-close="true"
@@ -83,6 +82,11 @@ function handleNext(): void {
     unmount-on-close
     @cancel="handleCancel"
   >
+    <template #title>
+      <span class="select-field-type-modal__title">
+        {{ t('admin.cardType.fieldConfig.selectFieldType') }}
+      </span>
+    </template>
     <div class="picker-shell">
       <nav class="picker-nav" aria-label="field type categories">
         <button
@@ -287,6 +291,29 @@ function handleNext(): void {
 
 .select-field-type-modal-wrap .arco-modal-header {
   border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.select-field-type-modal-wrap .arco-modal-title {
+  flex: 1;
+  margin: 0;
+  text-align: left;
+  justify-content: flex-start;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--color-text-1);
+}
+
+.select-field-type-modal-wrap .arco-modal-close-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.select-field-type-modal-wrap .select-field-type-modal__title {
+  font-weight: 600;
 }
 
 .select-field-type-modal-wrap .arco-modal-footer {
