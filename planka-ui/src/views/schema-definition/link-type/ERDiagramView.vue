@@ -20,7 +20,7 @@ import CardTypeSelect from '@/components/card-type/CardTypeSelect.vue'
 import { cardTypeApi, linkTypeApi } from '@/api'
 import type { CardTypeDefinition } from '@/types/card-type'
 import type { FieldOption } from '@/types/field-option'
-import type { LinkTypeVO, CardTypeInfo, UpdateLinkTypeRequest, CreateLinkTypeRequest } from '@/types/link-type'
+import type { LinkTypeVO, UpdateLinkTypeRequest, CreateLinkTypeRequest } from '@/types/link-type'
 import { SchemaSubType } from '@/types/schema'
 import { applyDagreLayout } from '@/utils/dagre-layout'
 import { compactNotification } from '@/utils/compactNotification'
@@ -65,28 +65,16 @@ const edgeTypes: EdgeTypesObject = {
   cardinality: markRaw(CardinalityEdge) as any,
 }
 
-// Build concrete type lookups
-const abstractToConcreteMap = computed(() => {
-  const map = new Map<string, CardTypeInfo[]>()
-
-  for (const ct of cardTypes.value) {
-    if (ct.schemaSubType === 'ENTITY_CARD_TYPE' && 'parentTypeIds' in ct && ct.parentTypeIds) {
-      for (const parentId of ct.parentTypeIds) {
-        if (!map.has(parentId)) {
-          map.set(parentId, [])
-        }
-        map.get(parentId)!.push({ id: ct.id!, name: ct.name })
-      }
-    }
+/** 从节点解析一个实体类型 ID（单节点取 entityId；组合节点取第一个特征类型） */
+function pickOneCardTypeIdFromNode(node: Node): string {
+  if (node.data.mode === 'single' && node.data.entityId) {
+    return node.data.entityId as string
   }
-
-  return map
-})
-
-// Helper function to generate consistent node key
-function generateNodeKey(cardTypeList: CardTypeInfo[]): string {
-  const sortedIds = cardTypeList.map(ct => ct.id).sort()
-  return sortedIds.length > 1 ? `combo-${sortedIds.join('-')}` : sortedIds[0] ?? ''
+  if (node.data.mode === 'combo' && node.data.abstractTypes?.length) {
+    const at = (node.data.abstractTypes as { id: string }[])[0]
+    return at?.id ?? ''
+  }
+  return ''
 }
 
 // Calculate best handles based on relative node positions
@@ -124,30 +112,10 @@ function calculateHandles(
   }
 }
 
-// Find concrete implementations for a set of abstract types
-function findConcreteImplementations(abstractTypes: CardTypeInfo[]): CardTypeInfo[] {
-  const concretes = new Map<string, CardTypeInfo>()
-
-  for (const abstract of abstractTypes) {
-    const impls = abstractToConcreteMap.value.get(abstract.id) || []
-    for (const impl of impls) {
-      concretes.set(impl.id, impl)
-    }
-  }
-
-  return Array.from(concretes.values())
-}
-
 /** 是否为特征类型（TRAIT_CARD_TYPE），用于 ER 图节点配色 */
 function isTraitCardTypeId(cardTypeId: string): boolean {
   const ct = cardTypes.value.find(c => c.id === cardTypeId)
   return ct?.schemaSubType === SchemaSubType.TRAIT_CARD_TYPE
-}
-
-/** 组合节点内全部为特征类型时整体按特征类型样式展示 */
-function isTraitNodeForCardTypes(cardTypeInfos: CardTypeInfo[]): boolean {
-  if (cardTypeInfos.length === 0) return false
-  return cardTypeInfos.every(ct => isTraitCardTypeId(ct.id))
 }
 
 // Build Vue Flow nodes and edges from data
@@ -158,103 +126,51 @@ function buildGraph() {
 
   // 第一遍：创建节点和边（位置由 dagre 计算）
   for (const linkType of linkTypes.value) {
-    // Process source side
-    if (linkType.sourceCardTypes && linkType.sourceCardTypes.length > 0) {
-      const nodeKey = generateNodeKey(linkType.sourceCardTypes)
-
-      if (!processedKeys.has(nodeKey)) {
-        processedKeys.add(nodeKey)
-
-        if (linkType.sourceCardTypes.length === 1) {
-          const ct = linkType.sourceCardTypes[0]
-          if (ct) {
-            newNodes.push({
-              id: ct.id,
-              type: 'cardType',
-              position: { x: 0, y: 0 },  // 临时位置，由 dagre 计算
-              data: {
-                mode: 'single',
-                entityId: ct.id,
-                entityName: ct.name,
-                fields: [],
-                linkFields: [],
-                fieldsLoaded: false,
-                fieldsLoading: false,
-                isTraitCardType: isTraitCardTypeId(ct.id),
-              },
-            })
-          }
-        } else {
-          const concretes = findConcreteImplementations(linkType.sourceCardTypes)
-          newNodes.push({
-            id: nodeKey,
-            type: 'cardType',
-            position: { x: 0, y: 0 },  // 临时位置，由 dagre 计算
-            data: {
-              mode: 'combo',
-              entityId: nodeKey,
-              abstractTypes: linkType.sourceCardTypes,
-              concreteTypes: concretes,
-              isTraitCardType: isTraitNodeForCardTypes(linkType.sourceCardTypes),
-            },
-          })
-        }
-      }
+    const src = linkType.sourceCardType
+    if (src?.id && !processedKeys.has(src.id)) {
+      processedKeys.add(src.id)
+      newNodes.push({
+        id: src.id,
+        type: 'cardType',
+        position: { x: 0, y: 0 },
+        data: {
+          mode: 'single',
+          entityId: src.id,
+          entityName: src.name,
+          fields: [],
+          linkFields: [],
+          fieldsLoaded: false,
+          fieldsLoading: false,
+          isTraitCardType: isTraitCardTypeId(src.id),
+        },
+      })
     }
 
-    // Process target side
-    if (linkType.targetCardTypes && linkType.targetCardTypes.length > 0) {
-      const nodeKey = generateNodeKey(linkType.targetCardTypes)
-
-      if (!processedKeys.has(nodeKey)) {
-        processedKeys.add(nodeKey)
-
-        if (linkType.targetCardTypes.length === 1) {
-          const ct = linkType.targetCardTypes[0]
-          if (ct) {
-            newNodes.push({
-              id: ct.id,
-              type: 'cardType',
-              position: { x: 0, y: 0 },  // 临时位置，由 dagre 计算
-              data: {
-                mode: 'single',
-                entityId: ct.id,
-                entityName: ct.name,
-                fields: [],
-                linkFields: [],
-                fieldsLoaded: false,
-                fieldsLoading: false,
-                isTraitCardType: isTraitCardTypeId(ct.id),
-              },
-            })
-          }
-        } else {
-          const concretes = findConcreteImplementations(linkType.targetCardTypes)
-          newNodes.push({
-            id: nodeKey,
-            type: 'cardType',
-            position: { x: 0, y: 0 },  // 临时位置，由 dagre 计算
-            data: {
-              mode: 'combo',
-              entityId: nodeKey,
-              abstractTypes: linkType.targetCardTypes,
-              concreteTypes: concretes,
-              isTraitCardType: isTraitNodeForCardTypes(linkType.targetCardTypes),
-            },
-          })
-        }
-      }
+    const tgt = linkType.targetCardType
+    if (tgt?.id && !processedKeys.has(tgt.id)) {
+      processedKeys.add(tgt.id)
+      newNodes.push({
+        id: tgt.id,
+        type: 'cardType',
+        position: { x: 0, y: 0 },
+        data: {
+          mode: 'single',
+          entityId: tgt.id,
+          entityName: tgt.name,
+          fields: [],
+          linkFields: [],
+          fieldsLoaded: false,
+          fieldsLoading: false,
+          isTraitCardType: isTraitCardTypeId(tgt.id),
+        },
+      })
     }
 
-    // Create edge (handle 由后续计算)
-    if (linkType.sourceCardTypes?.length && linkType.targetCardTypes?.length) {
-      const sourceKey = generateNodeKey(linkType.sourceCardTypes)
-      const targetKey = generateNodeKey(linkType.targetCardTypes)
-
+    if (src?.id && tgt?.id) {
       newEdges.push({
         id: `edge-${linkType.id}`,
-        source: sourceKey,
-        target: targetKey,
+        source: src.id,
+        target: tgt.id,
         sourceHandle: 'right',  // 临时值，后续根据 dagre 位置计算
         targetHandle: 'left',
         type: 'cardinality',
@@ -547,22 +463,16 @@ const drawerTitle = computed(() => {
 
 // 获取选中的源侧实体类型名称
 const sourceCardTypeName = computed(() => {
-  if (!formData.value.sourceCardTypeIds?.length) return ''
-  const ids = formData.value.sourceCardTypeIds
-  const names = cardTypeOptions.value
-    .filter(ct => ids.includes(ct.id))
-    .map(ct => ct.name)
-  return names.join('、') || ''
+  const id = formData.value.sourceCardTypeId
+  if (!id) return ''
+  return cardTypeOptions.value.find(ct => ct.id === id)?.name || ''
 })
 
 // 获取选中的对侧实体类型名称
 const targetCardTypeName = computed(() => {
-  if (!formData.value.targetCardTypeIds?.length) return ''
-  const ids = formData.value.targetCardTypeIds
-  const names = cardTypeOptions.value
-    .filter(ct => ids.includes(ct.id))
-    .map(ct => ct.name)
-  return names.join('、') || ''
+  const id = formData.value.targetCardTypeId
+  if (!id) return ''
+  return cardTypeOptions.value.find(ct => ct.id === id)?.name || ''
 })
 
 // 打开新建抽屉
@@ -587,25 +497,8 @@ function onConnect(connection: Connection) {
   const targetNode = (nodes.value as Node[]).find(n => n.id === connection.target)
   if (!sourceNode || !targetNode) return
 
-  // Extract card type IDs from nodes
-  const sourceCardTypeIds: string[] = []
-  const targetCardTypeIds: string[] = []
-
-  if (sourceNode.data.mode === 'single' && sourceNode.data.entityId) {
-    sourceCardTypeIds.push(sourceNode.data.entityId as string)
-  } else if (sourceNode.data.mode === 'combo' && sourceNode.data.abstractTypes) {
-    for (const at of sourceNode.data.abstractTypes as { id: string }[]) {
-      sourceCardTypeIds.push(at.id)
-    }
-  }
-
-  if (targetNode.data.mode === 'single' && targetNode.data.entityId) {
-    targetCardTypeIds.push(targetNode.data.entityId as string)
-  } else if (targetNode.data.mode === 'combo' && targetNode.data.abstractTypes) {
-    for (const at of targetNode.data.abstractTypes as { id: string }[]) {
-      targetCardTypeIds.push(at.id)
-    }
-  }
+  const sourceCardTypeId = pickOneCardTypeIdFromNode(sourceNode)
+  const targetCardTypeId = pickOneCardTypeIdFromNode(targetNode)
 
   // Open create drawer with pre-filled card types
   drawerMode.value = 'create'
@@ -618,8 +511,8 @@ function onConnect(connection: Connection) {
     targetCode: '',
     sourceMultiSelect: false,
     targetMultiSelect: false,
-    sourceCardTypeIds,
-    targetCardTypeIds,
+    sourceCardTypeId,
+    targetCardTypeId,
   }
   drawerVisible.value = true
 }
@@ -639,8 +532,8 @@ async function openEditDrawer(linkTypeId: string) {
       sourceCode: detail.sourceCode,
       targetName: detail.targetName,
       targetCode: detail.targetCode,
-      sourceCardTypeIds: detail.sourceCardTypes?.map((ct) => ct.id),
-      targetCardTypeIds: detail.targetCardTypes?.map((ct) => ct.id),
+      sourceCardTypeId: detail.sourceCardType?.id,
+      targetCardTypeId: detail.targetCardType?.id,
       sourceMultiSelect: detail.sourceMultiSelect,
       targetMultiSelect: detail.targetMultiSelect,
       enabled: detail.enabled,
@@ -660,11 +553,11 @@ async function handleSubmit() {
     Message.error(t('admin.linkType.requiredSourceTargetName'))
     return
   }
-  if (!formData.value.sourceCardTypeIds || formData.value.sourceCardTypeIds.length === 0) {
+  if (!formData.value.sourceCardTypeId?.trim()) {
     Message.error(t('admin.linkType.requiredSourceCardType'))
     return
   }
-  if (!formData.value.targetCardTypeIds || formData.value.targetCardTypeIds.length === 0) {
+  if (!formData.value.targetCardTypeId?.trim()) {
     Message.error(t('admin.linkType.requiredTargetCardType'))
     return
   }
@@ -1108,7 +1001,8 @@ onMounted(() => {
           <a-col :span="12">
             <a-form-item :label="t('admin.linkType.sourceCardTypeLabel')" required>
               <CardTypeSelect
-                v-model="formData.sourceCardTypeIds"
+                v-model="formData.sourceCardTypeId"
+                :multiple="false"
                 :placeholder="t('admin.linkType.selectCardType')"
                 :limit-concrete-single="true"
                 :options="cardTypeOptions"
@@ -1118,7 +1012,8 @@ onMounted(() => {
           <a-col :span="12">
             <a-form-item :label="t('admin.linkType.targetCardTypeLabel')" required>
               <CardTypeSelect
-                v-model="formData.targetCardTypeIds"
+                v-model="formData.targetCardTypeId"
+                :multiple="false"
                 :placeholder="t('admin.linkType.selectCardType')"
                 :limit-concrete-single="true"
                 :options="cardTypeOptions"

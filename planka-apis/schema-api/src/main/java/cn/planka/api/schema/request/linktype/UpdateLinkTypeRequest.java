@@ -3,8 +3,6 @@ package cn.planka.api.schema.request.linktype;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
  * 更新关联类型请求
  */
@@ -27,11 +25,11 @@ public class UpdateLinkTypeRequest {
     /** 目标端编码 */
     private String targetCode;
 
-    /** 源端允许的实体类型ID列表 */
-    private List<String> sourceCardTypeIds;
+    /** 源端允许的实体类型ID（传 null 不更新；传空字符串可清空限制） */
+    private String sourceCardTypeId;
 
-    /** 目标端允许的实体类型ID列表 */
-    private List<String> targetCardTypeIds;
+    /** 目标端允许的实体类型ID（传 null 不更新；传空字符串可清空限制） */
+    private String targetCardTypeId;
 
     /** 源端是否多选 */
     private Boolean sourceMultiSelect;

@@ -534,11 +534,11 @@ async function loadTargetCardTypes() {
 
     // 根据 position 确定目标实体类型
     // SOURCE 端关联的是 TARGET 端卡片，反之亦然
-    const cardTypes = position === 'SOURCE'
-      ? linkType.targetCardTypes
-      : linkType.sourceCardTypes
+    const peer = position === 'SOURCE'
+      ? linkType.targetCardType
+      : linkType.sourceCardType
 
-    targetCardTypeIds.value = cardTypes?.map(ct => ct.id) || []
+    targetCardTypeIds.value = peer?.id ? [peer.id] : []
   } catch (error) {
     console.error('加载目标实体类型失败:', error)
     targetCardTypeIds.value = []

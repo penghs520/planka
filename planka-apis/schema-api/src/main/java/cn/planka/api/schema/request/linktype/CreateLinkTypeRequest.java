@@ -1,11 +1,8 @@
 package cn.planka.api.schema.request.linktype;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 /**
  * 创建关联类型请求
@@ -31,13 +28,13 @@ public class CreateLinkTypeRequest {
     /** 目标端编码（如"children"） */
     private String targetCode;
 
-    /** 源端允许的实体类型ID列表 */
-    @NotEmpty(message = "源端实体类型不能为空")
-    private List<String> sourceCardTypeIds;
+    /** 源端允许的实体类型ID */
+    @NotBlank(message = "源端实体类型不能为空")
+    private String sourceCardTypeId;
 
-    /** 目标端允许的实体类型ID列表 */
-    @NotEmpty(message = "目标端实体类型不能为空")
-    private List<String> targetCardTypeIds;
+    /** 目标端允许的实体类型ID */
+    @NotBlank(message = "目标端实体类型不能为空")
+    private String targetCardTypeId;
 
     /** 源端是否多选 */
     private boolean sourceMultiSelect = true;

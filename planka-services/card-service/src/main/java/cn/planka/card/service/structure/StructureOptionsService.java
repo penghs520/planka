@@ -113,9 +113,7 @@ public class StructureOptionsService {
         Map<Integer, List<CardDTO>> result = new HashMap<>();
 
         for (StructureLevel level : levels) {
-            List<String> cardTypeIds = level.cardTypeIds().stream()
-                    .map(CardTypeId::value)
-                    .toList();
+            List<String> cardTypeIds = List.of(level.cardTypeId().value());
 
             // 非根层级需要查询父关联
             String parentLinkFieldId = level.parentLinkFieldId() != null

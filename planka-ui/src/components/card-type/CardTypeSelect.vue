@@ -31,6 +31,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
+  /** 多选为 ID 数组；单选为单个 ID 字符串，清空为空串 */
   (e: 'update:modelValue', value: string | string[]): void
 }>()
 
@@ -114,10 +115,10 @@ watch(selectedValues, (newVal, oldVal) => {
   }
 })
 
-// 单选模式：监听字符串变化，转换为数组后向外发送
+// 单选模式：向外发送单个 ID 字符串（清空为空串）
 watch(singleValue, (newVal) => {
   if (!props.multiple) {
-    emit('update:modelValue', newVal ? [newVal] : [])
+    emit('update:modelValue', newVal || '')
   }
 })
 
@@ -154,7 +155,7 @@ function buildSelectOptions(cardTypes: CardTypeOption[]) {
   if (abstractTypes.length > 0) {
     groupedOptions.push({
       isGroup: true,
-      label: props.limitConcreteSingle ? '特征类型 (可多选)' : '特征类型',
+      label: '特征类型',
       options: abstractTypes,
     })
   }
@@ -162,7 +163,7 @@ function buildSelectOptions(cardTypes: CardTypeOption[]) {
   if (concreteTypes.length > 0) {
     groupedOptions.push({
       isGroup: true,
-      label: props.limitConcreteSingle ? '实体类型 (仅单选)' : '实体类型',
+      label: '实体类型',
       options: concreteTypes,
     })
   }

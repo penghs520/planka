@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -66,22 +65,18 @@ public final class LinkTypeDefinition extends AbstractSchemaDefinition<LinkTypeI
     private boolean targetVisible = true;
 
     /**
-     * 源端允许的__PLANKA_EINST__ID列表（空表示所有）
-     * <p>
-     * 仅当都为特征类型时才支持指定多个，表示多个特征类型的共同__PLANKA_EINST__才有此关联关系
+     * 源端允许的__PLANKA_EINST__ID（null 表示不限制）
      */
     @Setter
-    @JsonProperty("sourceCardTypeIds")
-    private List<CardTypeId> sourceCardTypeIds;
+    @JsonProperty("sourceCardTypeId")
+    private CardTypeId sourceCardTypeId;
 
     /**
-     * 目标端允许的__PLANKA_EINST__ID列表（空表示所有）
-     * <p>
-     * 仅当都为特征类型时才支持指定多个，表示多个特征类型的共同__PLANKA_EINST__才有此关联关系
+     * 目标端允许的__PLANKA_EINST__ID（null 表示不限制）
      */
     @Setter
-    @JsonProperty("targetCardTypeIds")
-    private List<CardTypeId> targetCardTypeIds;
+    @JsonProperty("targetCardTypeId")
+    private CardTypeId targetCardTypeId;
 
     /** 源端是否多选（false=单选，true=多选） */
     @Setter
@@ -126,11 +121,11 @@ public final class LinkTypeDefinition extends AbstractSchemaDefinition<LinkTypeI
     @Override
     public Set<SchemaId> secondKeys() {
         Set<SchemaId> keys = new HashSet<>();
-        if (sourceCardTypeIds != null) {
-            keys.addAll(sourceCardTypeIds);
+        if (sourceCardTypeId != null) {
+            keys.add(sourceCardTypeId);
         }
-        if (targetCardTypeIds != null) {
-            keys.addAll(targetCardTypeIds);
+        if (targetCardTypeId != null) {
+            keys.add(targetCardTypeId);
         }
         return keys;
     }

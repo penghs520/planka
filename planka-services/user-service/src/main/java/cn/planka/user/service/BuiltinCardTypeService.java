@@ -213,8 +213,8 @@ public class BuiltinCardTypeService {
         linkType.setCode(linkCode);
         linkType.setSourceName(linkName);
         linkType.setTargetName(targetName);
-        linkType.setSourceCardTypeIds(List.of(CardTypeId.of(rootCardTypeId)));
-        linkType.setTargetCardTypeIds(List.of(CardTypeId.of(memberAbstractCardTypeId)));
+        linkType.setSourceCardTypeId(CardTypeId.of(rootCardTypeId));
+        linkType.setTargetCardTypeId(CardTypeId.of(memberAbstractCardTypeId));
         linkType.setSourceMultiSelect(false);
         linkType.setTargetMultiSelect(true);
         linkType.setSourceVisible(true);
@@ -284,8 +284,8 @@ public class BuiltinCardTypeService {
         link.setCode("team-member");
         link.setSourceName("团队成员");
         link.setTargetName("所在团队");
-        link.setSourceCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.teamCardTypeId(orgId))));
-        link.setTargetCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.memberAbstractCardTypeId(orgId))));
+        link.setSourceCardTypeId(CardTypeId.of(SystemSchemaIds.teamCardTypeId(orgId)));
+        link.setTargetCardTypeId(CardTypeId.of(SystemSchemaIds.memberAbstractCardTypeId(orgId)));
         link.setSourceMultiSelect(true);
         link.setTargetMultiSelect(true);
         link.setSourceVisible(true);
@@ -305,8 +305,8 @@ public class BuiltinCardTypeService {
         link.setCode("team-lead");
         link.setSourceName("负责人");
         link.setTargetName("负责的团队");
-        link.setSourceCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.teamCardTypeId(orgId))));
-        link.setTargetCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.memberAbstractCardTypeId(orgId))));
+        link.setSourceCardTypeId(CardTypeId.of(SystemSchemaIds.teamCardTypeId(orgId)));
+        link.setTargetCardTypeId(CardTypeId.of(SystemSchemaIds.memberAbstractCardTypeId(orgId)));
         link.setSourceMultiSelect(false);
         link.setTargetMultiSelect(false);
         link.setSourceVisible(true);
@@ -326,8 +326,8 @@ public class BuiltinCardTypeService {
         link.setCode("project-lead");
         link.setSourceName("负责人");
         link.setTargetName("负责的项目");
-        link.setSourceCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.projectCardTypeId(orgId))));
-        link.setTargetCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.memberAbstractCardTypeId(orgId))));
+        link.setSourceCardTypeId(CardTypeId.of(SystemSchemaIds.projectCardTypeId(orgId)));
+        link.setTargetCardTypeId(CardTypeId.of(SystemSchemaIds.memberAbstractCardTypeId(orgId)));
         link.setSourceMultiSelect(false);
         link.setTargetMultiSelect(false);
         link.setSourceVisible(true);
@@ -347,8 +347,8 @@ public class BuiltinCardTypeService {
         link.setCode("team-project");
         link.setSourceName("团队项目");
         link.setTargetName("所属团队");
-        link.setSourceCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.teamCardTypeId(orgId))));
-        link.setTargetCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.projectCardTypeId(orgId))));
+        link.setSourceCardTypeId(CardTypeId.of(SystemSchemaIds.teamCardTypeId(orgId)));
+        link.setTargetCardTypeId(CardTypeId.of(SystemSchemaIds.projectCardTypeId(orgId)));
         link.setSourceMultiSelect(true);
         link.setTargetMultiSelect(false);
         link.setSourceVisible(true);
@@ -368,8 +368,8 @@ public class BuiltinCardTypeService {
         link.setCode("project-issue");
         link.setSourceName("工作项");
         link.setTargetName("所属项目");
-        link.setSourceCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.projectCardTypeId(orgId))));
-        link.setTargetCardTypeIds(List.of(CardTypeId.of(SystemSchemaIds.issueCardTypeId(orgId))));
+        link.setSourceCardTypeId(CardTypeId.of(SystemSchemaIds.projectCardTypeId(orgId)));
+        link.setTargetCardTypeId(CardTypeId.of(SystemSchemaIds.issueCardTypeId(orgId)));
         link.setSourceMultiSelect(true);
         link.setTargetMultiSelect(false);
         link.setSourceVisible(true);

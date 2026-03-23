@@ -14,7 +14,6 @@ import cn.planka.domain.link.LinkPosition;
 import cn.planka.domain.link.LinkTypeId;
 import cn.planka.domain.schema.SchemaType;
 import cn.planka.domain.schema.definition.SchemaDefinition;
-import cn.planka.domain.schema.definition.cardtype.AbstractCardType;
 import cn.planka.domain.schema.definition.cardtype.CardTypeDefinition;
 import cn.planka.domain.schema.definition.link.LinkTypeDefinition;
 import cn.planka.schema.repository.SchemaRepository;
@@ -55,11 +54,11 @@ public class LinkTypeService {
         Set<String> allCardTypeIds = new HashSet<>();
         for (SchemaDefinition<?> schema : schemas) {
             if (schema instanceof LinkTypeDefinition linkType) {
-                if (linkType.getSourceCardTypeIds() != null) {
-                    linkType.getSourceCardTypeIds().forEach(id -> allCardTypeIds.add(id.value()));
+                if (linkType.getSourceCardTypeId() != null) {
+                    allCardTypeIds.add(linkType.getSourceCardTypeId().value());
                 }
-                if (linkType.getTargetCardTypeIds() != null) {
-                    linkType.getTargetCardTypeIds().forEach(id -> allCardTypeIds.add(id.value()));
+                if (linkType.getTargetCardTypeId() != null) {
+                    allCardTypeIds.add(linkType.getTargetCardTypeId().value());
                 }
             }
         }
@@ -128,19 +127,8 @@ public class LinkTypeService {
      */
     @Transactional
     public Result<LinkTypeVO> createLinkType(String orgId, String operatorId, CreateLinkTypeRequest request) {
-        // 转换并验证__PLANKA_EINST__ID
-        List<CardTypeId> sourceCardTypeIds = toCardTypeIds(request.getSourceCardTypeIds());
-        List<CardTypeId> targetCardTypeIds = toCardTypeIds(request.getTargetCardTypeIds());
-
-        // 验证：多个__PLANKA_EINST__时，必须都是特征类型
-        Result<Void> validationResult = validateCardTypeIds(sourceCardTypeIds, "源端");
-        if (!validationResult.isSuccess()) {
-            return Result.failure(validationResult.getCode(), validationResult.getMessage());
-        }
-        validationResult = validateCardTypeIds(targetCardTypeIds, "目标端");
-        if (!validationResult.isSuccess()) {
-            return Result.failure(validationResult.getCode(), validationResult.getMessage());
-        }
+        CardTypeId sourceCardTypeId = toCardTypeId(request.getSourceCardTypeId());
+        CardTypeId targetCardTypeId = toCardTypeId(request.getTargetCardTypeId());
 
         // 构建 LinkTypeDefinition
         LinkTypeDefinition linkType = new LinkTypeDefinition(
@@ -154,8 +142,8 @@ public class LinkTypeService {
         linkType.setSourceCode(request.getSourceCode());
         linkType.setTargetName(request.getTargetName());
         linkType.setTargetCode(request.getTargetCode());
-        linkType.setSourceCardTypeIds(sourceCardTypeIds);
-        linkType.setTargetCardTypeIds(targetCardTypeIds);
+        linkType.setSourceCardTypeId(sourceCardTypeId);
+        linkType.setTargetCardTypeId(targetCardTypeId);
         linkType.setSourceMultiSelect(request.isSourceMultiSelect());
         linkType.setTargetMultiSelect(request.isTargetMultiSelect());
         linkType.setEnabled(true);
@@ -198,22 +186,11 @@ public class LinkTypeService {
             return Result.failure(CommonErrorCode.BAD_REQUEST, "非关联类型");
         }
 
-        // 特殊验证：__PLANKA_EINST__ID
-        if (request.getSourceCardTypeIds() != null) {
-            List<CardTypeId> sourceCardTypeIds = toCardTypeIds(request.getSourceCardTypeIds());
-            Result<Void> validationResult = validateCardTypeIds(sourceCardTypeIds, "源端");
-            if (!validationResult.isSuccess()) {
-                return Result.failure(validationResult.getCode(), validationResult.getMessage());
-            }
-            linkType.setSourceCardTypeIds(sourceCardTypeIds);
+        if (request.getSourceCardTypeId() != null) {
+            linkType.setSourceCardTypeId(toCardTypeId(request.getSourceCardTypeId()));
         }
-        if (request.getTargetCardTypeIds() != null) {
-            List<CardTypeId> targetCardTypeIds = toCardTypeIds(request.getTargetCardTypeIds());
-            Result<Void> validationResult = validateCardTypeIds(targetCardTypeIds, "目标端");
-            if (!validationResult.isSuccess()) {
-                return Result.failure(validationResult.getCode(), validationResult.getMessage());
-            }
-            linkType.setTargetCardTypeIds(targetCardTypeIds);
+        if (request.getTargetCardTypeId() != null) {
+            linkType.setTargetCardTypeId(toCardTypeId(request.getTargetCardTypeId()));
         }
 
         // 更新字段
@@ -330,19 +307,19 @@ public class LinkTypeService {
     }
 
     private boolean isAvailableAsSource(LinkTypeDefinition linkType, String cardTypeId) {
-        List<CardTypeId> sourceIds = linkType.getSourceCardTypeIds();
-        if (sourceIds == null || sourceIds.isEmpty()) {
+        CardTypeId sourceId = linkType.getSourceCardTypeId();
+        if (sourceId == null) {
             return true;
         }
-        return sourceIds.stream().anyMatch(id -> id.value().equals(cardTypeId));
+        return sourceId.value().equals(cardTypeId);
     }
 
     private boolean isAvailableAsTarget(LinkTypeDefinition linkType, String cardTypeId) {
-        List<CardTypeId> targetIds = linkType.getTargetCardTypeIds();
-        if (targetIds == null || targetIds.isEmpty()) {
+        CardTypeId targetId = linkType.getTargetCardTypeId();
+        if (targetId == null) {
             return true;
         }
-        return targetIds.stream().anyMatch(id -> id.value().equals(cardTypeId));
+        return targetId.value().equals(cardTypeId);
     }
 
     /**
@@ -365,26 +342,22 @@ public class LinkTypeService {
      * 将关联类型转换为 VO
      */
     private LinkTypeVO toVO(LinkTypeDefinition linkType, Map<String, String> cardTypeNameMap) {
-        // 构建源端__PLANKA_EINST__信息
-        List<CardTypeInfo> sourceCardTypes = null;
-        if (linkType.getSourceCardTypeIds() != null && !linkType.getSourceCardTypeIds().isEmpty()) {
-            sourceCardTypes = linkType.getSourceCardTypeIds().stream()
-                    .map(id -> CardTypeInfo.builder()
-                            .id(id.value())
-                            .name(cardTypeNameMap.getOrDefault(id.value(), id.value()))
-                            .build())
-                    .collect(Collectors.toList());
+        CardTypeInfo sourceCardType = null;
+        if (linkType.getSourceCardTypeId() != null) {
+            CardTypeId id = linkType.getSourceCardTypeId();
+            sourceCardType = CardTypeInfo.builder()
+                    .id(id.value())
+                    .name(cardTypeNameMap.getOrDefault(id.value(), id.value()))
+                    .build();
         }
 
-        // 构建目标端__PLANKA_EINST__信息
-        List<CardTypeInfo> targetCardTypes = null;
-        if (linkType.getTargetCardTypeIds() != null && !linkType.getTargetCardTypeIds().isEmpty()) {
-            targetCardTypes = linkType.getTargetCardTypeIds().stream()
-                    .map(id -> CardTypeInfo.builder()
-                            .id(id.value())
-                            .name(cardTypeNameMap.getOrDefault(id.value(), id.value()))
-                            .build())
-                    .collect(Collectors.toList());
+        CardTypeInfo targetCardType = null;
+        if (linkType.getTargetCardTypeId() != null) {
+            CardTypeId id = linkType.getTargetCardTypeId();
+            targetCardType = CardTypeInfo.builder()
+                    .id(id.value())
+                    .name(cardTypeNameMap.getOrDefault(id.value(), id.value()))
+                    .build();
         }
 
         return LinkTypeVO.builder()
@@ -396,8 +369,8 @@ public class LinkTypeService {
                 .sourceCode(linkType.getSourceCode())
                 .targetName(linkType.getTargetName())
                 .targetCode(linkType.getTargetCode())
-                .sourceCardTypes(sourceCardTypes)
-                .targetCardTypes(targetCardTypes)
+                .sourceCardType(sourceCardType)
+                .targetCardType(targetCardType)
                 .sourceMultiSelect(linkType.isSourceMultiSelect())
                 .targetMultiSelect(linkType.isTargetMultiSelect())
                 .systemLinkType(linkType.isSystemLinkType())
@@ -423,15 +396,13 @@ public class LinkTypeService {
     }
 
     /**
-     * 将字符串列表转换为 CardTypeId 列表
+     * 将请求中的字符串转为 CardTypeId；null 或空白视为 null（不限制）
      */
-    private List<CardTypeId> toCardTypeIds(List<String> ids) {
-        if (ids == null || ids.isEmpty()) {
+    private CardTypeId toCardTypeId(String raw) {
+        if (raw == null || raw.isBlank()) {
             return null;
         }
-        return ids.stream()
-                .map(CardTypeId::of)
-                .collect(Collectors.toList());
+        return CardTypeId.of(raw.trim());
     }
 
     /**
@@ -439,42 +410,12 @@ public class LinkTypeService {
      */
     private Set<String> collectCardTypeIds(LinkTypeDefinition linkType) {
         Set<String> cardTypeIds = new HashSet<>();
-        if (linkType.getSourceCardTypeIds() != null) {
-            linkType.getSourceCardTypeIds().forEach(id -> cardTypeIds.add(id.value()));
+        if (linkType.getSourceCardTypeId() != null) {
+            cardTypeIds.add(linkType.getSourceCardTypeId().value());
         }
-        if (linkType.getTargetCardTypeIds() != null) {
-            linkType.getTargetCardTypeIds().forEach(id -> cardTypeIds.add(id.value()));
+        if (linkType.getTargetCardTypeId() != null) {
+            cardTypeIds.add(linkType.getTargetCardTypeId().value());
         }
         return cardTypeIds;
-    }
-
-    /**
-     * 验证__PLANKA_EINST__ID列表
-     * <p>
-     * 仅当都为特征类型时才支持指定多个，表示多个特征类型的共同__PLANKA_EINST__才有此关联关系
-     *
-     * @param cardTypeIds __PLANKA_EINST__ID列表
-     * @param position    位置描述（用于错误消息）
-     * @return 验证结果
-     */
-    private Result<Void> validateCardTypeIds(List<CardTypeId> cardTypeIds, String position) {
-        if (cardTypeIds == null || cardTypeIds.size() <= 1) {
-            return Result.success();
-        }
-
-        // 多个__PLANKA_EINST__时，必须都是特征类型
-        Set<String> ids = cardTypeIds.stream()
-                .map(CardTypeId::value)
-                .collect(Collectors.toSet());
-        List<SchemaDefinition<?>> schemas = schemaRepository.findByIds(ids);
-
-        for (SchemaDefinition<?> schema : schemas) {
-            if (!(schema instanceof AbstractCardType)) {
-                return Result.failure(CommonErrorCode.VALIDATION_ERROR,
-                        position + "指定多个__PLANKA_EINST__时，必须都是特征类型，但 " + schema.getName() + " 不是特征类型");
-            }
-        }
-
-        return Result.success();
     }
 }

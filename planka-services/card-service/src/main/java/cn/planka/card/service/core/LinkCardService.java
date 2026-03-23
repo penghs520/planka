@@ -296,13 +296,13 @@ public class LinkCardService {
      * 如果当前位置是 TARGET，说明当前卡片是目标端，需要查询源端__PLANKA_EINST__
      */
     private List<CardTypeId> getTargetCardTypeIds(LinkTypeDefinition linkType, LinkPosition currentPosition) {
-        if (currentPosition == LinkPosition.SOURCE) {
-            // 当前卡片是源端，对端是目标端
-            return linkType.getTargetCardTypeIds() != null ? linkType.getTargetCardTypeIds() : Collections.emptyList();
-        } else {
-            // 当前卡片是目标端，对端是源端
-            return linkType.getSourceCardTypeIds() != null ? linkType.getSourceCardTypeIds() : Collections.emptyList();
+        CardTypeId peerId = currentPosition == LinkPosition.SOURCE
+                ? linkType.getTargetCardTypeId()
+                : linkType.getSourceCardTypeId();
+        if (peerId == null) {
+            return Collections.emptyList();
         }
+        return List.of(peerId);
     }
 
     /**

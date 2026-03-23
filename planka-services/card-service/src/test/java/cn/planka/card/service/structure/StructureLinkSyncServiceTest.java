@@ -465,8 +465,8 @@ class StructureLinkSyncServiceTest {
                 "测试架构线"
         );
         def.setLevels(List.of(
-                new StructureLevel(0, "部落", List.of(CardTypeId.of("ct_tribe")), null, null, null, null),
-                new StructureLevel(1, "小队", List.of(CardTypeId.of("ct_squad")),
+                new StructureLevel(0, "部落", CardTypeId.of("ct_tribe"), null, null, null, null),
+                new StructureLevel(1, "小队", CardTypeId.of("ct_squad"),
                         LinkFieldId.of("lt_parent", LinkPosition.TARGET), null, null, null)
         ));
         return def;
@@ -500,7 +500,7 @@ class StructureLinkSyncServiceTest {
                 "测试架构线2"
         );
         def.setLevels(List.of(
-                new StructureLevel(0, "部落", List.of(CardTypeId.of("ct_tribe")), null, null, null, null)
+                new StructureLevel(0, "部落", CardTypeId.of("ct_tribe"), null, null, null, null)
         ));
         return def;
     }

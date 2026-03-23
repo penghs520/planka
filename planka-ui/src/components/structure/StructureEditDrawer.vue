@@ -107,7 +107,7 @@ async function loadLevelFieldOptions() {
   const currentIndex = selectedLevelIndex.value
   const currentLevel = formData.value.levels[currentIndex]
 
-  if (!currentLevel?.cardTypeIds?.length) {
+  if (!currentLevel?.cardTypeId?.trim()) {
     parentLinkOptions.value = []
     ownerLinkOptions.value = []
     sortFieldOptions.value = []
@@ -116,7 +116,7 @@ async function loadLevelFieldOptions() {
 
   try {
     // 获取当前层级的所有共同字段
-    const response = await fieldOptionsApi.getCommonFields(currentLevel.cardTypeIds)
+    const response = await fieldOptionsApi.getCommonFields([currentLevel.cardTypeId])
     const allFields = response.fields
 
     // 过滤出关联字段（用于负责人）
@@ -147,8 +147,8 @@ async function loadParentLinkOptions() {
   const parentLevel = formData.value.levels[currentIndex - 1]
 
   if (
-    !currentLevel?.cardTypeIds?.length ||
-    !parentLevel?.cardTypeIds?.length
+    !currentLevel?.cardTypeId?.trim() ||
+    !parentLevel?.cardTypeId?.trim()
   ) {
     parentLinkOptions.value = []
     return
@@ -158,8 +158,8 @@ async function loadParentLinkOptions() {
     // 获取当前层级中能够连接到父层级的关联属性
     // 源侧 = 当前层级，目标侧 = 父层级
     const response = await fieldOptionsApi.getMatchingLinkFields(
-      currentLevel.cardTypeIds,
-      parentLevel.cardTypeIds,
+      [currentLevel.cardTypeId],
+      [parentLevel.cardTypeId],
     )
 
     // 架构线场景虽然只使用了单选关联，但关联属性本身可能是多选的（比如 N:N），这里不应过滤
@@ -172,7 +172,7 @@ async function loadParentLinkOptions() {
 
 // 监听当前层级的实体类型变化
 watch(
-  () => selectedLevel.value?.cardTypeIds,
+  () => selectedLevel.value?.cardTypeId,
   () => {
     // 加载所有字段选项（包括父级关联、负责人、排序字段）
     loadLevelFieldOptions()
@@ -193,12 +193,13 @@ function initForm() {
     formData.value = {
       name: props.structure.name,
       description: props.structure.description || '',
-      levels: props.structure.levels?.map((l) => ({
-        ...l,
-        cardTypeIds: [...(l.cardTypeIds || [])], // 深拷贝数组
-        parentLinkFieldId: l.parentLinkFieldId ?? null,
-        ownerLinkFieldId: l.ownerLinkFieldId ?? undefined,
-      })) || [createNewLevel(0)],
+      levels:
+        props.structure.levels?.map((l) => ({
+          ...l,
+          cardTypeId: l.cardTypeId ?? '',
+          parentLinkFieldId: l.parentLinkFieldId ?? null,
+          ownerLinkFieldId: l.ownerLinkFieldId ?? undefined,
+        })) || [createNewLevel(0)],
     }
     editingVersion.value = props.structure.contentVersion
     selectedLevelIndex.value = 0
@@ -210,7 +211,7 @@ function createNewLevel(index: number): StructureLevel {
   return {
     index,
     name: '',
-    cardTypeIds: [],
+    cardTypeId: '',
     parentLinkFieldId: index === 0 ? null : '',
     ownerLinkFieldId: undefined,
     sortFieldId: undefined,
@@ -221,7 +222,7 @@ function createNewLevel(index: number): StructureLevel {
 // 检查层级是否填写完整
 function isLevelComplete(level: StructureLevel): boolean {
   if (!level.name.trim()) return false
-  if (!level.cardTypeIds || level.cardTypeIds.length === 0) return false
+  if (!level.cardTypeId?.trim()) return false
   // 非根层级需要检查父级关联
   if (level.index > 0 && !level.parentLinkFieldId) return false
   return true
@@ -274,29 +275,18 @@ function selectLevel(index: number) {
 function updateLevel(field: keyof StructureLevel, value: unknown) {
   if (!selectedLevel.value) return
 
-  // 特殊处理实体类型选择
-  if (field === 'cardTypeIds' && Array.isArray(value)) {
-    const cardTypeIds = value as string[]
-
-    // 检查是否有变化
-    const oldIds = selectedLevel.value.cardTypeIds || []
-    const hasChanged =
-      JSON.stringify(cardTypeIds.slice().sort()) !==
-      JSON.stringify(oldIds.slice().sort())
-
-    if (hasChanged) {
-      // 清除负责人
+  if (field === 'cardTypeId') {
+    const nextId = typeof value === 'string' ? value : ''
+    const oldId = selectedLevel.value.cardTypeId || ''
+    if (nextId !== oldId) {
       selectedLevel.value.ownerLinkFieldId = undefined
-      // 清除排序
       selectedLevel.value.sortFieldId = undefined
       selectedLevel.value.sortDirection = undefined
-      // 清除父级关联（非根层级）
       if (selectedLevelIndex.value > 0) {
         selectedLevel.value.parentLinkFieldId = ''
       }
     }
-
-    ;(selectedLevel.value as Record<string, unknown>)[field] = cardTypeIds
+    selectedLevel.value.cardTypeId = nextId
     return
   }
 
@@ -360,7 +350,7 @@ function validateForm(): boolean {
       Message.error(t('admin.structure.levelNameRequired', { index: i + 1 }))
       return false
     }
-    if (!level.cardTypeIds || level.cardTypeIds.length === 0) {
+    if (!level.cardTypeId?.trim()) {
       Message.error(t('admin.structure.cardTypeRequired', { index: i + 1 }))
       return false
     }
@@ -504,15 +494,15 @@ onMounted(() => {
             <a-form-item :label="t('admin.structure.cardType')" required>
               <CardTypeSelect
                 :key="`card-type-${selectedLevelIndex}`"
-                :model-value="selectedLevel.cardTypeIds"
-                :multiple="true"
+                :model-value="selectedLevel.cardTypeId"
+                :multiple="false"
                 :limit-concrete-single="true"
                 :options="cardTypeOptions"
                 :placeholder="t('admin.structure.cardTypePlaceholder')"
-                @update:model-value="updateLevel('cardTypeIds', $event)"
+                @update:model-value="updateLevel('cardTypeId', $event)"
               />
               <template #extra>
-                <span class="form-extra">{{ t('admin.structure.abstractMultiSelect') }}</span>
+                <span class="form-extra">{{ t('admin.structure.cardTypeSingleHint') }}</span>
               </template>
             </a-form-item>
 

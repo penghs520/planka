@@ -26,8 +26,8 @@ export interface LinkTypeVO {
   sourceCode?: string
   targetName: string
   targetCode?: string
-  sourceCardTypes?: CardTypeInfo[]
-  targetCardTypes?: CardTypeInfo[]
+  sourceCardType?: CardTypeInfo
+  targetCardType?: CardTypeInfo
   sourceMultiSelect: boolean
   targetMultiSelect: boolean
   systemLinkType: boolean
@@ -59,8 +59,8 @@ export interface CreateLinkTypeRequest {
   sourceCode?: string
   targetName: string
   targetCode?: string
-  sourceCardTypeIds?: string[]
-  targetCardTypeIds?: string[]
+  sourceCardTypeId?: string
+  targetCardTypeId?: string
   sourceMultiSelect?: boolean
   targetMultiSelect?: boolean
 }
@@ -75,8 +75,8 @@ export interface UpdateLinkTypeRequest {
   sourceCode?: string
   targetName?: string
   targetCode?: string
-  sourceCardTypeIds?: string[]
-  targetCardTypeIds?: string[]
+  sourceCardTypeId?: string
+  targetCardTypeId?: string
   sourceMultiSelect?: boolean
   targetMultiSelect?: boolean
   enabled?: boolean

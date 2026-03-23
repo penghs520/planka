@@ -67,11 +67,11 @@ async function loadMatchingLinks(): Promise<void> {
   if (!cardTypeIdValue) return
 
   for (const level of currentStructureLevels.value) {
-    if (level.cardTypeIds && level.cardTypeIds.length > 0) {
+    if (level.cardTypeId?.trim()) {
       try {
         const res = await fieldOptionsApi.getMatchingLinkFields(
           [cardTypeIdValue],
-          level.cardTypeIds
+          [level.cardTypeId],
         )
         matchingLinksCache.value[level.index] = res.fields
       } catch (error) {
@@ -150,9 +150,8 @@ async function handleAutoCreateLinkType(record: LevelBinding): Promise<void> {
   }
 
   const sourceCardTypeId = props.cardTypeId
-  const targetCardTypeIds = level.cardTypeIds
-
-  if (!targetCardTypeIds || targetCardTypeIds.length === 0) {
+  const targetCardTypeId = level.cardTypeId?.trim()
+  if (!targetCardTypeId) {
     Message.error('层级未配置实体类型')
     return
   }
@@ -165,8 +164,8 @@ async function handleAutoCreateLinkType(record: LevelBinding): Promise<void> {
       name: linkTypeName,
       sourceName: `${level.name || `层级${levelIndex + 1}`}`,
       targetName: `关联卡片`,
-      sourceCardTypeIds: [sourceCardTypeId],
-      targetCardTypeIds: targetCardTypeIds,
+      sourceCardTypeId,
+      targetCardTypeId,
       sourceMultiSelect: false,
       targetMultiSelect: true,
     })

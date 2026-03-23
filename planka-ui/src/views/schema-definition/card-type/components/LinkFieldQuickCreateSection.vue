@@ -40,6 +40,14 @@ const sourceCardTypeName = computed(() =>
 
 const targetCardTypeName = computed(() => joinNames(state.value.peerCardTypeIds))
 
+/** 对侧实体类型：下拉单选，与 state.peerCardTypeIds（0~1 个元素）同步 */
+const peerCardTypeIdModel = computed({
+  get: () => state.value.peerCardTypeIds[0] ?? '',
+  set: (id: string) => {
+    state.value.peerCardTypeIds = id ? [id] : []
+  },
+})
+
 onMounted(async () => {
   try {
     cardTypes.value = await cardTypeApi.listOptions()
@@ -69,7 +77,8 @@ defineExpose({ validate })
       <a-col :span="24">
         <a-form-item :label="t('admin.linkType.targetCardTypeLabel')" required>
           <CardTypeSelect
-            v-model="state.peerCardTypeIds"
+            v-model="peerCardTypeIdModel"
+            :multiple="false"
             :placeholder="t('admin.cardType.fieldConfig.linkFieldQuickCreate.peerSidePlaceholder')"
             :limit-concrete-single="true"
             :options="cardTypes"

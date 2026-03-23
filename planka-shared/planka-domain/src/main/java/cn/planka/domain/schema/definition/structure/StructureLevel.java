@@ -7,8 +7,6 @@ import cn.planka.domain.link.LinkFieldId;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-
 /**
  * 架构层级定义
  * <p>
@@ -16,7 +14,7 @@ import java.util.List;
  *
  * @param index               层级索引（0为根层级）
  * @param name                层级名称（如"部落"、"小队"）
- * @param cardTypeIds         关联的__PLANKA_EINST__ID列表（支持多选，当为特征类型时可指定多个）
+ * @param cardTypeId          关联的__PLANKA_EINST__ID（每层仅一个）
  * @param parentLinkFieldId   与上级的关联属性ID（根层级为null），格式为 "{linkTypeId}:{SOURCE|TARGET}"
  * @param ownerLinkFieldId    负责人关联属性ID（可选，用于标识当前架构节点的负责人）
  * @param sortFieldId         排序字段ID（可选，用于排序当前层级的节点）
@@ -25,7 +23,7 @@ import java.util.List;
 public record StructureLevel(
         @JsonProperty("index") int index,
         @JsonProperty("name") String name,
-        @JsonProperty("cardTypeIds") List<CardTypeId> cardTypeIds,
+        @JsonProperty("cardTypeId") CardTypeId cardTypeId,
         @JsonProperty("parentLinkFieldId") LinkFieldId parentLinkFieldId,
         @JsonProperty("ownerLinkFieldId") LinkFieldId ownerLinkFieldId,
         @JsonProperty("sortFieldId") FieldId sortFieldId,
@@ -40,8 +38,8 @@ public record StructureLevel(
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("层级名称不能为空");
         }
-        if (cardTypeIds == null || cardTypeIds.isEmpty()) {
-            throw new IllegalArgumentException("__PLANKA_EINST__ID列表不能为空");
+        if (cardTypeId == null) {
+            throw new IllegalArgumentException("__PLANKA_EINST__ID不能为空");
         }
         // 根层级（index=0）的 parentLinkFieldId 必须为 null
         if (index == 0 && parentLinkFieldId != null) {

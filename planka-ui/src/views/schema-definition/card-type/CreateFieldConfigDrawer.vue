@@ -278,6 +278,12 @@ async function handleSave(): Promise<void> {
       const sourceCode = formData.value.code?.trim() || undefined
       const relationName = `${sourceName}-${q.targetName.trim()}`
 
+      const peerId = q.peerCardTypeIds[0]
+      if (!peerId) {
+        Message.error(t('admin.cardType.fieldConfig.createFailed'))
+        return
+      }
+
       const linkType = await linkTypeApi.create({
         name: relationName,
         description: q.description || undefined,
@@ -285,8 +291,8 @@ async function handleSave(): Promise<void> {
         targetName: q.targetName.trim(),
         sourceCode,
         targetCode: q.targetCode || undefined,
-        sourceCardTypeIds: [props.cardTypeId],
-        targetCardTypeIds: [...q.peerCardTypeIds],
+        sourceCardTypeId: props.cardTypeId,
+        targetCardTypeId: peerId,
         sourceMultiSelect: false,
         targetMultiSelect: q.targetMultiSelect,
       })

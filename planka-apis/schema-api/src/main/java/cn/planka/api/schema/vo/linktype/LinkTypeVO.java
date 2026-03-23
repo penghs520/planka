@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * 关联类型 VO
@@ -39,10 +38,10 @@ public class LinkTypeVO {
     private String targetCode;
 
     /** 源端允许的实体类型 */
-    private List<CardTypeInfo> sourceCardTypes;
+    private CardTypeInfo sourceCardType;
 
     /** 目标端允许的实体类型 */
-    private List<CardTypeInfo> targetCardTypes;
+    private CardTypeInfo targetCardType;
 
     /** 源端是否多选 */
     private boolean sourceMultiSelect;

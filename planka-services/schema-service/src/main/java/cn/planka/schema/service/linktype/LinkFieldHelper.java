@@ -39,11 +39,11 @@ public class LinkFieldHelper {
         }
 
         LinkTypeDefinition linkType = linkTypeOpt.get();
-        List<CardTypeId> targetCardTypeIds = linkFieldId.getPosition() == LinkPosition.SOURCE
-                ? linkType.getTargetCardTypeIds()
-                : linkType.getSourceCardTypeIds();
+        CardTypeId peerId = linkFieldId.getPosition() == LinkPosition.SOURCE
+                ? linkType.getTargetCardTypeId()
+                : linkType.getSourceCardTypeId();
 
-        return targetCardTypeIds != null ? targetCardTypeIds : Collections.emptyList();
+        return peerId != null ? List.of(peerId) : Collections.emptyList();
     }
 
     /**

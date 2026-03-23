@@ -137,10 +137,10 @@ class FieldConfigResolver {
 
     private void addDefaultLinkConfigs(String cardTypeId, ResolveContext ctx) {
         for (LinkTypeDefinition linkType : dataProvider.getLinkTypesByCardTypeId(cardTypeId)) {
-            if (containsCardTypeId(linkType.getSourceCardTypeIds(), cardTypeId)) {
+            if (matchesCardTypeId(linkType.getSourceCardTypeId(), cardTypeId)) {
                 addDefaultLinkConfigIfAbsent(cardTypeId, linkType, LinkPosition.SOURCE, ctx);
             }
-            if (containsCardTypeId(linkType.getTargetCardTypeIds(), cardTypeId)) {
+            if (matchesCardTypeId(linkType.getTargetCardTypeId(), cardTypeId)) {
                 addDefaultLinkConfigIfAbsent(cardTypeId, linkType, LinkPosition.TARGET, ctx);
             }
         }
@@ -157,11 +157,8 @@ class FieldConfigResolver {
         ctx.fromLinkTypeDef.add(key);
     }
 
-    private boolean containsCardTypeId(List<CardTypeId> cardTypeIds, String cardTypeId) {
-        if (cardTypeIds == null || cardTypeIds.isEmpty()) {
-            return false;
-        }
-        return cardTypeIds.stream().anyMatch(id -> id.value().equals(cardTypeId));
+    private boolean matchesCardTypeId(CardTypeId constrainedId, String cardTypeId) {
+        return constrainedId != null && constrainedId.value().equals(cardTypeId);
     }
 
     // ==================== 内部结果类 ====================

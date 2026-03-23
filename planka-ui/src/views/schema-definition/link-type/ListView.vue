@@ -81,8 +81,8 @@ const filteredList = computed(() => {
     (lt) =>
       lt.sourceName?.toLowerCase().includes(keyword) ||
       lt.targetName?.toLowerCase().includes(keyword) ||
-      lt.sourceCardTypes?.some((ct) => ct.name.toLowerCase().includes(keyword)) ||
-      lt.targetCardTypes?.some((ct) => ct.name.toLowerCase().includes(keyword)),
+      lt.sourceCardType?.name.toLowerCase().includes(keyword) ||
+      lt.targetCardType?.name.toLowerCase().includes(keyword),
   )
 })
 
@@ -92,22 +92,16 @@ const drawerTitle = computed(() => {
 
 // 获取选中的源侧实体类型名称
 const sourceCardTypeName = computed(() => {
-  if (!formData.value.sourceCardTypeIds?.length) return ''
-  const ids = formData.value.sourceCardTypeIds
-  const names = cardTypes.value
-    .filter(ct => ids.includes(ct.id))
-    .map(ct => ct.name)
-  return names.join('、') || ''
+  const id = formData.value.sourceCardTypeId
+  if (!id) return ''
+  return cardTypes.value.find(ct => ct.id === id)?.name || ''
 })
 
 // 获取选中的对侧实体类型名称
 const targetCardTypeName = computed(() => {
-  if (!formData.value.targetCardTypeIds?.length) return ''
-  const ids = formData.value.targetCardTypeIds
-  const names = cardTypes.value
-    .filter(ct => ids.includes(ct.id))
-    .map(ct => ct.name)
-  return names.join('、') || ''
+  const id = formData.value.targetCardTypeId
+  if (!id) return ''
+  return cardTypes.value.find(ct => ct.id === id)?.name || ''
 })
 
 // 列表数据加载
@@ -160,8 +154,8 @@ async function handleEdit(linkType: LinkTypeVO) {
       description: detail.description,
       sourceName: detail.sourceName,
       targetName: detail.targetName,
-      sourceCardTypeIds: detail.sourceCardTypes?.map((ct) => ct.id),
-      targetCardTypeIds: detail.targetCardTypes?.map((ct) => ct.id),
+      sourceCardTypeId: detail.sourceCardType?.id,
+      targetCardTypeId: detail.targetCardType?.id,
       sourceMultiSelect: detail.sourceMultiSelect,
       targetMultiSelect: detail.targetMultiSelect,
       enabled: detail.enabled,
@@ -181,11 +175,11 @@ async function handleSubmit() {
     Message.error(t('admin.linkType.requiredSourceTargetName'))
     return
   }
-  if (!formData.value.sourceCardTypeIds || formData.value.sourceCardTypeIds.length === 0) {
+  if (!formData.value.sourceCardTypeId?.trim()) {
     Message.error(t('admin.linkType.requiredSourceCardType'))
     return
   }
-  if (!formData.value.targetCardTypeIds || formData.value.targetCardTypeIds.length === 0) {
+  if (!formData.value.targetCardTypeId?.trim()) {
     Message.error(t('admin.linkType.requiredTargetCardType'))
     return
   }
@@ -388,22 +382,16 @@ onMounted(async () => {
         </a-table-column>
         <a-table-column :title="t('admin.linkType.sourceCardType')" :width="180">
           <template #cell="{ record }">
-            <template v-if="record.sourceCardTypes && record.sourceCardTypes.length">
-              <span v-for="(ct, index) in record.sourceCardTypes" :key="ct.id">
-                <HighlightText :text="ct.name" :keyword="searchKeyword" />
-                <span v-if="index < record.sourceCardTypes.length - 1">、</span>
-              </span>
+            <template v-if="record.sourceCardType">
+              <HighlightText :text="record.sourceCardType.name" :keyword="searchKeyword" />
             </template>
             <span v-else>{{ t('admin.status.noLimit') }}</span>
           </template>
         </a-table-column>
         <a-table-column :title="t('admin.linkType.targetCardType')" :width="180">
           <template #cell="{ record }">
-            <template v-if="record.targetCardTypes && record.targetCardTypes.length">
-              <span v-for="(ct, index) in record.targetCardTypes" :key="ct.id">
-                <HighlightText :text="ct.name" :keyword="searchKeyword" />
-                <span v-if="index < record.targetCardTypes.length - 1">、</span>
-              </span>
+            <template v-if="record.targetCardType">
+              <HighlightText :text="record.targetCardType.name" :keyword="searchKeyword" />
             </template>
             <span v-else>{{ t('admin.status.noLimit') }}</span>
           </template>
@@ -464,7 +452,8 @@ onMounted(async () => {
           <a-col :span="12">
             <a-form-item :label="t('admin.linkType.sourceCardTypeLabel')" required>
               <CardTypeSelect
-                v-model="formData.sourceCardTypeIds"
+                v-model="formData.sourceCardTypeId"
+                :multiple="false"
                 :placeholder="t('admin.linkType.selectCardType')"
                 :limit-concrete-single="true"
                 :options="cardTypes"
@@ -474,7 +463,8 @@ onMounted(async () => {
           <a-col :span="12">
             <a-form-item :label="t('admin.linkType.targetCardTypeLabel')" required>
               <CardTypeSelect
-                v-model="formData.targetCardTypeIds"
+                v-model="formData.targetCardTypeId"
+                :multiple="false"
                 :placeholder="t('admin.linkType.selectCardType')"
                 :limit-concrete-single="true"
                 :options="cardTypes"

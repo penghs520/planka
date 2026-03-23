@@ -73,23 +73,14 @@ public class LinkTypeDiffStrategy implements SchemaDiffStrategy {
                     .ifPresent(detail::addFieldChange);
         }
 
-        // 比较源端__PLANKA_EINST__列表（使用ID对象比较）
-        detail.getSemanticChanges().addAll(
-                diffHelper.compareIdObjectList(
-                        before.path("sourceCardTypeIds"),
-                        after.path("sourceCardTypeIds"),
-                        "SOURCE_CARD_TYPE"
-                )
-        );
-
-        // 比较目标端__PLANKA_EINST__列表（使用ID对象比较）
-        detail.getSemanticChanges().addAll(
-                diffHelper.compareIdObjectList(
-                        before.path("targetCardTypeIds"),
-                        after.path("targetCardTypeIds"),
-                        "TARGET_CARD_TYPE"
-                )
-        );
+        diffHelper.compareScalar(
+                        "sourceCardTypeId", "源端实体类型",
+                        before.path("sourceCardTypeId"), after.path("sourceCardTypeId"), "string")
+                .ifPresent(detail::addFieldChange);
+        diffHelper.compareScalar(
+                        "targetCardTypeId", "目标端实体类型",
+                        before.path("targetCardTypeId"), after.path("targetCardTypeId"), "string")
+                .ifPresent(detail::addFieldChange);
 
         return detail;
     }
