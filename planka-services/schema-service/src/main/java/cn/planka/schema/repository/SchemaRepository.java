@@ -156,7 +156,6 @@ public class SchemaRepository {
         entity.setContent(serializeDefinition(schema));
         entity.setState(schema.getState().name());
         entity.setContentVersion(schema.getContentVersion());
-        entity.setStructureVersion(schema.getStructureVersion());
         entity.setBelongTo(schema.belongTo() != null ? schema.belongTo().value() : null);
         entity.setCreatedAt(schema.getCreatedAt());
         entity.setCreatedBy(schema.getCreatedBy());

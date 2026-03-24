@@ -208,9 +208,9 @@ function formatFieldValueByConfig(
       // 没有渲染配置时返回 ID
       return value.join('、') || emptyPlaceholder
 
-    case 'STRUCTURE':
-      // 架构属性：遍历链表结构，显示每层名称
-      return formatStructureValue(value as StructureItem | null) || emptyPlaceholder
+    case 'CASCADE':
+      // 级联属性：遍历链表结构，显示每层名称
+      return formatCascadeFieldValue(value as CascadeItem | null) || emptyPlaceholder
 
     default:
       return String(value) || emptyPlaceholder
@@ -218,21 +218,21 @@ function formatFieldValueByConfig(
 }
 
 /**
- * 架构属性值链表节点
+ * 级联属性值链表节点
  */
-interface StructureItem {
+interface CascadeItem {
   id?: string
   name?: string
-  next?: StructureItem | null
+  next?: CascadeItem | null
 }
 
 /**
- * 格式化架构属性值为显示文本
+ * 格式化级联属性值为显示文本
  */
-function formatStructureValue(item: StructureItem | null): string {
+function formatCascadeFieldValue(item: CascadeItem | null): string {
   if (!item) return ''
   const names: string[] = []
-  let current: StructureItem | null = item
+  let current: CascadeItem | null = item
   while (current) {
     if (current.name) {
       names.push(current.name)

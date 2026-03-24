@@ -15,6 +15,6 @@ import java.util.List;
 public class UpdateSidebarPreferencesRequest {
 
     /** 钉选的结构定义 ID 列表（多选、顺序即展示顺序）；可为空列表表示全部不钉选 */
-    @NotNull(message = "pinnedStructureIds 不能为 null")
-    private List<String> pinnedStructureIds;
+    @NotNull(message = "pinnedCascadeRelationIds 不能为 null")
+    private List<String> pinnedCascadeRelationIds;
 }

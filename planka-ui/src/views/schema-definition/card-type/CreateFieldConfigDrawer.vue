@@ -28,7 +28,7 @@ import {
   EnumFieldConfig,
   AttachmentFieldConfig,
   WebUrlFieldConfig,
-  StructureFieldConfig,
+  CascadeFieldConfig,
 } from './components/field-config'
 
 const { t } = useI18n()
@@ -93,7 +93,7 @@ const formData = ref<{
   defaultUrl: string
   defaultLinkText: string
   // 架构层级类型
-  structureId: string
+  cascadeRelationId: string
   levelBindings: LevelBinding[]
 }>({
   name: '',
@@ -120,7 +120,7 @@ const formData = ref<{
   showPreview: false,
   defaultUrl: '',
   defaultLinkText: '',
-  structureId: '',
+  cascadeRelationId: '',
   levelBindings: [],
 })
 
@@ -203,8 +203,8 @@ function applyTypeDefaults(type: SchemaSubType, opts?: ApplyTypeOptions): void {
       formData.value.validateUrl = true
       formData.value.showPreview = false
       break
-    case SchemaSubType.STRUCTURE_FIELD:
-      formData.value.structureId = ''
+    case SchemaSubType.CASCADE_FIELD:
+      formData.value.cascadeRelationId = ''
       formData.value.levelBindings = []
       break
     case SchemaSubType.LINK_FIELD:
@@ -251,7 +251,7 @@ function resetForm(): void {
     showPreview: false,
     defaultUrl: '',
     defaultLinkText: '',
-    structureId: '',
+    cascadeRelationId: '',
     levelBindings: [],
   }
   linkQuick.value = defaultLinkFieldQuickCreateState(false)
@@ -403,9 +403,9 @@ async function handleSave(): Promise<void> {
           defaultLinkText: formData.value.defaultLinkText,
         })
         break
-      case SchemaSubType.STRUCTURE_FIELD:
+      case SchemaSubType.CASCADE_FIELD:
         Object.assign(fieldConfig, {
-          structureId: formData.value.structureId,
+          cascadeRelationId: formData.value.cascadeRelationId,
           levelBindings: formData.value.levelBindings,
         })
         break
@@ -545,9 +545,9 @@ async function handleSave(): Promise<void> {
       />
 
       <!-- 架构层级类型配置 -->
-      <StructureFieldConfig
-        v-if="selectedType === SchemaSubType.STRUCTURE_FIELD"
-        v-model:structure-id="formData.structureId"
+      <CascadeFieldConfig
+        v-if="selectedType === SchemaSubType.CASCADE_FIELD"
+        v-model:cascade-relation-id="formData.cascadeRelationId"
         v-model:level-bindings="formData.levelBindings"
         :card-type-id="props.cardTypeId"
         :field-name="formData.name"

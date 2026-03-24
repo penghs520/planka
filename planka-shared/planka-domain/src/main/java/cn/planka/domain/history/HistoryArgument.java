@@ -32,7 +32,7 @@ import java.util.List;
         @JsonSubTypes.Type(value = HistoryArgument.DateFieldValue.class, name = "FIELD_VALUE_DATE"),
         @JsonSubTypes.Type(value = HistoryArgument.DateTimeFieldValue.class, name = "FIELD_VALUE_DATETIME"),
         @JsonSubTypes.Type(value = HistoryArgument.EnumFieldValue.class, name = "FIELD_VALUE_ENUM"),
-        @JsonSubTypes.Type(value = HistoryArgument.StructureFieldValue.class, name = "FIELD_VALUE_STRUCTURE"),
+        @JsonSubTypes.Type(value = HistoryArgument.CascadeFieldHistoryValue.class, name = "FIELD_VALUE_CASCADE"),
         @JsonSubTypes.Type(value = HistoryArgument.LinkFieldValue.class, name = "FIELD_VALUE_LINK")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -180,19 +180,19 @@ public sealed interface HistoryArgument {
     /**
      * 架构/组织结构类型属性值 - 存储节点ID和名称（备份）
      */
-    record StructureFieldValue(
+    record CascadeFieldHistoryValue(
             String fieldId,
-            List<StructureNode> path
+            List<CascadeHistoryNode> path
     ) implements FieldValueArg {
         @Override
         public String getType() {
-            return "FIELD_VALUE_STRUCTURE";
+            return "FIELD_VALUE_CASCADE";
         }
 
         /**
          * 架构节点
          */
-        public record StructureNode(String nodeId, String nodeName) {}
+        public record CascadeHistoryNode(String nodeId, String nodeName) {}
     }
 
     /**

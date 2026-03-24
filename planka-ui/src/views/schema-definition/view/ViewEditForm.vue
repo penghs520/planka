@@ -34,14 +34,14 @@ const props = withDefaults(
     visible: boolean
     mode: 'create' | 'edit'
     view?: ListViewDefinition | null
-    structureNodeContextId?: string
+    cascadeRelationNodeContextId?: string
     saveLoading?: boolean
   }>(),
   {
     visible: false,
     mode: 'create',
     view: null,
-    structureNodeContextId: undefined,
+    cascadeRelationNodeContextId: undefined,
     saveLoading: false,
   },
 )
@@ -215,9 +215,9 @@ function handleCreateTypeNext() {
   }
   if (opt.kind === 'LIST') {
     const draft = createEmptyListView(orgStore.currentOrgId)
-    if (props.structureNodeContextId) {
-      draft.viewVisibilityScope = 'STRUCTURE_NODE'
-      draft.visibleStructureNodeIds = [props.structureNodeContextId]
+    if (props.cascadeRelationNodeContextId) {
+      draft.viewVisibilityScope = 'CASCADE_RELATION_NODE'
+      draft.visibleCascadeRelationNodeIds = [props.cascadeRelationNodeContextId]
     }
     formData.value = draft
     createPhase.value = 'form'
@@ -261,10 +261,10 @@ function handleSave() {
     return
   }
   if (
-    d.viewVisibilityScope === 'STRUCTURE_NODE' &&
-    !(d.visibleStructureNodeIds?.length)
+    d.viewVisibilityScope === 'CASCADE_RELATION_NODE' &&
+    !(d.visibleCascadeRelationNodeIds?.length)
   ) {
-    Message.warning(t('viewForm.validation.structureNodesRequired'))
+    Message.warning(t('viewForm.validation.cascadeRelationNodesRequired'))
     activeTab.value = 'visibility'
     return
   }
@@ -324,7 +324,7 @@ function handleSave() {
         v-model:active-tab="activeTab"
         :list-view="formData"
         :mode="mode"
-        :structure-node-context-id="structureNodeContextId"
+        :cascade-relation-node-context-id="cascadeRelationNodeContextId"
         :card-type-options="cardTypeOptions"
         :loading-card-types="loadingCardTypes"
         :available-fields="availableFields"

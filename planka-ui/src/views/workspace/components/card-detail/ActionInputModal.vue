@@ -237,7 +237,7 @@ function convertToFixedValue(value: unknown, fieldType: string): unknown {
       return { valueType: 'ENUM', enumValueIds: Array.isArray(value) ? value : [String(value)] }
       
     case 'LINK':
-    case 'STRUCTURE':
+    case 'CASCADE':
     case 'MEMBER':
       // 关联/人员字段
       return { valueType: 'LINK', ids: Array.isArray(value) ? value : [String(value)] }

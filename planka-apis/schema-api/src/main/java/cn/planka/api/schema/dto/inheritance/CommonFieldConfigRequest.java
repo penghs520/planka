@@ -18,7 +18,7 @@ public class CommonFieldConfigRequest {
     /**
      * 属性类型过滤（可选）
      * <p>
-     * 如: TEXT, NUMBER, DATE, ENUM, ATTACHMENT, WEB_URL, STRUCTURE, LINK
+     * 如: TEXT, NUMBER, DATE, ENUM, ATTACHMENT, WEB_URL, CASCADE, LINK
      */
     private List<String> fieldTypes;
 }

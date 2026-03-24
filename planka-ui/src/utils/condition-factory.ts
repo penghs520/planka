@@ -130,7 +130,7 @@ export function getNodeTypeByFieldType(schemaSubType: string): NodeTypeValue {
     ENUM_FIELD: NodeType.ENUM,
     WEB_URL_FIELD: NodeType.WEB_URL,
     ATTACHMENT_FIELD: NodeType.TEXT, // 附件当作文本处理
-    STRUCTURE_FIELD: NodeType.TEXT, // 结构当作文本处理
+    CASCADE_FIELD: NodeType.TEXT, // 级联属性当作文本处理
     LINK_FIELD: NodeType.LINK, // 关联字段
 
     // 字段定义类型映射
@@ -142,7 +142,7 @@ export function getNodeTypeByFieldType(schemaSubType: string): NodeTypeValue {
     ENUM_FIELD_DEFINITION: NodeType.ENUM,
     WEB_URL_FIELD_DEFINITION: NodeType.WEB_URL,
     ATTACHMENT_FIELD_DEFINITION: NodeType.TEXT,
-    STRUCTURE_FIELD_DEFINITION: NodeType.TEXT,
+    CASCADE_FIELD_DEFINITION: NodeType.TEXT,
   }
 
   return mapping[schemaSubType] || NodeType.TEXT

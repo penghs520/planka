@@ -92,7 +92,7 @@ public final class ListViewDefinition extends AbstractViewDefinition {
         ViewVisibilityValidation.validateScopeAndAudience(
                 getEffectiveViewVisibilityScope(),
                 visibleTeamCardIds,
-                visibleStructureNodeIds,
+                visibleCascadeRelationNodeIds,
                 visibilityAudienceCondition);
     }
 

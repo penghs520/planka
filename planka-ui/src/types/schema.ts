@@ -19,7 +19,7 @@ export enum SchemaType {
   /** 关联类型 */
   LINK_TYPE = 'LINK_TYPE',
   /** 架构线定义 */
-  STRUCTURE_DEFINITION = 'STRUCTURE_DEFINITION',
+  CASCADE_RELATION_DEFINITION = 'CASCADE_RELATION_DEFINITION',
   /** 业务规则 */
   BIZ_RULE = 'BIZ_RULE',
   /** 流转策略 */
@@ -70,7 +70,7 @@ export enum SchemaSubType {
   /** 网页链接属性定义 */
   WEB_URL_FIELD_DEFINITION = 'WEB_URL_FIELD_DEFINITION',
   /** 架构层级属性定义 */
-  STRUCTURE_FIELD_DEFINITION = 'STRUCTURE_FIELD_DEFINITION',
+  CASCADE_FIELD_DEFINITION = 'CASCADE_FIELD_DEFINITION',
 
   // ==================== 属性配置 ====================
   /** 单行文本属性配置 */
@@ -89,8 +89,8 @@ export enum SchemaSubType {
   ATTACHMENT_FIELD = 'ATTACHMENT_FIELD',
   /** 网页链接属性配置 */
   WEB_URL_FIELD = 'WEB_URL_FIELD',
-  /** 架构层级属性配置 */
-  STRUCTURE_FIELD = 'STRUCTURE_FIELD',
+  /** 级联属性配置 */
+  CASCADE_FIELD = 'CASCADE_FIELD',
 
   // ==================== 关联类型 ====================
   /** 关联类型 */
@@ -100,7 +100,7 @@ export enum SchemaSubType {
 
   // ==================== 架构线定义 ====================
   /** 架构线定义 */
-  STRUCTURE_DEFINITION = 'STRUCTURE_DEFINITION',
+  CASCADE_RELATION_DEFINITION = 'CASCADE_RELATION_DEFINITION',
 
   // ==================== 视图 ====================
   /** 列表视图 */
@@ -155,7 +155,7 @@ export const SchemaTypeConfig: Record<SchemaType, { label: string; requiresBelon
   [SchemaType.VIEW]: { label: '视图', requiresBelongTo: false },
   [SchemaType.VALUE_STREAM]: { label: '价值流定义', requiresBelongTo: true },
   [SchemaType.LINK_TYPE]: { label: '实体关系', requiresBelongTo: false },
-  [SchemaType.STRUCTURE_DEFINITION]: { label: '架构线定义', requiresBelongTo: false },
+  [SchemaType.CASCADE_RELATION_DEFINITION]: { label: '级联关系定义', requiresBelongTo: false },
   [SchemaType.BIZ_RULE]: { label: '业务规则', requiresBelongTo: true },
   [SchemaType.FLOW_POLICY]: { label: '流转策略', requiresBelongTo: true },
   [SchemaType.CARD_DETAIL_TEMPLATE]: { label: '卡片详情页模板', requiresBelongTo: true },
@@ -183,7 +183,7 @@ export const SchemaSubTypeConfig: Record<SchemaSubType, { label: string; categor
   [SchemaSubType.ENUM_FIELD_DEFINITION]: { label: '枚举属性', category: SchemaType.FIELD_DEFINITION },
   [SchemaSubType.ATTACHMENT_FIELD_DEFINITION]: { label: '附件属性', category: SchemaType.FIELD_DEFINITION },
   [SchemaSubType.WEB_URL_FIELD_DEFINITION]: { label: '网页链接属性', category: SchemaType.FIELD_DEFINITION },
-  [SchemaSubType.STRUCTURE_FIELD_DEFINITION]: { label: '架构层级属性', category: SchemaType.FIELD_DEFINITION },
+  [SchemaSubType.CASCADE_FIELD_DEFINITION]: { label: '级联属性', category: SchemaType.FIELD_DEFINITION },
   // 属性配置
   [SchemaSubType.TEXT_FIELD]: { label: '单行文本属性配置', category: SchemaType.FIELD_CONFIG },
   [SchemaSubType.MULTI_LINE_TEXT_FIELD]: { label: '多行文本属性配置', category: SchemaType.FIELD_CONFIG },
@@ -193,12 +193,12 @@ export const SchemaSubTypeConfig: Record<SchemaSubType, { label: string; categor
   [SchemaSubType.ENUM_FIELD]: { label: '枚举属性配置', category: SchemaType.FIELD_CONFIG },
   [SchemaSubType.ATTACHMENT_FIELD]: { label: '附件属性配置', category: SchemaType.FIELD_CONFIG },
   [SchemaSubType.WEB_URL_FIELD]: { label: '网页链接属性配置', category: SchemaType.FIELD_CONFIG },
-  [SchemaSubType.STRUCTURE_FIELD]: { label: '架构层级属性配置', category: SchemaType.FIELD_CONFIG },
+  [SchemaSubType.CASCADE_FIELD]: { label: '级联属性配置', category: SchemaType.FIELD_CONFIG },
   // 关联类型
   [SchemaSubType.LINK_TYPE]: { label: '实体关系', category: SchemaType.LINK_TYPE },
   [SchemaSubType.LINK_FIELD]: { label: '关联属性配置', category: SchemaType.FIELD_CONFIG },
   // 架构线定义
-  [SchemaSubType.STRUCTURE_DEFINITION]: { label: '架构线定义', category: SchemaType.STRUCTURE_DEFINITION },
+  [SchemaSubType.CASCADE_RELATION_DEFINITION]: { label: '级联关系定义', category: SchemaType.CASCADE_RELATION_DEFINITION },
   // 价值流定义
   [SchemaSubType.VALUE_STREAM]: { label: '价值流基线', category: SchemaType.VALUE_STREAM },
   [SchemaSubType.VALUE_STREAM_BRANCH]: { label: '价值流分支', category: SchemaType.VALUE_STREAM },
@@ -244,8 +244,6 @@ export interface SchemaDefinition {
   state: EntityState
   /** 内容版本号 */
   contentVersion: number
-  /** 结构版本号 */
-  structureVersion?: string
   /** 创建时间 */
   createdAt?: string
   /** 创建人 ID */

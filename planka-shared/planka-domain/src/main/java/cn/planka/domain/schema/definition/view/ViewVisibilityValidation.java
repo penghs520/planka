@@ -15,16 +15,16 @@ public final class ViewVisibilityValidation {
     public static void validateScopeAndAudience(
             ViewVisibilityScope scope,
             List<String> visibleTeamCardIds,
-            List<String> visibleStructureNodeIds,
+            List<String> visibleCascadeRelationNodeIds,
             Condition visibilityAudienceCondition) {
         if (scope == ViewVisibilityScope.TEAMS) {
             if (visibleTeamCardIds == null || visibleTeamCardIds.isEmpty()) {
                 throw new IllegalArgumentException("TEAMS 可见性必须配置 visibleTeamCardIds");
             }
         }
-        if (scope == ViewVisibilityScope.STRUCTURE_NODE) {
-            if (visibleStructureNodeIds == null || visibleStructureNodeIds.isEmpty()) {
-                throw new IllegalArgumentException("STRUCTURE_NODE 可见性必须配置 visibleStructureNodeIds");
+        if (scope == ViewVisibilityScope.CASCADE_RELATION_NODE) {
+            if (visibleCascadeRelationNodeIds == null || visibleCascadeRelationNodeIds.isEmpty()) {
+                throw new IllegalArgumentException("CASCADE_RELATION_NODE 可见性必须配置 visibleCascadeRelationNodeIds");
             }
         }
         if (visibilityAudienceCondition != null && visibilityAudienceCondition.getRoot() != null) {

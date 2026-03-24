@@ -12,7 +12,7 @@ import cn.planka.domain.card.CardTitle;
 import cn.planka.domain.card.CardTypeId;
 import cn.planka.domain.card.CardCycle;
 import cn.planka.domain.field.FieldValue;
-import cn.planka.domain.field.StructureFieldValue;
+import cn.planka.domain.field.CascadeFieldValue;
 import cn.planka.domain.schema.definition.cardtype.CardTypeDefinition;
 import cn.planka.domain.schema.definition.cardtype.CodeGenerationRule;
 import cn.planka.domain.schema.definition.cardtype.EntityCardType;
@@ -62,26 +62,26 @@ public class CardEntityConverter {
     }
 
     /**
-     * 过滤创建请求中的 StructureFieldValue
+     * 过滤创建请求中的 CascadeFieldValue
      */
-    public FilteredCreateRequest filterStructureFieldValues(CreateCardRequest request) {
+    public FilteredCreateRequest filterCascadeFieldValues(CreateCardRequest request) {
         if (request.fieldValues() == null || request.fieldValues().isEmpty()) {
             return new FilteredCreateRequest(request, Map.of());
         }
 
         Map<String, FieldValue<?>> filteredFieldValues = new HashMap<>();
-        Map<String, StructureFieldValue> structureFieldValues = new HashMap<>();
+        Map<String, CascadeFieldValue> cascadeFieldValues = new HashMap<>();
 
         for (Map.Entry<String, FieldValue<?>> entry : request.fieldValues().entrySet()) {
-            if (entry.getValue() instanceof StructureFieldValue structureValue) {
-                structureFieldValues.put(entry.getKey(), structureValue);
+            if (entry.getValue() instanceof CascadeFieldValue cascadeFieldValue) {
+                cascadeFieldValues.put(entry.getKey(), cascadeFieldValue);
                 logger.debug("创建请求中发现架构属性: fieldId={}", entry.getKey());
             } else {
                 filteredFieldValues.put(entry.getKey(), entry.getValue());
             }
         }
 
-        if (structureFieldValues.isEmpty()) {
+        if (cascadeFieldValues.isEmpty()) {
             return new FilteredCreateRequest(request, Map.of());
         }
 
@@ -94,7 +94,7 @@ public class CardEntityConverter {
                 request.linkUpdates()
         );
 
-        return new FilteredCreateRequest(filteredRequest, structureFieldValues);
+        return new FilteredCreateRequest(filteredRequest, cascadeFieldValues);
     }
 
     /**
@@ -287,7 +287,7 @@ public class CardEntityConverter {
      */
     public record FilteredCreateRequest(
             CreateCardRequest request,
-            Map<String, StructureFieldValue> structureFieldValues
+            Map<String, CascadeFieldValue> cascadeFieldValues
     ) {
     }
 }

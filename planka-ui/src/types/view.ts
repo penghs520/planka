@@ -40,11 +40,11 @@ export interface ListViewDefinition extends SchemaDefinition {
   visibleTo?: string[]
 
   /** 可见性范围基数（新模型） */
-  viewVisibilityScope?: 'PRIVATE' | 'WORKSPACE' | 'TEAMS' | 'STRUCTURE_NODE'
+  viewVisibilityScope?: 'PRIVATE' | 'WORKSPACE' | 'TEAMS' | 'CASCADE_RELATION_NODE'
 
   visibleTeamCardIds?: string[]
 
-  visibleStructureNodeIds?: string[]
+  visibleCascadeRelationNodeIds?: string[]
 
   /** 受众条件（可选，与数据过滤 condition 分离） */
   visibilityAudienceCondition?: Condition
@@ -130,7 +130,7 @@ export interface ViewListItemVO {
 
   visibleTeamCardIds?: string[]
 
-  visibleStructureNodeIds?: string[]
+  visibleCascadeRelationNodeIds?: string[]
 
   createdBy?: string
 
@@ -187,7 +187,7 @@ export function createEmptyListView(orgId: string): ListViewDefinition {
     shared: true,
     viewVisibilityScope: 'WORKSPACE',
     visibleTeamCardIds: [],
-    visibleStructureNodeIds: [],
+    visibleCascadeRelationNodeIds: [],
   }
 }
 

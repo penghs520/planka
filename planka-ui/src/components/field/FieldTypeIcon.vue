@@ -10,7 +10,7 @@ import {
 import type { Component } from 'vue'
 import IconMarkdown from '@/components/icons/IconMarkdown.vue'
 import IconMultiLineText from '@/components/icons/IconMultiLineText.vue'
-import IconStructure from '@/components/icons/IconStructure.vue'
+import IconCascadeField from '@/components/icons/IconCascadeField.vue'
 import IconNumber from '@/components/icons/IconNumber.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
 
@@ -38,7 +38,7 @@ const baseIconMap: Record<string, Component> = {
   ENUM: IconMenu,
   ATTACHMENT: IconAttachment,
   WEB_URL: IconLink,
-  STRUCTURE: IconStructure,
+  CASCADE: IconCascadeField,
   LINK: IconLinkType,
 }
 
@@ -56,7 +56,7 @@ const fieldTypeIconMap: Record<string, Component> = {
   ENUM_FIELD_DEFINITION: IconMenu,
   ATTACHMENT_FIELD_DEFINITION: IconAttachment,
   WEB_URL_FIELD_DEFINITION: IconLink,
-  STRUCTURE_FIELD_DEFINITION: IconStructure,
+  CASCADE_FIELD_DEFINITION: IconCascadeField,
   LINK_FIELD_DEFINITION: IconLinkType,
 
   // FieldConfig 类型（使用新的 _FIELD 后缀）
@@ -68,7 +68,7 @@ const fieldTypeIconMap: Record<string, Component> = {
   ENUM_FIELD: IconMenu,
   ATTACHMENT_FIELD: IconAttachment,
   WEB_URL_FIELD: IconLink,
-  STRUCTURE_FIELD: IconStructure,
+  CASCADE_FIELD: IconCascadeField,
   LINK_FIELD: IconLinkType,
 }
 

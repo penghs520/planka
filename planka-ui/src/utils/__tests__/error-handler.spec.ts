@@ -37,7 +37,7 @@ describe('error-handler', () => {
     it('should parse "引用方:" correctly', () => {
       const error = { message: '无法删除。引用方: Card[123]' }
       handleReferenceConflictError(error)
-      // We can verify that Modal.warning was called with specific content structure
+      // We can verify that Modal.warning was called with specific modal payload shape
       // but checking the exact render function output is complex.
       // We assume it works if the function returns true and Modal is called.
       expect(Modal.warning).toHaveBeenCalled()

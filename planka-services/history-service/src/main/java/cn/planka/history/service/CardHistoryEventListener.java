@@ -326,19 +326,19 @@ public class CardHistoryEventListener {
                     .map(id -> HistoryMessage.enumOption(id, id))
                     .collect(Collectors.toList());
             return HistoryMessage.enumFieldValue(fieldId, options);
-        } else if (fieldValue instanceof StructureFieldValue structureValue) {
-            StructureItem item = structureValue.getValue();
+        } else if (fieldValue instanceof CascadeFieldValue cascadeFieldValue) {
+            CascadeItem item = cascadeFieldValue.getValue();
             if (item == null) {
-                return HistoryMessage.structureFieldValue(fieldId, Collections.emptyList());
+                return HistoryMessage.cascadeFieldHistoryValue(fieldId, Collections.emptyList());
             }
             // 将链表结构转换为路径列表
-            List<HistoryArgument.StructureFieldValue.StructureNode> path = new java.util.ArrayList<>();
-            StructureItem current = item;
+            List<HistoryArgument.CascadeFieldHistoryValue.CascadeHistoryNode> path = new java.util.ArrayList<>();
+            CascadeItem current = item;
             while (current != null) {
-                path.add(HistoryMessage.structureNode(current.getId(), current.getName()));
+                path.add(HistoryMessage.cascadeHistoryNode(current.getId(), current.getName()));
                 current = current.getNext();
             }
-            return HistoryMessage.structureFieldValue(fieldId, path);
+            return HistoryMessage.cascadeFieldHistoryValue(fieldId, path);
         } else {
             // 其他类型使用文本表示
             Object value = fieldValue.getValue();

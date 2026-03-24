@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { FormInstance } from '@arco-design/web-vue'
 import { Message } from '@arco-design/web-vue'
-import { cardTypeApi, structureApi, linkTypeApi } from '@/api'
+import { cardTypeApi, cascadeRelationApi, linkTypeApi } from '@/api'
 import { fieldOptionsApi } from '@/api/field-options'
 import SaveButton from '@/components/common/SaveButton.vue'
 import CancelButton from '@/components/common/CancelButton.vue'
@@ -28,7 +28,7 @@ import {
   EnumFieldConfig as EnumFieldConfigComponent,
   AttachmentFieldConfig,
   WebUrlFieldConfig,
-  StructureFieldConfig,
+  CascadeFieldConfig,
 } from './components/field-config'
 
 const { t } = useI18n()
@@ -49,9 +49,8 @@ const saving = ref(false)
 const currentFieldConfig = ref<FieldConfig | null>(null)
 const formRef = ref<FormInstance>()
 
-// 架构层级类型显示数据
-const structureName = ref<string>('')
-const structureLevels = ref<Map<number, string>>(new Map())
+// 级联属性类型只读展示
+const cascadeRelationDisplayName = ref<string>('')
 const linkTypeNames = ref<Record<string, { sourceName: string; targetName: string }>>({})
 
 // 校验规则配置所需数据
@@ -84,9 +83,9 @@ async function initData(): Promise<void> {
       }
     }
 
-    // 如果是架构层级类型，加载架构线和关联类型详情
-    if (props.fieldConfig.schemaSubType === 'STRUCTURE_FIELD') {
-      await loadStructureDetails()
+    // 如果是级联属性类型，加载级联关系定义与关联类型详情
+    if (props.fieldConfig.schemaSubType === 'CASCADE_FIELD') {
+      await loadCascadeRelationDetails()
     }
 
     // 加载校验规则配置所需数据
@@ -96,20 +95,16 @@ async function initData(): Promise<void> {
   }
 }
 
-/** 加载架构线和层级详情 */
-async function loadStructureDetails(): Promise<void> {
-  const structureId = (currentFieldConfig.value as Record<string, unknown>)?.structureId as string | undefined
-  if (!structureId) return
+/** 加载级联关系定义与层级详情 */
+async function loadCascadeRelationDetails(): Promise<void> {
+  const cascadeRelationId = (currentFieldConfig.value as Record<string, unknown>)?.cascadeRelationId as
+    | string
+    | undefined
+  if (!cascadeRelationId) return
 
   try {
-    const structure = await structureApi.getById(structureId)
-    structureName.value = structure.name
-
-    const levelsMap = new Map<number, string>()
-    structure.levels?.forEach((level: { index: number; name: string }) => {
-      levelsMap.set(level.index, level.name)
-    })
-    structureLevels.value = levelsMap
+    const def = await cascadeRelationApi.getById(cascadeRelationId)
+    cascadeRelationDisplayName.value = def.name
 
     // 加载层级绑定的关联类型名称
     const levelBindings = (currentFieldConfig.value as Record<string, unknown>)?.levelBindings as LevelBinding[] || []
@@ -130,7 +125,7 @@ async function loadStructureDetails(): Promise<void> {
       }
     }
   } catch (error) {
-    console.error('Failed to load structure details:', error)
+    console.error('Failed to load cascade relation definition:', error)
   }
 }
 
@@ -385,17 +380,17 @@ async function handleSave(): Promise<void> {
         :disabled="!isOwnConfig"
       />
 
-      <!-- 架构层级类型配置 -->
-      <StructureFieldConfig
-        v-if="currentFieldConfig.schemaSubType === 'STRUCTURE_FIELD'"
-        :structure-id="(currentFieldConfig as any).structureId"
+      <!-- 级联属性类型配置 -->
+      <CascadeFieldConfig
+        v-if="currentFieldConfig.schemaSubType === 'CASCADE_FIELD'"
+        :cascade-relation-id="(currentFieldConfig as any).cascadeRelationId"
         :level-bindings="(currentFieldConfig as any).levelBindings || []"
         :card-type-id="props.cardTypeId"
         :field-name="currentFieldConfig.name"
         :disabled="!isOriginal"
         :readonly="!isOriginal"
-        :structure-name="structureName"
-        @update:structure-id="(val) => (currentFieldConfig as any).structureId = val"
+        :cascade-relation-name="cascadeRelationDisplayName"
+        @update:cascade-relation-id="(val) => (currentFieldConfig as any).cascadeRelationId = val"
         @update:level-bindings="handleLevelBindingsUpdate"
       />
 
@@ -414,7 +409,7 @@ async function handleSave(): Promise<void> {
       <a-space>
         <CancelButton @click="drawerVisible = false" />
         <SaveButton
-          v-if="isOwnConfig || (currentFieldConfig?.schemaSubType === 'STRUCTURE_FIELD' && isOriginal)"
+          v-if="isOwnConfig || (currentFieldConfig?.schemaSubType === 'CASCADE_FIELD' && isOriginal)"
           :loading="saving"
           :text="t('admin.action.save')"
           @click="handleSave"

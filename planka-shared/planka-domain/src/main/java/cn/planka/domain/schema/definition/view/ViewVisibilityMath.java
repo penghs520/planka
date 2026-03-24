@@ -18,13 +18,13 @@ public final class ViewVisibilityMath {
      *
      * @param view                 视图定义
      * @param viewerMemberCardId   当前成员卡 ID（请求头 X-Member-Card-Id）
-     * @param currentStructureNodeId 当前架构节点 ID；工作区全局导航传 null
+     * @param currentCascadeRelationNodeId 当前架构节点 ID；工作区全局导航传 null
      * @param memberInAnyTeam      当 scope=TEAMS 时，是否属于 visibleTeamCardIds 中任一团队
      */
     public static boolean isVisible(
             NavVisibilitySubject subject,
             String viewerMemberCardId,
-            String currentStructureNodeId,
+            String currentCascadeRelationNodeId,
             boolean memberInAnyTeam) {
         AssertUtils.notBlank(viewerMemberCardId, "viewerMemberCardId");
         if (!subject.isEnabled() || subject.isDeleted()) {
@@ -35,7 +35,7 @@ public final class ViewVisibilityMath {
             case PRIVATE -> Objects.equals(viewerMemberCardId, subject.getCreatedBy());
             case WORKSPACE -> true;
             case TEAMS -> memberInAnyTeam;
-            case STRUCTURE_NODE -> isStructureNodeVisible(subject, currentStructureNodeId);
+            case CASCADE_RELATION_NODE -> isCascadeRelationNodeVisible(subject, currentCascadeRelationNodeId);
         };
     }
 
@@ -43,17 +43,17 @@ public final class ViewVisibilityMath {
      * 工作区全局导航（无节点上下文）不应列出 STRUCTURE_NODE 作用域条目。
      */
     public static boolean includeInWorkspaceNav(NavVisibilitySubject subject) {
-        return subject.getEffectiveViewVisibilityScope() != ViewVisibilityScope.STRUCTURE_NODE;
+        return subject.getEffectiveViewVisibilityScope() != ViewVisibilityScope.CASCADE_RELATION_NODE;
     }
 
-    private static boolean isStructureNodeVisible(NavVisibilitySubject subject, String currentStructureNodeId) {
-        Collection<String> nodes = subject.getVisibleStructureNodeIds();
+    private static boolean isCascadeRelationNodeVisible(NavVisibilitySubject subject, String currentCascadeRelationNodeId) {
+        Collection<String> nodes = subject.getVisibleCascadeRelationNodeIds();
         if (nodes == null || nodes.isEmpty()) {
             return false;
         }
-        if (currentStructureNodeId == null || currentStructureNodeId.isBlank()) {
+        if (currentCascadeRelationNodeId == null || currentCascadeRelationNodeId.isBlank()) {
             return false;
         }
-        return nodes.contains(currentStructureNodeId);
+        return nodes.contains(currentCascadeRelationNodeId);
     }
 }

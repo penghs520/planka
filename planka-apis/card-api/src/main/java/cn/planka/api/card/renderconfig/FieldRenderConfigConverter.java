@@ -54,8 +54,8 @@ public final class FieldRenderConfigConverter {
         if (fieldConfig instanceof LinkFieldConfig config) {
             return convertLink(config);
         }
-        if (fieldConfig instanceof StructureFieldConfig config) {
-            return convertStructure(config);
+        if (fieldConfig instanceof CascadeFieldConfig config) {
+            return convertCascadeField(config);
         }
         if (fieldConfig instanceof WebUrlFieldConfig config) {
             return convertWebUrl(config);
@@ -180,14 +180,14 @@ public final class FieldRenderConfigConverter {
     }
 
     /**
-     * 转换架构层级类型配置
+     * 转换级联属性类型配置
      */
-    public static StructureRenderConfig convertStructure(StructureFieldConfig config) {
-        String structureIdStr = config.getStructureId() != null
-                ? config.getStructureId().value()
+    public static CascadeFieldRenderConfig convertCascadeField(CascadeFieldConfig config) {
+        String cascadeRelationIdStr = config.getCascadeRelationId() != null
+                ? config.getCascadeRelationId().value()
                 : null;
-        return StructureRenderConfig.builder()
-                .structureId(structureIdStr)
+        return CascadeFieldRenderConfig.builder()
+                .cascadeRelationId(cascadeRelationIdStr)
                 .leafOnly(config.isLeafOnly())
                 .build();
     }

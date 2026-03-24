@@ -27,8 +27,6 @@ public class SchemaEntity {
 
     private Integer contentVersion;
 
-    private String structureVersion;
-
     private String belongTo;
 
     @TableField(fill = FieldFill.INSERT)

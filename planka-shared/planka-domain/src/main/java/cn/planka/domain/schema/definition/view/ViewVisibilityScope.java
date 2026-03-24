@@ -14,6 +14,6 @@ public enum ViewVisibilityScope {
     /** 指定团队（团队卡）成员可见 */
     TEAMS,
 
-    /** 指定架构节点上下文可见 */
-    STRUCTURE_NODE
+    /** 指定级联关系节点上下文可见 */
+    CASCADE_RELATION_NODE
 }

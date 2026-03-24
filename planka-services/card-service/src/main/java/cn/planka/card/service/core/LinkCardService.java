@@ -4,15 +4,15 @@ import cn.planka.api.card.dto.CardDTO;
 import cn.planka.card.repository.CardRepository;
 import cn.planka.card.service.permission.CardPermissionService;
 import cn.planka.card.service.permission.exception.PermissionDeniedException;
-import cn.planka.card.service.structure.StructureLinkSyncService;
-import cn.planka.card.service.structure.StructureSyncResult;
+import cn.planka.card.service.cascadefield.CascadeFieldLinkSyncService;
+import cn.planka.card.service.cascadefield.CascadeFieldSyncResult;
 import cn.planka.common.result.PageResult;
 import cn.planka.common.result.Result;
 import cn.planka.domain.card.CardId;
 import cn.planka.domain.card.CardCycle;
 import cn.planka.domain.card.CardTypeId;
 import cn.planka.domain.field.LinkedCard;
-import cn.planka.domain.field.StructureFieldValue;
+import cn.planka.domain.field.CascadeFieldValue;
 import cn.planka.domain.link.LinkFieldIdUtils;
 import cn.planka.domain.link.LinkPosition;
 import cn.planka.domain.schema.definition.condition.Condition;
@@ -54,20 +54,20 @@ public class LinkCardService {
     private final CardRepository cardRepository;
     private final ZgraphWriteClient writeClient;
     private final EventPublisher eventPublisher;
-    private final StructureLinkSyncService structureLinkSyncService;
+    private final CascadeFieldLinkSyncService cascadeFieldLinkSyncService;
     private final CardPermissionService permissionService;
 
     public LinkCardService(SchemaCacheService schemaCacheService,
                            CardRepository cardRepository,
                            ZgraphWriteClient writeClient,
                            EventPublisher eventPublisher,
-                           StructureLinkSyncService structureLinkSyncService,
+                           CascadeFieldLinkSyncService cascadeFieldLinkSyncService,
                            CardPermissionService permissionService) {
         this.schemaCacheService = schemaCacheService;
         this.cardRepository = cardRepository;
         this.writeClient = writeClient;
         this.eventPublisher = eventPublisher;
-        this.structureLinkSyncService = structureLinkSyncService;
+        this.cascadeFieldLinkSyncService = cascadeFieldLinkSyncService;
         this.permissionService = permissionService;
     }
 
@@ -203,9 +203,9 @@ public class LinkCardService {
             Map<String, CardDTO> existingLinkedCards = getExistingLinkedCardsWithDetail(cardId, linkFieldId, operatorId);
 
             // 4.1 在关联更新之前，预先计算所有受影响架构属性的旧值（用于变更历史记录）
-            Map<String, StructureFieldValue> oldStructureValues = Map.of();
+            Map<String, CascadeFieldValue> oldCascadeFieldValues = Map.of();
             if (!skipSync) {
-                oldStructureValues = structureLinkSyncService.getStructureValuesBeforeUpdate(
+                oldCascadeFieldValues = cascadeFieldLinkSyncService.getCascadeFieldValuesBeforeUpdate(
                         cardId, currentCard.getTypeId().value(), linkFieldId, operatorId);
             }
 
@@ -261,9 +261,9 @@ public class LinkCardService {
 
             // 9. 架构关联联动同步（入口1）
             if (!skipSync) {
-                StructureSyncResult syncResult = structureLinkSyncService.syncStructureLinks(
+                CascadeFieldSyncResult syncResult = cascadeFieldLinkSyncService.syncCascadeFieldLinks(
                         cardId, currentCard.getTypeId().value(), linkFieldId, targetCardIds,
-                        oldStructureValues, orgId, operatorId, sourceIp);
+                        oldCascadeFieldValues, orgId, operatorId, sourceIp);
                 if (syncResult.synced()) {
                     logger.debug("架构联动同步完成，addedLinks: {}, removedLinks: {}",
                             syncResult.addedLinks().size(), syncResult.removedLinks().size());

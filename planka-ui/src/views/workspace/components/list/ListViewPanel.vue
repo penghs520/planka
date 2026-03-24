@@ -52,12 +52,12 @@ const LIST_VIEW_DATA_COL_WIDTH = 150
 
 const props = defineProps<{
   viewId: string
-  /** 架构节点页传入，用于视图数据可见性校验 */
-  structureNodeId?: string
+  /** 级联关系节点页传入，用于视图数据可见性校验 */
+  cascadeRelationNodeId?: string
 }>()
 
 const viewDataQueryOpts = computed(() =>
-  props.structureNodeId ? { structureNodeId: props.structureNodeId } : undefined,
+  props.cascadeRelationNodeId ? { cascadeRelationNodeId: props.cascadeRelationNodeId } : undefined,
 )
 
 const { t } = useI18n()
@@ -138,7 +138,7 @@ const {
   editingDateValue,
   editingEnumValue,
   editingLinkValue,
-  editingStructureValue,
+  editingCascadeFieldValue,
   cellSaving,
   // isEditing: _isEditing,
   startEditing,
@@ -584,7 +584,7 @@ defineExpose({ refresh })
       v-model:date-value="editingDateValue"
       v-model:enum-value="editingEnumValue"
       v-model:link-value="editingLinkValue"
-      v-model:structure-value="editingStructureValue"
+      v-model:cascade-field-value="editingCascadeFieldValue"
       :editing-cell="editingCell"
       :saving="cellSaving"
       :display-value="''"
@@ -605,7 +605,7 @@ defineExpose({ refresh })
       v-model:visible="editViewVisible"
       mode="edit"
       :view="viewDefForEdit"
-      :structure-node-context-id="structureNodeId"
+      :cascade-relation-node-context-id="cascadeRelationNodeId"
       :save-loading="editViewSaving"
       @save="handleEditViewSave"
     />

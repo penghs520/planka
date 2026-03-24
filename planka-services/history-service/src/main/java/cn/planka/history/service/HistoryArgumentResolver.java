@@ -322,15 +322,15 @@ public class HistoryArgumentResolver {
                     .displayValue(String.join(", ", displayValues))
                     .deleted(fieldDeleted)
                     .build();
-        } else if (fieldValueArg instanceof StructureFieldValue structureValue) {
+        } else if (fieldValueArg instanceof CascadeFieldHistoryValue cascadeFieldHistoryValue) {
             List<String> pathNames = new ArrayList<>();
-            if (structureValue.path() != null) {
-                for (StructureFieldValue.StructureNode node : structureValue.path()) {
+            if (cascadeFieldHistoryValue.path() != null) {
+                for (CascadeFieldHistoryValue.CascadeHistoryNode node : cascadeFieldHistoryValue.path()) {
                     pathNames.add(node.nodeName());
                 }
             }
             return HistoryArgumentVO.builder()
-                    .type("FIELD_VALUE_STRUCTURE")
+                    .type("FIELD_VALUE_CASCADE")
                     .fieldId(fieldId)
                     .fieldName(fieldName)
                     .displayValue(String.join(" / ", pathNames))

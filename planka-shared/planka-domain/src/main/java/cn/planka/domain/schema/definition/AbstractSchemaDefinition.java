@@ -78,11 +78,6 @@ public abstract class AbstractSchemaDefinition<ID extends SchemaId> implements S
      */
     protected int contentVersion;
 
-    /**
-     * 结构版本号（语义版本）
-     */
-    protected String structureVersion;
-
     // ==================== 审计信息 ====================
 
     /**

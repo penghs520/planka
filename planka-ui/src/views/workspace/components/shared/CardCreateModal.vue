@@ -21,7 +21,7 @@ import type {
   EnumFieldVO,
   LinkFieldVO,
 } from '@/types/card-create-page-template'
-import FieldStructureEditor from '@/components/field/editor/FieldStructureEditor.vue'
+import FieldCascadeEditor from '@/components/field/editor/FieldCascadeEditor.vue'
 import FieldLinkEditor from '@/components/field/editor/FieldLinkEditor.vue'
 import type { LinkedCard } from '@/types/card'
 
@@ -294,12 +294,12 @@ function buildFieldValue(field: CreatePageFieldVO, value: any): any {
         ? value 
         : (value ? [value] : [])
       return { ...base, type: 'ENUM', value: optionIds }
-    case 'STRUCTURE':
-      // 架构字段值直接使用 FieldStructureEditor 构建的值
-      if (value && typeof value === 'object' && value.type === 'STRUCTURE') {
+    case 'CASCADE':
+      // 架构字段值直接使用 FieldCascadeEditor 构建的值
+      if (value && typeof value === 'object' && value.type === 'CASCADE') {
         return value
       }
-      return { ...base, type: 'STRUCTURE', value: value }
+      return { ...base, type: 'CASCADE', value: value }
     case 'LINK':
       // LINK 字段值：返回关联卡片ID数组
       const linkedCards = value as LinkedCard[]
@@ -456,8 +456,8 @@ function shouldShowTime(field: DateFieldVO): boolean {
                 />
 
                 <!-- 架构属性字段 -->
-                <FieldStructureEditor
-                  v-else-if="field.fieldType === 'STRUCTURE'"
+                <FieldCascadeEditor
+                  v-else-if="field.fieldType === 'CASCADE'"
                   :field-id="field.fieldId"
                   :model-value="formData[field.fieldId]"
                   :placeholder="`请选择${field.name}`"
@@ -560,8 +560,8 @@ function shouldShowTime(field: DateFieldVO): boolean {
                 />
 
                 <!-- 架构属性字段 -->
-                <FieldStructureEditor
-                  v-else-if="field.fieldType === 'STRUCTURE'"
+                <FieldCascadeEditor
+                  v-else-if="field.fieldType === 'CASCADE'"
                   :field-id="field.fieldId"
                   :model-value="formData[field.fieldId]"
                   :placeholder="`请选择${field.name}`"

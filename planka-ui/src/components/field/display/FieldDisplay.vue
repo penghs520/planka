@@ -12,7 +12,7 @@ import FieldNumberDisplay from './FieldNumberDisplay.vue'
 import FieldDateDisplay from './FieldDateDisplay.vue'
 import FieldEnumDisplay from './FieldEnumDisplay.vue'
 import FieldLinkDisplay from './FieldLinkDisplay.vue'
-import FieldStructureDisplay from './FieldStructureDisplay.vue'
+import FieldCascadeDisplay from './FieldCascadeDisplay.vue'
 import FieldWebUrlDisplay from './FieldWebUrlDisplay.vue'
 import FieldMarkdownDisplay from './FieldMarkdownDisplay.vue'
 
@@ -165,8 +165,8 @@ const value = computed(() => {
     :render-config="renderConfig as DateRenderConfig"
     :placeholder="placeholder"
   />
-  <FieldStructureDisplay
-    v-else-if="fieldType === 'STRUCTURE'"
+  <FieldCascadeDisplay
+    v-else-if="fieldType === 'CASCADE'"
     :value="value"
     :placeholder="placeholder"
   />

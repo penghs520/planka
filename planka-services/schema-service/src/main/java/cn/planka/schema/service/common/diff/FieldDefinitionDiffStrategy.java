@@ -34,7 +34,7 @@ public class FieldDefinitionDiffStrategy implements SchemaDiffStrategy {
             SchemaSubType.ENUM_FIELD,
             SchemaSubType.ATTACHMENT_FIELD,
             SchemaSubType.WEB_URL_FIELD,
-            SchemaSubType.STRUCTURE_FIELD
+            SchemaSubType.CASCADE_FIELD
     );
 
     /**

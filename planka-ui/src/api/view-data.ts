@@ -17,7 +17,7 @@ export const viewDataApi = {
   queryByViewId(
     viewId: string,
     body: Record<string, unknown> = {},
-    options?: { structureNodeId?: string },
+    options?: { cascadeRelationNodeId?: string },
   ): Promise<ViewDataResponse> {
     return request.post(`${VIEW_DATA_URL}/${viewId}`, body, { params: options })
   },
@@ -39,7 +39,7 @@ export const viewDataApi = {
    */
   preview(
     previewRequest: ViewPreviewRequest,
-    options?: { structureNodeId?: string },
+    options?: { cascadeRelationNodeId?: string },
   ): Promise<ViewDataResponse> {
     return request.post(`${VIEW_DATA_URL}/preview`, previewRequest, { params: options })
   },

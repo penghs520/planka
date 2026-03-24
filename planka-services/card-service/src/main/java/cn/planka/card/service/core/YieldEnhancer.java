@@ -4,8 +4,8 @@ import cn.planka.api.card.request.Yield;
 import cn.planka.api.card.request.YieldField;
 import cn.planka.api.card.request.YieldLink;
 import cn.planka.domain.schema.definition.SchemaDefinition;
-import cn.planka.domain.schema.definition.fieldconfig.StructureFieldConfig;
-import cn.planka.domain.schema.definition.structure.StructureLevelBinding;
+import cn.planka.domain.schema.definition.fieldconfig.CascadeFieldConfig;
+import cn.planka.domain.schema.definition.cascaderelation.CascadeRelationLevelBinding;
 import cn.planka.infra.cache.schema.SchemaCacheService;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +42,7 @@ public class YieldEnhancer {
         }
 
         // 1. 收集当前层级需要补充的 YieldLink
-        List<YieldLink> additionalLinks = collectStructureLinks(yield.getField());
+        List<YieldLink> additionalLinks = collectCascadeFieldLinks(yield.getField());
 
         // 2. 递归处理嵌套的 YieldLink
         List<YieldLink> enhancedLinks = new ArrayList<>();
@@ -93,26 +93,26 @@ public class YieldEnhancer {
      * @param field YieldField
      * @return 需要补充的 YieldLink 列表
      */
-    private List<YieldLink> collectStructureLinks(YieldField field) {
+    private List<YieldLink> collectCascadeFieldLinks(YieldField field) {
         if (field == null || field.isAllFields() || field.getFieldIds() == null) {
             return List.of();
         }
 
-        // 批量获取 Schema，筛选出 StructureFieldConfig
+        // 批量获取 Schema，筛选出 CascadeFieldConfig
         Set<String> fieldIds = new HashSet<>(field.getFieldIds());
         Map<String, SchemaDefinition<?>> schemas = schemaCacheService.getByIds(fieldIds);
 
-        List<StructureFieldConfig> structureFields = schemas.values().stream()
-                .filter(s -> s instanceof StructureFieldConfig)
-                .map(s -> (StructureFieldConfig) s)
+        List<CascadeFieldConfig> cascadeFieldConfigs = schemas.values().stream()
+                .filter(s -> s instanceof CascadeFieldConfig)
+                .map(s -> (CascadeFieldConfig) s)
                 .toList();
 
-        // 为每个架构属性的所有层级绑定生成平铺的 YieldLink 列表
+        // 为每个级联属性的所有层级绑定生成平铺的 YieldLink 列表
         List<YieldLink> links = new ArrayList<>();
-        for (StructureFieldConfig def : structureFields) {
-            List<StructureLevelBinding> bindings = def.getLevelBindings();
+        for (CascadeFieldConfig def : cascadeFieldConfigs) {
+            List<CascadeRelationLevelBinding> bindings = def.getLevelBindings();
             if (bindings != null) {
-                for (StructureLevelBinding binding : bindings) {
+                for (CascadeRelationLevelBinding binding : bindings) {
                     YieldLink link = new YieldLink();
                     link.setLinkFieldId(binding.linkFieldId().value());
                     links.add(link);
@@ -157,12 +157,12 @@ public class YieldEnhancer {
     /**
      * 从 Yield 中递归提取所有架构属性定义
      * <p>
-     * 用于 CardService 在查询后构造 StructureFieldValue。
+     * 用于 CardService 在查询后构造 CascadeFieldValue。
      *
      * @param yield Yield 对象
      * @return 架构属性定义列表
      */
-    public List<StructureFieldConfig> extractStructureFieldDefs(Yield yield) {
+    public List<CascadeFieldConfig> extractCascadeFieldDefs(Yield yield) {
         Set<String> allFieldIds = new HashSet<>();
         collectFieldIds(yield, allFieldIds);
 
@@ -173,8 +173,8 @@ public class YieldEnhancer {
         Map<String, SchemaDefinition<?>> schemas = schemaCacheService.getByIds(allFieldIds);
 
         return schemas.values().stream()
-                .filter(s -> s instanceof StructureFieldConfig)
-                .map(s -> (StructureFieldConfig) s)
+                .filter(s -> s instanceof CascadeFieldConfig)
+                .map(s -> (CascadeFieldConfig) s)
                 .toList();
     }
 

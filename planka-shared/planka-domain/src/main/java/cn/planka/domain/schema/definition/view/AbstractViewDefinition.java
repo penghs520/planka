@@ -44,8 +44,8 @@ public abstract class AbstractViewDefinition extends AbstractSchemaDefinition<Vi
     protected List<String> visibleTeamCardIds;
 
     /** 架构节点可见时的节点 ID 列表 */
-    @JsonProperty("visibleStructureNodeIds")
-    protected List<String> visibleStructureNodeIds;
+    @JsonProperty("visibleCascadeRelationNodeIds")
+    protected List<String> visibleCascadeRelationNodeIds;
 
     /**
      * 受众条件（可选）；与列表数据过滤条件分离。

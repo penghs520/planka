@@ -67,7 +67,6 @@ class SchemaDefinitionSerializationTest {
             cardType.setEnabled(true);
             cardType.setState(EntityState.ACTIVE);
             cardType.setContentVersion(1);
-            cardType.setStructureVersion("1.0.0");
             cardType.setCreatedAt(LocalDateTime.of(2024, 1, 15, 10, 30, 0));
             cardType.setCreatedBy("user_001");
             cardType.setUpdatedAt(LocalDateTime.of(2024, 1, 16, 14, 20, 0));
@@ -93,7 +92,6 @@ class SchemaDefinitionSerializationTest {
             assertThat(result.isEnabled()).isTrue();
             assertThat(result.getState()).isEqualTo(EntityState.ACTIVE);
             assertThat(result.getContentVersion()).isEqualTo(1);
-            assertThat(result.getStructureVersion()).isEqualTo("1.0.0");
             assertThat(result.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 1, 15, 10, 30, 0));
             assertThat(result.getCreatedBy()).isEqualTo("user_001");
             assertThat(result.getUpdatedAt()).isEqualTo(LocalDateTime.of(2024, 1, 16, 14, 20, 0));
@@ -115,7 +113,6 @@ class SchemaDefinitionSerializationTest {
             cardType.setEnabled(true);
             cardType.setState(EntityState.ACTIVE);
             cardType.setContentVersion(2);
-            cardType.setStructureVersion("1.1.0");
             cardType.setCreatedAt(LocalDateTime.of(2024, 1, 15, 10, 30, 0));
             cardType.setCreatedBy("user_001");
 
@@ -404,10 +401,10 @@ class SchemaDefinitionSerializationTest {
         }
 
         @Test
-        @DisplayName("StructureFieldConfig 序列化/反序列化")
-        void testStructureFieldConfig() throws Exception {
+        @DisplayName("CascadeFieldConfig 序列化/反序列化")
+        void testCascadeFieldConfig() throws Exception {
             // Given
-            StructureFieldConfig config = new StructureFieldConfig(
+            CascadeFieldConfig config = new CascadeFieldConfig(
                     FieldConfigId.of("fc_007"),
                     "org_001",
                     "所属部门",
@@ -421,13 +418,13 @@ class SchemaDefinitionSerializationTest {
 
             // When
             String json = objectMapper.writeValueAsString(config);
-            System.out.println("StructureFieldConfig JSON:\n" + json);
+            System.out.println("CascadeFieldConfig JSON:\n" + json);
 
             FieldConfig deserialized = objectMapper.readValue(json, FieldConfig.class);
 
             // Then
-            assertThat(deserialized).isInstanceOf(StructureFieldConfig.class);
-            StructureFieldConfig result = (StructureFieldConfig) deserialized;
+            assertThat(deserialized).isInstanceOf(CascadeFieldConfig.class);
+            CascadeFieldConfig result = (CascadeFieldConfig) deserialized;
 
             assertThat(result.getId().value()).isEqualTo("fc_007");
             assertThat(result.isLeafOnly()).isTrue();

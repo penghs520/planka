@@ -14,7 +14,7 @@ function ensureChildren(nodes: MenuTreeVO['roots']): MenuTreeVO['roots'] {
  * 侧栏菜单树（Schema 菜单分组 + 当前用户可见视图）
  */
 export const menuNavApi = {
-  nav(params?: { structureNodeId?: string }): Promise<MenuTreeVO> {
+  nav(params?: { cascadeRelationNodeId?: string }): Promise<MenuTreeVO> {
     return request.get(`${URL}/nav`, { params }).then((data) => {
       const d = data as unknown as MenuTreeVO
       return {

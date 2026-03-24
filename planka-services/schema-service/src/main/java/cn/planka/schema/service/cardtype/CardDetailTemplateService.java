@@ -111,7 +111,6 @@ public class CardDetailTemplateService {
         // 设置元数据
         copy.setState(EntityState.ACTIVE);
         copy.setContentVersion(1);
-        copy.setStructureVersion("1.0.0");
         LocalDateTime now = LocalDateTime.now();
         copy.setCreatedAt(now);
         copy.setCreatedBy(operatorId);

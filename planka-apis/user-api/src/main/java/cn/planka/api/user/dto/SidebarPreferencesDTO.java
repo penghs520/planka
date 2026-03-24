@@ -19,5 +19,5 @@ public class SidebarPreferencesDTO {
 
     /** 已钉选的结构定义 ID，可多选、有序 */
     @Builder.Default
-    private List<String> pinnedStructureIds = new ArrayList<>();
+    private List<String> pinnedCascadeRelationIds = new ArrayList<>();
 }

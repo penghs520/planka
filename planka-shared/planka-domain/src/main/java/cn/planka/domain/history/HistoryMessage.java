@@ -152,18 +152,18 @@ public class HistoryMessage {
     }
 
     /**
-     * 创建架构类型属性值
+     * 创建级联类型属性值
      */
-    public static HistoryArgument structureFieldValue(String fieldId,
-                                                       List<HistoryArgument.StructureFieldValue.StructureNode> path) {
-        return new HistoryArgument.StructureFieldValue(fieldId, path);
+    public static HistoryArgument cascadeFieldHistoryValue(String fieldId,
+                                                       List<HistoryArgument.CascadeFieldHistoryValue.CascadeHistoryNode> path) {
+        return new HistoryArgument.CascadeFieldHistoryValue(fieldId, path);
     }
 
     /**
-     * 创建架构节点
+     * 创建级联路径节点
      */
-    public static HistoryArgument.StructureFieldValue.StructureNode structureNode(String nodeId, String nodeName) {
-        return new HistoryArgument.StructureFieldValue.StructureNode(nodeId, nodeName);
+    public static HistoryArgument.CascadeFieldHistoryValue.CascadeHistoryNode cascadeHistoryNode(String nodeId, String nodeName) {
+        return new HistoryArgument.CascadeFieldHistoryValue.CascadeHistoryNode(nodeId, nodeName);
     }
 
     /**

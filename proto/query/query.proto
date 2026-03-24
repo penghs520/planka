@@ -83,7 +83,7 @@ message SortField {
   //     __PLANKA_EINST__、容器，这些就按照他们排序就行
   //     标题：要按照拼接标题来排序
   //     卡片编号：如果有custom_code，则按照custom_code排序，否则按照code_in_org进行排序，前者是文本，后置是数字
-  //不支持计算属性排序、价值流状态排序、架构属性排序
+  //不支持计算属性排序、价值流状态排序、级联属性排序
   oneof field_type {
     SortDateField date_field = 2;
     SortNumberField number_field = 3;

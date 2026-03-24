@@ -108,8 +108,8 @@ public class FieldValueConverter {
                 }
             }
             builder.setAttachmentField(attachBuilder.build());
-        } else if (fieldValue instanceof StructureFieldValue) {
-            // StructureFieldValue 在 proto 中没有对应类型，无需转换
+        } else if (fieldValue instanceof CascadeFieldValue) {
+            // CascadeFieldValue 在 proto 中没有对应类型，无需转换
             return null;
         } else {
             logger.warn("未知的 FieldValue 类型: {}", fieldValue.getClass().getName());

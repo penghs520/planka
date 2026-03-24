@@ -43,7 +43,7 @@ export interface FieldOption {
   targetCardTypeIds?: string[]
 
   /** 架构线ID（仅架构类型字段有效） */
-  structureId?: string
+  cascadeRelationId?: string
 
   /** 是否多选（仅关联类型字段有效） */
   multiple?: boolean

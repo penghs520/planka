@@ -44,8 +44,8 @@ public class UserSidebarPreferencesService {
         if (rel == null) {
             return Result.failure("MEMBER_NOT_FOUND", "当前用户不在该组织中");
         }
-        List<String> requestIds = request.getPinnedStructureIds() != null
-                ? new ArrayList<>(request.getPinnedStructureIds())
+        List<String> requestIds = request.getPinnedCascadeRelationIds() != null
+                ? new ArrayList<>(request.getPinnedCascadeRelationIds())
                 : new ArrayList<>();
         SidebarPreferencesDTO saved = userSidebarPreferenceRepository.save(userId, orgId, requestIds);
         return Result.success(saved);

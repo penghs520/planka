@@ -10,7 +10,7 @@ import FieldDateEditor from './FieldDateEditor.vue'
 import FieldWebUrlEditor from './FieldWebUrlEditor.vue'
 import FieldEnumEditor from './FieldEnumEditor.vue'
 import FieldLinkEditor from './FieldLinkEditor.vue'
-import FieldStructureEditor from './FieldStructureEditor.vue'
+import FieldCascadeEditor from './FieldCascadeEditor.vue'
 import FieldMarkdownEditor from './FieldMarkdownEditor.vue'
 import { isValidLinkFieldId } from '@/utils/link-field-utils'
 
@@ -117,8 +117,8 @@ function handlePopupVisibleChange(visible: boolean) {
     @save="handleSave"
     @cancel="handleCancel"
   />
-  <FieldStructureEditor
-    v-else-if="fieldType === 'STRUCTURE' && fieldId"
+  <FieldCascadeEditor
+    v-else-if="fieldType === 'CASCADE' && fieldId"
     v-model="modelValue"
     :field-id="fieldId"
     :placeholder="placeholder"

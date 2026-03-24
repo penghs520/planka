@@ -32,7 +32,8 @@ export default {
   createViewBack: 'Back',
   createViewTypeListHelp: 'Table layout with columns, sorting, and filters.',
   createViewTypeComingSoon: 'Coming soon.',
-  createViewStructureScopeHint: 'This view will only appear in the sidebar and navigation for this structure node.',
+  createViewCascadeRelationScopeHint:
+    'This view will only appear in the sidebar and navigation for this cascade relation node.',
   createTeam: 'Create team',
   newTeamDefaultName: 'New team',
   teamIssues: 'Issues',
@@ -44,18 +45,18 @@ export default {
   sidebarWorkspaceSettingsSaved: 'Workspace sidebar defaults saved',
   sidebarSettingsTabUser: 'Personal preferences',
   sidebarSettingsTabWorkspace: 'Workspace default',
-  structureSidebarUserTitle: 'Choose structure lines to show in the sidebar',
-  structureSidebarUserHint:
+  cascadeRelationSidebarUserTitle: 'Choose cascade relations to show in the sidebar',
+  cascadeRelationSidebarUserHint:
     'Only for your account. If you clear all selections, the org workspace default is used (if any).',
-  workspaceSidebarEditorTitle: 'Choose structure lines to show in the sidebar',
+  workspaceSidebarEditorTitle: 'Choose cascade relations to show in the sidebar',
   workspaceSidebarEditorHint:
     'Default for members who have not set personal sidebar preferences: checked lines appear on the left; unchecked lines are hidden. Only owners and admins can save.',
   workspaceSidebarReadonlyHint: 'Only organization owners and admins can edit workspace defaults. You can view the current configuration.',
-  structureSidebarEditorTitle: 'Structure lines in sidebar',
-  structureSidebarEditorHint: 'Choose which structure lines appear in the sidebar.',
-  structureSidebarEditorEmpty: 'No structure lines in this org. Create and enable them in admin first.',
-  structureViewsHint:
-    'Views from the org menu. If the view targets issues, results are limited to issues in projects under this structure node.',
-  structureViewsEmpty: 'No views in the org menu',
-  structureNodeSectionNav: 'Structure node sections',
+  cascadeRelationSidebarEditorTitle: 'Cascade relations in sidebar',
+  cascadeRelationSidebarEditorHint: 'Choose which cascade relations appear in the sidebar.',
+  cascadeRelationSidebarEditorEmpty: 'No cascade relations in this org. Create and enable them in admin first.',
+  cascadeRelationNodeViewsHint:
+    'Views from the org menu. If the view targets issues, results are limited to issues in projects under this cascade relation node.',
+  cascadeRelationNodeViewsEmpty: 'No views in the org menu',
+  cascadeRelationNodeSectionNav: 'Cascade relation node sections',
 }

@@ -24,7 +24,7 @@ const numberValue = defineModel<number | undefined>('numberValue', { required: t
 const dateValue = defineModel<string | undefined>('dateValue', { required: true })
 const enumValue = defineModel<string[]>('enumValue', { required: true })
 const linkValue = defineModel<LinkedCard[]>('linkValue', { required: true })
-const structureValue = defineModel<FieldValue | null>('structureValue', { required: true })
+const cascadeFieldValue = defineModel<FieldValue | null>('cascadeFieldValue', { required: true })
 
 const emit = defineEmits<{
   keydown: [event: KeyboardEvent]
@@ -42,7 +42,7 @@ const isNumberType = computed(() => props.editingCell?.fieldType === 'NUMBER')
 const isDateType = computed(() => props.editingCell?.fieldType === 'DATE')
 const isEnumType = computed(() => props.editingCell?.fieldType === 'ENUM')
 const isLinkType = computed(() => props.editingCell?.fieldType === 'LINK')
-const isStructureType = computed(() => props.editingCell?.fieldType === 'STRUCTURE')
+const isCascadeFieldType = computed(() => props.editingCell?.fieldType === 'CASCADE')
 
 // 统一模型值代理
 const activeModelValue = computed({
@@ -64,7 +64,7 @@ const activeModelValue = computed({
     }
     if (isEnumType.value) return enumValue.value
     if (isLinkType.value) return linkValue.value
-    if (isStructureType.value) return structureValue.value
+    if (isCascadeFieldType.value) return cascadeFieldValue.value
     return undefined
   },
   set(val: any) {
@@ -86,7 +86,7 @@ const activeModelValue = computed({
     }
     if (isEnumType.value) enumValue.value = val
     if (isLinkType.value) linkValue.value = val
-    if (isStructureType.value) structureValue.value = val
+    if (isCascadeFieldType.value) cascadeFieldValue.value = val
   }
 })
 

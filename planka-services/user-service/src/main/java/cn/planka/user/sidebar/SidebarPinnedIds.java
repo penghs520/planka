@@ -13,12 +13,12 @@ public final class SidebarPinnedIds {
     private SidebarPinnedIds() {
     }
 
-    public static List<String> orderedDistinctNonBlank(List<String> structureIds) {
-        if (structureIds == null || structureIds.isEmpty()) {
+    public static List<String> orderedDistinctNonBlank(List<String> cascadeRelationIds) {
+        if (cascadeRelationIds == null || cascadeRelationIds.isEmpty()) {
             return List.of();
         }
         Set<String> seen = new LinkedHashSet<>();
-        for (String s : structureIds) {
+        for (String s : cascadeRelationIds) {
             if (s != null && !s.isBlank()) {
                 seen.add(s);
             }

@@ -34,13 +34,13 @@ public final class SchemaSubType {
     public static final String ATTACHMENT_FIELD = "ATTACHMENT_FIELD";
     /** 网页链接属性配置 */
     public static final String WEB_URL_FIELD = "WEB_URL_FIELD";
-    /** 架构层级属性配置 */
-    public static final String STRUCTURE_FIELD = "STRUCTURE_FIELD";
+    /** 级联属性配置 */
+    public static final String CASCADE_FIELD = "CASCADE_FIELD";
     /** 关联属性配置 */
     public static final String LINK_FIELD = "LINK_FIELD";
 
     // ==================== 架构线定义 ====================
-    public static final String STRUCTURE_DEFINITION = "STRUCTURE_DEFINITION";
+    public static final String CASCADE_RELATION_DEFINITION = "CASCADE_RELATION_DEFINITION";
 
 
     // ==================== 其他 Schema 定义 ====================

@@ -1,7 +1,7 @@
 import { ref, computed, type Ref, type ComputedRef } from 'vue'
 import { Message } from '@arco-design/web-vue'
-import { structureApi, linkTypeApi, fieldOptionsApi } from '@/api'
-import type { StructureDefinition, StructureLevel } from '@/types/structure'
+import { cascadeRelationApi, linkTypeApi, fieldOptionsApi } from '@/api'
+import type { CascadeRelationDefinition, CascadeRelationLevel } from '@/types/cascade-relation'
 import type { MatchingLinkFieldDTO } from '@/types/card-type'
 import type { LinkPosition } from '@/types/link-type'
 import type { EnumOptionDTO } from '@/types/view-data'
@@ -27,24 +27,23 @@ export const AUTO_CREATE_VALUE = '__AUTO_CREATE__'
 
 export interface UseFieldConfigFormOptions {
   cardTypeId: Ref<string>
-  structureId: Ref<string | undefined>
   fieldName: Ref<string | undefined>
   t: (key: string, params?: Record<string, unknown>) => string
 }
 
 export interface UseFieldConfigFormReturn {
-  // 架构线相关
-  structureList: Ref<StructureDefinition[]>
-  loadingStructures: Ref<boolean>
-  currentStructureLevels: Ref<StructureLevel[]>
+  // 级联关系定义列表
+  cascadeRelationList: Ref<CascadeRelationDefinition[]>
+  loadingCascadeRelations: Ref<boolean>
+  currentCascadeRelationLevels: Ref<CascadeRelationLevel[]>
   levelBindings: Ref<LevelBinding[]>
   matchingLinksCache: Ref<Record<number, MatchingLinkFieldDTO[]>>
   creatingLinkLevelIndex: Ref<number | null>
 
   // 方法
-  loadStructureList: () => Promise<void>
+  loadCascadeRelationList: () => Promise<void>
   loadMatchingLinks: () => Promise<void>
-  handleStructureChange: (structureId: string) => Promise<void>
+  handleCascadeRelationChange: (cascadeRelationId: string) => Promise<void>
   getLevelLinkOptions: (levelIndex: number) => Array<{ label: string; value: string }>
   getLevelDisplayName: (record: LevelBinding) => string
   setLinkFieldId: (record: LevelBinding, value: string) => Promise<void>
@@ -58,25 +57,24 @@ export interface UseFieldConfigFormReturn {
 export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseFieldConfigFormReturn {
   const { cardTypeId, fieldName, t } = options
 
-  // 架构线相关状态
-  const structureList = ref<StructureDefinition[]>([])
-  const loadingStructures = ref(false)
-  const currentStructureLevels = ref<StructureLevel[]>([])
+  const cascadeRelationList = ref<CascadeRelationDefinition[]>([])
+  const loadingCascadeRelations = ref(false)
+  const currentCascadeRelationLevels = ref<CascadeRelationLevel[]>([])
   const levelBindings = ref<LevelBinding[]>([])
   const matchingLinksCache = ref<Record<number, MatchingLinkFieldDTO[]>>({})
   const creatingLinkLevelIndex = ref<number | null>(null)
 
-  /** 加载架构线列表 */
-  async function loadStructureList(): Promise<void> {
-    loadingStructures.value = true
+  /** 加载级联关系定义列表 */
+  async function loadCascadeRelationList(): Promise<void> {
+    loadingCascadeRelations.value = true
     try {
-      const result = await structureApi.list(1, 100)
-      structureList.value = result.content || []
+      const result = await cascadeRelationApi.list(1, 100)
+      cascadeRelationList.value = result.content || []
     } catch (error) {
-      console.error('Failed to load structure list:', error)
-      structureList.value = []
+      console.error('Failed to load cascade relation list:', error)
+      cascadeRelationList.value = []
     } finally {
-      loadingStructures.value = false
+      loadingCascadeRelations.value = false
     }
   }
 
@@ -85,7 +83,7 @@ export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseField
     const cardTypeIdValue = cardTypeId.value
     if (!cardTypeIdValue) return
 
-    for (const level of currentStructureLevels.value) {
+    for (const level of currentCascadeRelationLevels.value) {
       if (level.cardTypeId?.trim()) {
         try {
           const res = await fieldOptionsApi.getMatchingLinkFields(
@@ -100,21 +98,21 @@ export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseField
     }
   }
 
-  /** 处理架构线变更 */
-  async function handleStructureChange(newStructureId: string): Promise<void> {
-    if (!newStructureId) {
-      currentStructureLevels.value = []
+  /** 处理级联关系定义变更 */
+  async function handleCascadeRelationChange(newCascadeRelationId: string): Promise<void> {
+    if (!newCascadeRelationId) {
+      currentCascadeRelationLevels.value = []
       levelBindings.value = []
       matchingLinksCache.value = {}
       return
     }
 
     try {
-      const structure = await structureApi.getById(newStructureId)
-      currentStructureLevels.value = structure.levels || []
+      const def = await cascadeRelationApi.getById(newCascadeRelationId)
+      currentCascadeRelationLevels.value = def.levels || []
 
       // 初始化层级绑定配置
-      levelBindings.value = structure.levels.map((level) => ({
+      levelBindings.value = def.levels.map((level) => ({
         levelIndex: level.index,
         levelName: level.name,
         linkFieldId: undefined,
@@ -124,13 +122,13 @@ export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseField
       // 加载匹配的关联属性
       await loadMatchingLinks()
     } catch (error) {
-      console.error('Failed to fetch structure details:', error)
+      console.error('Failed to fetch cascade relation definition:', error)
     }
   }
 
   /** 获取层级显示名称 */
   function getLevelDisplayName(record: LevelBinding): string {
-    const level = currentStructureLevels.value.find((l) => l.index === record.levelIndex)
+    const level = currentCascadeRelationLevels.value.find((l) => l.index === record.levelIndex)
     if (level?.name) {
       return level.name
     }
@@ -160,7 +158,7 @@ export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseField
   /** 自动创建关联类型 */
   async function handleAutoCreateLinkType(record: LevelBinding): Promise<void> {
     const levelIndex = record.levelIndex
-    const level = currentStructureLevels.value.find((l) => l.index === levelIndex)
+    const level = currentCascadeRelationLevels.value.find((l) => l.index === levelIndex)
     if (!level) {
       Message.error('无法找到层级信息')
       return
@@ -239,15 +237,15 @@ export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseField
   }
 
   return {
-    structureList,
-    loadingStructures,
-    currentStructureLevels,
+    cascadeRelationList,
+    loadingCascadeRelations,
+    currentCascadeRelationLevels,
     levelBindings,
     matchingLinksCache,
     creatingLinkLevelIndex,
-    loadStructureList,
+    loadCascadeRelationList,
     loadMatchingLinks,
-    handleStructureChange,
+    handleCascadeRelationChange,
     getLevelLinkOptions,
     getLevelDisplayName,
     setLinkFieldId,

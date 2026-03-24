@@ -30,10 +30,10 @@ public class SidebarPreferencesPrefsCodec {
         }
         try {
             PrefsBody body = objectMapper.readValue(json, PrefsBody.class);
-            List<String> ids = body.getPinnedStructureIds() != null
-                    ? new ArrayList<>(body.getPinnedStructureIds())
+            List<String> ids = body.getPinnedCascadeRelationIds() != null
+                    ? new ArrayList<>(body.getPinnedCascadeRelationIds())
                     : new ArrayList<>();
-            return SidebarPreferencesDTO.builder().pinnedStructureIds(ids).build();
+            return SidebarPreferencesDTO.builder().pinnedCascadeRelationIds(ids).build();
         } catch (JsonProcessingException e) {
             log.warn("Failed to parse sidebar prefs JSON: {}", e.getMessage());
             return empty();
@@ -41,21 +41,21 @@ public class SidebarPreferencesPrefsCodec {
     }
 
     public String serialize(SidebarPreferencesDTO dto) throws JsonProcessingException {
-        List<String> ids = dto.getPinnedStructureIds() != null
-                ? new ArrayList<>(dto.getPinnedStructureIds())
+        List<String> ids = dto.getPinnedCascadeRelationIds() != null
+                ? new ArrayList<>(dto.getPinnedCascadeRelationIds())
                 : new ArrayList<>();
         PrefsBody body = new PrefsBody();
-        body.setPinnedStructureIds(ids);
+        body.setPinnedCascadeRelationIds(ids);
         return objectMapper.writeValueAsString(body);
     }
 
     private static SidebarPreferencesDTO empty() {
-        return SidebarPreferencesDTO.builder().pinnedStructureIds(new ArrayList<>()).build();
+        return SidebarPreferencesDTO.builder().pinnedCascadeRelationIds(new ArrayList<>()).build();
     }
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class PrefsBody {
-        private List<String> pinnedStructureIds = new ArrayList<>();
+        private List<String> pinnedCascadeRelationIds = new ArrayList<>();
     }
 }

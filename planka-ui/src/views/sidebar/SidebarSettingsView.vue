@@ -3,12 +3,12 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Message } from '@arco-design/web-vue'
-import { useStructureNavStore } from '@/stores/structureNav'
+import { useCascadeRelationNavStore } from '@/stores/cascadeRelationNav'
 import { useOrgStore } from '@/stores/org'
 
 const { t } = useI18n()
 const router = useRouter()
-const structureNav = useStructureNavStore()
+const cascadeRelationNav = useCascadeRelationNavStore()
 const orgStore = useOrgStore()
 
 const activeTab = ref<'user' | 'workspace'>('user')
@@ -16,7 +16,7 @@ const draftUserIds = ref<string[]>([])
 const draftWorkspaceIds = ref<string[]>([])
 
 const sortedCatalog = computed(() =>
-  [...structureNav.structureCatalog].sort((a, b) => a.name.localeCompare(b.name, 'zh-CN')),
+  [...cascadeRelationNav.cascadeRelationCatalog].sort((a, b) => a.name.localeCompare(b.name, 'zh-CN')),
 )
 
 /**
@@ -24,8 +24,8 @@ const sortedCatalog = computed(() =>
  * 工作空间勾选的会在个人页默认勾选，便于在侧栏实际展示基础上继续调整。
  */
 function initialDraftUserPinnedIds(): string[] {
-  const user = [...structureNav.pinnedStructureIds]
-  const ws = [...structureNav.workspacePinnedStructureIds]
+  const user = [...cascadeRelationNav.pinnedCascadeRelationIds]
+  const ws = [...cascadeRelationNav.workspacePinnedCascadeRelationIds]
   const seen = new Set<string>()
   const out: string[] = []
   for (const id of user) {
@@ -44,9 +44,9 @@ function initialDraftUserPinnedIds(): string[] {
 }
 
 onMounted(async () => {
-  await structureNav.refreshCatalog()
+  await cascadeRelationNav.refreshCatalog()
   draftUserIds.value = initialDraftUserPinnedIds()
-  draftWorkspaceIds.value = [...structureNav.workspacePinnedStructureIds]
+  draftWorkspaceIds.value = [...cascadeRelationNav.workspacePinnedCascadeRelationIds]
 })
 
 function toggleUserId(id: string, checked: boolean) {
@@ -90,7 +90,7 @@ function orderedWorkspacePinnedIds(): string[] {
 
 async function handleSaveUser() {
   try {
-    await structureNav.setPinnedStructureIds(orderedUserPinnedIds())
+    await cascadeRelationNav.setPinnedCascadeRelationIds(orderedUserPinnedIds())
     Message.success(t('sidebar.sidebarSettingsSaved'))
     router.back()
   } catch {
@@ -103,7 +103,7 @@ async function handleSaveWorkspace() {
     return
   }
   try {
-    await structureNav.setWorkspacePinnedStructureIds(orderedWorkspacePinnedIds())
+    await cascadeRelationNav.setWorkspacePinnedCascadeRelationIds(orderedWorkspacePinnedIds())
     Message.success(t('sidebar.sidebarWorkspaceSettingsSaved'))
     router.back()
   } catch {
@@ -130,14 +130,14 @@ function handleCancel() {
         :title="t('sidebar.sidebarSettingsTabUser')"
       >
         <section class="section">
-          <h2 class="section-title">{{ t('sidebar.structureSidebarUserTitle') }}</h2>
-          <p class="section-hint">{{ t('sidebar.structureSidebarUserHint') }}</p>
-          <a-spin :loading="structureNav.loadingCatalog">
+          <h2 class="section-title">{{ t('sidebar.cascadeRelationSidebarUserTitle') }}</h2>
+          <p class="section-hint">{{ t('sidebar.cascadeRelationSidebarUserHint') }}</p>
+          <a-spin :loading="cascadeRelationNav.loadingCatalog">
             <div
-              v-if="!structureNav.loadingCatalog && sortedCatalog.length === 0"
+              v-if="!cascadeRelationNav.loadingCatalog && sortedCatalog.length === 0"
               class="empty"
             >
-              {{ t('sidebar.structureSidebarEditorEmpty') }}
+              {{ t('sidebar.cascadeRelationSidebarEditorEmpty') }}
             </div>
             <ul
               v-else
@@ -166,7 +166,7 @@ function handleCancel() {
           </a-button>
           <a-button
             type="primary"
-            :disabled="structureNav.loadingCatalog"
+            :disabled="cascadeRelationNav.loadingCatalog"
             @click="handleSaveUser"
           >
             {{ t('common.action.save') }}
@@ -187,12 +187,12 @@ function handleCancel() {
           >
             {{ t('sidebar.workspaceSidebarReadonlyHint') }}
           </p>
-          <a-spin :loading="structureNav.loadingCatalog">
+          <a-spin :loading="cascadeRelationNav.loadingCatalog">
             <div
-              v-if="!structureNav.loadingCatalog && sortedCatalog.length === 0"
+              v-if="!cascadeRelationNav.loadingCatalog && sortedCatalog.length === 0"
               class="empty"
             >
-              {{ t('sidebar.structureSidebarEditorEmpty') }}
+              {{ t('sidebar.cascadeRelationSidebarEditorEmpty') }}
             </div>
             <ul
               v-else
@@ -226,7 +226,7 @@ function handleCancel() {
           <a-button
             v-if="orgStore.isAdmin"
             type="primary"
-            :disabled="structureNav.loadingCatalog"
+            :disabled="cascadeRelationNav.loadingCatalog"
             @click="handleSaveWorkspace"
           >
             {{ t('common.action.save') }}

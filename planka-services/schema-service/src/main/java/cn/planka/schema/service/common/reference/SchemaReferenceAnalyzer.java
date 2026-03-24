@@ -38,7 +38,7 @@ public class SchemaReferenceAnalyzer {
      * 需要排除的元数据字段
      */
     private static final Set<String> EXCLUDED_FIELDS = Set.of(
-            "id", "orgId", "state", "contentVersion", "structureVersion",
+            "id", "orgId", "state", "contentVersion",
             "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt"
     );
 

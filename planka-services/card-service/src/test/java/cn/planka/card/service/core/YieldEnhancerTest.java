@@ -7,8 +7,8 @@ import cn.planka.domain.field.FieldConfigId;
 import cn.planka.domain.field.FieldId;
 import cn.planka.domain.link.LinkFieldId;
 import cn.planka.domain.link.LinkPosition;
-import cn.planka.domain.schema.definition.fieldconfig.StructureFieldConfig;
-import cn.planka.domain.schema.definition.structure.StructureLevelBinding;
+import cn.planka.domain.schema.definition.fieldconfig.CascadeFieldConfig;
+import cn.planka.domain.schema.definition.cascaderelation.CascadeRelationLevelBinding;
 import cn.planka.infra.cache.schema.SchemaCacheService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -76,16 +76,16 @@ class YieldEnhancerTest {
     @DisplayName("enhance - 当 fieldIds 包含架构属性时补充平铺的 YieldLink 列表")
     void enhance_addsFlatYieldLinks_whenFieldIdsContainStructureField() {
         // 准备架构属性定义（两层）
-        StructureFieldConfig structureDef = createStructureFieldConfig(
+        CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig(
                 "struct_001",
                 List.of(
-                        new StructureLevelBinding(0, LinkFieldId.of("link_001", LinkPosition.SOURCE), true),
-                        new StructureLevelBinding(1, LinkFieldId.of("link_002", LinkPosition.SOURCE), false)
+                        new CascadeRelationLevelBinding(0, LinkFieldId.of("link_001", LinkPosition.SOURCE), true),
+                        new CascadeRelationLevelBinding(1, LinkFieldId.of("link_002", LinkPosition.SOURCE), false)
                 )
         );
 
         when(schemaCacheService.getByIds(anySet()))
-                .thenReturn(Map.of("struct_001", structureDef));
+                .thenReturn(Map.of("struct_001", cascadeRelationDef));
 
         // 准备 Yield
         Yield yield = new Yield();
@@ -113,15 +113,15 @@ class YieldEnhancerTest {
     @DisplayName("enhance - 已存在的 YieldLink 保留（包括其 targetYield），不被覆盖")
     void enhance_mergesLinks_preservesExistingWithTargetYield() {
         // 准备架构属性定义
-        StructureFieldConfig structureDef = createStructureFieldConfig(
+        CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig(
                 "struct_001",
                 List.of(
-                        new StructureLevelBinding(0, LinkFieldId.of("link_001", LinkPosition.SOURCE), true)
+                        new CascadeRelationLevelBinding(0, LinkFieldId.of("link_001", LinkPosition.SOURCE), true)
                 )
         );
 
         when(schemaCacheService.getByIds(anySet()))
-                .thenReturn(Map.of("struct_001", structureDef));
+                .thenReturn(Map.of("struct_001", cascadeRelationDef));
 
         // 准备 Yield（已经有一个相同的 YieldLink，但带有 targetYield）
         Yield yield = new Yield();
@@ -155,13 +155,13 @@ class YieldEnhancerTest {
     }
 
     @Test
-    @DisplayName("extractStructureFieldDefs - 递归收集所有层级的架构属性定义")
-    void extractStructureFieldDefs_collectsFromAllLevels() {
+    @DisplayName("extractCascadeFieldDefs - 递归收集所有层级的架构属性定义")
+    void extractCascadeFieldDefs_collectsFromAllLevels() {
         // 准备架构属性定义
-        StructureFieldConfig structureDef = createStructureFieldConfig("struct_001", List.of());
+        CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig("struct_001", List.of());
 
         when(schemaCacheService.getByIds(anySet()))
-                .thenReturn(Map.of("struct_001", structureDef));
+                .thenReturn(Map.of("struct_001", cascadeRelationDef));
 
         // 准备嵌套的 Yield
         Yield yield = new Yield();
@@ -170,15 +170,15 @@ class YieldEnhancerTest {
         yield.setField(field);
 
         // 执行
-        List<StructureFieldConfig> result = yieldEnhancer.extractStructureFieldDefs(yield);
+        List<CascadeFieldConfig> result = yieldEnhancer.extractCascadeFieldDefs(yield);
 
         // 验证
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getId().value()).isEqualTo("struct_001");
     }
 
-    private StructureFieldConfig createStructureFieldConfig(String id, List<StructureLevelBinding> bindings) {
-        StructureFieldConfig def = new StructureFieldConfig(
+    private CascadeFieldConfig createCascadeFieldConfig(String id, List<CascadeRelationLevelBinding> bindings) {
+        CascadeFieldConfig def = new CascadeFieldConfig(
                 FieldConfigId.of(id),
                 "org_001",
                 "测试架构属性",

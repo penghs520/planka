@@ -32,7 +32,7 @@ public class ExecuteActionRequest {
     private List<LinkFieldUpdate> linkedCardLinkUpdates;
 
     /**
-     * 弹窗提交的字段值（与写库 FieldValue JSON 一致，含 STRUCTURE 等），优先于 userInputs 的 FixedValue 合并
+     * 弹窗提交的字段值（与写库 FieldValue JSON 一致，含 CASCADE 等），优先于 userInputs 的 FixedValue 合并
      */
     private Map<String, Object> linkedCardFieldValues;
 }

@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS sys_user_sidebar_preference (
     id VARCHAR(64) NOT NULL COMMENT '主键（雪花）',
     user_id VARCHAR(64) NOT NULL COMMENT '用户ID',
     org_id VARCHAR(64) NOT NULL COMMENT '组织ID',
-    prefs JSON NOT NULL COMMENT '侧栏偏好 JSON，如 pinnedStructureIds 等，可扩展字段',
+    prefs JSON NOT NULL COMMENT '侧栏偏好 JSON，如 pinnedCascadeRelationIds 等，可扩展字段',
 
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

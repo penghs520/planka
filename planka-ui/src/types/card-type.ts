@@ -17,7 +17,7 @@ export type {
   EnumFieldConfig,
   AttachmentFieldConfig,
   WebUrlFieldConfig,
-  StructureFieldConfig,
+  CascadeFieldConfig,
   LinkFieldConfig,
   FieldConfig,
 } from './field-config'

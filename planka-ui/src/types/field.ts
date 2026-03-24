@@ -21,8 +21,8 @@ export enum FieldType {
   ATTACHMENT = 'ATTACHMENT',
   /** 网页链接 */
   WEB_URL = 'WEB_URL',
-  /** 架构层级 */
-  STRUCTURE = 'STRUCTURE',
+  /** 级联属性 */
+  CASCADE = 'CASCADE',
 }
 
 /**
@@ -38,7 +38,7 @@ export const FieldTypeConfig: Record<FieldType, { labelKey: string; icon: string
   [FieldType.ENUM]: { labelKey: 'admin.fieldType.ENUM', icon: 'icon-list' },
   [FieldType.ATTACHMENT]: { labelKey: 'admin.fieldType.ATTACHMENT', icon: 'icon-attachment' },
   [FieldType.WEB_URL]: { labelKey: 'admin.fieldType.WEB_URL', icon: 'icon-link' },
-  [FieldType.STRUCTURE]: { labelKey: 'admin.fieldType.STRUCTURE', icon: 'icon-layers' },
+  [FieldType.CASCADE]: { labelKey: 'admin.fieldType.CASCADE', icon: 'icon-layers' },
 }
 
 
@@ -204,11 +204,11 @@ export interface WebUrlFieldDefinition extends AbstractFieldDefinition {
  * 架构层级属性定义
  */
 export interface StructureFieldDefinition extends AbstractFieldDefinition {
-  schemaSubType: SchemaSubType.STRUCTURE_FIELD_DEFINITION
+  schemaSubType: SchemaSubType.CASCADE_FIELD_DEFINITION
   /** 关联的架构线 ID */
-  structureId?: string
+  cascadeRelationId?: string
   /** 层级配置列表 */
-  levelBindings?: StructureLevelBinding[]
+  levelBindings?: CascadeRelationLevelBinding[]
 }
 
 
@@ -216,7 +216,7 @@ export interface StructureFieldDefinition extends AbstractFieldDefinition {
 /**
  * 架构层级配置
  */
-export interface StructureLevelBinding {
+export interface CascadeRelationLevelBinding {
   /** 层级索引 */
   levelIndex: number
   /** 关联属性ID，格式: {linkTypeId}:{SOURCE|TARGET} */
@@ -252,7 +252,7 @@ export const FieldTypeToSchemaSubType: Record<FieldType, SchemaSubType> = {
   [FieldType.ENUM]: SchemaSubType.ENUM_FIELD_DEFINITION,
   [FieldType.ATTACHMENT]: SchemaSubType.ATTACHMENT_FIELD_DEFINITION,
   [FieldType.WEB_URL]: SchemaSubType.WEB_URL_FIELD_DEFINITION,
-  [FieldType.STRUCTURE]: SchemaSubType.STRUCTURE_FIELD_DEFINITION,
+  [FieldType.CASCADE]: SchemaSubType.CASCADE_FIELD_DEFINITION,
 }
 
 /**
@@ -270,7 +270,7 @@ export const SchemaSubTypeToFieldType: Partial<Record<SchemaSubType, FieldType>>
   [SchemaSubType.ENUM_FIELD_DEFINITION]: FieldType.ENUM,
   [SchemaSubType.ATTACHMENT_FIELD_DEFINITION]: FieldType.ATTACHMENT,
   [SchemaSubType.WEB_URL_FIELD_DEFINITION]: FieldType.WEB_URL,
-  [SchemaSubType.STRUCTURE_FIELD_DEFINITION]: FieldType.STRUCTURE,
+  [SchemaSubType.CASCADE_FIELD_DEFINITION]: FieldType.CASCADE,
   // FIELD_CONFIG 映射（使用新的 _FIELD 后缀）
   [SchemaSubType.TEXT_FIELD]: FieldType.SINGLE_LINE_TEXT,
   [SchemaSubType.MULTI_LINE_TEXT_FIELD]: FieldType.MULTI_LINE_TEXT,
@@ -280,7 +280,7 @@ export const SchemaSubTypeToFieldType: Partial<Record<SchemaSubType, FieldType>>
   [SchemaSubType.ENUM_FIELD]: FieldType.ENUM,
   [SchemaSubType.ATTACHMENT_FIELD]: FieldType.ATTACHMENT,
   [SchemaSubType.WEB_URL_FIELD]: FieldType.WEB_URL,
-  [SchemaSubType.STRUCTURE_FIELD]: FieldType.STRUCTURE,
+  [SchemaSubType.CASCADE_FIELD]: FieldType.CASCADE,
 }
 
 /**
@@ -378,11 +378,11 @@ export function createEmptyFieldDefinition(fieldType: FieldType, orgId: string):
         schemaSubType: FieldTypeToSchemaSubType[FieldType.WEB_URL],
         state: 'ACTIVE' as const,
       } as WebUrlFieldDefinition
-    case FieldType.STRUCTURE:
+    case FieldType.CASCADE:
       return {
         ...base,
-        schemaSubType: FieldTypeToSchemaSubType[FieldType.STRUCTURE],
-        structureId: '',
+        schemaSubType: FieldTypeToSchemaSubType[FieldType.CASCADE],
+        cascadeRelationId: '',
         levelBindings: [],
         state: 'ACTIVE' as const,
       } as StructureFieldDefinition

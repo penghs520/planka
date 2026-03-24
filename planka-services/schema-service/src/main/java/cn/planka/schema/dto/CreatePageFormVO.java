@@ -31,7 +31,7 @@ public class CreatePageFormVO {
     /** 字段配置列表（包含布局信息和字段配置） */
     private List<CreatePageFieldVO> fields;
     
-    /** 空间绑定架构属性ID（当__PLANKA_EINST__绑定空间时，该字段必填） */
+    /** 空间绑定级联属性 ID（当__PLANKA_EINST__绑定空间时，该字段必填） */
     private String spaceBindingFieldId;
 
     // ==================== 字段 VO 基类和子类 ====================
@@ -52,7 +52,7 @@ public class CreatePageFormVO {
             @JsonSubTypes.Type(value = EnumFieldVO.class, name = "ENUM"),
             @JsonSubTypes.Type(value = AttachmentFieldVO.class, name = "ATTACHMENT"),
             @JsonSubTypes.Type(value = WebUrlFieldVO.class, name = "WEB_URL"),
-            @JsonSubTypes.Type(value = StructureFieldVO.class, name = "STRUCTURE"),
+            @JsonSubTypes.Type(value = CascadeFieldVO.class, name = "CASCADE"),
             @JsonSubTypes.Type(value = LinkFieldVO.class, name = "LINK"),
     })
     public static abstract class CreatePageFieldVO {
@@ -254,13 +254,13 @@ public class CreatePageFormVO {
     }
 
     /**
-     * 架构层级字段 VO
+     * 级联属性字段 VO
      */
     @Data
     @EqualsAndHashCode(callSuper = true)
-    public static class StructureFieldVO extends CreatePageFieldVO {
-        /** 架构 ID */
-        private String structureId;
+    public static class CascadeFieldVO extends CreatePageFieldVO {
+        /** 级联关系定义 ID */
+        private String cascadeRelationId;
         
         /** 是否只允许选择叶子节点 */
         private boolean leafOnly;
@@ -270,7 +270,7 @@ public class CreatePageFormVO {
         
         @Override
         public String getFieldType() {
-            return "STRUCTURE";
+            return "CASCADE";
         }
     }
 

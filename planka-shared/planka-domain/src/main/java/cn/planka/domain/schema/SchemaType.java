@@ -42,9 +42,9 @@ public enum SchemaType {
     LINK_TYPE("关联类型", false),
 
     /**
-     * 架构线定义
+     * 级联关系定义
      */
-    STRUCTURE_DEFINITION("架构线定义", false),
+    CASCADE_RELATION_DEFINITION("级联关系定义", false),
 
     /**
      * 业务规则定义（属于某个__PLANKA_EINST__）

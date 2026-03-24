@@ -17,7 +17,7 @@ public interface NavVisibilitySubject {
 
     String getCreatedBy();
 
-    List<String> getVisibleStructureNodeIds();
+    List<String> getVisibleCascadeRelationNodeIds();
 
     List<String> getVisibleTeamCardIds();
 }

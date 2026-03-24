@@ -64,7 +64,7 @@ export type HistoryArgumentType =
   | 'FIELD_VALUE_DATE'
   | 'FIELD_VALUE_DATETIME'
   | 'FIELD_VALUE_ENUM'
-  | 'FIELD_VALUE_STRUCTURE'
+  | 'FIELD_VALUE_CASCADE'
   | 'FIELD_VALUE_LINK'
 
 /**

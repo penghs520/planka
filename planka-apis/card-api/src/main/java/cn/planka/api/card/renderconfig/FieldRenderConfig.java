@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = TextRenderConfig.class, name = "TEXT"),
         @JsonSubTypes.Type(value = AttachmentRenderConfig.class, name = "ATTACHMENT"),
         @JsonSubTypes.Type(value = LinkRenderConfig.class, name = "LINK"),
-        @JsonSubTypes.Type(value = StructureRenderConfig.class, name = "STRUCTURE"),
+        @JsonSubTypes.Type(value = CascadeFieldRenderConfig.class, name = "CASCADE"),
         @JsonSubTypes.Type(value = WebUrlRenderConfig.class, name = "WEB_URL"),
         @JsonSubTypes.Type(value = MarkdownRenderConfig.class, name = "MARKDOWN"),
 })

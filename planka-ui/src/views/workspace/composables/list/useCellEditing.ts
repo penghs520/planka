@@ -48,7 +48,7 @@ export function useCellEditing(
   const editingDateValue = ref<string>('')
   const editingEnumValue = ref<string[]>([])
   const editingLinkValue = ref<LinkedCard[]>([])
-  const editingStructureValue = ref<FieldValue | null>(null)
+  const editingCascadeFieldValue = ref<FieldValue | null>(null)
   const cellSaving = ref(false)
 
   /** 判断单元格是否正在编辑 */
@@ -162,17 +162,17 @@ export function useCellEditing(
           editingLinkValue.value = []
         }
         break
-      case 'STRUCTURE':
-        // STRUCTURE 类型：直接使用 fieldValue
-        editingStructureValue.value = fieldValue || null
+      case 'CASCADE':
+        // CASCADE 类型：直接使用 fieldValue
+        editingCascadeFieldValue.value = fieldValue || null
         break
       default:
         const displayValue = getFieldDisplayValue(card, fieldId, columns())
         editingTextValue.value = displayValue === '-' ? '' : displayValue
     }
 
-    // 聚焦输入框（LINK 和 STRUCTURE 类型不需要聚焦，它们会自动弹出选择器）
-    if (fieldType !== 'LINK' && fieldType !== 'STRUCTURE') {
+    // 聚焦输入框（LINK 和 CASCADE 类型不需要聚焦，它们会自动弹出选择器）
+    if (fieldType !== 'LINK' && fieldType !== 'CASCADE') {
       nextTick(() => {
         const input = document.querySelector('.cell-editing-input input, .cell-editing-input .arco-input') as HTMLInputElement
         if (input) {
@@ -193,7 +193,7 @@ export function useCellEditing(
     editingDateValue.value = ''
     editingEnumValue.value = []
     editingLinkValue.value = []
-    editingStructureValue.value = null
+    editingCascadeFieldValue.value = null
   }
 
   /** 构建 FieldValue */
@@ -225,9 +225,9 @@ export function useCellEditing(
           value: currentIds.length > 0 ? currentIds : null,
         } as FieldValue
       }
-      case 'STRUCTURE':
-        // STRUCTURE 类型直接返回编辑值（已经是 FieldValue 格式）
-        return editingStructureValue.value
+      case 'CASCADE':
+        // CASCADE 类型直接返回编辑值（已经是 FieldValue 格式）
+        return editingCascadeFieldValue.value
       default:
         return {
           type: 'TEXT',
@@ -278,11 +278,11 @@ export function useCellEditing(
         const currentIds = editingLinkValue.value.map((c) => c.cardId).sort().join(',')
         return currentIds !== originalIds
       }
-      case 'STRUCTURE': {
-        // STRUCTURE 类型：比较 JSON 字符串
+      case 'CASCADE': {
+        // CASCADE 类型：比较 JSON 字符串
         const originalJson = originalValue ? JSON.stringify(originalValue) : ''
-        const currentJson = editingStructureValue.value?.value
-          ? JSON.stringify(editingStructureValue.value.value)
+        const currentJson = editingCascadeFieldValue.value?.value
+          ? JSON.stringify(editingCascadeFieldValue.value.value)
           : ''
         return currentJson !== originalJson
       }
@@ -485,7 +485,7 @@ export function useCellEditing(
     editingDateValue,
     editingEnumValue,
     editingLinkValue,
-    editingStructureValue,
+    editingCascadeFieldValue,
     cellSaving,
     // 方法
     isEditing,

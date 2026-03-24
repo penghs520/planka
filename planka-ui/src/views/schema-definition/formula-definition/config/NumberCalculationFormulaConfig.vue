@@ -27,14 +27,14 @@
       </div>
     </a-form-item>
 
-    <a-form-item :label="t('admin.formulaDefinition.numberCalculation.expressionStructure')">
+    <a-form-item :label="t('admin.formulaDefinition.numberCalculation.expressionLayout')">
       <a-textarea
         v-model="formula.expressionStructure"
-        :placeholder="t('admin.formulaDefinition.numberCalculation.expressionStructurePlaceholder')"
+        :placeholder="t('admin.formulaDefinition.numberCalculation.expressionLayoutPlaceholder')"
         :rows="8"
       />
       <div class="form-item-help">
-        {{ t('admin.formulaDefinition.numberCalculation.expressionStructureHelp') }}
+        {{ t('admin.formulaDefinition.numberCalculation.expressionLayoutHelp') }}
       </div>
     </a-form-item>
 

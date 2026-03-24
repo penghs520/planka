@@ -20,9 +20,9 @@ class MenuGroupDefinitionValidateTest {
     @Test
     void rejectsStructureNodeScopeWithoutNodeIds() {
         MenuGroupDefinition g = new MenuGroupDefinition(MenuGroupId.of("mg-1"), "org-1", "G");
-        g.setViewVisibilityScope(ViewVisibilityScope.STRUCTURE_NODE);
+        g.setViewVisibilityScope(ViewVisibilityScope.CASCADE_RELATION_NODE);
         assertThatThrownBy(g::validate)
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("visibleStructureNodeIds");
+                .hasMessageContaining("visibleCascadeRelationNodeIds");
     }
 }

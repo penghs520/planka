@@ -17,8 +17,8 @@ const props = defineProps<{
   listView: ListViewDefinition
   mode: 'create' | 'edit'
   activeTab: string
-  /** 新建且从架构节点打开时展示 */
-  structureNodeContextId?: string
+  /** 新建且从级联关系节点页打开时展示 */
+  cascadeRelationNodeContextId?: string
   cardTypeOptions: { value: string; label: string }[]
   loadingCardTypes: boolean
   availableFields: FieldOption[]
@@ -59,10 +59,10 @@ defineExpose({
 <template>
   <div class="list-view-edit-form">
     <a-alert
-      v-if="mode === 'create' && structureNodeContextId"
+      v-if="mode === 'create' && cascadeRelationNodeContextId"
       type="info"
       class="context-alert"
-      :content="t('sidebar.createViewStructureScopeHint')"
+      :content="t('sidebar.createViewCascadeRelationScopeHint')"
     />
     <a-tabs
       v-model:active-key="activeTabModel"

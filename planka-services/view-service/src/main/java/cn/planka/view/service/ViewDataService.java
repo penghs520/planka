@@ -42,14 +42,14 @@ public class ViewDataService {
                                                    ViewDataRequest request,
                                                    String operatorId,
                                                    String orgId,
-                                                   String structureNodeId) {
+                                                   String cascadeRelationNodeId) {
         try {
             // 1. 获取视图定义
             AbstractViewDefinition viewDef = getViewDefinition(viewId);
             if (orgId != null && !orgId.equals(viewDef.getOrgId())) {
                 return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "组织与视图不匹配");
             }
-            if (!viewDataVisibilityService.canQuery(viewDef, operatorId, structureNodeId)) {
+            if (!viewDataVisibilityService.canQuery(viewDef, operatorId, cascadeRelationNodeId)) {
                 return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无权访问该视图");
             }
 
@@ -91,12 +91,12 @@ public class ViewDataService {
                                              ViewDataRequest request,
                                              String operatorId,
                                              String orgId,
-                                             String structureNodeId) {
+                                             String cascadeRelationNodeId) {
         try {
             if (orgId != null && viewDef.getOrgId() != null && !orgId.equals(viewDef.getOrgId())) {
                 return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "组织与视图不匹配");
             }
-            if (!viewDataVisibilityService.canQuery(viewDef, operatorId, structureNodeId)) {
+            if (!viewDataVisibilityService.canQuery(viewDef, operatorId, cascadeRelationNodeId)) {
                 return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "无权预览该视图");
             }
             return executeQuery(viewDef, request, operatorId);

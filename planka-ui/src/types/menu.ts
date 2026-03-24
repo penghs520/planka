@@ -21,9 +21,9 @@ export interface MenuGroupDefinition extends SchemaDefinition {
   /** 与列表视图一致的可见性（默认 shared=true → 工作区可见） */
   shared?: boolean
   visibleTo?: string[]
-  viewVisibilityScope?: 'PRIVATE' | 'WORKSPACE' | 'TEAMS' | 'STRUCTURE_NODE'
+  viewVisibilityScope?: 'PRIVATE' | 'WORKSPACE' | 'TEAMS' | 'CASCADE_RELATION_NODE'
   visibleTeamCardIds?: string[]
-  visibleStructureNodeIds?: string[]
+  visibleCascadeRelationNodeIds?: string[]
   visibilityAudienceCondition?: Condition
 }
 

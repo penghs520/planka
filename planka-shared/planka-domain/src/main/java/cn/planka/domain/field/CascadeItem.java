@@ -1,0 +1,64 @@
+package cn.planka.domain.field;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * 架构节点（链表结构，支持层级路径）
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+public final class CascadeItem {
+    private final String id;
+    private final String name;
+    private CascadeItem next;
+
+    public CascadeItem(String id, String name) {
+        this(id, name, null);
+    }
+
+    @JsonCreator
+    public CascadeItem(
+            @JsonProperty("id") String id,
+            @JsonProperty("name") String name,
+            @JsonProperty("next") CascadeItem next) {
+        this.id = id;
+        this.name = name;
+        this.next = next;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CascadeItem getNext() {
+        return next;
+    }
+
+    public void setNext(CascadeItem next) {
+        this.next = next;
+    }
+
+    /**
+     * 获取链表最后一个节点
+     */
+    public CascadeItem last() {
+        CascadeItem last = this;
+        while (last.getNext() != null) {
+            last = last.getNext();
+        }
+        return last;
+    }
+
+    /**
+     * 在链表末尾添加节点
+     */
+    public CascadeItem addNext(CascadeItem nextToAdd) {
+        last().setNext(nextToAdd);
+        return this;
+    }
+}

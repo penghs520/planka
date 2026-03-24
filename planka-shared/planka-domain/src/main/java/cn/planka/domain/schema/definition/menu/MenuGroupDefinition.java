@@ -63,8 +63,8 @@ public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGrou
     @JsonProperty("visibleTeamCardIds")
     private List<String> visibleTeamCardIds;
 
-    @JsonProperty("visibleStructureNodeIds")
-    private List<String> visibleStructureNodeIds;
+    @JsonProperty("visibleCascadeRelationNodeIds")
+    private List<String> visibleCascadeRelationNodeIds;
 
     @JsonProperty("visibilityAudienceCondition")
     private Condition visibilityAudienceCondition;
@@ -125,7 +125,7 @@ public final class MenuGroupDefinition extends AbstractSchemaDefinition<MenuGrou
         ViewVisibilityValidation.validateScopeAndAudience(
                 getEffectiveViewVisibilityScope(),
                 visibleTeamCardIds,
-                visibleStructureNodeIds,
+                visibleCascadeRelationNodeIds,
                 visibilityAudienceCondition);
     }
 

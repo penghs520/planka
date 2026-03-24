@@ -50,7 +50,7 @@ function getFieldTypeLabel(schemaSubType: string): string {
     ENUM_FIELD: 'Enum',
     ATTACHMENT_FIELD: 'Attachment',
     WEB_URL_FIELD: 'URL',
-    STRUCTURE_FIELD: 'Structure',
+    CASCADE_FIELD: 'Cascade',
     LINK_FIELD: 'Link',
   }
   return typeMap[schemaSubType] || 'Text'

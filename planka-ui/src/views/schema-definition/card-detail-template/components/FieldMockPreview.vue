@@ -117,10 +117,10 @@ function getMockEnumOption(fieldConfigId: string): { name: string; color: string
         <span>https://example.com/page</span>
       </a>
     </template>
-    <!-- 架构层级类型 -->
-    <template v-else-if="getFieldType(fieldConfigId) === 'STRUCTURE'">
-      <div class="mock-structure">
-        <span class="structure-path">部门 / 研发中心 / 前端组</span>
+    <!-- 级联属性类型 -->
+    <template v-else-if="getFieldType(fieldConfigId) === 'CASCADE'">
+      <div class="mock-cascade-field">
+        <span class="cascade-path">部门 / 研发中心 / 前端组</span>
       </div>
     </template>
     <!-- 关联类型 - 与实际详情页样式一致 -->
@@ -210,8 +210,8 @@ function getMockEnumOption(fieldConfigId: string): { name: string; color: string
   }
 }
 
-.mock-structure {
-  .structure-path {
+.mock-cascade-field {
+  .cascade-path {
     color: var(--color-text-1);
     font-size: 14px;
   }

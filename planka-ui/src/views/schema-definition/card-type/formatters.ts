@@ -135,7 +135,7 @@ const fieldTypeLabelKeyMap: Record<string, string> = {
   ENUM_FIELD: 'admin.fieldType.ENUM',
   ATTACHMENT_FIELD: 'admin.fieldType.ATTACHMENT',
   WEB_URL_FIELD: 'admin.fieldType.WEB_URL',
-  STRUCTURE_FIELD: 'admin.fieldType.STRUCTURE',
+  CASCADE_FIELD: 'admin.fieldType.CASCADE',
   LINK_FIELD: 'admin.fieldType.LINK',
 }
 

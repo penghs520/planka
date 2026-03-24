@@ -80,32 +80,32 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'structure/:structureId/node/:nodeId',
-        component: () => import('@/views/structure-node/StructureNodeLayout.vue'),
+        path: 'cascade-relation/:cascadeRelationId/node/:nodeId',
+        component: () => import('@/views/cascade-relation-node/CascadeRelationNodeLayout.vue'),
         redirect: (to) => ({
-          path: `/structure/${to.params.structureId}/node/${to.params.nodeId}/issues`,
+          path: `/cascade-relation/${to.params.cascadeRelationId}/node/${to.params.nodeId}/issues`,
         }),
         children: [
           {
             path: 'issues',
-            name: 'StructureNodeIssues',
-            component: () => import('@/views/structure-node/StructureNodeIssuesView.vue'),
+            name: 'CascadeRelationNodeIssues',
+            component: () => import('@/views/cascade-relation-node/CascadeRelationNodeIssuesView.vue'),
             meta: {
               titleKey: 'sidebar.teamIssues',
             },
           },
           {
             path: 'projects',
-            name: 'StructureNodeProjects',
-            component: () => import('@/views/structure-node/StructureNodeProjectsView.vue'),
+            name: 'CascadeRelationNodeProjects',
+            component: () => import('@/views/cascade-relation-node/CascadeRelationNodeProjectsView.vue'),
             meta: {
               titleKey: 'sidebar.teamProjects',
             },
           },
           {
             path: 'views',
-            name: 'StructureNodeViews',
-            component: () => import('@/views/structure-node/StructureNodeViewsView.vue'),
+            name: 'CascadeRelationNodeViews',
+            component: () => import('@/views/cascade-relation-node/CascadeRelationNodeViewsView.vue'),
             meta: {
               titleKey: 'sidebar.teamViews',
             },
@@ -238,14 +238,14 @@ export const routes: RouteRecordRaw[] = [
               activeMenu: 'link-type',
             },
           },
-          // 架构线定义
+          // 级联关系定义
           {
-            path: 'structure',
-            name: 'Structure',
-            component: () => import('@/views/schema-definition/structure/StructureGraphView.vue'),
+            path: 'cascade-relation',
+            name: 'CascadeRelationDefinition',
+            component: () => import('@/views/schema-definition/cascade-relation/CascadeRelationGraphView.vue'),
             meta: {
-              titleKey: 'admin.structure.title',
-              activeMenu: 'structure',
+              titleKey: 'admin.cascadeRelation.title',
+              activeMenu: 'cascade-relation',
             },
           },
           // 详情页模板

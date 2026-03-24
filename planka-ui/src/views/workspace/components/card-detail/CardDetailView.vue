@@ -648,7 +648,7 @@ function initEditingValue(fieldId: string, fieldType: string, fieldValue: FieldV
         editingFieldValue.value = []
       }
       break
-    case 'STRUCTURE':
+    case 'CASCADE':
       editingFieldValue.value = fieldValue || null
       break
     default:
@@ -942,7 +942,7 @@ function buildFieldValue(fieldId: string, fieldType: string): FieldValue | null 
         value: ids.length > 0 ? ids : null,
       } as FieldValue
     }
-    case 'STRUCTURE':
+    case 'CASCADE':
       return editingFieldValue.value
     default:
       return {
@@ -974,7 +974,7 @@ function isFieldValueChanged(_fieldId: string, fieldType: string, originalValue:
       const currentIds = editingFieldValue.value.map((c: LinkedCard) => c.cardId).sort().join(',')
       return currentIds !== originalIds
     }
-    case 'STRUCTURE': {
+    case 'CASCADE': {
       const originalJson = originalValue ? JSON.stringify(originalValue) : ''
       const currentJson = editingFieldValue.value?.value
         ? JSON.stringify(editingFieldValue.value.value)

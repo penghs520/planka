@@ -36,7 +36,7 @@ public interface ViewDataClient {
             @PathVariable("viewId") String viewId,
             @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorId,
-            @RequestParam(value = "structureNodeId", required = false) String structureNodeId,
+            @RequestParam(value = "cascadeRelationNodeId", required = false) String cascadeRelationNodeId,
             @RequestBody ViewDataRequest request);
 
     /**
@@ -69,6 +69,6 @@ public interface ViewDataClient {
     Result<ViewDataResponse> preview(
             @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorId,
-            @RequestParam(value = "structureNodeId", required = false) String structureNodeId,
+            @RequestParam(value = "cascadeRelationNodeId", required = false) String cascadeRelationNodeId,
             @RequestBody ViewPreviewRequest request);
 }

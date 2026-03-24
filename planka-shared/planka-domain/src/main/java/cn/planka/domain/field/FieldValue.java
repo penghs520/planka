@@ -16,14 +16,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = NumberFieldValue.class, name = "NUMBER"),
         @JsonSubTypes.Type(value = DateFieldValue.class, name = "DATE"),
         @JsonSubTypes.Type(value = EnumFieldValue.class, name = "ENUM"),
-        @JsonSubTypes.Type(value = StructureFieldValue.class, name = "STRUCTURE"),
+        @JsonSubTypes.Type(value = CascadeFieldValue.class, name = "CASCADE"),
         @JsonSubTypes.Type(value = WebLinkFieldValue.class, name = "WEB_URL"),
         @JsonSubTypes.Type(value = AttachmentFieldValue.class, name = "ATTACHMENT"),
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public sealed interface FieldValue<T>
         permits TextFieldValue, NumberFieldValue, DateFieldValue,
-        EnumFieldValue, StructureFieldValue,
+        EnumFieldValue, CascadeFieldValue,
         WebLinkFieldValue, AttachmentFieldValue {
 
     /**

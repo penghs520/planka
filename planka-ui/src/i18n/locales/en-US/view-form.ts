@@ -18,10 +18,10 @@ export default {
   visibilityPrivate: 'Private (creator only)',
   visibilityWorkspace: 'Everyone in workspace',
   visibilityTeams: 'Specific teams',
-  visibilityStructureNode: 'Specific structure nodes',
+  visibilityCascadeRelationNode: 'Specific cascade relation nodes',
   visibilityTeamPick: 'Teams',
   visibilityTeamsHint: 'Choose team cards whose members can see this view.',
-  visibilityStructureHint: 'Choose structure node cards where this view appears.',
+  visibilityCascadeRelationHint: 'Choose cascade relation node cards where this view appears.',
   visibilityAudienceNote:
     'Audience condition (visibilityAudienceCondition) is not configurable in the UI yet; leave it empty.',
   sortRules: 'Default sorting',
@@ -37,7 +37,7 @@ export default {
     cardTypeRequired: 'Select a entity type',
     columnsRequired: 'Add at least one column with a valid field ID',
     teamsRequired: 'Pick at least one team when using team visibility',
-    structureNodesRequired: 'Pick at least one structure node when using node visibility',
+    cascadeRelationNodesRequired: 'Pick at least one cascade relation node when using node visibility',
     sortFieldRequired: 'Choose a field for every sort rule, or remove empty rows.',
   },
 }

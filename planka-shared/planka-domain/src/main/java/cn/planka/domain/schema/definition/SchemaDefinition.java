@@ -15,7 +15,7 @@ import cn.planka.domain.schema.definition.menu.MenuGroupDefinition;
 import cn.planka.domain.schema.definition.permission.PermissionConfigDefinition;
 import cn.planka.domain.schema.definition.rule.BizRuleDefinition;
 import cn.planka.domain.schema.definition.stream.ValueStreamDefinition;
-import cn.planka.domain.schema.definition.structure.StructureDefinition;
+import cn.planka.domain.schema.definition.cascaderelation.CascadeRelationDefinition;
 import cn.planka.domain.schema.definition.template.CardDetailTemplateDefinition;
 import cn.planka.domain.schema.definition.template.CardCreatePageTemplateDefinition;
 import cn.planka.domain.schema.definition.template.CardFaceDefinition;
@@ -51,7 +51,7 @@ import java.util.Set;
         @JsonSubTypes.Type(value = EnumFieldConfig.class, name = SchemaSubType.ENUM_FIELD),
         @JsonSubTypes.Type(value = AttachmentFieldConfig.class, name = SchemaSubType.ATTACHMENT_FIELD),
         @JsonSubTypes.Type(value = WebUrlFieldConfig.class, name = SchemaSubType.WEB_URL_FIELD),
-        @JsonSubTypes.Type(value = StructureFieldConfig.class, name = SchemaSubType.STRUCTURE_FIELD),
+        @JsonSubTypes.Type(value = CascadeFieldConfig.class, name = SchemaSubType.CASCADE_FIELD),
         @JsonSubTypes.Type(value = LinkFieldConfig.class, name = SchemaSubType.LINK_FIELD),
 
         // ==================== 视图定义 ====================
@@ -61,7 +61,7 @@ import java.util.Set;
         @JsonSubTypes.Type(value = MenuGroupDefinition.class, name = SchemaSubType.MENU_GROUP),
 
         // ==================== 架构线定义 ====================
-        @JsonSubTypes.Type(value = StructureDefinition.class, name = SchemaSubType.STRUCTURE_DEFINITION),
+        @JsonSubTypes.Type(value = CascadeRelationDefinition.class, name = SchemaSubType.CASCADE_RELATION_DEFINITION),
 
         // ==================== 其他 Schema 定义 ====================
         @JsonSubTypes.Type(value = ValueStreamDefinition.class, name = SchemaSubType.VALUE_STREAM),

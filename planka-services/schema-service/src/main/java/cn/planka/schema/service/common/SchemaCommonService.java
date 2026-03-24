@@ -119,7 +119,6 @@ public class SchemaCommonService {
         // 设置元数据
         schema.setState(EntityState.ACTIVE);
         schema.setContentVersion(1);
-        schema.setStructureVersion("1.0.0");
         schema.setCreatedAt(LocalDateTime.now());
         schema.setCreatedBy(operatorId);
         schema.setUpdatedAt(LocalDateTime.now());
@@ -235,7 +234,6 @@ public class SchemaCommonService {
             // 复制元数据到新定义（保留原有的不可变字段）
             newDefinition.setState(schema.getState());
             newDefinition.setContentVersion(schema.getContentVersion() + 1);
-            newDefinition.setStructureVersion(schema.getStructureVersion());
             newDefinition.setCreatedAt(schema.getCreatedAt());
             newDefinition.setCreatedBy(schema.getCreatedBy());
             newDefinition.setUpdatedAt(LocalDateTime.now());

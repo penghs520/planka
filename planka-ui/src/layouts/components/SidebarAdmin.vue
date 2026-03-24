@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { usePermission } from '@/hooks/usePermission'
 import { IconSettings, IconBook, IconRobot, IconRobotAdd, IconCode } from '@arco-design/web-vue/es/icon'
 import IconAuditLog from '@/components/icons/IconAuditLog.vue'
-import IconStructure from '@/components/icons/IconStructure.vue'
+import IconCascadeField from '@/components/icons/IconCascadeField.vue'
 import IconLinkType from '@/components/icons/IconLinkType.vue'
 import IconFormulaDefinition from '@/components/icons/IconFormulaDefinition.vue'
 import IconCardType from '@/components/icons/IconCardType.vue'
@@ -44,7 +44,7 @@ const sections: MenuSection[] = [
     items: [
       { key: 'card-type', titleKey: 'admin.menu.cardType', icon: IconCardType, path: '/admin/card-type' },
       { key: 'link-type', titleKey: 'admin.menu.linkType', icon: IconLinkType, path: '/admin/link-type' },
-      { key: 'structure', titleKey: 'admin.menu.structure', icon: IconStructure, path: '/admin/structure' },
+      { key: 'cascade-relation', titleKey: 'admin.menu.cascadeRelation', icon: IconCascadeField, path: '/admin/cascade-relation' },
       { key: 'formula-definition', titleKey: 'admin.menu.formulaDefinition', icon: IconFormulaDefinition, path: '/admin/formula-definition' },
       { key: 'biz-rule-definition', titleKey: 'admin.menu.bizRuleDefinition', icon: IconThunderbolt, path: '/admin/biz-rule-definition' },
     ],

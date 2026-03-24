@@ -6,7 +6,7 @@ import cn.planka.domain.card.CardTitle;
 import cn.planka.domain.history.HistoryArgument;
 import cn.planka.domain.history.HistoryArgument.EnumFieldValue;
 import cn.planka.domain.history.HistoryArgument.LinkFieldValue;
-import cn.planka.domain.history.HistoryArgument.StructureFieldValue;
+import cn.planka.domain.history.HistoryArgument.CascadeFieldHistoryValue;
 import cn.planka.domain.history.HistoryMessage;
 import cn.planka.history.service.SchemaNameCache.SchemaNameInfo;
 import cn.planka.history.vo.HistoryArgumentVO;
@@ -566,14 +566,14 @@ class HistoryArgumentResolverTest {
         }
 
         @Test
-        @DisplayName("StructureFieldValue 解析路径并用 / 连接")
+        @DisplayName("CascadeFieldValue 解析路径并用 / 连接")
         void shouldJoinStructurePathWithSlash() {
             // Given
-            List<StructureFieldValue.StructureNode> path = List.of(
-                    HistoryMessage.structureNode("node-1", "研发中心"),
-                    HistoryMessage.structureNode("node-2", "前端组")
+            List<CascadeFieldHistoryValue.CascadeHistoryNode> path = List.of(
+                    HistoryMessage.cascadeHistoryNode("node-1", "研发中心"),
+                    HistoryMessage.cascadeHistoryNode("node-2", "前端组")
             );
-            HistoryArgument arg = HistoryMessage.structureFieldValue("field-001", path);
+            HistoryArgument arg = HistoryMessage.cascadeFieldHistoryValue("field-001", path);
             HistoryMessage message = HistoryMessage.of("history.test", arg);
 
             when(schemaNameCache.getFieldNames(Set.of("field-001")))
@@ -584,7 +584,7 @@ class HistoryArgumentResolverTest {
 
             // Then
             HistoryArgumentVO vo = result.getArgs().get(0);
-            assertThat(vo.getType()).isEqualTo("FIELD_VALUE_STRUCTURE");
+            assertThat(vo.getType()).isEqualTo("FIELD_VALUE_CASCADE");
             assertThat(vo.getDisplayValue()).isEqualTo("研发中心 / 前端组");
         }
 

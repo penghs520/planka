@@ -53,7 +53,7 @@ export const FIELD_TYPE_CATEGORIES: FieldTypeCategoryDef[] = [
       item(SchemaSubType.ENUM_FIELD, { key: 'ENUM_FIELD_MULTI', enumMultiSelect: true }),
       item(SchemaSubType.LINK_FIELD, { key: 'LINK_FIELD_SINGLE', linkTargetMulti: false }),
       item(SchemaSubType.LINK_FIELD, { key: 'LINK_FIELD_MULTI', linkTargetMulti: true }),
-      item(SchemaSubType.STRUCTURE_FIELD),
+      item(SchemaSubType.CASCADE_FIELD),
     ],
   },
   { id: 'date', items: [item(SchemaSubType.DATE_FIELD)] },

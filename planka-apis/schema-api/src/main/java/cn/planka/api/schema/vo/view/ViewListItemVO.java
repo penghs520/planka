@@ -84,7 +84,7 @@ public class ViewListItemVO {
     /**
      * 架构节点可见时的节点 ID
      */
-    private List<String> visibleStructureNodeIds;
+    private List<String> visibleCascadeRelationNodeIds;
 
     /**
      * 创建人成员卡 ID

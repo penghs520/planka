@@ -191,7 +191,7 @@ export interface CreatePageFieldVO {
 /**
  * 字段 VO 类型枚举
  */
-export type FieldVOType = 'TEXT' | 'TEXTAREA' | 'MARKDOWN' | 'NUMBER' | 'DATE' | 'ENUM' | 'ATTACHMENT' | 'WEB_URL' | 'STRUCTURE' | 'LINK'
+export type FieldVOType = 'TEXT' | 'TEXTAREA' | 'MARKDOWN' | 'NUMBER' | 'DATE' | 'ENUM' | 'ATTACHMENT' | 'WEB_URL' | 'CASCADE' | 'LINK'
 
 /**
  * 单行文本字段 VO
@@ -302,10 +302,10 @@ export interface WebUrlFieldVO extends CreatePageFieldVO {
 /**
  * 架构层级字段 VO
  */
-export interface StructureFieldVO extends CreatePageFieldVO {
-    fieldType: 'STRUCTURE'
+export interface CascadeFieldVO extends CreatePageFieldVO {
+    fieldType: 'CASCADE'
     /** 架构 ID */
-    structureId?: string
+    cascadeRelationId?: string
     /** 是否只允许选择叶子节点 */
     leafOnly: boolean
     /** 默认节点 ID */

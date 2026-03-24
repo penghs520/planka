@@ -86,8 +86,8 @@ export type { LinkPosition } from '@/utils/link-field-utils'
 /**
  * 结构属性值
  */
-export interface StructureFieldValue extends FieldValueBase {
-  type: 'STRUCTURE'
+export interface CascadeFieldValue extends FieldValueBase {
+  type: 'CASCADE'
   value: unknown
 }
 
@@ -116,7 +116,7 @@ export type FieldValue =
   | DateFieldValue
   | EnumFieldValue
   | LinkFieldValue
-  | StructureFieldValue
+  | CascadeFieldValue
   | WebLinkFieldValue
   | AttachmentFieldValue
 

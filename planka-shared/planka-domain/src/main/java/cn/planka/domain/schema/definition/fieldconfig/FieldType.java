@@ -46,9 +46,9 @@ public enum FieldType {
     LINK("LINK", "关联"),
 
     /**
-     * 架构层级
+     * 级联属性
      */
-    STRUCTURE("STRUCTURE", "架构层级"),
+    CASCADE("CASCADE", "级联属性"),
 
     /**
      * 网页链接

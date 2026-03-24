@@ -127,10 +127,6 @@ public class FieldConfigService {
         if (config.getCreatedBy() == null) {
             config.setCreatedBy(operatorId);
         }
-        if (config.getStructureVersion() == null) {
-            config.setStructureVersion("1.0.0");
-        }
-
         config.setUpdatedAt(LocalDateTime.now());
         config.setUpdatedBy(operatorId);
 

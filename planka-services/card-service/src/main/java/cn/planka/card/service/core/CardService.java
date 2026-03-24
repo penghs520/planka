@@ -9,7 +9,7 @@ import cn.planka.card.repository.CardRepository;
 import cn.planka.card.service.permission.CardPermissionService;
 import cn.planka.card.service.permission.exception.PermissionDeniedException;
 import cn.planka.card.service.permission.model.BatchPermissionCheckResult;
-import cn.planka.card.service.structure.StructureLinkSyncService;
+import cn.planka.card.service.cascadefield.CascadeFieldLinkSyncService;
 import cn.planka.card.service.validation.FieldValueValidator;
 import cn.planka.common.exception.CommonErrorCode;
 import cn.planka.common.result.Result;
@@ -20,12 +20,12 @@ import cn.planka.domain.card.CardTypeId;
 import cn.planka.domain.card.CardDescription;
 import cn.planka.domain.field.FieldId;
 import cn.planka.domain.field.FieldValue;
-import cn.planka.domain.field.StructureFieldValue;
-import cn.planka.domain.field.StructureItem;
+import cn.planka.domain.field.CascadeFieldValue;
+import cn.planka.domain.field.CascadeItem;
 import cn.planka.domain.schema.definition.fieldconfig.FieldConfig;
-import cn.planka.domain.schema.definition.fieldconfig.StructureFieldConfig;
+import cn.planka.domain.schema.definition.fieldconfig.CascadeFieldConfig;
 import cn.planka.domain.schema.definition.permission.PermissionConfig.CardOperation;
-import cn.planka.domain.schema.definition.structure.StructureLevelBinding;
+import cn.planka.domain.schema.definition.cascaderelation.CascadeRelationLevelBinding;
 import cn.planka.infra.cache.schema.SchemaCacheService;
 import cn.planka.event.card.CardMovedEvent;
 import cn.planka.api.card.request.*;
@@ -51,7 +51,7 @@ public class CardService {
     private static final Logger logger = LoggerFactory.getLogger(CardService.class);
 
     private final CardRepository cardRepository;
-    private final StructureLinkSyncService structureLinkSyncService;
+    private final CascadeFieldLinkSyncService cascadeFieldLinkSyncService;
     private final LinkCardService linkCardService;
     private final CardPermissionService permissionService;
     private final CardEventPublisher eventPublisher;
@@ -61,7 +61,7 @@ public class CardService {
     private final SchemaCacheService schemaCacheService;
 
     public CardService(CardRepository cardRepository,
-                       StructureLinkSyncService structureLinkSyncService,
+                       CascadeFieldLinkSyncService cascadeFieldLinkSyncService,
                        LinkCardService linkCardService,
                        CardPermissionService permissionService,
                        CardEventPublisher eventPublisher,
@@ -70,7 +70,7 @@ public class CardService {
                        FieldValueValidator fieldValueValidator,
                        SchemaCacheService schemaCacheService) {
         this.cardRepository = cardRepository;
-        this.structureLinkSyncService = structureLinkSyncService;
+        this.cascadeFieldLinkSyncService = cascadeFieldLinkSyncService;
         this.linkCardService = linkCardService;
         this.permissionService = permissionService;
         this.eventPublisher = eventPublisher;
@@ -99,11 +99,11 @@ public class CardService {
                 return Result.failure(CommonErrorCode.VALIDATION_ERROR, validationResult.getFormattedError());
             }
 
-            CardEntityConverter.FilteredCreateRequest filtered = entityConverter.filterStructureFieldValues(request);
+            CardEntityConverter.FilteredCreateRequest filtered = entityConverter.filterCascadeFieldValues(request);
             CardEntity cardEntity = entityConverter.toCardEntityForCreate(filtered.request());
             CardId cardId = cardRepository.create(cardEntity);
 
-            applyStructureFieldValuesForCreate(cardId, request, filtered.structureFieldValues(), operatorId, sourceIp);
+            applyCascadeFieldValuesForCreate(cardId, request, filtered.cascadeFieldValues(), operatorId, sourceIp);
             eventPublisher.publishCreated(cardEntity, String.valueOf(operatorId.value()));
 
             // 处理关联属性（覆盖式）
@@ -190,7 +190,7 @@ public class CardService {
                 }
             }
 
-            UpdateCardRequest filteredRequest = filterStructureFieldValues(
+            UpdateCardRequest filteredRequest = filterCascadeFieldValues(
                     request, existingCard, effectiveOrgId, operatorId, sourceIp);
 
             CardEntity cardEntity = entityConverter.toCardEntityForUpdate(filteredRequest, existingCard);
@@ -308,7 +308,7 @@ public class CardService {
     public Result<BatchOperationResult> batchCreate(List<CreateCardRequest> requests, CardId operatorId) {
         try {
             List<CardEntity> cardEntities = requests.stream()
-                    .map(entityConverter::filterStructureFieldValues)
+                    .map(entityConverter::filterCascadeFieldValues)
                     .map(filtered -> entityConverter.toCardEntityForCreate(filtered.request()))
                     .toList();
             List<CardId> successIds = cardRepository.batchCreate(cardEntities);
@@ -587,22 +587,22 @@ public class CardService {
 
     // ==================== 私有方法 ====================
 
-    private void applyStructureFieldValuesForCreate(CardId cardId, CreateCardRequest request,
-                                                    Map<String, StructureFieldValue> structureFieldValues,
+    private void applyCascadeFieldValuesForCreate(CardId cardId, CreateCardRequest request,
+                                                    Map<String, CascadeFieldValue> cascadeFieldValues,
                                                     CardId operatorId, String sourceIp) {
-        if (structureFieldValues.isEmpty()) {
+        if (cascadeFieldValues.isEmpty()) {
             return;
         }
-        for (StructureFieldValue structureValue : structureFieldValues.values()) {
-            structureLinkSyncService.applyStructureFieldValue(
+        for (CascadeFieldValue cascadeFieldValue : cascadeFieldValues.values()) {
+            cascadeFieldLinkSyncService.applyCascadeFieldValue(
                     String.valueOf(cardId.value()),
                     request.typeId().value(),
-                    structureValue,
+                    cascadeFieldValue,
                     request.orgId().value(),
                     String.valueOf(operatorId.value()),
                     sourceIp,
                     linkCardService::updateLink);
-            logger.debug("创建卡片时应用架构属性: cardId={}, fieldId={}", cardId, structureValue.getFieldId());
+            logger.debug("创建卡片时应用架构属性: cardId={}, fieldId={}", cardId, cascadeFieldValue.getFieldId());
         }
     }
 
@@ -631,8 +631,8 @@ public class CardService {
         // 2b. 从架构属性额外收集对应的关联属性（架构属性本身已在 changedFieldIds 中）
         if (request.fieldValues() != null) {
             for (Map.Entry<String, FieldValue<?>> entry : request.fieldValues().entrySet()) {
-                if (entry.getValue() instanceof StructureFieldValue structureValue) {
-                    collectLinkFieldIdsFromStructure(structureValue,
+                if (entry.getValue() instanceof CascadeFieldValue cascadeFieldValue) {
+                    collectLinkFieldIdsFromStructure(cascadeFieldValue,
                             linkFieldIds, targetCardIdsByLinkField);
                 }
             }
@@ -650,24 +650,24 @@ public class CardService {
      * 从架构属性中收集对应的关联属性ID和对端卡片ID
      */
     private void collectLinkFieldIdsFromStructure(
-            StructureFieldValue structureValue,
+            CascadeFieldValue cascadeFieldValue,
             Set<String> linkFieldIds,
             Map<String, List<String>> targetCardIdsByLinkField) {
 
-        String fieldId = structureValue.getFieldId();
+        String fieldId = cascadeFieldValue.getFieldId();
         var defOpt = schemaCacheService.getById(fieldId);
-        if (defOpt.isEmpty() || !(defOpt.get() instanceof StructureFieldConfig structureFieldConfig)) {
+        if (defOpt.isEmpty() || !(defOpt.get() instanceof CascadeFieldConfig cascadeFieldConfig)) {
             return;
         }
 
-        List<StructureLevelBinding> bindings = structureFieldConfig.getLevelBindings();
+        List<CascadeRelationLevelBinding> bindings = cascadeFieldConfig.getLevelBindings();
         if (bindings == null || bindings.isEmpty()) {
             return;
         }
 
-        // 解析 StructureItem 链表为 Map<levelIndex, cardId>
+        // 解析 CascadeItem 链表为 Map<levelIndex, cardId>
         Map<Integer, String> levelCardIds = new HashMap<>();
-        StructureItem item = structureValue.getValue();
+        CascadeItem item = cascadeFieldValue.getValue();
         int level = 0;
         while (item != null) {
             levelCardIds.put(level, item.getId());
@@ -676,7 +676,7 @@ public class CardService {
         }
 
         // 将每个层级绑定的 linkFieldId 加入集合
-        for (StructureLevelBinding binding : bindings) {
+        for (CascadeRelationLevelBinding binding : bindings) {
             String linkFieldId = binding.linkFieldId().value();
             linkFieldIds.add(linkFieldId);
 
@@ -686,22 +686,22 @@ public class CardService {
         }
     }
 
-    private UpdateCardRequest filterStructureFieldValues(UpdateCardRequest request, CardDTO existingCard,
+    private UpdateCardRequest filterCascadeFieldValues(UpdateCardRequest request, CardDTO existingCard,
                                                          String orgId, CardId operatorId, String sourceIp) {
         if (request.fieldValues() == null || request.fieldValues().isEmpty()) {
             return request;
         }
 
         Map<String, FieldValue<?>> filteredFieldValues = new HashMap<>();
-        boolean hasStructureField = false;
+        boolean hasCascadeRelationField = false;
 
         for (Map.Entry<String, FieldValue<?>> entry : request.fieldValues().entrySet()) {
-            if (entry.getValue() instanceof StructureFieldValue structureValue) {
-                hasStructureField = true;
-                structureLinkSyncService.applyStructureFieldValue(
+            if (entry.getValue() instanceof CascadeFieldValue cascadeFieldValue) {
+                hasCascadeRelationField = true;
+                cascadeFieldLinkSyncService.applyCascadeFieldValue(
                         String.valueOf(request.cardId().value()),
                         existingCard.getTypeId().value(),
-                        structureValue,
+                        cascadeFieldValue,
                         orgId, String.valueOf(operatorId.value()), sourceIp,
                         linkCardService::updateLink);
                 logger.debug("架构属性已转换为关联更新: cardId={}, fieldId={}", request.cardId(), entry.getKey());
@@ -710,7 +710,7 @@ public class CardService {
             }
         }
 
-        if (hasStructureField) {
+        if (hasCascadeRelationField) {
             return new UpdateCardRequest(
                     request.cardId(),
                     request.title(),

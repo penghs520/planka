@@ -57,7 +57,7 @@ defineProps<{
     </div>
 
     <!-- 级联单选：树形下拉（触发器 + 展开面板内树） -->
-    <div v-else-if="schemaSubType === SchemaSubType.STRUCTURE_FIELD" class="mock mock-tree-dd">
+    <div v-else-if="schemaSubType === SchemaSubType.CASCADE_FIELD" class="mock mock-tree-dd">
       <div class="mock-tree-trigger">
         <span class="mock-tree-trigger-ph" />
         <span class="mock-tree-chevron" />

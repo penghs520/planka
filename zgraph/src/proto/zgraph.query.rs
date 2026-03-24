@@ -1422,7 +1422,7 @@ pub struct SortField {
     ///      __PLANKA_EINST__、容器，这些就按照他们排序就行
     ///      标题：要按照拼接标题来排序
     ///      卡片编号：如果有custom_code，则按照custom_code排序，否则按照code_in_org进行排序，前者是文本，后置是数字
-    /// 不支持计算属性排序、价值流状态排序、架构属性排序
+    /// 不支持计算属性排序、价值流状态排序、级联属性排序
     #[prost(oneof = "sort_field::FieldType", tags = "2, 3, 4, 5, 6, 7, 8")]
     pub field_type: ::core::option::Option<sort_field::FieldType>,
 }
@@ -1437,7 +1437,7 @@ pub mod sort_field {
     ///      __PLANKA_EINST__、容器，这些就按照他们排序就行
     ///      标题：要按照拼接标题来排序
     ///      卡片编号：如果有custom_code，则按照custom_code排序，否则按照code_in_org进行排序，前者是文本，后置是数字
-    /// 不支持计算属性排序、价值流状态排序、架构属性排序
+    /// 不支持计算属性排序、价值流状态排序、级联属性排序
     #[derive(serde::Serialize, serde::Deserialize)]
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Oneof)]

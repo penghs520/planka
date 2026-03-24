@@ -12,12 +12,12 @@ public class ViewDataVisibilityService {
 
     private final ViewTeamMembershipSupport viewTeamMembershipSupport;
 
-    public boolean canQuery(AbstractViewDefinition view, String operatorMemberCardId, String structureNodeId) {
+    public boolean canQuery(AbstractViewDefinition view, String operatorMemberCardId, String cascadeRelationNodeId) {
         String orgId = view.getOrgId();
         boolean inTeam = false;
         if (view.getEffectiveViewVisibilityScope() == ViewVisibilityScope.TEAMS) {
             inTeam = viewTeamMembershipSupport.memberInAnyTeam(orgId, operatorMemberCardId, view.getVisibleTeamCardIds());
         }
-        return ViewVisibilityMath.isVisible(view, operatorMemberCardId, structureNodeId, inTeam);
+        return ViewVisibilityMath.isVisible(view, operatorMemberCardId, cascadeRelationNodeId, inTeam);
     }
 }

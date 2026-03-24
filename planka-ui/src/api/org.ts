@@ -46,7 +46,7 @@ export const orgApi = {
 
   updateSidebarWorkspacePreferences(
     orgId: string,
-    body: { pinnedStructureIds: string[] },
+    body: { pinnedCascadeRelationIds: string[] },
   ): Promise<SidebarPreferencesDTO> {
     return request.put(`${BASE_URL}/${orgId}/sidebar-workspace-preferences`, body)
   },

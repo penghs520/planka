@@ -24,7 +24,7 @@ public class MenuNavController {
     public Result<MenuNavTreeVO> nav(
             @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorMemberCardId,
-            @RequestParam(name = "structureNodeId", required = false) String structureNodeId) {
-        return Result.success(menuNavService.buildNavTree(orgId, operatorMemberCardId, structureNodeId));
+            @RequestParam(name = "cascadeRelationNodeId", required = false) String cascadeRelationNodeId) {
+        return Result.success(menuNavService.buildNavTree(orgId, operatorMemberCardId, cascadeRelationNodeId));
     }
 }

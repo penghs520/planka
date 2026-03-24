@@ -24,8 +24,8 @@ const props = withDefaults(
     modelValue?: string
     /** 嵌入 App 侧栏时使用：隐藏分区标题、紧凑样式、随侧栏滚动 */
     variant?: 'default' | 'sidebar'
-    /** 架构节点页传入当前 nodeId，用于拉取 STRUCTURE_NODE 视图 */
-    structureNodeId?: string
+    /** 级联关系节点页传入当前 nodeId，用于拉取 CASCADE_RELATION_NODE 视图 */
+    cascadeRelationNodeId?: string
   }>(),
   { variant: 'default' },
 )
@@ -106,7 +106,7 @@ function collectExpandedGroups(nodes: MenuTreeNodeVO[]) {
 async function fetchMenuTree() {
   loading.value = true
   try {
-    const params = props.structureNodeId ? { structureNodeId: props.structureNodeId } : undefined
+    const params = props.cascadeRelationNodeId ? { cascadeRelationNodeId: props.cascadeRelationNodeId } : undefined
     menuTree.value = await menuNavApi.nav(params)
     collectExpandedGroups(menuTree.value.roots)
     if (menuTree.value.ungroupedViews?.length) {
@@ -177,7 +177,7 @@ onMounted(() => {
 })
 
 watch(
-  () => props.structureNodeId,
+  () => props.cascadeRelationNodeId,
   () => {
     void fetchMenuTree()
   },
@@ -269,7 +269,7 @@ watch(
     <ViewEditForm
       v-model:visible="createViewVisible"
       mode="create"
-      :structure-node-context-id="props.structureNodeId"
+      :cascade-relation-node-context-id="props.cascadeRelationNodeId"
       :save-loading="createViewSaving"
       @save="handleCreateViewSave"
     />

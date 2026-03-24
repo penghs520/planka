@@ -30,8 +30,8 @@ public class MenuNavService {
     private final ViewNavService viewNavService;
     private final ViewNavVisibilityChecker viewNavVisibilityChecker;
 
-    public MenuNavTreeVO buildNavTree(String orgId, String operatorMemberCardId, String structureNodeId) {
-        List<ViewListItemVO> nav = viewNavService.listNav(orgId, operatorMemberCardId, structureNodeId);
+    public MenuNavTreeVO buildNavTree(String orgId, String operatorMemberCardId, String cascadeRelationNodeId) {
+        List<ViewListItemVO> nav = viewNavService.listNav(orgId, operatorMemberCardId, cascadeRelationNodeId);
         Map<String, ViewListItemVO> navById = nav.stream()
                 .filter(v -> v.getId() != null)
                 .collect(Collectors.toMap(ViewListItemVO::getId, v -> v, (a, b) -> a));
@@ -42,7 +42,7 @@ public class MenuNavService {
                 .collect(Collectors.toList());
 
         Set<String> navVisibleGroupIds = menuGroups.stream()
-                .filter(g -> viewNavVisibilityChecker.isVisibleForNav(g, orgId, operatorMemberCardId, structureNodeId))
+                .filter(g -> viewNavVisibilityChecker.isVisibleForNav(g, orgId, operatorMemberCardId, cascadeRelationNodeId))
                 .map(g -> g.getId().value())
                 .collect(Collectors.toSet());
 

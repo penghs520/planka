@@ -31,7 +31,7 @@ spring:
         - id: card-service
           uri: lb://card-service
           predicates:
-            - Path=/api/v1/cards/**,/api/v1/links/**,/api/v1/structure-options/**,/api/v1/biz-rules/execution-logs/**
+            - Path=/api/v1/cards/**,/api/v1/links/**,/api/v1/cascade-field-options/**,/api/v1/biz-rules/execution-logs/**
 
         # View 服务路由
         - id: view-service

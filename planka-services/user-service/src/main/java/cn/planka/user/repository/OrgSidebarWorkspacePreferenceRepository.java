@@ -26,14 +26,14 @@ public class OrgSidebarWorkspacePreferenceRepository {
                 new LambdaQueryWrapper<OrgSidebarWorkspacePreferenceEntity>()
                         .eq(OrgSidebarWorkspacePreferenceEntity::getOrgId, orgId));
         if (row == null || row.getPrefs() == null || row.getPrefs().isBlank()) {
-            return SidebarPreferencesDTO.builder().pinnedStructureIds(List.of()).build();
+            return SidebarPreferencesDTO.builder().pinnedCascadeRelationIds(List.of()).build();
         }
         return sidebarPreferencesPrefsCodec.parse(row.getPrefs());
     }
 
-    public SidebarPreferencesDTO save(String orgId, List<String> pinnedStructureIds) {
-        List<String> normalized = SidebarPinnedIds.orderedDistinctNonBlank(pinnedStructureIds);
-        SidebarPreferencesDTO dto = SidebarPreferencesDTO.builder().pinnedStructureIds(normalized).build();
+    public SidebarPreferencesDTO save(String orgId, List<String> pinnedCascadeRelationIds) {
+        List<String> normalized = SidebarPinnedIds.orderedDistinctNonBlank(pinnedCascadeRelationIds);
+        SidebarPreferencesDTO dto = SidebarPreferencesDTO.builder().pinnedCascadeRelationIds(normalized).build();
         String json;
         try {
             json = sidebarPreferencesPrefsCodec.serialize(dto);

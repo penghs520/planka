@@ -51,8 +51,8 @@ public class OrganizationSidebarWorkspacePreferencesService {
         if (org == null) {
             return Result.failure("ORG_001", "组织不存在");
         }
-        List<String> requestIds = request.getPinnedStructureIds() != null
-                ? new ArrayList<>(request.getPinnedStructureIds())
+        List<String> requestIds = request.getPinnedCascadeRelationIds() != null
+                ? new ArrayList<>(request.getPinnedCascadeRelationIds())
                 : new ArrayList<>();
         SidebarPreferencesDTO saved = orgSidebarWorkspacePreferenceRepository.save(orgId, requestIds);
         return Result.success(saved);

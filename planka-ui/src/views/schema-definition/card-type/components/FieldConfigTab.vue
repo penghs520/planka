@@ -48,7 +48,7 @@ const fieldTypePillClassMap: Record<string, string> = {
   ENUM_FIELD: 'ft-field-pill--green',
   ATTACHMENT_FIELD: 'ft-field-pill--amber',
   WEB_URL_FIELD: 'ft-field-pill--blue',
-  STRUCTURE_FIELD: 'ft-field-pill--violet',
+  CASCADE_FIELD: 'ft-field-pill--violet',
   LINK_FIELD: 'ft-field-pill--teal',
 }
 

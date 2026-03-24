@@ -136,7 +136,6 @@ public class CardCreatePageTemplateService {
     private void initializeMetadata(CardCreatePageTemplateDefinition definition, String operatorId) {
         definition.setState(EntityState.ACTIVE);
         definition.setContentVersion(1);
-        definition.setStructureVersion("1.0.0");
         LocalDateTime now = LocalDateTime.now();
         definition.setCreatedAt(now);
         definition.setCreatedBy(operatorId);
@@ -387,7 +386,7 @@ public class CardCreatePageTemplateService {
             case ENUM -> convertEnumFieldConfigToVO((EnumFieldConfig) config, widthPercent);
             case ATTACHMENT -> convertAttachmentFieldConfigToVO((AttachmentFieldConfig) config, widthPercent);
             case WEB_URL -> convertWebUrlFieldConfigToVO((WebUrlFieldConfig) config, widthPercent);
-            case STRUCTURE -> convertStructureFieldConfigToVO((StructureFieldConfig) config, widthPercent);
+            case CASCADE -> convertCascadeFieldConfigToVO((CascadeFieldConfig) config, widthPercent);
             case LINK -> convertLinkFieldConfigToVO((LinkFieldConfig) config, widthPercent);
             default -> null;
         };
@@ -488,10 +487,10 @@ public class CardCreatePageTemplateService {
         return vo;
     }
 
-    private StructureFieldVO convertStructureFieldConfigToVO(StructureFieldConfig config, int widthPercent) {
-        StructureFieldVO vo = new StructureFieldVO();
+    private CascadeFieldVO convertCascadeFieldConfigToVO(CascadeFieldConfig config, int widthPercent) {
+        CascadeFieldVO vo = new CascadeFieldVO();
         setCommonFieldProperties(vo, config, widthPercent);
-        vo.setStructureId(config.getStructureId() != null ? config.getStructureId().value() : null);
+        vo.setCascadeRelationId(config.getCascadeRelationId() != null ? config.getCascadeRelationId().value() : null);
         vo.setLeafOnly(config.isLeafOnly());
         return vo;
     }

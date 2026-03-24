@@ -69,7 +69,7 @@ public class FieldOption {
     /**
      * 架构线ID（仅架构类型字段有效）
      */
-    private String structureId;
+    private String cascadeRelationId;
 
     /**
      * 是否多选（仅关联类型字段有效）

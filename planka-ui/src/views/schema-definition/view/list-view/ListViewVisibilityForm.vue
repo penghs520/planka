@@ -4,13 +4,13 @@ import { useI18n } from 'vue-i18n'
 import { useOrgStore } from '@/stores/org'
 import type { ListViewDefinition } from '@/types/view'
 import { fetchAllTeamsInOrg } from '@/api/team'
-import { structureApi } from '@/api/structure'
-import { structureOptionsApi } from '@/api/structure-options'
-import type { StructureNodeDTO } from '@/api/structure-options'
+import { cascadeRelationApi } from '@/api/cascade-relation'
+import { cascadeFieldOptionsApi } from '@/api/cascade-field-options'
+import type { CascadeNodeDTO } from '@/api/cascade-field-options'
 import { getCardTitle } from '@/types/card'
 import type { CardDTO } from '@/types/card'
 
-/** TreeSelect 节点（含架构线分组根，不可勾选） */
+/** TreeSelect 节点（含级联关系分组根，不可勾选） */
 interface VisibilityTreeNode {
   key: string
   title: string
@@ -22,10 +22,10 @@ interface VisibilityTreeNode {
   children?: VisibilityTreeNode[]
 }
 
-interface StructureForest {
-  structureId: string
-  structureName: string
-  roots: StructureNodeDTO[]
+interface CascadeRelationForest {
+  cascadeRelationId: string
+  cascadeRelationName: string
+  roots: CascadeNodeDTO[]
 }
 
 const props = defineProps<{
@@ -36,15 +36,15 @@ const { t } = useI18n()
 const orgStore = useOrgStore()
 
 const teamOptions = ref<{ value: string; label: string }[]>([])
-const structureForests = ref<StructureForest[]>([])
+const cascadeRelationForests = ref<CascadeRelationForest[]>([])
 const loadingTeams = ref(false)
-const loadingStructures = ref(false)
+const loadingCascadeRelations = ref(false)
 
 const scopeOptions = computed(() => [
   { value: 'PRIVATE', label: t('viewForm.visibilityPrivate') },
   { value: 'WORKSPACE', label: t('viewForm.visibilityWorkspace') },
   { value: 'TEAMS', label: t('viewForm.visibilityTeams') },
-  { value: 'STRUCTURE_NODE', label: t('viewForm.visibilityStructureNode') },
+  { value: 'CASCADE_RELATION_NODE', label: t('viewForm.visibilityCascadeRelationNode') },
 ])
 
 const visibilityScopeUi = computed({
@@ -62,8 +62,8 @@ const visibilityScopeUi = computed({
     if (v !== 'TEAMS') {
       d.visibleTeamCardIds = []
     }
-    if (v !== 'STRUCTURE_NODE') {
-      d.visibleStructureNodeIds = []
+    if (v !== 'CASCADE_RELATION_NODE') {
+      d.visibleCascadeRelationNodeIds = []
     }
   },
 })
@@ -73,8 +73,8 @@ function ensureIdArrays() {
   if (!d.visibleTeamCardIds) {
     d.visibleTeamCardIds = []
   }
-  if (!d.visibleStructureNodeIds) {
-    d.visibleStructureNodeIds = []
+  if (!d.visibleCascadeRelationNodeIds) {
+    d.visibleCascadeRelationNodeIds = []
   }
 }
 
@@ -84,7 +84,7 @@ watch(
   { immediate: true },
 )
 
-function mapDtoToTreeNodes(nodes: StructureNodeDTO[]): VisibilityTreeNode[] {
+function mapDtoToTreeNodes(nodes: CascadeNodeDTO[]): VisibilityTreeNode[] {
   return nodes.map((n) => ({
     key: n.id,
     title: n.name,
@@ -94,10 +94,10 @@ function mapDtoToTreeNodes(nodes: StructureNodeDTO[]): VisibilityTreeNode[] {
   }))
 }
 
-const structureTreeData = computed<VisibilityTreeNode[]>(() =>
-  structureForests.value.map((sf) => ({
-    key: `__sf__:${sf.structureId}`,
-    title: sf.structureName || sf.structureId,
+const cascadeRelationVisibilityTreeData = computed<VisibilityTreeNode[]>(() =>
+  cascadeRelationForests.value.map((sf) => ({
+    key: `__sf__:${sf.cascadeRelationId}`,
+    title: sf.cascadeRelationName || sf.cascadeRelationId,
     selectable: false,
     disableCheckbox: true,
     checkable: false,
@@ -105,12 +105,12 @@ const structureTreeData = computed<VisibilityTreeNode[]>(() =>
   })),
 )
 
-/** 节点 id → 「架构线名 / … / 节点名」完整路径，用于多选回显 */
-const structureNodePathById = computed(() => {
+/** 节点 id → 「级联关系名 / … / 节点名」完整路径，用于多选回显 */
+const cascadeRelationNodePathById = computed(() => {
   const map = new Map<string, string>()
-  for (const sf of structureForests.value) {
-    const lineName = sf.structureName || sf.structureId
-    const walk = (nodes: StructureNodeDTO[], ancestors: string[]) => {
+  for (const sf of cascadeRelationForests.value) {
+    const lineName = sf.cascadeRelationName || sf.cascadeRelationId
+    const walk = (nodes: CascadeNodeDTO[], ancestors: string[]) => {
       for (const n of nodes) {
         const segments = [...ancestors, n.name]
         map.set(n.id, segments.join(' / '))
@@ -124,27 +124,27 @@ const structureNodePathById = computed(() => {
   return map
 })
 
-/** 架构树数据就绪后换 key，避免 TreeSelect 在「空 data → 异步有数据」时内部 patch 报错 */
-const structureTreeMountKey = computed(() => {
-  const ids = structureForests.value.map((f) => f.structureId).sort()
+/** 级联树数据就绪后换 key，避免 TreeSelect 在「空 data → 异步有数据」时内部 patch 报错 */
+const cascadeRelationTreeMountKey = computed(() => {
+  const ids = cascadeRelationForests.value.map((f) => f.cascadeRelationId).sort()
   return `${orgStore.currentOrgId ?? ''}:${ids.join('|')}`
 })
 
 /**
  * TreeSelect 标签插槽入参为 { data: raw }，raw 含 value / label
  */
-function structureNodeTagText(data: { value?: string; label?: string } | undefined) {
+function cascadeRelationNodeTagText(data: { value?: string; label?: string } | undefined) {
   if (!data?.value) {
     return data?.label ?? ''
   }
   if (data.value === '__arco__more') {
     return data.label ?? ''
   }
-  return structureNodePathById.value.get(data.value) ?? data.label ?? data.value
+  return cascadeRelationNodePathById.value.get(data.value) ?? data.label ?? data.value
 }
 
 /** 按节点标题 / 层级名搜索（默认按 key 搜对 UUID 不友好） */
-function filterStructureTreeNode(searchKey: string, node: VisibilityTreeNode): boolean {
+function filterCascadeRelationTreeNode(searchKey: string, node: VisibilityTreeNode): boolean {
   const k = (searchKey || '').trim().toLowerCase()
   if (!k) {
     return true
@@ -173,50 +173,50 @@ async function loadTeams() {
   }
 }
 
-async function loadStructureNodeOptions() {
+async function loadCascadeRelationNodeOptions() {
   const orgId = orgStore.currentOrgId
   const mid = orgStore.currentMemberCardId
   if (!orgId || !mid) {
-    structureForests.value = []
+    cascadeRelationForests.value = []
     return
   }
-  loadingStructures.value = true
+  loadingCascadeRelations.value = true
   try {
-    const page = await structureApi.list(1, 100)
+    const page = await cascadeRelationApi.list(1, 100)
     const rows = page.content ?? []
-    const forests: StructureForest[] = []
+    const forests: CascadeRelationForest[] = []
     for (const def of rows) {
       const sid = def.id
       if (!sid) {
         continue
       }
       try {
-        const roots = await structureOptionsApi.queryOptions({ structureId: sid })
+        const roots = await cascadeFieldOptionsApi.queryOptions({ cascadeRelationId: sid })
         forests.push({
-          structureId: sid,
-          structureName: def.name || sid,
+          cascadeRelationId: sid,
+          cascadeRelationName: def.name || sid,
           roots,
         })
       } catch {
-        /* 单条架构线失败时跳过 */
+        /* 单条级联关系失败时跳过 */
       }
     }
-    structureForests.value = forests
+    cascadeRelationForests.value = forests
   } finally {
-    loadingStructures.value = false
+    loadingCascadeRelations.value = false
   }
 }
 
 onMounted(() => {
   void loadTeams()
-  void loadStructureNodeOptions()
+  void loadCascadeRelationNodeOptions()
 })
 
 watch(
   () => [orgStore.currentOrgId, orgStore.currentMemberCardId],
   () => {
     void loadTeams()
-    void loadStructureNodeOptions()
+    void loadCascadeRelationNodeOptions()
   },
 )
 </script>
@@ -266,37 +266,37 @@ watch(
       </a-form-item>
 
       <a-form-item
-        v-if="visibilityScopeUi === 'STRUCTURE_NODE'"
-        :label="t('viewForm.visibilityStructureNode')"
+        v-if="visibilityScopeUi === 'CASCADE_RELATION_NODE'"
+        :label="t('viewForm.visibilityCascadeRelationNode')"
       >
         <template #extra>
-          <span class="form-extra">{{ t('viewForm.visibilityStructureHint') }}</span>
+          <span class="form-extra">{{ t('viewForm.visibilityCascadeRelationHint') }}</span>
         </template>
-        <div v-if="loadingStructures" class="structure-tree-loading-wrap">
+        <div v-if="loadingCascadeRelations" class="cascade-relation-tree-loading-wrap">
           <a-spin :loading="true" :tip="t('common.state.loading')" />
         </div>
         <a-tree-select
           v-else
-          :key="structureTreeMountKey"
-          v-model="listView.visibleStructureNodeIds"
-          class="structure-node-tree-select arco-select-tag-blue"
-          :data="structureTreeData"
+          :key="cascadeRelationTreeMountKey"
+          v-model="listView.visibleCascadeRelationNodeIds"
+          class="cascade-relation-node-tree-select arco-select-tag-blue"
+          :data="cascadeRelationVisibilityTreeData"
           :loading="false"
           multiple
           tree-checkable
           tree-check-strictly
           allow-search
-          :filter-tree-node="filterStructureTreeNode"
+          :filter-tree-node="filterCascadeRelationTreeNode"
           :max-tag-count="4"
           :dropdown-style="{ maxHeight: '360px' }"
-          :placeholder="t('viewForm.visibilityStructureNode')"
+          :placeholder="t('viewForm.visibilityCascadeRelationNode')"
         >
           <template #label="{ data }">
             <span
-              class="structure-node-tag-text"
-              :title="structureNodeTagText(data)"
+              class="cascade-relation-node-tag-text"
+              :title="cascadeRelationNodeTagText(data)"
             >
-              {{ structureNodeTagText(data) }}
+              {{ cascadeRelationNodeTagText(data) }}
             </span>
           </template>
           <template #tree-slot-title="{ title, levelName }">
@@ -326,18 +326,18 @@ watch(
   line-height: 1.4;
 }
 
-.structure-tree-loading-wrap {
+.cascade-relation-tree-loading-wrap {
   display: flex;
   align-items: center;
   min-height: 40px;
   padding: 4px 0;
 }
 
-.structure-node-tree-select {
+.cascade-relation-node-tree-select {
   width: 100%;
 }
 
-.structure-node-tree-select :deep(.arco-tree-select) {
+.cascade-relation-node-tree-select :deep(.arco-tree-select) {
   width: 100%;
 }
 
@@ -346,7 +346,7 @@ watch(
  * TreeSelect 会把 class 透传到内部 SelectView / InputTag 根节点，需同时带 arco-select-tag-blue。
  */
 
-.structure-node-tag-text {
+.cascade-relation-node-tag-text {
   display: inline-block;
   max-width: 280px;
   overflow: hidden;

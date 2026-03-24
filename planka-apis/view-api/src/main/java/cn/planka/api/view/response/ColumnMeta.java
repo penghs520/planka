@@ -38,7 +38,7 @@ public class ColumnMeta {
     /**
      * 字段类型
      * <p>
-     * 可选值：TEXT, NUMBER, DATE, ENUM, ATTACHMENT, LINK, STRUCTURE, WEB_URL, MARKDOWN 等
+     * 可选值：TEXT, NUMBER, DATE, ENUM, ATTACHMENT, LINK, CASCADE, WEB_URL, MARKDOWN 等
      */
     private String fieldType;
 

@@ -157,12 +157,12 @@ export interface LevelBinding {
 }
 
 /** 架构层级属性配置 */
-export interface StructureFieldConfig extends FieldConfigBase {
-  schemaSubType: 'STRUCTURE_FIELD'
-  /** 架构线ID */
-  structureId?: string
-  /** 架构线名称 */
-  structureName?: string
+export interface CascadeFieldConfig extends FieldConfigBase {
+  schemaSubType: 'CASCADE_FIELD'
+  /** 级联关系定义 ID */
+  cascadeRelationId?: string
+  /** 级联关系定义名称 */
+  cascadeRelationName?: string
   /** 层级绑定配置 */
   levelBindings?: LevelBinding[]
   /** @deprecated 仅用于兼容 */
@@ -213,7 +213,7 @@ export type FieldConfig =
   | EnumFieldConfig
   | AttachmentFieldConfig
   | WebUrlFieldConfig
-  | StructureFieldConfig
+  | CascadeFieldConfig
   | LinkFieldConfig
 
 /**
@@ -229,7 +229,7 @@ export function getFieldTypeFromConfig(schemaSubType: string): string {
     ENUM_FIELD: 'ENUM',
     ATTACHMENT_FIELD: 'ATTACHMENT',
     WEB_URL_FIELD: 'WEB_URL',
-    STRUCTURE_FIELD: 'STRUCTURE',
+    CASCADE_FIELD: 'CASCADE',
     LINK_FIELD: 'LINK',
     DESCRIPTION: 'DESCRIPTION',
   }

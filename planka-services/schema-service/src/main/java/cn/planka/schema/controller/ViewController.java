@@ -62,14 +62,14 @@ public class ViewController {
     /**
      * 当前用户可见的视图列表（工作区或架构节点侧栏）
      *
-     * @param structureNodeId 架构节点 ID；工作区全局不传或空
+     * @param cascadeRelationNodeId 架构节点 ID；工作区全局不传或空
      */
     @GetMapping("/nav")
     public Result<List<ViewListItemVO>> nav(
             @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorMemberCardId,
-            @RequestParam(name = "structureNodeId", required = false) String structureNodeId) {
-        return Result.success(viewNavService.listNav(orgId, operatorMemberCardId, structureNodeId));
+            @RequestParam(name = "cascadeRelationNodeId", required = false) String cascadeRelationNodeId) {
+        return Result.success(viewNavService.listNav(orgId, operatorMemberCardId, cascadeRelationNodeId));
     }
 
     /**
@@ -120,7 +120,7 @@ public class ViewController {
                 .shared(view.isShared())
                 .viewVisibilityScope(scope != null ? scope.name() : null)
                 .visibleTeamCardIds(view.getVisibleTeamCardIds())
-                .visibleStructureNodeIds(view.getVisibleStructureNodeIds())
+                .visibleCascadeRelationNodeIds(view.getVisibleCascadeRelationNodeIds())
                 .createdBy(view.getCreatedBy())
                 .enabled(view.isEnabled())
                 .contentVersion(view.getContentVersion())

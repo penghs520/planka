@@ -9,7 +9,7 @@ import cn.planka.api.card.request.QueryContext;
 import cn.planka.api.card.request.QueryScope;
 import cn.planka.api.card.request.Yield;
 import cn.planka.api.card.request.YieldLink;
-import cn.planka.card.converter.StructureFieldValueBuilder;
+import cn.planka.card.converter.CascadeFieldValueBuilder;
 import cn.planka.card.repository.CardRepository;
 import cn.planka.card.service.permission.CardPermissionService;
 import cn.planka.common.exception.CommonErrorCode;
@@ -18,7 +18,7 @@ import cn.planka.common.result.Result;
 import cn.planka.domain.card.CardId;
 import cn.planka.domain.card.CardTitle;
 import cn.planka.domain.field.FieldValue;
-import cn.planka.domain.schema.definition.fieldconfig.StructureFieldConfig;
+import cn.planka.domain.schema.definition.fieldconfig.CascadeFieldConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -61,7 +61,7 @@ public class CardQueryService {
                 return Result.failure(CommonErrorCode.NOT_FOUND, "卡片不存在");
             }
             CardDTO cardDTO = cardOpt.get();
-            fillStructureFieldValues(cardDTO, yield);
+            fillCascadeFieldValues(cardDTO, yield);
             cardPermissionService.applyFieldReadPermissions(List.of(cardDTO), operatorId);
             return Result.success(cardDTO);
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class CardQueryService {
         try {
             Yield enhancedYield = yieldEnhancer.enhance(yield);
             List<CardDTO> cards = cardRepository.findByIds(cardIds, enhancedYield, String.valueOf(operatorId.value()));
-            fillStructureFieldValuesForList(cards, yield);
+            fillCascadeFieldValuesForList(cards, yield);
             cardPermissionService.applyFieldReadPermissions(cards, operatorId);
             return Result.success(cards);
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class CardQueryService {
             Yield originalYield = request.getYield();
             request.setYield(yieldEnhancer.enhance(originalYield));
             List<CardDTO> cards = cardRepository.query(request);
-            fillStructureFieldValuesForList(cards, originalYield);
+            fillCascadeFieldValuesForList(cards, originalYield);
             applyFieldPermissionsFromRequest(cards, request);
             return Result.success(cards);
         } catch (Exception e) {
@@ -112,7 +112,7 @@ public class CardQueryService {
             request.setYield(yieldEnhancer.enhance(originalYield));
             PageResult<CardDTO> result = cardRepository.pageQuery(request);
             if (result.getContent() != null) {
-                fillStructureFieldValuesForList(result.getContent(), originalYield);
+                fillCascadeFieldValuesForList(result.getContent(), originalYield);
                 applyFieldPermissionsFromRequest(result.getContent(), request);
             }
             return Result.success(result);
@@ -208,24 +208,24 @@ public class CardQueryService {
     /**
      * 填充架构属性值
      */
-    private void fillStructureFieldValues(CardDTO cardDTO, Yield yield) {
+    private void fillCascadeFieldValues(CardDTO cardDTO, Yield yield) {
         if (yield == null || cardDTO == null) {
             return;
         }
-        List<StructureFieldConfig> structureDefs = yieldEnhancer.extractStructureFieldDefs(yield);
-        fillStructureFieldValuesRecursive(cardDTO, yield, structureDefs);
+        List<CascadeFieldConfig> cascadeFieldDefs = yieldEnhancer.extractCascadeFieldDefs(yield);
+        fillCascadeFieldValuesRecursive(cardDTO, yield, cascadeFieldDefs);
     }
 
     /**
      * 批量填充架构属性值
      */
-    private void fillStructureFieldValuesForList(List<CardDTO> cards, Yield yield) {
+    private void fillCascadeFieldValuesForList(List<CardDTO> cards, Yield yield) {
         if (yield == null || cards == null || cards.isEmpty()) {
             return;
         }
-        List<StructureFieldConfig> structureDefs = yieldEnhancer.extractStructureFieldDefs(yield);
+        List<CascadeFieldConfig> cascadeFieldDefs = yieldEnhancer.extractCascadeFieldDefs(yield);
         for (CardDTO cardDTO : cards) {
-            fillStructureFieldValuesRecursive(cardDTO, yield, structureDefs);
+            fillCascadeFieldValuesRecursive(cardDTO, yield, cascadeFieldDefs);
         }
     }
 
@@ -245,19 +245,19 @@ public class CardQueryService {
     /**
      * 递归填充架构属性值
      */
-    private void fillStructureFieldValuesRecursive(CardDTO cardDTO, Yield yield,
-                                                   List<StructureFieldConfig> structureDefs) {
+    private void fillCascadeFieldValuesRecursive(CardDTO cardDTO, Yield yield,
+                                                   List<CascadeFieldConfig> cascadeFieldDefs) {
         if (yield == null || cardDTO == null) {
             return;
         }
 
-        if (!structureDefs.isEmpty()) {
-            Map<String, FieldValue<?>> structureValues = StructureFieldValueBuilder.buildAll(cardDTO, structureDefs);
-            if (!structureValues.isEmpty()) {
+        if (!cascadeFieldDefs.isEmpty()) {
+            Map<String, FieldValue<?>> cascadeFieldValues = CascadeFieldValueBuilder.buildAll(cardDTO, cascadeFieldDefs);
+            if (!cascadeFieldValues.isEmpty()) {
                 if (cardDTO.getFieldValues() == null) {
                     cardDTO.setFieldValues(new HashMap<>());
                 }
-                cardDTO.getFieldValues().putAll(structureValues);
+                cardDTO.getFieldValues().putAll(cascadeFieldValues);
             }
         }
 
@@ -269,7 +269,7 @@ public class CardQueryService {
                 Set<CardDTO> linkedCards = cardDTO.getLinkedCards().get(link.getLinkFieldId());
                 if (linkedCards != null) {
                     for (CardDTO linkedCard : linkedCards) {
-                        fillStructureFieldValuesRecursive(linkedCard, link.getTargetYield(), structureDefs);
+                        fillCascadeFieldValuesRecursive(linkedCard, link.getTargetYield(), cascadeFieldDefs);
                     }
                 }
             }

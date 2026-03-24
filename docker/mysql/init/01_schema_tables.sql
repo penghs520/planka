@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS schema_definition (
     content JSON NOT NULL COMMENT 'Schema定义内容(JSON)',
     state VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '状态(ACTIVE/DISABLED/DELETED)',
     content_version INT NOT NULL DEFAULT 1 COMMENT '内容版本号（乐观锁）',
-    structure_version VARCHAR(20) DEFAULT '1.0.0' COMMENT '结构版本号（语义版本）',
     belong_to VARCHAR(64) NULL COMMENT '所属Schema ID(组合关系)',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     created_by VARCHAR(64) NOT NULL COMMENT '创建人ID',

@@ -260,9 +260,9 @@ public class FieldOptionService {
             builder.enumOptions(enumOptions);
         }
 
-        // 架构属性填充 structureId
-        if (config instanceof StructureFieldConfig structureConfig && structureConfig.getStructureId() != null) {
-            builder.structureId(structureConfig.getStructureId().value());
+        // 级联属性填充 cascadeRelationId
+        if (config instanceof CascadeFieldConfig cascadeFieldConfig && cascadeFieldConfig.getCascadeRelationId() != null) {
+            builder.cascadeRelationId(cascadeFieldConfig.getCascadeRelationId().value());
         }
 
         // 关联属性填充 targetCardTypeIds 和 multiple
@@ -308,7 +308,7 @@ public class FieldOptionService {
         if (config instanceof EnumFieldConfig) return "ENUM";
         if (config instanceof AttachmentFieldConfig) return "ATTACHMENT";
         if (config instanceof WebUrlFieldConfig) return "WEB_URL";
-        if (config instanceof StructureFieldConfig) return "STRUCTURE";
+        if (config instanceof CascadeFieldConfig) return "CASCADE";
         if (config instanceof LinkFieldConfig) return "LINK";
         return "UNKNOWN";
     }

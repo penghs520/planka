@@ -410,9 +410,9 @@ function isFieldCompatible(sourceField: FieldOption, targetField?: FieldOption):
     return sourceField.id === targetField.id
   }
 
-  // STRUCTURE：必须是同一个架构线
-  if (targetField.fieldType === 'STRUCTURE') {
-    return sourceField.structureId === targetField.structureId
+  // CASCADE：必须是同一条级联关系定义
+  if (targetField.fieldType === 'CASCADE') {
+    return sourceField.cascadeRelationId === targetField.cascadeRelationId
   }
 
   // LINK：必须是同一个关联类型（通过 linkTypeId 判断）

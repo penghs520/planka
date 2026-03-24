@@ -26,19 +26,19 @@ public class ViewNavService {
     private final SchemaRepository schemaRepository;
     private final ViewNavVisibilityChecker viewNavVisibilityChecker;
 
-    public List<ViewListItemVO> listNav(String orgId, String operatorMemberCardId, String structureNodeId) {
+    public List<ViewListItemVO> listNav(String orgId, String operatorMemberCardId, String cascadeRelationNodeId) {
         List<SchemaDefinition<?>> schemas = schemaQuery.query(orgId, SchemaType.VIEW);
         Map<String, String> cardTypeNames = getCardTypeNames(schemas);
         return schemas.stream()
                 .filter(s -> s instanceof ListViewDefinition)
                 .map(s -> (ListViewDefinition) s)
-                .filter(v -> isNavVisible(v, orgId, operatorMemberCardId, structureNodeId))
+                .filter(v -> isNavVisible(v, orgId, operatorMemberCardId, cascadeRelationNodeId))
                 .map(v -> toNavVo(v, cardTypeNames))
                 .collect(Collectors.toList());
     }
 
-    private boolean isNavVisible(ListViewDefinition view, String orgId, String operatorMemberCardId, String structureNodeId) {
-        return viewNavVisibilityChecker.isVisibleForNav(view, orgId, operatorMemberCardId, structureNodeId);
+    private boolean isNavVisible(ListViewDefinition view, String orgId, String operatorMemberCardId, String cascadeRelationNodeId) {
+        return viewNavVisibilityChecker.isVisibleForNav(view, orgId, operatorMemberCardId, cascadeRelationNodeId);
     }
 
     private Map<String, String> getCardTypeNames(List<SchemaDefinition<?>> schemas) {
@@ -74,7 +74,7 @@ public class ViewNavService {
                 .shared(view.isShared())
                 .viewVisibilityScope(scope != null ? scope.name() : null)
                 .visibleTeamCardIds(view.getVisibleTeamCardIds())
-                .visibleStructureNodeIds(view.getVisibleStructureNodeIds())
+                .visibleCascadeRelationNodeIds(view.getVisibleCascadeRelationNodeIds())
                 .createdBy(view.getCreatedBy())
                 .enabled(view.isEnabled())
                 .contentVersion(view.getContentVersion())

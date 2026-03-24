@@ -146,7 +146,7 @@ export type FieldRenderConfig =
   | TextRenderConfig
   | AttachmentRenderConfig
   | LinkRenderConfig
-  | StructureRenderConfig
+  | CascadeFieldRenderConfig
   | WebUrlRenderConfig
   | MarkdownRenderConfig
 
@@ -251,10 +251,10 @@ export interface LinkRenderConfig {
 /**
  * 架构层级类型渲染配置
  */
-export interface StructureRenderConfig {
-  type: 'STRUCTURE'
-  /** 架构线 ID */
-  structureId?: string
+export interface CascadeFieldRenderConfig {
+  type: 'CASCADE'
+  /** 级联关系定义 ID */
+  cascadeRelationId?: string
   /** 是否只能选择叶子节点 */
   leafOnly: boolean
 }

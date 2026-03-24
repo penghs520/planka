@@ -37,7 +37,7 @@ const fieldTypeConfig: Record<string, { name: string; order: number }> = {
   DESCRIPTION: { name: '描述', order: 5 },
   ATTACHMENT: { name: '附件', order: 6 },
   WEB_URL: { name: '网页链接', order: 7 },
-  STRUCTURE: { name: '架构层级', order: 8 },
+  CASCADE: { name: '级联属性', order: 8 },
   LINK: { name: '关联', order: 9 },
   BUILTIN: { name: '内置属性', order: 99 },
 }

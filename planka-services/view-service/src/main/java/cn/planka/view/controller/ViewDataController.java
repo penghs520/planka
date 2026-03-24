@@ -32,10 +32,10 @@ public class ViewDataController implements ViewDataClient {
             @PathVariable("viewId") String viewId,
             @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorId,
-            @RequestParam(value = "structureNodeId", required = false) String structureNodeId,
+            @RequestParam(value = "cascadeRelationNodeId", required = false) String cascadeRelationNodeId,
             @RequestBody ViewDataRequest request) {
         log.debug("查询视图数据, viewId={}, operatorId={}", viewId, operatorId);
-        return viewDataService.queryByViewId(viewId, request, operatorId, orgId, structureNodeId);
+        return viewDataService.queryByViewId(viewId, request, operatorId, orgId, cascadeRelationNodeId);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ViewDataController implements ViewDataClient {
     public Result<ViewDataResponse> preview(
             @RequestHeader("X-Org-Id") String orgId,
             @RequestHeader("X-Member-Card-Id") String operatorId,
-            @RequestParam(value = "structureNodeId", required = false) String structureNodeId,
+            @RequestParam(value = "cascadeRelationNodeId", required = false) String cascadeRelationNodeId,
             @RequestBody ViewPreviewRequest request) {
         log.debug("预览视图数据, operatorId={}", operatorId);
         return viewDataService.preview(
@@ -61,7 +61,7 @@ public class ViewDataController implements ViewDataClient {
                 request.getDataRequestOrDefault(),
                 operatorId,
                 orgId,
-                structureNodeId
+                cascadeRelationNodeId
         );
     }
 }

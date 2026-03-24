@@ -1,7 +1,7 @@
 import request from './request'
 
 export interface SidebarPreferencesDTO {
-  pinnedStructureIds: string[]
+  pinnedCascadeRelationIds: string[]
 }
 
 export const sidebarPreferencesApi = {
@@ -9,7 +9,7 @@ export const sidebarPreferencesApi = {
     return request.get('/api/v1/users/me/sidebar-preferences')
   },
 
-  update(body: { pinnedStructureIds: string[] }): Promise<SidebarPreferencesDTO> {
+  update(body: { pinnedCascadeRelationIds: string[] }): Promise<SidebarPreferencesDTO> {
     return request.put('/api/v1/users/me/sidebar-preferences', body)
   },
 }

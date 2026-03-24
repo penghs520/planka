@@ -21,11 +21,11 @@ public class ViewNavVisibilityChecker {
             NavVisibilitySubject subject,
             String orgId,
             String operatorMemberCardId,
-            String structureNodeId) {
+            String cascadeRelationNodeId) {
         if (subject == null || orgId == null || !Objects.equals(orgId, subject.getOrgId())) {
             return false;
         }
-        if (structureNodeId == null || structureNodeId.isBlank()) {
+        if (cascadeRelationNodeId == null || cascadeRelationNodeId.isBlank()) {
             if (!ViewVisibilityMath.includeInWorkspaceNav(subject)) {
                 return false;
             }
@@ -35,6 +35,6 @@ public class ViewNavVisibilityChecker {
             inTeam = viewTeamMembershipSupport.memberInAnyTeam(
                     orgId, operatorMemberCardId, subject.getVisibleTeamCardIds());
         }
-        return ViewVisibilityMath.isVisible(subject, operatorMemberCardId, structureNodeId, inTeam);
+        return ViewVisibilityMath.isVisible(subject, operatorMemberCardId, cascadeRelationNodeId, inTeam);
     }
 }
