@@ -16,7 +16,7 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const expanded = ref(true)
-/** 「视图」下后台菜单树展开/收起（与架构线分区 chevron 行为一致） */
+/** 「视图」下后台菜单树展开/收起（与级联关系分区 chevron 行为一致） */
 const viewsMenuExpanded = ref(true)
 
 /** Issues / Projects / Teams / Members — 视图单独挂载后台菜单树 */

@@ -38,12 +38,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * 架构关联同步服务
+ * 级联关系同步服务
  * <p>
- * 负责处理架构属性和关联属性之间的联动更新：
+ * 负责处理级联属性和关联属性之间的联动更新：
  * <ul>
  *   <li>入口1：关联属性更新时，自动同步其他层级的关联</li>
- *   <li>入口2：架构属性更新时，将其转换为多个关联属性的更新</li>
+ *   <li>入口2：级联属性更新时，将其转换为多个关联属性的更新</li>
  * </ul>
  */
 @Service
@@ -71,7 +71,7 @@ public class CascadeFieldLinkSyncService {
     // ==================== 入口1：关联属性更新时的联动同步 ====================
 
     /**
-     * 关联属性更新后执行架构层级联动同步
+     * 关联属性更新后执行级联层级联动同步
      * <p>
      * 当用户通过关联属性编辑器修改关联时，自动同步其他层级的关联：
      * <ul>
@@ -79,13 +79,13 @@ public class CascadeFieldLinkSyncService {
      *   <li>关联上级时：清除下级（向下清空）</li>
      * </ul>
      * <p>
-     * 一个关联属性可能被多个架构属性绑定，此方法会处理所有受影响的架构属性。
+     * 一个关联属性可能被多个级联属性绑定，此方法会处理所有受影响的级联属性。
      *
      * @param cardId              当前卡片ID
-     * @param cardTypeId          __PLANKA_EINST__ID
+     * @param cardTypeId          实体类型ID
      * @param linkFieldId         被更新的关联属性ID
      * @param targetCardIds       新的关联目标卡片ID列表
-     * @param oldCascadeFieldValues  关联更新前的架构属性值映射（由调用方预先计算）
+     * @param oldCascadeFieldValues  关联更新前的级联属性值映射（由调用方预先计算）
      * @param orgId               组织ID
      * @param operatorId          操作人ID
      * @param sourceIp            来源IP
@@ -95,7 +95,7 @@ public class CascadeFieldLinkSyncService {
                                                    String linkFieldId, List<String> targetCardIds,
                                                    Map<String, CascadeFieldValue> oldCascadeFieldValues,
                                                    String orgId, String operatorId, String sourceIp) {
-        // 1. 查找所有匹配的架构绑定
+        // 1. 查找所有匹配的级联绑定
         List<CascadeFieldBindingMatch> matches = findAllStructureBindings(cardTypeId, linkFieldId);
         if (matches.isEmpty()) {
             return CascadeFieldSyncResult.noSync();
@@ -104,19 +104,19 @@ public class CascadeFieldLinkSyncService {
         Map<String, Set<String>> allAddedLinks = new HashMap<>();
         Map<String, Set<String>> allRemovedLinks = new HashMap<>();
 
-        // 2. 遍历每个架构绑定，执行同步
+        // 2. 遍历每个级联绑定，执行同步
         for (CascadeFieldBindingMatch match : matches) {
             int currentLevel = match.levelIndex();
             CascadeFieldConfig cascadeFieldDef = match.cascadeFieldDef();
             String cascadeFieldId = cascadeFieldDef.getId().value();
 
-            logger.debug("检测到架构属性联动：cardId={}, linkFieldId={}, cascadeFieldId={}, levelIndex={}",
+            logger.debug("检测到级联属性联动：cardId={}, linkFieldId={}, cascadeFieldId={}, levelIndex={}",
                     cardId, linkFieldId, cascadeFieldId, currentLevel);
 
-            // 3. 获取架构线定义
+            // 3. 获取级联关系定义
             CascadeRelationDefinition cascadeRelationDef = getCascadeRelationDefinition(cascadeFieldDef.getCascadeRelationId().value());
             if (cascadeRelationDef == null) {
-                logger.warn("架构线定义不存在: {}", cascadeFieldDef.getCascadeRelationId());
+                logger.warn("级联关系定义不存在: {}", cascadeFieldDef.getCascadeRelationId());
                 continue;
             }
 
@@ -127,7 +127,7 @@ public class CascadeFieldLinkSyncService {
                 syncResult = clearLowerLevels(cardId, cascadeFieldDef, currentLevel, orgId, operatorId, sourceIp);
             } else if (currentLevel > 0) {
                 // 关联非根层级：同步上级
-                String targetCardId = targetCardIds.get(0); // 架构属性应该是单选的
+                String targetCardId = targetCardIds.get(0); // 级联属性应该是单选的
                 syncResult = syncUpperLevels(cardId, match, cascadeRelationDef, targetCardId, orgId, operatorId, sourceIp);
             } else {
                 // 关联根层级（currentLevel=0）：清除下级
@@ -138,7 +138,7 @@ public class CascadeFieldLinkSyncService {
             mergeLinks(allAddedLinks, syncResult.addedLinks());
             mergeLinks(allRemovedLinks, syncResult.removedLinks());
 
-            // 5. 计算架构属性新值并发布变更事件
+            // 5. 计算级联属性新值并发布变更事件
             CascadeFieldValue oldValue = oldCascadeFieldValues != null
                     ? oldCascadeFieldValues.get(cascadeFieldId) : null;
             CascadeFieldValue newValue = buildCurrentStructureValue(cardId, cascadeFieldDef, operatorId);
@@ -159,16 +159,16 @@ public class CascadeFieldLinkSyncService {
     }
 
     /**
-     * 计算指定关联属性对应的所有架构属性当前值
+     * 计算指定关联属性对应的所有级联属性当前值
      * <p>
-     * 供 LinkCardService 在更新关联前调用，用于获取所有受影响架构属性的旧值。
-     * 一个关联属性可能被多个架构属性绑定。
+     * 供 LinkCardService 在更新关联前调用，用于获取所有受影响级联属性的旧值。
+     * 一个关联属性可能被多个级联属性绑定。
      *
      * @param cardId      卡片ID
-     * @param cardTypeId  __PLANKA_EINST__ID
+     * @param cardTypeId  实体类型ID
      * @param linkFieldId 关联属性ID
      * @param operatorId  操作人ID
-     * @return 架构属性ID到当前值的映射，如果关联属性不属于任何架构绑定则返回空Map
+     * @return 级联属性ID到当前值的映射，如果关联属性不属于任何级联绑定则返回空Map
      */
     public Map<String, CascadeFieldValue> getCascadeFieldValuesBeforeUpdate(String cardId, String cardTypeId,
                                                                             String linkFieldId, String operatorId) {
@@ -181,7 +181,7 @@ public class CascadeFieldLinkSyncService {
         for (CascadeFieldBindingMatch match : matches) {
             CascadeFieldConfig cascadeFieldDef = match.cascadeFieldDef();
             String fieldId = cascadeFieldDef.getId().value();
-            // 避免重复计算同一个架构属性
+            // 避免重复计算同一个级联属性
             if (!result.containsKey(fieldId)) {
                 result.put(fieldId, buildCurrentStructureValue(cardId, cascadeFieldDef, operatorId));
             }
@@ -190,15 +190,15 @@ public class CascadeFieldLinkSyncService {
     }
 
     /**
-     * 计算指定关联属性对应的架构属性当前值（向后兼容）
+     * 计算指定关联属性对应的级联属性当前值（向后兼容）
      * <p>
-     * 供 LinkCardService 在更新关联前调用，用于获取架构属性旧值
+     * 供 LinkCardService 在更新关联前调用，用于获取级联属性旧值
      *
      * @param cardId      卡片ID
-     * @param cardTypeId  __PLANKA_EINST__ID
+     * @param cardTypeId  实体类型ID
      * @param linkFieldId 关联属性ID
      * @param operatorId  操作人ID
-     * @return 架构属性当前值，如果关联属性不属于架构绑定则返回 null
+     * @return 级联属性当前值，如果关联属性不属于级联绑定则返回 null
      * @deprecated 使用 {@link #getCascadeFieldValuesBeforeUpdate} 代替
      */
     @Deprecated
@@ -211,17 +211,17 @@ public class CascadeFieldLinkSyncService {
         return buildCurrentStructureValue(cardId, matchOpt.get().cascadeFieldDef(), operatorId);
     }
 
-    // ==================== 入口2：架构属性更新转换为关联更新 ====================
+    // ==================== 入口2：级联属性更新转换为关联更新 ====================
 
     /**
-     * 将架构属性值转换为多个关联属性更新
+     * 将级联属性值转换为多个关联属性更新
      * <p>
-     * 当用户通过架构属性编辑器直接选择完整路径时，将 CascadeFieldValue 解析为
+     * 当用户通过级联属性编辑器直接选择完整路径时，将 CascadeFieldValue 解析为
      * 多个关联属性的更新操作。
      *
      * @param cardId         卡片ID
-     * @param cardTypeId     __PLANKA_EINST__ID
-     * @param cascadeFieldValue 架构属性值（链表结构）
+     * @param cardTypeId     实体类型ID
+     * @param cascadeFieldValue 级联属性值（链表结构）
      * @param orgId          组织ID
      * @param operatorId     操作人ID
      * @param sourceIp       来源IP
@@ -235,7 +235,7 @@ public class CascadeFieldLinkSyncService {
         String fieldId = cascadeFieldValue.getFieldId();
         Optional<SchemaDefinition<?>> defOpt = schemaCacheService.getById(fieldId);
         if (defOpt.isEmpty() || !(defOpt.get() instanceof CascadeFieldConfig cascadeFieldDef)) {
-            logger.warn("架构属性定义不存在: {}", fieldId);
+            logger.warn("级联属性定义不存在: {}", fieldId);
             return;
         }
 
@@ -244,7 +244,7 @@ public class CascadeFieldLinkSyncService {
             return;
         }
 
-        // 2. 计算架构属性旧值（用于事件记录）
+        // 2. 计算级联属性旧值（用于事件记录）
         CascadeFieldValue oldStructureValue = buildCurrentStructureValue(cardId, cascadeFieldDef, operatorId);
 
         // 3. 解析 CascadeItem 链表为 Map<levelIndex, cardId>
@@ -271,35 +271,35 @@ public class CascadeFieldLinkSyncService {
                     .cardId(cardId)
                     .linkFieldId(targetLinkFieldId)
                     .targetCardIds(targetCardIds)
-                    .skipPermissionCheck(true)  // 跳过权限检查，架构属性联动不需要权限检查
+                    .skipPermissionCheck(true)  // 跳过权限检查，级联属性联动不需要权限检查
                     .build();
             linkUpdater.updateLink(request, orgId, operatorId, sourceIp, true);
 
-            logger.debug("架构属性更新关联：cardId={}, linkFieldId={}, targetCardId={}",
+            logger.debug("级联属性更新关联：cardId={}, linkFieldId={}, targetCardId={}",
                     cardId, targetLinkFieldId, targetCardId);
         }
 
-        // 5. 发布架构属性变更事件
+        // 5. 发布级联属性变更事件
         publishStructureFieldChangeEvent(cardId, cardTypeId, cascadeFieldDef,
                 oldStructureValue, cascadeFieldValue, orgId, operatorId, sourceIp);
     }
 
-    // ==================== 核心算法：查找架构绑定 ====================
+    // ==================== 核心算法：查找级联绑定 ====================
 
     /**
-     * 查找关联属性对应的所有架构绑定
+     * 查找关联属性对应的所有级联绑定
      * <p>
-     * 遍历该__PLANKA_EINST__的所有架构属性定义，检查当前 linkFieldId 是否属于某个架构属性的层级绑定。
-     * 一个关联属性可能被多个架构属性绑定。
+     * 遍历该实体类型的所有级联属性定义，检查当前 linkFieldId 是否属于某个级联属性的层级绑定。
+     * 一个关联属性可能被多个级联属性绑定。
      *
-     * @param cardTypeId  __PLANKA_EINST__ID
+     * @param cardTypeId  实体类型ID
      * @param linkFieldId 关联属性ID
-     * @return 所有匹配的架构绑定信息列表
+     * @return 所有匹配的级联绑定信息列表
      */
     public List<CascadeFieldBindingMatch> findAllStructureBindings(String cardTypeId, String linkFieldId) {
         List<CascadeFieldBindingMatch> matches = new ArrayList<>();
 
-        // 获取该__PLANKA_EINST__的所有架构属性定义
+        // 获取该实体类型的所有级联属性定义
         List<SchemaDefinition<?>> schemas = schemaCacheService.getBySecondaryIndex(
                 CARD_TYPE_INDEX, cardTypeId, SchemaType.FIELD_CONFIG);
 
@@ -326,13 +326,13 @@ public class CascadeFieldLinkSyncService {
     }
 
     /**
-     * 查找关联属性对应的架构绑定（返回第一个匹配）
+     * 查找关联属性对应的级联绑定（返回第一个匹配）
      * <p>
      * 向后兼容方法，返回第一个匹配的绑定。
      *
-     * @param cardTypeId  __PLANKA_EINST__ID
+     * @param cardTypeId  实体类型ID
      * @param linkFieldId 关联属性ID
-     * @return 匹配的架构绑定信息，不存在时返回 Optional.empty()
+     * @return 匹配的级联绑定信息，不存在时返回 Optional.empty()
      */
     public Optional<CascadeFieldBindingMatch> findStructureBinding(String cardTypeId, String linkFieldId) {
         List<CascadeFieldBindingMatch> matches = findAllStructureBindings(cardTypeId, linkFieldId);
@@ -457,7 +457,7 @@ public class CascadeFieldLinkSyncService {
     // ==================== 辅助方法 ====================
 
     /**
-     * 获取架构线定义
+     * 获取级联关系定义
      */
     private CascadeRelationDefinition getCascadeRelationDefinition(String cascadeRelationDefinitionId) {
         return schemaCacheService.getById(cascadeRelationDefinitionId)
@@ -467,7 +467,7 @@ public class CascadeFieldLinkSyncService {
     }
 
     /**
-     * 查找架构线层级定义
+     * 查找级联关系层级定义
      */
     private CascadeRelationLevel findCascadeRelationLevel(CascadeRelationDefinition cascadeRelationDef, int levelIndex) {
         if (cascadeRelationDef.getLevels() == null) {
@@ -492,7 +492,7 @@ public class CascadeFieldLinkSyncService {
     }
 
     /**
-     * 查询架构节点的上级卡片ID
+     * 查询级联节点的上级卡片ID
      */
     private String queryParentCard(String cardId, LinkFieldId parentLinkFieldId, String operatorId) {
         Set<String> parentIds = getCurrentLinkedCardIds(cardId, parentLinkFieldId.value(), operatorId);
@@ -541,7 +541,7 @@ public class CascadeFieldLinkSyncService {
     }
 
     /**
-     * 构建当前卡片的架构属性值
+     * 构建当前卡片的级联属性值
      */
     private CascadeFieldValue buildCurrentStructureValue(String cardId,
                                                            CascadeFieldConfig cascadeFieldDef,
@@ -641,7 +641,7 @@ public class CascadeFieldLinkSyncService {
     private void publishSyncLinkEvent(String cardId, String linkFieldId,
                                        Set<String> addedIds, Set<String> removedIds,
                                        String orgId, String operatorId, String sourceIp) {
-        // 获取__PLANKA_EINST__
+        // 获取实体类型
         CardId id = CardId.of(cardId);
         Optional<CardDTO> cardOpt = cardRepository.findById(id, Yield.basic(), operatorId);
         if (cardOpt.isEmpty()) {
@@ -674,7 +674,7 @@ public class CascadeFieldLinkSyncService {
     }
 
     /**
-     * 发布架构属性变更事件
+     * 发布级联属性变更事件
      */
     private void publishStructureFieldChangeEvent(String cardId, String cardTypeId,
                                                    CascadeFieldConfig cascadeFieldDef,
@@ -700,7 +700,7 @@ public class CascadeFieldLinkSyncService {
         event.addFieldChange(cascadeFieldDef.getId().value(), oldValue, newValue);
 
         eventPublisher.publish(event);
-        logger.debug("发布架构属性变更事件: cardId={}, fieldId={}", cardId, cascadeFieldDef.getId());
+        logger.debug("发布级联属性变更事件: cardId={}, fieldId={}", cardId, cascadeFieldDef.getId());
     }
 
     /**

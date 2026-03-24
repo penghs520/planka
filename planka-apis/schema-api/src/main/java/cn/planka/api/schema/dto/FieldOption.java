@@ -67,7 +67,7 @@ public class FieldOption {
     private List<String> targetCardTypeIds;
 
     /**
-     * 架构线ID（仅架构类型字段有效）
+     * 级联关系ID（仅级联类型字段有效）
      */
     private String cascadeRelationId;
 

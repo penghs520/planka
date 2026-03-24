@@ -337,7 +337,7 @@ public class SchemaCommonService {
 
     /**
      * 构建引用详情字符串
-     * 格式：__PLANKA_EINST__[需求]、工作流[需求流程]
+     * 格式：实体类型[需求]、工作流[需求流程]
      */
     private String buildReferenceDetails(List<SchemaReferenceEntity> refs) {
         return refs.stream()
@@ -531,22 +531,22 @@ public class SchemaCommonService {
      * 校验系统内置类型的修改
      * <p>
      * 系统内置类型的修改规则：
-     * - __PLANKA_EINST__：只允许修改 icon、color，其他字段不允许修改
+     * - 实体类型：只允许修改 icon、color，其他字段不允许修改
      * - 关联类型：不允许修改
      * - 属性定义：不允许修改
      */
     private Result<Void> validateSystemTypeModification(AbstractSchemaDefinition<?> oldSchema, AbstractSchemaDefinition<?> newSchema) {
-        // __PLANKA_EINST__校验：只允许修改 icon 和 color
+        // 实体类型校验：只允许修改 icon 和 color
         if (oldSchema instanceof CardTypeDefinition oldCardType && oldCardType.isSystemType()) {
             CardTypeDefinition newCardType = (CardTypeDefinition) newSchema;
             if (!Objects.equals(oldCardType.getName(), newCardType.getName())) {
-                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置__PLANKA_EINST__不允许修改名称");
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置实体类型不允许修改名称");
             }
             if (!Objects.equals(oldCardType.getCode(), newCardType.getCode())) {
-                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置__PLANKA_EINST__不允许修改标识");
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置实体类型不允许修改标识");
             }
             if (!Objects.equals(oldCardType.getDescription(), newCardType.getDescription())) {
-                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置__PLANKA_EINST__不允许修改描述");
+                return Result.failure(CommonErrorCode.OPERATION_NOT_ALLOWED, "系统内置实体类型不允许修改描述");
             }
         }
 

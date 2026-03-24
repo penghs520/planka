@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * 架构节点（链表结构，支持层级路径）
+ * 级联节点（链表结构，支持层级路径）
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class CascadeItem {

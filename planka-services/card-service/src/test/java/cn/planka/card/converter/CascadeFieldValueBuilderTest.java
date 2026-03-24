@@ -28,7 +28,7 @@ class CascadeFieldValueBuilderTest {
     @Test
     @DisplayName("build - 从源卡片 linkedCards 构建完整的 CascadeItem 链")
     void build_createsCompleteChain_fromLinkedCards() {
-        // 准备架构属性定义（两层）
+        // 准备级联属性定义（两层）
         CascadeFieldConfig definition = createCascadeFieldConfig(
                 "struct_001",
                 List.of(
@@ -78,7 +78,7 @@ class CascadeFieldValueBuilderTest {
     @Test
     @DisplayName("build - 当关联卡片缺失时返回部分链")
     void build_createsPartialChain_whenLinkMissing() {
-        // 准备架构属性定义（两层）
+        // 准备级联属性定义（两层）
         CascadeFieldConfig definition = createCascadeFieldConfig(
                 "struct_001",
                 List.of(
@@ -129,7 +129,7 @@ class CascadeFieldValueBuilderTest {
     }
 
     @Test
-    @DisplayName("buildAll - 批量构建多个架构属性值")
+    @DisplayName("buildAll - 批量构建多个级联属性值")
     void buildAll_createsMultipleValues() {
         CascadeFieldConfig def1 = createCascadeFieldConfig(
                 "struct_001",
@@ -169,7 +169,7 @@ class CascadeFieldValueBuilderTest {
         CascadeFieldConfig def = new CascadeFieldConfig(
                 FieldConfigId.of(id),
                 "org_001",
-                "测试架构属性",
+                "测试级联属性",
                 null,
                 FieldId.of(id),
                 false

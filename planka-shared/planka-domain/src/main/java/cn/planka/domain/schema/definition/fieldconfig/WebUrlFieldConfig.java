@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 网页链接属性的__PLANKA_EINST__级别配置
+ * 网页链接属性的实体类型级别配置
  */
 @Setter
 @Getter

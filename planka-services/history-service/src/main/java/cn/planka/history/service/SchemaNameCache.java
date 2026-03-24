@@ -154,7 +154,7 @@ public class SchemaNameCache {
     /**
      * 批量获取状态名称
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @param statusIds  状态ID集合
      * @return statusId -> statusName 映射
      */
@@ -164,7 +164,7 @@ public class SchemaNameCache {
         }
 
         try {
-            // 1. 通过__PLANKA_EINST__的价值流定义
+            // 1. 通过实体类型的价值流定义
             Optional<ValueStreamDefinition> valueStreamOpt = valueStreamCacheQuery.getValueStreamByCardTypeId(cardTypeId);
 
             if (valueStreamOpt.isEmpty()) {

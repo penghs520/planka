@@ -8,15 +8,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * 架构层级定义
+ * 级联层级定义
  * <p>
- * 定义架构线中的一个层级，包含层级索引、名称、关联的__PLANKA_EINST__以及与上级的关联关系。
+ * 定义级联关系中的一个层级，包含层级索引、名称、关联的实体类型以及与上级的关联关系。
  *
  * @param index               层级索引（0为根层级）
  * @param name                层级名称（如"部落"、"小队"）
- * @param cardTypeId          关联的__PLANKA_EINST__ID（每层仅一个）
+ * @param cardTypeId          关联的实体类型ID（每层仅一个）
  * @param parentLinkFieldId   与上级的关联属性ID（根层级为null），格式为 "{linkTypeId}:{SOURCE|TARGET}"
- * @param ownerLinkFieldId    负责人关联属性ID（可选，用于标识当前架构节点的负责人）
+ * @param ownerLinkFieldId    负责人关联属性ID（可选，用于标识当前级联节点的负责人）
  * @param sortFieldId         排序字段ID（可选，用于排序当前层级的节点）
  * @param sortDirection       排序方向（可选，默认升序）
  */
@@ -39,7 +39,7 @@ public record CascadeRelationLevel(
             throw new IllegalArgumentException("层级名称不能为空");
         }
         if (cardTypeId == null) {
-            throw new IllegalArgumentException("__PLANKA_EINST__ID不能为空");
+            throw new IllegalArgumentException("实体类型ID不能为空");
         }
         // 根层级（index=0）的 parentLinkFieldId 必须为 null
         if (index == 0 && parentLinkFieldId != null) {

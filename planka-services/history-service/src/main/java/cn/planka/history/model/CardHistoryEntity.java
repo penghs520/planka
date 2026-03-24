@@ -33,7 +33,7 @@ public class CardHistoryEntity {
     private Long cardId;
 
     /**
-     * __PLANKA_EINST__ID
+     * 实体类型ID
      */
     private String cardTypeId;
 

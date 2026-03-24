@@ -18,7 +18,7 @@ public final class ViewVisibilityMath {
      *
      * @param view                 视图定义
      * @param viewerMemberCardId   当前成员卡 ID（请求头 X-Member-Card-Id）
-     * @param currentCascadeRelationNodeId 当前架构节点 ID；工作区全局导航传 null
+     * @param currentCascadeRelationNodeId 当前级联节点 ID；工作区全局导航传 null
      * @param memberInAnyTeam      当 scope=TEAMS 时，是否属于 visibleTeamCardIds 中任一团队
      */
     public static boolean isVisible(

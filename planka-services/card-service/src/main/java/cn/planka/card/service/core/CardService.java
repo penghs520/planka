@@ -142,7 +142,7 @@ public class CardService {
                     request.orgId().value(),
                     String.valueOf(operatorId.value()),
                     sourceIp,
-                    true); // 跳过架构联动同步，避免循环
+                    true); // 跳过级联同步，避免循环
 
             if (!creatorLinkResult.isSuccess()) {
                 logger.error("设置创建人关联失败: cardId={}, error={}",
@@ -175,7 +175,7 @@ public class CardService {
             CardDTO existingCard = existingCardOpt.get();
             String effectiveOrgId = orgId != null ? orgId : existingCard.getOrgId().value();
 
-            // 属性编辑权限检查（普通属性 + 关联属性 + 架构属性，含对侧检查）
+            // 属性编辑权限检查（普通属性 + 关联属性 + 级联属性，含对侧检查）
             checkFieldEditPermission(request, operatorId);
 
             // 属性值校验（只校验本次修改的属性）
@@ -494,7 +494,7 @@ public class CardService {
      * @param sourceStatusId 源状态ID
      * @param targetStatusId 目标状态ID
      * @param streamId 价值流ID
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @param operatorId 操作人ID
      * @return 更新的卡片数量
      */
@@ -602,12 +602,12 @@ public class CardService {
                     String.valueOf(operatorId.value()),
                     sourceIp,
                     linkCardService::updateLink);
-            logger.debug("创建卡片时应用架构属性: cardId={}, fieldId={}", cardId, cascadeFieldValue.getFieldId());
+            logger.debug("创建卡片时应用级联属性: cardId={}, fieldId={}", cardId, cascadeFieldValue.getFieldId());
         }
     }
 
     private void checkFieldEditPermission(UpdateCardRequest request, CardId operatorId) {
-        // 1. 收集所有属性 fieldIds（包括架构属性本身）
+        // 1. 收集所有属性 fieldIds（包括级联属性本身）
         Set<FieldId> changedFieldIds = new HashSet<>();
         if (request.fieldValues() != null) {
             for (String key : request.fieldValues().keySet()) {
@@ -628,7 +628,7 @@ public class CardService {
             }
         }
 
-        // 2b. 从架构属性额外收集对应的关联属性（架构属性本身已在 changedFieldIds 中）
+        // 2b. 从级联属性额外收集对应的关联属性（级联属性本身已在 changedFieldIds 中）
         if (request.fieldValues() != null) {
             for (Map.Entry<String, FieldValue<?>> entry : request.fieldValues().entrySet()) {
                 if (entry.getValue() instanceof CascadeFieldValue cascadeFieldValue) {
@@ -647,7 +647,7 @@ public class CardService {
     }
 
     /**
-     * 从架构属性中收集对应的关联属性ID和对端卡片ID
+     * 从级联属性中收集对应的关联属性ID和对端卡片ID
      */
     private void collectLinkFieldIdsFromStructure(
             CascadeFieldValue cascadeFieldValue,
@@ -704,7 +704,7 @@ public class CardService {
                         cascadeFieldValue,
                         orgId, String.valueOf(operatorId.value()), sourceIp,
                         linkCardService::updateLink);
-                logger.debug("架构属性已转换为关联更新: cardId={}, fieldId={}", request.cardId(), entry.getKey());
+                logger.debug("级联属性已转换为关联更新: cardId={}, fieldId={}", request.cardId(), entry.getKey());
             } else {
                 filteredFieldValues.put(entry.getKey(), entry.getValue());
             }
@@ -723,13 +723,13 @@ public class CardService {
     // ==================== 属性值校验辅助方法 ====================
 
     /**
-     * 获取__PLANKA_EINST__的所有属性配置
+     * 获取实体类型的所有属性配置
      */
     private List<FieldConfig> getFieldConfigsForCardType(CardTypeId typeId) {
         Result<FieldConfigListWithSource> result =
                 fieldConfigQueryService.getFieldConfigListWithSource(typeId.value());
         if (!result.isSuccess() || result.getData() == null) {
-            logger.warn("获取__PLANKA_EINST__属性配置失败: typeId={}, error={}", typeId, result.getMessage());
+            logger.warn("获取实体类型属性配置失败: typeId={}, error={}", typeId, result.getMessage());
             return Collections.emptyList();
         }
         return result.getData().getFields();

@@ -26,10 +26,10 @@ public class TemplateListItemVO {
     /** 模板描述 */
     private String description;
 
-    /** 所属__PLANKA_EINST__ID */
+    /** 所属实体类型ID */
     private String cardTypeId;
 
-    /** 所属__PLANKA_EINST__名称 */
+    /** 所属实体类型名称 */
     private String cardTypeName;
 
     /** 是否系统内置模板 */

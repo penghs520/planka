@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>
  * 测试所有 SchemaDefinition 子类的 Jackson 序列化和反序列化是否正常工作，
  * 包括：
- * - __PLANKA_EINST__定义（AbstractCardType, EntityCardType）
+ * - 实体类型定义（AbstractCardType, EntityCardType）
  * - 属性定义（SingleLineTextFieldDefinition, MultiLineTextFieldDefinition, MarkdownFieldDefinition, NumberFieldDefinition 等 9 种）
  * - 属性配置（SingleLineTextFieldConfig, MultiLineTextFieldConfig, MarkdownFieldConfig, NumberFieldConfig 等 9 种）
  */
@@ -46,10 +46,10 @@ class SchemaDefinitionSerializationTest {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
-    // ==================== __PLANKA_EINST__定义测试 ====================
+    // ==================== 实体类型定义测试 ====================
 
     @Nested
-    @DisplayName("__PLANKA_EINST__定义测试")
+    @DisplayName("实体类型定义测试")
     class CardTypeDefinitionTest {
 
         @Test
@@ -108,7 +108,7 @@ class SchemaDefinitionSerializationTest {
                     "需求"
             );
             cardType.setCode("REQUIREMENT");
-            cardType.setDescription("__PLANKA_EINST__-需求");
+            cardType.setDescription("实体类型-需求");
             cardType.setSortOrder(2);
             cardType.setEnabled(true);
             cardType.setState(EntityState.ACTIVE);
@@ -142,7 +142,7 @@ class SchemaDefinitionSerializationTest {
             assertThat(result.getOrgId()).isEqualTo("org_001");
             assertThat(result.getName()).isEqualTo("需求");
             assertThat(result.getCode()).isEqualTo("REQUIREMENT");
-            assertThat(result.getDescription()).isEqualTo("__PLANKA_EINST__-需求");
+            assertThat(result.getDescription()).isEqualTo("实体类型-需求");
 
             // 验证 EntityCardType 特有字段
             assertThat(result.getParentTypeIds())
@@ -526,7 +526,7 @@ class SchemaDefinitionSerializationTest {
                         "schemaSubType": "ENTITY_CARD_TYPE",
                         "id": "ct_101",
                         "orgId": "org_001",
-                        "name": "__PLANKA_EINST__",
+                        "name": "实体类型",
                         "parentTypeIds": ["ct_100"]
                     }
                     """;

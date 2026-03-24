@@ -279,7 +279,7 @@ class LinkTypeServiceTest {
     class GetAvailableLinkTypesTests {
 
         @Test
-        @DisplayName("返回__PLANKA_EINST__可用的关联类型（不限位置）")
+        @DisplayName("返回实体类型可用的关联类型（不限位置）")
         void shouldReturnAvailableLinkTypesForCardType() {
             // Given
             EntityCardType cardType = createEntityCardType("ct-1", "需求");
@@ -289,8 +289,8 @@ class LinkTypeServiceTest {
 
             LinkTypeDefinition linkType2 = createLinkType("lt-2", "限定关联");
             linkType2.setEnabled(true);
-            linkType2.setSourceCardTypeId(CardTypeId.of("ct-2"));  // 限定其他__PLANKA_EINST__
-            linkType2.setTargetCardTypeId(CardTypeId.of("ct-2")); // 目标端也限定为其他__PLANKA_EINST__
+            linkType2.setSourceCardTypeId(CardTypeId.of("ct-2"));  // 限定其他实体类型
+            linkType2.setTargetCardTypeId(CardTypeId.of("ct-2")); // 目标端也限定为其他实体类型
 
             when(schemaRepository.findById("ct-1")).thenReturn(Optional.of(cardType));
             when(schemaQuery.queryAll(ORG_ID, SchemaType.LINK_TYPE))
@@ -338,7 +338,7 @@ class LinkTypeServiceTest {
         }
 
         @Test
-        @DisplayName("__PLANKA_EINST__不存在时返回失败")
+        @DisplayName("实体类型不存在时返回失败")
         void shouldFailWhenCardTypeNotFound() {
             // Given
             when(schemaRepository.findById("not-exist")).thenReturn(Optional.empty());

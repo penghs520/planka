@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Objects;
 
 /**
- * __PLANKA_EINST__ID值对象
+ * 实体类型ID值对象
  * <p>
  * 对应旧系统的ValueUnitType (VUT)
  */

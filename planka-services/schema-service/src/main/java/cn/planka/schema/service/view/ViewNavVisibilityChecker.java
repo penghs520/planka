@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 /**
- * 工作区 / 架构节点导航条目的可见性（视图、菜单分组共用）
+ * 工作区 / 级联节点导航条目的可见性（视图、菜单分组共用）
  */
 @Component
 @RequiredArgsConstructor

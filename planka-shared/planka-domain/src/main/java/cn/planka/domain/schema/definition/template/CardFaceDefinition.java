@@ -20,7 +20,7 @@ import java.util.Set;
  * 卡面定义
  * <p>
  * 定义卡片在看板/列表视图中的展示样式，包括显示哪些属性、布局方式等。
- * __PLANKA_EINST__通过引用卡面ID来使用该定义。
+ * 实体类型通过引用卡面ID来使用该定义。
  */
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -31,7 +31,7 @@ public final class CardFaceDefinition extends AbstractSchemaDefinition<CardFaceI
         return SchemaSubType.CARD_FACE;
     }
 
-    /** 所属__PLANKA_EINST__ID */
+    /** 所属实体类型ID */
     @Setter
     @JsonProperty("cardTypeId")
     private CardTypeId cardTypeId;
@@ -86,7 +86,7 @@ public final class CardFaceDefinition extends AbstractSchemaDefinition<CardFaceI
 
     @Override
     public SchemaId belongTo() {
-        return cardTypeId;  // 卡面定义属于某个__PLANKA_EINST__
+        return cardTypeId;  // 卡面定义属于某个实体类型
     }
 
     @Override
@@ -118,7 +118,7 @@ public final class CardFaceDefinition extends AbstractSchemaDefinition<CardFaceI
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class HeaderConfig {
-        /** 是否显示__PLANKA_EINST__图标 */
+        /** 是否显示实体类型图标 */
         @JsonProperty("showTypeIcon")
         private boolean showTypeIcon = true;
 

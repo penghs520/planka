@@ -23,9 +23,9 @@ public class BizRuleController {
     private final BizRuleService bizRuleService;
 
     /**
-     * 根据__PLANKA_EINST__ID获取所有业务规则
+     * 根据实体类型ID获取所有业务规则
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 业务规则列表
      */
     @GetMapping("/by-card-type/{cardTypeId}")

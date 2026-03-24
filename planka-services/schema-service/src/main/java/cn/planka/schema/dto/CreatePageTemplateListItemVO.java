@@ -28,7 +28,7 @@ public class CreatePageTemplateListItemVO {
     /** 模板描述 */
     private String description;
 
-    /** 所属__PLANKA_EINST__ID */
+    /** 所属实体类型ID */
     private String cardTypeId;
 
     /** 是否系统内置模板 */

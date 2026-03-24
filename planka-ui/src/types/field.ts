@@ -201,11 +201,11 @@ export interface WebUrlFieldDefinition extends AbstractFieldDefinition {
 }
 
 /**
- * 架构层级属性定义
+ * 级联层级属性定义
  */
 export interface StructureFieldDefinition extends AbstractFieldDefinition {
   schemaSubType: SchemaSubType.CASCADE_FIELD_DEFINITION
-  /** 关联的架构线 ID */
+  /** 关联的级联关系 ID */
   cascadeRelationId?: string
   /** 层级配置列表 */
   levelBindings?: CascadeRelationLevelBinding[]
@@ -214,7 +214,7 @@ export interface StructureFieldDefinition extends AbstractFieldDefinition {
 
 
 /**
- * 架构层级配置
+ * 级联层级配置
  */
 export interface CascadeRelationLevelBinding {
   /** 层级索引 */

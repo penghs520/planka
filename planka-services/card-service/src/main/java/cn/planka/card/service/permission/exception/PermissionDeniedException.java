@@ -78,7 +78,7 @@ public class PermissionDeniedException extends RuntimeException {
     /**
      * 创建卡片权限拒绝
      *
-     * @param cardTypeName __PLANKA_EINST__名称
+     * @param cardTypeName 实体类型名称
      * @param alertMessage 提示信息
      * @return 权限拒绝异常
      */
@@ -88,7 +88,7 @@ public class PermissionDeniedException extends RuntimeException {
 
         String message = alertMessage != null && !alertMessage.isBlank()
                 ? alertMessage
-                : String.format("无权限创建卡片，__PLANKA_EINST__: %s", cardTypeName);
+                : String.format("无权限创建卡片，实体类型: %s", cardTypeName);
 
         return new PermissionDeniedException(
                 "PERMISSION_DENIED_CARD_CREATE",
@@ -98,7 +98,7 @@ public class PermissionDeniedException extends RuntimeException {
     }
 
     /**
-     * 对侧__PLANKA_EINST__关联属性编辑权限拒绝
+     * 对侧实体类型关联属性编辑权限拒绝
      *
      * @param cardId       当前卡片ID
      * @param fieldId      关联属性ID

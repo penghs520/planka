@@ -35,10 +35,10 @@ public final class DateCollectionFormulaDefinition extends AbstractFormulaDefini
     private LinkFieldId linkFieldId;
 
     /**
-     * 目标__PLANKA_EINST__ID列表（可选）
+     * 目标实体类型ID列表（可选）
      * <p>
-     * 如果为空，表示关联类型定义中允许的所有__PLANKA_EINST__
-     * 如果指定，只汇集指定__PLANKA_EINST__的关联卡片
+     * 如果为空，表示关联类型定义中允许的所有实体类型
+     * 如果指定，只汇集指定实体类型的关联卡片
      */
     @JsonProperty("targetCardTypeIds")
     private List<CardTypeId> targetCardTypeIds;

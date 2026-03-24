@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Markdown属性的__PLANKA_EINST__级别配置
+ * Markdown属性的实体类型级别配置
  */
 @Getter
 @Setter

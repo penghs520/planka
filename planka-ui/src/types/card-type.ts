@@ -26,7 +26,7 @@ export { getFieldTypeFromConfig, isSystemField } from './field-config'
 
 /**
  * 匹配的关联属性 DTO
- * 用于架构线配置场景，返回能够连接父子层级的关联属性信息
+ * 用于级联关系配置场景，返回能够连接父子层级的关联属性信息
  */
 export interface MatchingLinkFieldDTO {
   /** 属性配置ID */

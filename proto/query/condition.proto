@@ -46,7 +46,7 @@ message ConditionNode {
     WebLinkConditionItem web_link = 11;
     // 关键词条件
     KeywordConditionItem keyword = 12;
-    // __PLANKA_EINST__条件
+    // 实体类型条件
     CardTypeConditionItem card_type = 13;
   }
 }
@@ -233,7 +233,7 @@ message StateNotInOperator {
 }
 
 //==============================================================================
-// __PLANKA_EINST__条件
+// 实体类型条件
 //==============================================================================
 message CardTypeSubject {
   zgraph.common.Path path = 1;

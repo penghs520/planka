@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 架构关联同步结果
+ * 级联关系同步结果
  * <p>
  * 记录联动同步操作中额外产生的关联变更。
  *

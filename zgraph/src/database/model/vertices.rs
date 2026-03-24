@@ -14,7 +14,7 @@ pub struct Vertex {
     pub card_id: CardId,
     /// 组织ID
     pub org_id: Identifier,
-    /// __PLANKA_EINST__ID，另外一个可能的名字叫做 CardTypeId，vu指的是ValueUnit，这是以往旧系统的对于卡片的命名
+    /// 实体类型ID，另外一个可能的名字叫做 CardTypeId，vu指的是ValueUnit，这是以往旧系统的对于卡片的命名
     pub card_type_id: CardTypeId,
     /// 容器ID，指明卡片所属的容器
     pub container_id: ContainerId,
@@ -63,7 +63,7 @@ pub struct Description{
 pub type CardId = u64;
 /// 节点ID类型 - 现在是 CardId 的别名，保持向后兼容
 pub type VertexId = CardId;
-/// __PLANKA_EINST__ID
+/// 实体类型ID
 pub type CardTypeId = Identifier; //对于重复性比较多的字符串类型，使用Identifier类型，可以减少内存使用
 /// 组织ID类型
 pub type OrgId = Identifier;

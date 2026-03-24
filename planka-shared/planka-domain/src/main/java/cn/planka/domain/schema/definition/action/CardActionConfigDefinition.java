@@ -19,8 +19,8 @@ import java.util.Set;
 /**
  * 卡片动作配置定义
  * <p>
- * 定义在__PLANKA_EINST__级别配置的可执行操作，用户可在卡片详情页点击触发执行。
- * belongTo: 所属的__PLANKA_EINST__ID
+ * 定义在实体类型级别配置的可执行操作，用户可在卡片详情页点击触发执行。
+ * belongTo: 所属的实体类型ID
  */
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -32,7 +32,7 @@ public final class CardActionConfigDefinition extends AbstractSchemaDefinition<C
     }
 
     /**
-     * 所属__PLANKA_EINST__ID
+     * 所属实体类型ID
      */
     @Setter
     @JsonProperty("cardTypeId")

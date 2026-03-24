@@ -238,7 +238,7 @@ public class SchemaDiffService {
             case "PAGE_CONFIG" -> "分页配置";
             case "FILTER_CONDITION" -> "过滤条件";
 
-            // __PLANKA_EINST__相关
+            // 实体类型相关
             case "PARENT_TYPE" -> "继承类型";
             case "QUICK_CREATE_CONFIG" -> "快速创建配置";
             case "PERMISSION_CONFIG" -> "权限配置";
@@ -247,8 +247,8 @@ public class SchemaDiffService {
             case "ATTACHMENT_PERMISSION" -> "附件权限";
 
             // 关联类型相关
-            case "SOURCE_CARD_TYPE" -> "源端__PLANKA_EINST__";
-            case "TARGET_CARD_TYPE" -> "目标端__PLANKA_EINST__";
+            case "SOURCE_CARD_TYPE" -> "源端实体类型";
+            case "TARGET_CARD_TYPE" -> "目标端实体类型";
 
             default -> "项目";
         };

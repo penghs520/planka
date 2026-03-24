@@ -249,7 +249,7 @@ export interface LinkRenderConfig {
 }
 
 /**
- * 架构层级类型渲染配置
+ * 级联层级类型渲染配置
  */
 export interface CascadeFieldRenderConfig {
   type: 'CASCADE'

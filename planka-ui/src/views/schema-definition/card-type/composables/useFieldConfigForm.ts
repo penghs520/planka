@@ -174,7 +174,7 @@ export function useFieldConfigForm(options: UseFieldConfigFormOptions): UseField
     creatingLinkLevelIndex.value = levelIndex
 
     try {
-      const linkTypeName = `${fieldName.value || '架构'}-${level.name || `层级${levelIndex + 1}`}`
+      const linkTypeName = `${fieldName.value || '级联'}-${level.name || `层级${levelIndex + 1}`}`
       const linkType = await linkTypeApi.create({
         name: linkTypeName,
         sourceName: `${level.name || `层级${levelIndex + 1}`}`,

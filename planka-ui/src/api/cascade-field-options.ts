@@ -1,7 +1,7 @@
 import request from './request'
 
 /**
- * 架构节点 DTO
+ * 级联节点 DTO
  */
 export interface CascadeNodeDTO {
   /** 节点ID（卡片ID） */
@@ -19,7 +19,7 @@ export interface CascadeNodeDTO {
 }
 
 /**
- * 架构树查询请求（须且仅能指定其一）
+ * 级联节点树查询请求（须且仅能指定其一）
  */
 export type CascadeFieldOptionsRequest =
   | { cascadeFieldId: string; cascadeRelationId?: undefined }

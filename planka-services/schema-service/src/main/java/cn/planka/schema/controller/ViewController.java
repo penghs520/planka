@@ -48,7 +48,7 @@ public class ViewController {
     public Result<List<ViewListItemVO>> list(@RequestHeader("X-Org-Id") String orgId) {
         List<SchemaDefinition<?>> schemas = schemaQuery.query(orgId, SchemaType.VIEW);
 
-        // 收集所有__PLANKA_EINST__ID用于批量查询名称
+        // 收集所有实体类型ID用于批量查询名称
         Map<String, String> cardTypeNames = getCardTypeNames(schemas);
 
         List<ViewListItemVO> voList = schemas.stream()
@@ -60,9 +60,9 @@ public class ViewController {
     }
 
     /**
-     * 当前用户可见的视图列表（工作区或架构节点侧栏）
+     * 当前用户可见的视图列表（工作区或级联节点侧栏）
      *
-     * @param cascadeRelationNodeId 架构节点 ID；工作区全局不传或空
+     * @param cascadeRelationNodeId 级联节点 ID；工作区全局不传或空
      */
     @GetMapping("/nav")
     public Result<List<ViewListItemVO>> nav(
@@ -73,7 +73,7 @@ public class ViewController {
     }
 
     /**
-     * 批量获取__PLANKA_EINST__名称映射
+     * 批量获取实体类型名称映射
      */
     private Map<String, String> getCardTypeNames(List<SchemaDefinition<?>> schemas) {
         // 收集所有cardTypeId
@@ -89,7 +89,7 @@ public class ViewController {
             return Collections.emptyMap();
         }
 
-        // 批量查询__PLANKA_EINST__
+        // 批量查询实体类型
         List<SchemaDefinition<?>> cardTypes = schemaRepository.findByIds(cardTypeIds.stream().collect(Collectors.toSet()));
         return cardTypes.stream()
                 .collect(Collectors.toMap(

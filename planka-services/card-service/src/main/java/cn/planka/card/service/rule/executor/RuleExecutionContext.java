@@ -33,7 +33,7 @@ public class RuleExecutionContext {
     /** 触发卡片ID */
     private CardId cardId;
 
-    /** __PLANKA_EINST__ID */
+    /** 实体类型ID */
     private CardTypeId cardTypeId;
 
     /** 操作人ID */

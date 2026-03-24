@@ -8,7 +8,7 @@
 
 1. **统一为一套布局** — 管理后台嵌入主布局侧边栏，不再需要独立的 DefaultLayout
 2. **侧边栏支持深色/浅色切换** — Rosé Pine 配色方案，默认深色
-3. **Team / Project / Issue 为内置__PLANKA_EINST__** — 复用 Schema + 图存储，不建 `sys_team` 表
+3. **Team / Project / Issue 为内置实体类型** — 复用 Schema + 图存储，不建 `sys_team` 表
 
 ## 实施顺序
 
@@ -141,14 +141,14 @@ Response: PageResult<{ id, title, code, cardTypeName, status }>
 
 ---
 
-## Phase 3: 多团队模式（已改为内置__PLANKA_EINST__）
+## Phase 3: 多团队模式（已改为内置实体类型）
 
 ### 数据模型（无独立 Team 表）
 
-- **Team / Project / Issue**：各为 `EntityCardType`（`systemType=true`），**不**在 schema 上显式 `parentTypeIds` 继承 `{orgId}:any-trait`（由运行时/模型隐式视为任意卡）；字段直接挂在__PLANKA_EINST__上。
+- **Team / Project / Issue**：各为 `EntityCardType`（`systemType=true`），**不**在 schema 上显式 `parentTypeIds` 继承 `{orgId}:any-trait`（由运行时/模型隐式视为任意卡）；字段直接挂在实体类型上。
 - **内置字段**（名称统一用**卡片标题**，不单独建 name/title 字段）：Team（identifier、color）；Project（identifier、status 枚举）；Issue（priority、status 枚举）。产品用语为 **Issue**，不使用「工单」。
 - **内置关联**：`team-member`（团队 ↔ 成员特征类型）、`team-lead`（团队 → 成员，**负责人**，单选）、`project-lead`（项目 → 成员，**负责人**，单选）、`team-project`（团队 → 项目，项目侧单选可空）、`project-issue`（项目 → 工作项，工作项侧单选可空）。
-- **__PLANKA_EINST__显示名（中文）**：团队、项目、工作项（`code` 仍为 `team` / `project` / `issue`）。
+- **实体类型显示名（中文）**：团队、项目、工作项（`code` 仍为 `team` / `project` / `issue`）。
 
 组织创建时由 user-service `BuiltinCardTypeService` 写入 schema；存量组织由 `BuiltinCardTypeMigrationRunner` 在启动时补建（以 `{orgId}:team` 是否存在为判据）。
 

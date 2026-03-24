@@ -43,7 +43,7 @@ public abstract class AbstractViewDefinition extends AbstractSchemaDefinition<Vi
     @JsonProperty("visibleTeamCardIds")
     protected List<String> visibleTeamCardIds;
 
-    /** 架构节点可见时的节点 ID 列表 */
+    /** 级联节点可见时的节点 ID 列表 */
     @JsonProperty("visibleCascadeRelationNodeIds")
     protected List<String> visibleCascadeRelationNodeIds;
 

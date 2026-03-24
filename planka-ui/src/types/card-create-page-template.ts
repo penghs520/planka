@@ -300,11 +300,11 @@ export interface WebUrlFieldVO extends CreatePageFieldVO {
 }
 
 /**
- * 架构层级字段 VO
+ * 级联层级字段 VO
  */
 export interface CascadeFieldVO extends CreatePageFieldVO {
     fieldType: 'CASCADE'
-    /** 架构 ID */
+    /** 级联关系定义 ID */
     cascadeRelationId?: string
     /** 是否只允许选择叶子节点 */
     leafOnly: boolean

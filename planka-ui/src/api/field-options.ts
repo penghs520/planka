@@ -10,7 +10,7 @@ const FIELD_OPTIONS_URL = '/api/v1/schemas/field-options'
  * - 视图配置的列选择
  * - 筛选器的字段选择
  * - 排序字段选择
- * - 架构线配置的关联属性选择
+ * - 级联关系配置的关联属性选择
  * - 其他需要属性列表的场景
  */
 export const fieldOptionsApi = {
@@ -60,7 +60,7 @@ export const fieldOptionsApi = {
    * 获取源实体类型和目标实体类型之间可以匹配的关联属性
    * @param sourceCardTypeIds 源实体类型ID列表（当前层级）
    * @param targetCardTypeIds 目标实体类型ID列表（父层级）
-   * @returns 只返回单选的关联属性（用于架构线配置，子节点只能有一个父节点）
+   * @returns 只返回单选的关联属性（用于级联关系配置，子节点只能有一个父节点）
    */
   getMatchingLinkFields(
     sourceCardTypeIds: string[],

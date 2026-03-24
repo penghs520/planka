@@ -61,7 +61,7 @@ impl ResultProcessor {
                     // 如果序列化失败，显示基本信息
                     println!("   ID: {}", card.id);
                     println!("   组织ID: {}", card.org_id);
-                    println!("   __PLANKA_EINST__ID: {}", card.type_id);
+                    println!("   实体类型ID: {}", card.type_id);
                 }
             }
         }
@@ -161,7 +161,7 @@ impl ResultProcessor {
             // 基础ID字段
             "id" | "card_id" => "卡片ID".to_string(),
             "org_id" => "组织ID".to_string(),
-            "type_id" => "__PLANKA_EINST__ID".to_string(),
+            "type_id" => "实体类型ID".to_string(),
 
             // 状态字段
             "state" => "状态".to_string(),

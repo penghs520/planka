@@ -112,7 +112,7 @@ public class CardDetailService {
             Map<String, CardDetailResponse.FieldControlDTO> fieldControls =
                     fieldControlService.computeFieldControls(domainFieldConfigs, operatorId);
 
-            // 9. 获取__PLANKA_EINST__信息
+            // 9. 获取实体类型信息
             CardDetailResponse.CardTypeInfoDTO cardTypeInfo = getCardTypeInfo(cardTypeId.value());
 
             // 10. 获取价值流状态信息（如果卡片有 statusId）
@@ -437,7 +437,7 @@ public class CardDetailService {
     }
 
     /**
-     * 获取__PLANKA_EINST__信息
+     * 获取实体类型信息
      */
     private CardDetailResponse.CardTypeInfoDTO getCardTypeInfo(String cardTypeId) {
         try {
@@ -449,11 +449,11 @@ public class CardDetailService {
                             .name(cardType.getName())
                             .build())
                     .orElseGet(() -> {
-                        logger.warn("获取__PLANKA_EINST__信息失败，cardTypeId: {}", cardTypeId);
+                        logger.warn("获取实体类型信息失败，cardTypeId: {}", cardTypeId);
                         return CardDetailResponse.CardTypeInfoDTO.builder().id(cardTypeId).build();
                     });
         } catch (Exception e) {
-            logger.warn("获取__PLANKA_EINST__信息失败: {}", e.getMessage());
+            logger.warn("获取实体类型信息失败: {}", e.getMessage());
         }
         return CardDetailResponse.CardTypeInfoDTO.builder().id(cardTypeId).build();
     }

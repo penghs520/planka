@@ -24,9 +24,9 @@ public class CardActionConfigController {
     private final CardActionConfigService cardActionConfigService;
 
     /**
-     * 根据__PLANKA_EINST__ID获取所有动作配置
+     * 根据实体类型ID获取所有动作配置
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 动作配置列表
      */
     @GetMapping("/by-card-type/{cardTypeId}")

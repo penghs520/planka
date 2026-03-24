@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 当前用户可见的视图导航列表（工作区 / 架构节点）。
+ * 当前用户可见的视图导航列表（工作区 / 级联节点）。
  */
 @Service
 @RequiredArgsConstructor

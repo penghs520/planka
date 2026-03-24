@@ -72,7 +72,7 @@ public class CardActionExecutionService {
             CardDTO card = cardOpt.get();
             CardTypeId cardTypeId = card.getTypeId();
 
-            // 获取__PLANKA_EINST__的所有动作配置
+            // 获取实体类型的所有动作配置
             List<CardActionConfigDefinition> allActions = cardActionCacheQuery.getByCardTypeId(cardTypeId);
 
             // TODO: 根据可见性条件过滤动作
@@ -388,7 +388,7 @@ public class CardActionExecutionService {
                 return ActionExecutionResult.error("创建关联卡片失败: 未配置关联类型");
             }
             if (execution.getTargetCardTypeId() == null || execution.getTargetCardTypeId().isBlank()) {
-                return ActionExecutionResult.error("创建关联卡片失败: 未配置目标__PLANKA_EINST__");
+                return ActionExecutionResult.error("创建关联卡片失败: 未配置目标实体类型");
             }
 
             String resolvedTitle;

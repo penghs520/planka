@@ -170,7 +170,7 @@ public class CardQueryService {
      * @param orgId 组织ID
      * @param statusId 状态ID
      * @param streamId 价值流ID
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 卡片数量
      */
     public Result<Integer> countCardsByStatus(String orgId, String statusId, String streamId, String cardTypeId) {
@@ -206,7 +206,7 @@ public class CardQueryService {
     }
 
     /**
-     * 填充架构属性值
+     * 填充级联属性值
      */
     private void fillCascadeFieldValues(CardDTO cardDTO, Yield yield) {
         if (yield == null || cardDTO == null) {
@@ -217,7 +217,7 @@ public class CardQueryService {
     }
 
     /**
-     * 批量填充架构属性值
+     * 批量填充级联属性值
      */
     private void fillCascadeFieldValuesForList(List<CardDTO> cards, Yield yield) {
         if (yield == null || cards == null || cards.isEmpty()) {
@@ -243,7 +243,7 @@ public class CardQueryService {
     }
 
     /**
-     * 递归填充架构属性值
+     * 递归填充级联属性值
      */
     private void fillCascadeFieldValuesRecursive(CardDTO cardDTO, Yield yield,
                                                    List<CascadeFieldConfig> cascadeFieldDefs) {

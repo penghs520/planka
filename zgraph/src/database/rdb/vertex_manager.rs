@@ -84,7 +84,7 @@ impl<'a> VertexManager<'a> {
         //节点和节点属性存储
         batch.put_cf(&self.vertex_cf, &key, bincode::serialize(&vertex)?);
 
-        //__PLANKA_EINST__索引是否需要？ 不需要，都在内存中维护
+        //实体类型索引是否需要？ 不需要，都在内存中维护
 
         //卡片描述存储
         if vertex.desc.changed {

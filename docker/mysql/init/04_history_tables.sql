@@ -8,10 +8,10 @@ CREATE DATABASE IF NOT EXISTS planka_history
 
 USE planka_history;
 
--- card_history_meta：记录每个 __PLANKA_EINST__ 对应的历史表名，用于动态分表
+-- card_history_meta：记录每个 实体类型 对应的历史表名，用于动态分表
 CREATE TABLE IF NOT EXISTS card_history_meta (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '自增主键',
-    card_type_id VARCHAR(64) NOT NULL COMMENT '__PLANKA_EINST__ID',
+    card_type_id VARCHAR(64) NOT NULL COMMENT '实体类型ID',
     table_name VARCHAR(100) NOT NULL COMMENT '历史表名',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     UNIQUE INDEX uk_card_type_id (card_type_id)

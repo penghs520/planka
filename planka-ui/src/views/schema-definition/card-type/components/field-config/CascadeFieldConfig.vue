@@ -159,7 +159,7 @@ async function handleAutoCreateLinkType(record: LevelBinding): Promise<void> {
   creatingLinkLevelIndex.value = levelIndex
 
   try {
-    const linkTypeName = `${props.fieldName || '架构'}-${level.name || `层级${levelIndex + 1}`}`
+    const linkTypeName = `${props.fieldName || '级联'}-${level.name || `层级${levelIndex + 1}`}`
     const linkType = await linkTypeApi.create({
       name: linkTypeName,
       sourceName: `${level.name || `层级${levelIndex + 1}`}`,

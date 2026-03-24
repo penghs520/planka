@@ -41,7 +41,7 @@ public class ViewToQueryConverter {
         QueryContext context = buildQueryContext(viewDef, operatorId);
         queryRequest.setQueryContext(context);
 
-        // 2. 设置查询范围（__PLANKA_EINST__）
+        // 2. 设置查询范围（实体类型）
         QueryScope scope = buildQueryScope(viewDef);
         queryRequest.setQueryScope(scope);
 

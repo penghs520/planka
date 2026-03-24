@@ -26,9 +26,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * 架构属性可选项服务
+ * 级联属性可选项服务
  * <p>
- * 提供架构属性编辑器所需的树形可选项数据
+ * 提供级联属性编辑器所需的树形可选项数据
  */
 @Service
 public class CascadeFieldOptionsService {
@@ -45,9 +45,9 @@ public class CascadeFieldOptionsService {
     }
 
     /**
-     * 查询架构属性的树形可选项
+     * 查询级联属性的树形可选项
      * <p>
-     * 根据架构属性定义，查询整条架构线的所有节点（卡片），
+     * 根据级联属性定义，查询整条级联关系的所有节点（卡片），
      * 构建树形结构供前端编辑器展示。搜索过滤由前端完成。
      *
      * @param request    查询请求
@@ -63,10 +63,10 @@ public class CascadeFieldOptionsService {
 
         String cascadeFieldId = request.getCascadeFieldId().trim();
 
-        // 1. 获取架构属性定义
+        // 1. 获取级联属性定义
         Optional<SchemaDefinition<?>> defOpt = schemaCacheService.getById(cascadeFieldId);
         if (defOpt.isEmpty() || !(defOpt.get() instanceof CascadeFieldConfig cascadeFieldDef)) {
-            return Result.failure("CASCADE_FIELD_NOT_FOUND", "架构属性定义不存在: " + cascadeFieldId);
+            return Result.failure("CASCADE_FIELD_NOT_FOUND", "级联属性定义不存在: " + cascadeFieldId);
         }
 
         // 2. 获取级联关系定义
@@ -245,7 +245,7 @@ public class CascadeFieldOptionsService {
         if (linkedCards == null || linkedCards.isEmpty()) {
             return null;
         }
-        // 取第一个（架构关系应该是单选的）
+        // 取第一个（级联关系应该是单选的）
         return linkedCards.iterator().next().getId().asStr();
     }
 }

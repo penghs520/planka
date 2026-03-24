@@ -41,7 +41,7 @@ export async function fetchProjectsForTeam(
 }
 
 /**
- * 架构节点下的 Project 卡（与团队相同：经 team–project 关联挂在容器卡片上）
+ * 级联节点下的 Project 卡（与团队相同：经 team–project 关联挂在容器卡片上）
  */
 export async function fetchProjectsForCascadeRelationNode(
   orgId: string,

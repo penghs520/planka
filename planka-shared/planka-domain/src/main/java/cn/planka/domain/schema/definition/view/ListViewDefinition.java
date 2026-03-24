@@ -32,7 +32,7 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class ListViewDefinition extends AbstractViewDefinition {
 
-    /** 显示__PLANKA_EINST__ID */
+    /** 显示实体类型ID */
     @JsonProperty("cardTypeId")
     private CardTypeId cardTypeId;
 

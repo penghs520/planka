@@ -15,7 +15,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 级联属性的__PLANKA_EINST__级别配置
+ * 级联属性的实体类型级别配置
  * <p>
  * cascadeRelationId 和 levelBindings 从父类型继承，
  * 在 Config 中只读，不可覆盖。
@@ -35,11 +35,11 @@ public final class CascadeFieldConfig extends FieldConfig {
         return FieldType.CASCADE;
     }
 
-    /** 关联的架构线ID（从父类型继承） */
+    /** 关联的级联关系ID（从父类型继承） */
     @JsonProperty("cascadeRelationId")
     private CascadeRelationId cascadeRelationId;
 
-    /** 与架构线各层级的关联绑定配置（从父类型继承） */
+    /** 与级联关系各层级的关联绑定配置（从父类型继承） */
     @JsonProperty("levelBindings")
     private List<CascadeRelationLevelBinding> levelBindings;
 

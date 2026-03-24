@@ -17,7 +17,7 @@ export const viewApi = {
   },
 
   /**
-   * 当前用户可见的视图（工作区或架构节点）
+   * 当前用户可见的视图（工作区或级联节点）
    */
   nav(params?: { cascadeRelationNodeId?: string }): Promise<ViewListItemVO[]> {
     return request.get(`${VIEW_URL}/nav`, { params })

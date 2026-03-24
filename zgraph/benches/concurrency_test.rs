@@ -477,7 +477,7 @@ impl TestDataGenerator {
             .unwrap()
             .as_secs();
 
-        // 随机分配__PLANKA_EINST__
+        // 随机分配实体类型
         let card_types = vec!["task", "bug", "feature", "epic", "story"];
         let card_type = card_types[rng.random_range(0..card_types.len())];
 
@@ -795,7 +795,7 @@ impl ConcurrentDatabaseClient {
 
             let _response = connection_pool.send_request(request).await?;
         } else {
-            // 查询特定__PLANKA_EINST__
+            // 查询特定实体类型
             let card_types = vec!["task", "bug", "feature"];
             let card_type = card_types[rng.random_range(0..card_types.len())];
 

@@ -33,7 +33,7 @@ public final class CardCreatePageTemplateDefinition extends AbstractSchemaDefini
         return SchemaSubType.CARD_CREATE_PAGE_TEMPLATE;
     }
 
-    /** 所属__PLANKA_EINST__ID */
+    /** 所属实体类型ID */
     @JsonProperty("cardTypeId")
     private CardTypeId cardTypeId;
 
@@ -41,7 +41,7 @@ public final class CardCreatePageTemplateDefinition extends AbstractSchemaDefini
     @JsonProperty("systemTemplate")
     private boolean systemTemplate = false;
 
-    /** 是否默认模板（每个__PLANKA_EINST__只能有一个默认模板） */
+    /** 是否默认模板（每个实体类型只能有一个默认模板） */
     @JsonProperty("isDefault")
     private boolean isDefault = false;
 
@@ -64,7 +64,7 @@ public final class CardCreatePageTemplateDefinition extends AbstractSchemaDefini
 
     @Override
     public SchemaId belongTo() {
-        return cardTypeId;  // 卡片新建页模板属于某个__PLANKA_EINST__
+        return cardTypeId;  // 卡片新建页模板属于某个实体类型
     }
 
     @Override

@@ -37,7 +37,7 @@ export function countMenuTreeViews(tree: MenuTreeVO | null): number {
 }
 
 /**
- * 架构节点页：在侧栏「视图」下展示与主侧栏一致的后台菜单树，并向子路由 provide 状态。
+ * 级联节点页：在侧栏「视图」下展示与主侧栏一致的后台菜单树，并向子路由 provide 状态。
  */
 export function useCascadeRelationNodeViewsMenu() {
   const route = useRoute()
@@ -93,7 +93,7 @@ export function useCascadeRelationNodeViewsMenu() {
     { immediate: true },
   )
 
-  /** 在当前架构节点页右栏打开视图（不跳转到全屏 /workspace） */
+  /** 在当前级联节点页右栏打开视图（不跳转到全屏 /workspace） */
   function workspaceLinkForView(viewId: string): RouteLocationRaw {
     const sid = route.params.cascadeRelationId as string
     const nid = route.params.nodeId as string

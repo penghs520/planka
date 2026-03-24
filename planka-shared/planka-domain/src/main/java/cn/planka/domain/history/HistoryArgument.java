@@ -178,7 +178,7 @@ public sealed interface HistoryArgument {
     }
 
     /**
-     * 架构/组织结构类型属性值 - 存储节点ID和名称（备份）
+     * 级联类型属性值 - 存储节点ID和名称（备份）
      */
     record CascadeFieldHistoryValue(
             String fieldId,
@@ -190,7 +190,7 @@ public sealed interface HistoryArgument {
         }
 
         /**
-         * 架构节点
+         * 级联节点
          */
         public record CascadeHistoryNode(String nodeId, String nodeName) {}
     }

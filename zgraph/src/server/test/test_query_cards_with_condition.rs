@@ -300,7 +300,7 @@ mod tests {
         assert_eq!(response.cards.len(), 3);
     }
 
-    // ==================== __PLANKA_EINST__条件测试 ====================
+    // ==================== 实体类型条件测试 ====================
 
     #[test]
     fn test_card_type_equals() {

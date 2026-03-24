@@ -645,7 +645,7 @@ public class CardQueryService {
 public record CardBasicInfo(
     CardId cardId,              // 卡片ID
     OrgId orgId,                // 组织ID
-    CardTypeId cardTypeId,      // __PLANKA_EINST__ID
+    CardTypeId cardTypeId,      // 实体类型ID
     CardTitle title,            // 卡片标题（CardTitle 类型，非 String）
     String code,                // 卡片编号
     CardCycle cardCycle,        // 生命周期（ACTIVE/ARCHIVED/DISCARDED）
@@ -696,8 +696,8 @@ cardCacheService.evictAll(cardIds);
 `SchemaCacheService` 提供 Schema 定义的二级缓存（L1: Caffeine，L2: Redis），支持二级索引查询。用于高频访问的 Schema 配置数据。
 
 **使用场景**：
-- 查询__PLANKA_EINST__、视图、业务规则等 Schema 定义
-- 通过__PLANKA_EINST__ID查询关联配置
+- 查询实体类型、视图、业务规则等 Schema 定义
+- 通过实体类型ID查询关联配置
 - 组织级别的 Schema 列表查询
 
 **必须遵守**：schema-service之外的服务都应该使用schema缓存，而不是跨服务调用查询schema。
@@ -724,11 +724,11 @@ public class SchemaQueryService {
 ### 二级索引查询
 
 ```java
-// 通过__PLANKA_EINST__ID查询关联的字段配置
+// 通过实体类型ID查询关联的字段配置
 List<SchemaDefinition<?>> fieldConfigs = schemaCacheService.getBySecondaryIndex(
     new CardTypeId("cardTypeId"), SchemaType.FIELD_CONFIG);
 
-// 通过__PLANKA_EINST__ID查询关联的卡片面版
+// 通过实体类型ID查询关联的卡片面版
 List<SchemaDefinition<?>> cardFaces = schemaCacheService.getBySecondaryIndex(
     new CardTypeId("cardTypeId"), SchemaType.CARD_FACE);
 ```
@@ -737,7 +737,7 @@ List<SchemaDefinition<?>> cardFaces = schemaCacheService.getBySecondaryIndex(
 
 | 查询类 | 主要方法 | 适用场景 |
 |--------|----------|----------|
-| `CardTypeCacheQuery` | `getById()`, `getByOrgId()` | __PLANKA_EINST__查询 |
+| `CardTypeCacheQuery` | `getById()`, `getByOrgId()` | 实体类型查询 |
 | `ViewCacheQuery` | `getById()`, `getByOrgId()` | 视图定义查询 |
 | `CardFaceCacheQuery` | `getById()`, `getByCardTypeId()` | 卡片面版模板查询 |
 | `BizRuleCacheQuery` | `getById()`, `getByCardTypeId()` | 业务规则查询 |
@@ -757,7 +757,7 @@ public class CardTypeService {
 
     public CardTypeDefinition getCardType(CardTypeId id) {
         return cardTypeCacheQuery.getById(id)
-            .orElseThrow(() -> new BizException(CommonErrorCode.DATA_NOT_FOUND, "__PLANKA_EINST__"));
+            .orElseThrow(() -> new BizException(CommonErrorCode.DATA_NOT_FOUND, "实体类型"));
     }
 
     public List<CardTypeDefinition> getOrgCardTypes(String orgId) {
@@ -805,17 +805,17 @@ schemaCacheService.clearAll();
 
 ### 概述
 
-`FieldConfigQueryService` 提供__PLANKA_EINST__的完整字段配置查询，自动解析继承关系（自身 > 显式父类 > 任意卡特征类型）。
+`FieldConfigQueryService` 提供实体类型的完整字段配置查询，自动解析继承关系（自身 > 显式父类 > 任意卡特征类型）。
 
 **使用场景**：
-- 获取__PLANKA_EINST__的完整字段列表
+- 获取实体类型的完整字段列表
 - 了解字段的继承来源
 - 字段配置冲突检测
 
 ### 继承优先级
 
 从高到低：
-1. **自身配置**：当前__PLANKA_EINST__直接定义的字段
+1. **自身配置**：当前实体类型直接定义的字段
 2. **显式父类**：通过 `extends` 指定的父类
 3. **任意卡特征类型**：系统默认的任意卡字段
 
@@ -845,17 +845,17 @@ public class CardTypeService {
 
 ```java
 public class FieldConfigListWithSource {
-    private String cardTypeId;                    // __PLANKA_EINST__ID
-    private String cardTypeName;                  // __PLANKA_EINST__名称
+    private String cardTypeId;                    // 实体类型ID
+    private String cardTypeName;                  // 实体类型名称
     private List<FieldConfig> fields;             // 字段配置列表
     private Map<String, FieldSourceInfo> fieldSources; // 字段来源信息
 }
 
 public class FieldSourceInfo {
-    private String definitionSourceCardTypeId;    // 定义来源__PLANKA_EINST__ID
-    private String definitionSourceCardTypeName;  // 定义来源__PLANKA_EINST__名称
-    private String configSourceCardTypeId;        // 配置来源__PLANKA_EINST__ID
-    private String configSourceCardTypeName;      // 配置来源__PLANKA_EINST__名称
+    private String definitionSourceCardTypeId;    // 定义来源实体类型ID
+    private String definitionSourceCardTypeName;  // 定义来源实体类型名称
+    private String configSourceCardTypeId;        // 配置来源实体类型ID
+    private String configSourceCardTypeName;      // 配置来源实体类型名称
     private boolean definitionInherited;          // 是否继承的定义
     private boolean configInherited;              // 是否继承的配置
     private boolean fromLinkTypeDefinition;       // 是否来自关联类型定义

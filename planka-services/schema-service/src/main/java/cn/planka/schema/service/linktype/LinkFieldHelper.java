@@ -24,13 +24,13 @@ public class LinkFieldHelper {
     private final SchemaRepository schemaRepository;
 
     /**
-     * 根据关联字段ID获取目标__PLANKA_EINST__ID列表
+     * 根据关联字段ID获取目标实体类型ID列表
      * <p>
-     * SOURCE 表示当前卡片是源端，返回目标端__PLANKA_EINST__列表
-     * TARGET 表示当前卡片是目标端，返回源端__PLANKA_EINST__列表
+     * SOURCE 表示当前卡片是源端，返回目标端实体类型列表
+     * TARGET 表示当前卡片是目标端，返回源端实体类型列表
      *
      * @param linkFieldId 关联字段ID
-     * @return 目标__PLANKA_EINST__ID列表，如果关联类型不存在或无限制则返回空列表
+     * @return 目标实体类型ID列表，如果关联类型不存在或无限制则返回空列表
      */
     public List<CardTypeId> getTargetCardTypeIds(LinkFieldId linkFieldId) {
         Optional<LinkTypeDefinition> linkTypeOpt = getLinkType(linkFieldId);

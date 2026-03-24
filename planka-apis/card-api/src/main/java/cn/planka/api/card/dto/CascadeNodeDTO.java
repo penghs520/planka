@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * 架构节点 DTO
+ * 级联节点 DTO
  * <p>
- * 表示架构线中的一个节点（卡片），用于架构属性编辑器的树形展示
+ * 表示级联关系中的一个节点（卡片），用于级联属性编辑器的树形展示
  */
 @Data
 @Builder

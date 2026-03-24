@@ -115,7 +115,7 @@ public class CardLinkUpdatedEvent extends CardEvent {
         private final String cardTitle;
 
         /**
-         * __PLANKA_EINST__ID
+         * 实体类型ID
          */
         private final String cardTypeId;
 

@@ -10,7 +10,7 @@ export enum SortDirection {
 }
 
 /**
- * 架构层级
+ * 级联层级
  */
 export interface CascadeRelationLevel {
   /** 层级索引（0为根层级） */
@@ -30,18 +30,18 @@ export interface CascadeRelationLevel {
 }
 
 /**
- * 架构线定义
+ * 级联关系定义
  */
 export interface CascadeRelationDefinition extends SchemaDefinition {
   schemaSubType: SchemaSubType.CASCADE_RELATION_DEFINITION
-  /** 架构线层级列表（有序，从根到叶） */
+  /** 级联关系层级列表（有序，从根到叶） */
   levels: CascadeRelationLevel[]
   /** 是否系统内置 */
   systemCascadeRelation: boolean
 }
 
 /**
- * 创建/更新架构线请求
+ * 创建/更新级联关系请求
  */
 export interface CascadeRelationDefinitionRequest {
   name: string

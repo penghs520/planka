@@ -163,7 +163,7 @@ mod tests {
      *
      * 测试场景：
      * 1. 创建四个不同类型、容器和状态的节点
-     * 2. 测试多条件组合查询：卡片ID + __PLANKA_EINST__ + 容器 + 状态
+     * 2. 测试多条件组合查询：卡片ID + 实体类型 + 容器 + 状态
      */
     #[test]
     fn test_complex_query_conditions() {

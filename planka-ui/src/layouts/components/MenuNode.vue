@@ -9,7 +9,7 @@ defineProps<{
   level: number
   isExpanded: (groupId: string) => boolean
   isSelected: (viewId: string) => boolean
-  /** 若提供，视图节点渲染为路由链接（如架构节点页跳转工作区） */
+  /** 若提供，视图节点渲染为路由链接（如级联节点页跳转工作区） */
   viewTo?: (viewId: string) => RouteLocationRaw
 }>()
 

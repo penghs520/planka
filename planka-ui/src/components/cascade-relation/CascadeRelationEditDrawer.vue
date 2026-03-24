@@ -162,7 +162,7 @@ async function loadParentLinkOptions() {
       [parentLevel.cardTypeId],
     )
 
-    // 架构线场景虽然只使用了单选关联，但关联属性本身可能是多选的（比如 N:N），这里不应过滤
+    // 级联关系场景虽然只使用了单选关联，但关联属性本身可能是多选的（比如 N:N），这里不应过滤
     parentLinkOptions.value = response.fields
   } catch (error) {
     console.error('Failed to load parent link options:', error)

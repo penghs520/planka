@@ -10,25 +10,25 @@ function getOrgId(): string {
 }
 
 /**
- * 架构线 API
+ * 级联关系 API
  */
 export const cascadeRelationApi = {
   /**
-   * 获取架构线列表
+   * 获取级联关系列表
    */
   list(page = 1, size = 100): Promise<PageResult<CascadeRelationDefinition>> {
     return schemaApi.listByType<CascadeRelationDefinition>(SchemaType.CASCADE_RELATION_DEFINITION, page, size)
   },
 
   /**
-   * 根据 ID 获取架构线
+   * 根据 ID 获取级联关系
    */
   getById(id: string): Promise<CascadeRelationDefinition> {
     return schemaApi.getById<CascadeRelationDefinition>(id)
   },
 
   /**
-   * 创建架构线
+   * 创建级联关系
    */
   create(request: CascadeRelationDefinitionRequest): Promise<CascadeRelationDefinition> {
     return schemaApi.create<CascadeRelationDefinition>({
@@ -44,7 +44,7 @@ export const cascadeRelationApi = {
   },
 
   /**
-   * 更新架构线
+   * 更新级联关系
    */
   update(id: string, request: CascadeRelationDefinitionRequest, version: number): Promise<CascadeRelationDefinition> {
     return schemaApi.update<CascadeRelationDefinition>(id, {
@@ -61,21 +61,21 @@ export const cascadeRelationApi = {
   },
 
   /**
-   * 删除架构线
+   * 删除级联关系
    */
   delete(id: string): Promise<void> {
     return schemaApi.delete(id)
   },
 
   /**
-   * 启用架构线
+   * 启用级联关系
    */
   activate(id: string): Promise<void> {
     return schemaApi.activate(id)
   },
 
   /**
-   * 停用架构线
+   * 停用级联关系
    */
   disable(id: string): Promise<void> {
     return schemaApi.disable(id)

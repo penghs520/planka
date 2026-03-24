@@ -73,16 +73,16 @@ class CascadeFieldLinkSyncServiceTest {
     private static final String TRIBE_X_CARD_ID = "201";
     private static final String SQUAD_EXISTING_CARD_ID = "301";
 
-    // 架构线层级
+    // 级联关系层级
     private static final String TRIBE_LINK_FIELD_ID = "lt_tribe:SOURCE";      // 用户故事 → 部落
     private static final String SQUAD_LINK_FIELD_ID = "lt_squad:SOURCE";      // 用户故事 → 小队
     private static final String PARENT_LINK_FIELD_ID = "lt_parent:TARGET";    // 小队 → 部落
 
-    // 架构属性
+    // 级联属性
     private static final String STRUCTURE_FIELD_ID = "sf_001";
     private static final String STRUCTURE_ID = "struct_001";
 
-    // 第二个架构属性（用于测试多架构属性绑定同一关联属性的场景）
+    // 第二个级联属性（用于测试多级联属性绑定同一关联属性的场景）
     private static final String STRUCTURE_FIELD_ID_2 = "sf_002";
     private static final String STRUCTURE_ID_2 = "struct_002";
 
@@ -93,13 +93,13 @@ class CascadeFieldLinkSyncServiceTest {
     }
 
     @Nested
-    @DisplayName("findStructureBinding - 架构绑定查找")
+    @DisplayName("findStructureBinding - 级联绑定查找")
     class FindStructureBindingTests {
 
         @Test
-        @DisplayName("当关联属性属于架构绑定时返回匹配信息")
+        @DisplayName("当关联属性属于级联绑定时返回匹配信息")
         void returnsMatch_whenLinkFieldBelongsToStructureBinding() {
-            // 准备架构属性定义
+            // 准备级联属性定义
             CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig();
             when(schemaCacheService.getBySecondaryIndex(eq("CARD_TYPE"), eq(CARD_TYPE_ID), eq(SchemaType.FIELD_CONFIG)))
                     .thenReturn(List.of(cascadeRelationDef));
@@ -114,9 +114,9 @@ class CascadeFieldLinkSyncServiceTest {
         }
 
         @Test
-        @DisplayName("当关联属性不属于任何架构绑定时返回空")
+        @DisplayName("当关联属性不属于任何级联绑定时返回空")
         void returnsEmpty_whenLinkFieldNotInAnyStructureBinding() {
-            // 准备架构属性定义（不包含测试的关联属性）
+            // 准备级联属性定义（不包含测试的关联属性）
             CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig();
             when(schemaCacheService.getBySecondaryIndex(eq("CARD_TYPE"), eq(CARD_TYPE_ID), eq(SchemaType.FIELD_CONFIG)))
                     .thenReturn(List.of(cascadeRelationDef));
@@ -129,7 +129,7 @@ class CascadeFieldLinkSyncServiceTest {
         }
 
         @Test
-        @DisplayName("当__PLANKA_EINST__没有架构属性时返回空")
+        @DisplayName("当实体类型没有级联属性时返回空")
         void returnsEmpty_whenNoStructureFieldDefinition() {
             when(schemaCacheService.getBySecondaryIndex(eq("CARD_TYPE"), eq(CARD_TYPE_ID), eq(SchemaType.FIELD_CONFIG)))
                     .thenReturn(List.of());
@@ -141,20 +141,20 @@ class CascadeFieldLinkSyncServiceTest {
     }
 
     @Nested
-    @DisplayName("findAllStructureBindings - 多架构绑定查找")
+    @DisplayName("findAllStructureBindings - 多级联绑定查找")
     class FindAllStructureBindingsTests {
 
         @Test
-        @DisplayName("当关联属性被多个架构属性绑定时返回所有匹配")
+        @DisplayName("当关联属性被多个级联属性绑定时返回所有匹配")
         void returnsAllMatches_whenLinkFieldBoundToMultipleStructures() {
-            // 准备两个架构属性定义，都绑定了同一个关联属性
+            // 准备两个级联属性定义，都绑定了同一个关联属性
             CascadeFieldConfig cascadeRelationDef1 = createCascadeFieldConfig();
             CascadeFieldConfig cascadeRelationDef2 = createSecondCascadeFieldConfig();
 
             when(schemaCacheService.getBySecondaryIndex(eq("CARD_TYPE"), eq(CARD_TYPE_ID), eq(SchemaType.FIELD_CONFIG)))
                     .thenReturn(List.of(cascadeRelationDef1, cascadeRelationDef2));
 
-            // 执行 - 查找绑定了 TRIBE_LINK_FIELD_ID 的所有架构属性
+            // 执行 - 查找绑定了 TRIBE_LINK_FIELD_ID 的所有级联属性
             List<CascadeFieldBindingMatch> result = service.findAllStructureBindings(CARD_TYPE_ID, TRIBE_LINK_FIELD_ID);
 
             // 验证返回两个匹配
@@ -164,7 +164,7 @@ class CascadeFieldLinkSyncServiceTest {
         }
 
         @Test
-        @DisplayName("当关联属性只被一个架构属性绑定时返回单个匹配")
+        @DisplayName("当关联属性只被一个级联属性绑定时返回单个匹配")
         void returnsSingleMatch_whenLinkFieldBoundToOneStructure() {
             CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig();
             when(schemaCacheService.getBySecondaryIndex(eq("CARD_TYPE"), eq(CARD_TYPE_ID), eq(SchemaType.FIELD_CONFIG)))
@@ -177,7 +177,7 @@ class CascadeFieldLinkSyncServiceTest {
         }
 
         @Test
-        @DisplayName("当关联属性不属于任何架构绑定时返回空列表")
+        @DisplayName("当关联属性不属于任何级联绑定时返回空列表")
         void returnsEmptyList_whenNoBindingFound() {
             CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig();
             when(schemaCacheService.getBySecondaryIndex(eq("CARD_TYPE"), eq(CARD_TYPE_ID), eq(SchemaType.FIELD_CONFIG)))
@@ -190,13 +190,13 @@ class CascadeFieldLinkSyncServiceTest {
     }
 
     @Nested
-    @DisplayName("getCascadeFieldValuesBeforeUpdate - 多架构属性旧值获取")
+    @DisplayName("getCascadeFieldValuesBeforeUpdate - 多级联属性旧值获取")
     class GetStructureValuesBeforeUpdateTests {
 
         @Test
-        @DisplayName("当关联属性被多个架构属性绑定时返回所有旧值")
+        @DisplayName("当关联属性被多个级联属性绑定时返回所有旧值")
         void returnsAllOldValues_whenMultipleStructuresBound() {
-            // 准备两个架构属性定义
+            // 准备两个级联属性定义
             CascadeFieldConfig cascadeRelationDef1 = createCascadeFieldConfig();
             CascadeFieldConfig cascadeRelationDef2 = createSecondCascadeFieldConfig();
 
@@ -210,13 +210,13 @@ class CascadeFieldLinkSyncServiceTest {
             Map<String, CascadeFieldValue> result = service.getCascadeFieldValuesBeforeUpdate(
                     CARD_ID, CARD_TYPE_ID, TRIBE_LINK_FIELD_ID, OPERATOR_ID);
 
-            // 验证返回两个架构属性的旧值
+            // 验证返回两个级联属性的旧值
             assertThat(result).hasSize(2);
             assertThat(result).containsKeys(STRUCTURE_FIELD_ID, STRUCTURE_FIELD_ID_2);
         }
 
         @Test
-        @DisplayName("当关联属性不属于任何架构绑定时返回空Map")
+        @DisplayName("当关联属性不属于任何级联绑定时返回空Map")
         void returnsEmptyMap_whenNoBindingFound() {
             when(schemaCacheService.getBySecondaryIndex(eq("CARD_TYPE"), eq(CARD_TYPE_ID), eq(SchemaType.FIELD_CONFIG)))
                     .thenReturn(List.of());
@@ -233,7 +233,7 @@ class CascadeFieldLinkSyncServiceTest {
     class SyncStructureLinksTests {
 
         @Test
-        @DisplayName("当关联属性不属于架构绑定时不执行同步")
+        @DisplayName("当关联属性不属于级联绑定时不执行同步")
         void noSync_whenLinkFieldNotInStructureBinding() {
             when(schemaCacheService.getBySecondaryIndex(anyString(), anyString(), any()))
                     .thenReturn(List.of());
@@ -300,7 +300,7 @@ class CascadeFieldLinkSyncServiceTest {
         }
 
         @Test
-        @DisplayName("当关联属性被多个架构属性绑定时同步所有架构属性")
+        @DisplayName("当关联属性被多个级联属性绑定时同步所有级联属性")
         void syncsAllStructures_whenLinkFieldBoundToMultiple() {
             // 准备两个级联属性定义及对应级联关系定义
             CascadeFieldConfig cascadeFieldConfig1 = createCascadeFieldConfig();
@@ -326,7 +326,7 @@ class CascadeFieldLinkSyncServiceTest {
             // 验证同步结果
             assertThat(result.synced()).isTrue();
 
-            // 验证发布了事件：2个架构属性变更事件 + 可能的关联同步事件
+            // 验证发布了事件：2个级联属性变更事件 + 可能的关联同步事件
             verify(eventPublisher, atLeast(2)).publish(any());
         }
 
@@ -355,18 +355,18 @@ class CascadeFieldLinkSyncServiceTest {
     }
 
     @Nested
-    @DisplayName("applyCascadeFieldValue - 入口2：架构属性更新转关联")
+    @DisplayName("applyCascadeFieldValue - 入口2：级联属性更新转关联")
     class ApplyCascadeFieldValueTests {
 
         @Test
-        @DisplayName("将完整架构路径转换为多个关联更新")
+        @DisplayName("将完整级联路径转换为多个关联更新")
         void convertsFullPathToMultipleLinkUpdates() {
-            // 准备架构属性定义
+            // 准备级联属性定义
             CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig();
             when(schemaCacheService.getById(STRUCTURE_FIELD_ID))
                     .thenReturn(Optional.of(cascadeRelationDef));
 
-            // 准备架构属性值（部落A/小队A）
+            // 准备级联属性值（部落A/小队A）
             CascadeItem tribeItem = new CascadeItem(TRIBE_CARD_ID, "部落A",
                     new CascadeItem(SQUAD_CARD_ID, "小队A", null));
             CascadeFieldValue cascadeFieldValue = new CascadeFieldValue(STRUCTURE_FIELD_ID, tribeItem);
@@ -406,12 +406,12 @@ class CascadeFieldLinkSyncServiceTest {
         @Test
         @DisplayName("仅设置根层级时清空下级关联")
         void clearsLowerLevels_whenOnlyRootLevelSet() {
-            // 准备架构属性定义
+            // 准备级联属性定义
             CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig();
             when(schemaCacheService.getById(STRUCTURE_FIELD_ID))
                     .thenReturn(Optional.of(cascadeRelationDef));
 
-            // 准备架构属性值（只有部落A）
+            // 准备级联属性值（只有部落A）
             CascadeItem tribeItem = new CascadeItem(TRIBE_CARD_ID, "部落A", null);
             CascadeFieldValue cascadeFieldValue = new CascadeFieldValue(STRUCTURE_FIELD_ID, tribeItem);
 
@@ -445,7 +445,7 @@ class CascadeFieldLinkSyncServiceTest {
         CascadeFieldConfig def = new CascadeFieldConfig(
                 FieldConfigId.of(STRUCTURE_FIELD_ID),
                 ORG_ID,
-                "测试架构属性",
+                "测试级联属性",
                 null,
                 FieldId.of(STRUCTURE_FIELD_ID),
                 false
@@ -462,7 +462,7 @@ class CascadeFieldLinkSyncServiceTest {
         CascadeRelationDefinition def = new CascadeRelationDefinition(
                 CascadeRelationId.of(STRUCTURE_ID),
                 ORG_ID,
-                "测试架构线"
+                "测试级联关系"
         );
         def.setLevels(List.of(
                 new CascadeRelationLevel(0, "部落", CardTypeId.of("ct_tribe"), null, null, null, null),
@@ -473,20 +473,20 @@ class CascadeFieldLinkSyncServiceTest {
     }
 
     /**
-     * 创建第二个架构属性定义（用于测试多架构属性绑定同一关联属性的场景）
-     * 这个架构属性也绑定了 TRIBE_LINK_FIELD_ID
+     * 创建第二个级联属性定义（用于测试多级联属性绑定同一关联属性的场景）
+     * 这个级联属性也绑定了 TRIBE_LINK_FIELD_ID
      */
     private CascadeFieldConfig createSecondCascadeFieldConfig() {
         CascadeFieldConfig def = new CascadeFieldConfig(
                 FieldConfigId.of(STRUCTURE_FIELD_ID_2),
                 ORG_ID,
-                "测试架构属性2",
+                "测试级联属性2",
                 null,
                 FieldId.of(STRUCTURE_FIELD_ID_2),
                 false
         );
         def.setCascadeRelationId(CascadeRelationId.of(STRUCTURE_ID_2));
-        // 只绑定部落层级，与第一个架构属性共享同一个关联属性
+        // 只绑定部落层级，与第一个级联属性共享同一个关联属性
         def.setLevelBindings(List.of(
                 new CascadeRelationLevelBinding(0, LinkFieldId.of("lt_tribe", LinkPosition.SOURCE), true)
         ));
@@ -497,7 +497,7 @@ class CascadeFieldLinkSyncServiceTest {
         CascadeRelationDefinition def = new CascadeRelationDefinition(
                 CascadeRelationId.of(STRUCTURE_ID_2),
                 ORG_ID,
-                "测试架构线2"
+                "测试级联关系2"
         );
         def.setLevels(List.of(
                 new CascadeRelationLevel(0, "部落", CardTypeId.of("ct_tribe"), null, null, null, null)

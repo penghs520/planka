@@ -44,14 +44,14 @@ public class CardCreatePageTemplateService {
      * 查询模板列表
      *
      * @param orgId      组织ID
-     * @param cardTypeId __PLANKA_EINST__ID（可选）
+     * @param cardTypeId 实体类型ID（可选）
      * @return 模板列表
      */
     public Result<List<CreatePageTemplateListItemVO>> list(String orgId, String cardTypeId) {
         List<SchemaDefinition<?>> definitions;
 
         if (cardTypeId != null && !cardTypeId.isEmpty()) {
-            // 按__PLANKA_EINST__筛选
+            // 按实体类型筛选
             definitions = schemaQuery.queryBySecondKey(CardTypeId.of(cardTypeId), SchemaType.CARD_CREATE_PAGE_TEMPLATE);
         } else {
             // 查询组织下所有模板
@@ -68,9 +68,9 @@ public class CardCreatePageTemplateService {
     }
 
     /**
-     * 根据__PLANKA_EINST__ID获取模板列表
+     * 根据实体类型ID获取模板列表
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 模板定义列表
      */
     public Result<List<CardCreatePageTemplateDefinition>> getByCardType(String cardTypeId) {
@@ -85,9 +85,9 @@ public class CardCreatePageTemplateService {
     }
 
     /**
-     * 获取__PLANKA_EINST__的默认新建页模板
+     * 获取实体类型的默认新建页模板
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 默认模板定义，如果不存在则返回null
      */
     public Result<CardCreatePageTemplateDefinition> getDefaultByCardType(String cardTypeId) {
@@ -163,7 +163,7 @@ public class CardCreatePageTemplateService {
     }
 
     /**
-     * 设置为默认模板，同时取消该__PLANKA_EINST__下其他模板的默认状态
+     * 设置为默认模板，同时取消该实体类型下其他模板的默认状态
      */
     @Transactional
     public Result<Void> setDefault(String templateId, String operatorId) {
@@ -210,14 +210,14 @@ public class CardCreatePageTemplateService {
      * <p>
      * 聚合模板布局、字段配置和默认值，返回完整的表单配置供前端渲染。
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 表单配置 VO
      */
     public Result<CreatePageFormVO> getForm(String cardTypeId) {
-        // 1. 获取__PLANKA_EINST__信息
+        // 1. 获取实体类型信息
         SchemaDefinition<?> cardTypeDef = schemaRepository.findById(cardTypeId).orElse(null);
         if (!(cardTypeDef instanceof EntityCardType cardType)) {
-            return Result.failure("CARD_TYPE_NOT_FOUND", "__PLANKA_EINST__不存在");
+            return Result.failure("CARD_TYPE_NOT_FOUND", "实体类型不存在");
         }
 
         // 2. 获取默认模板（如果不存在，使用虚拟默认模板）
@@ -245,7 +245,7 @@ public class CardCreatePageTemplateService {
             formVO.setTemplateName(template.getName());
             formVO.setFields(buildFieldVOList(template.getFieldItems(), fieldConfigMap));
         } else {
-            // 虚拟默认模板：由后端填充标题字段和__PLANKA_EINST__特定字段
+            // 虚拟默认模板：由后端填充标题字段和实体类型特定字段
             List<CreatePageFieldVO> defaultFieldVos = buildDefaultFieldVos(cardTypeId, fieldConfigMap);
             formVO.setFields(defaultFieldVos);
         }
@@ -262,7 +262,7 @@ public class CardCreatePageTemplateService {
             defaultFieldVos.add($title);
         }
 
-        // 2. 根据__PLANKA_EINST__添加特定字段
+        // 2. 根据实体类型添加特定字段
         if (cardTypeId.contains("leave-application")) {
             // 请假申请：请假类型、开始日期、结束日期、时长、原因
             addFieldIfExists(defaultFieldVos, fieldConfigMap, cardTypeId + ":leave-type", 50);

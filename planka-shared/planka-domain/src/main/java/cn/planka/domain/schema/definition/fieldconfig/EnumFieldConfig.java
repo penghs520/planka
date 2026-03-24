@@ -13,7 +13,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 枚举属性的__PLANKA_EINST__级别配置
+ * 枚举属性的实体类型级别配置
  */
 @Setter
 @Getter

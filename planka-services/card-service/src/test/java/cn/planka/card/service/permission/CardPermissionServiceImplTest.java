@@ -592,7 +592,7 @@ class CardPermissionServiceImplTest {
         }
 
         @Test
-        @DisplayName("批量多__PLANKA_EINST__分组处理")
+        @DisplayName("批量多实体类型分组处理")
         void batchMultipleCardTypes_groupedCorrectly() {
             CardTypeId typeA = CardTypeId.of("typeA");
             CardTypeId typeB = CardTypeId.of("typeB");

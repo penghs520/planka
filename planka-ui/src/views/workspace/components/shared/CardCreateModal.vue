@@ -295,7 +295,7 @@ function buildFieldValue(field: CreatePageFieldVO, value: any): any {
         : (value ? [value] : [])
       return { ...base, type: 'ENUM', value: optionIds }
     case 'CASCADE':
-      // 架构字段值直接使用 FieldCascadeEditor 构建的值
+      // 级联字段值直接使用 FieldCascadeEditor 构建的值
       if (value && typeof value === 'object' && value.type === 'CASCADE') {
         return value
       }
@@ -455,7 +455,7 @@ function shouldShowTime(field: DateFieldVO): boolean {
                   @save="() => {}"
                 />
 
-                <!-- 架构属性字段 -->
+                <!-- 级联属性字段 -->
                 <FieldCascadeEditor
                   v-else-if="field.fieldType === 'CASCADE'"
                   :field-id="field.fieldId"
@@ -559,7 +559,7 @@ function shouldShowTime(field: DateFieldVO): boolean {
                   @save="() => {}"
                 />
 
-                <!-- 架构属性字段 -->
+                <!-- 级联属性字段 -->
                 <FieldCascadeEditor
                   v-else-if="field.fieldType === 'CASCADE'"
                   :field-id="field.fieldId"

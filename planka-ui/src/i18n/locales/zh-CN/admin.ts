@@ -873,7 +873,7 @@ targetFieldsRequired: '请选择目标属性',
     cardType: '实体类型',
     cardTypePlaceholder: '选择该层对应的实体类型',
     cardTypeRequired: '请选择第 {index} 层级的实体类型',
-    /** @deprecated 架构线层级已改为单选，请用 cardTypeSingleHint */
+    /** @deprecated 级联关系层级已改为单选，请用 cardTypeSingleHint */
     abstractMultiSelect: '该层级仅可选择一个类型',
     concreteSingleSelect: '实体类型只能单选',
     cardTypeSingleHint: '该层级仅可选择一个实体类型或特征类型',

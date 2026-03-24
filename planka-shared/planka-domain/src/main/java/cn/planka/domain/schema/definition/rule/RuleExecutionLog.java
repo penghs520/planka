@@ -34,7 +34,7 @@ public class RuleExecutionLog {
     @JsonProperty("ruleName")
     private String ruleName;
 
-    /** __PLANKA_EINST__ID（用于分表） */
+    /** 实体类型ID（用于分表） */
     @JsonProperty("cardTypeId")
     private CardTypeId cardTypeId;
 

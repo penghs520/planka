@@ -14,8 +14,8 @@ import java.util.*;
 /**
  * Yield 增强器
  * <p>
- * 分析 Yield 中的架构属性需求，自动补充获取架构属性值所需的 YieldLink 链。
- * 递归处理所有层级的 YieldField，确保嵌套查询也能正确获取架构属性。
+ * 分析 Yield 中的级联属性需求，自动补充获取级联属性值所需的 YieldLink 链。
+ * 递归处理所有层级的 YieldField，确保嵌套查询也能正确获取级联属性。
  */
 @Component
 public class YieldEnhancer {
@@ -27,14 +27,14 @@ public class YieldEnhancer {
     }
 
     /**
-     * 增强 Yield，自动补充架构属性需要的关联查询
+     * 增强 Yield，自动补充级联属性需要的关联查询
      * <p>
      * 递归处理所有层级的 Yield，包括：
      * - 顶层 Yield.field（可能为 null）
      * - 嵌套的 Yield.links[].targetYield.field
      *
      * @param yield 原始 Yield
-     * @return 增强后的 Yield（包含架构属性需要的 YieldLink）
+     * @return 增强后的 Yield（包含级联属性需要的 YieldLink）
      */
     public Yield enhance(Yield yield) {
         if (yield == null) {
@@ -82,12 +82,12 @@ public class YieldEnhancer {
     }
 
     /**
-     * 从 YieldField 中收集架构属性需要的 YieldLink
+     * 从 YieldField 中收集级联属性需要的 YieldLink
      * <p>
-     * 只在 YieldField.fieldIds 显式包含架构属性时才生成 YieldLink，
-     * allFields=true 时不自动触发架构属性查询。
+     * 只在 YieldField.fieldIds 显式包含级联属性时才生成 YieldLink，
+     * allFields=true 时不自动触发级联属性查询。
      * <p>
-     * 注意：架构属性中的所有关联属性都是当前卡片直接关联的，
+     * 注意：级联属性中的所有关联属性都是当前卡片直接关联的，
      * 因此直接平铺返回 YieldLink 列表，不需要构造嵌套的链式结构。
      *
      * @param field YieldField
@@ -155,12 +155,12 @@ public class YieldEnhancer {
     }
 
     /**
-     * 从 Yield 中递归提取所有架构属性定义
+     * 从 Yield 中递归提取所有级联属性定义
      * <p>
      * 用于 CardService 在查询后构造 CascadeFieldValue。
      *
      * @param yield Yield 对象
-     * @return 架构属性定义列表
+     * @return 级联属性定义列表
      */
     public List<CascadeFieldConfig> extractCascadeFieldDefs(Yield yield) {
         Set<String> allFieldIds = new HashSet<>();

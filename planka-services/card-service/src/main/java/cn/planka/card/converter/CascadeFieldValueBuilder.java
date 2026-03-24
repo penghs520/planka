@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 架构属性值构造器
+ * 级联属性值构造器
  * <p>
  * 从 CardDTO 的 linkedCards 提取关联数据，按照 levelBindings 顺序构造 CascadeItem 链表。
  * 关联缺失时返回部分链（next = null），而非整体返回 null。
@@ -25,10 +25,10 @@ public final class CascadeFieldValueBuilder {
     }
 
     /**
-     * 批量构建架构属性值
+     * 批量构建级联属性值
      *
      * @param cardDTO     卡片 DTO（包含 linkedCards 关联数据）
-     * @param definitions 架构属性定义列表
+     * @param definitions 级联属性定义列表
      * @return fieldId -> FieldValue 映射
      */
     public static Map<String, FieldValue<?>> buildAll(
@@ -45,11 +45,11 @@ public final class CascadeFieldValueBuilder {
     }
 
     /**
-     * 构建单个架构属性值
+     * 构建单个级联属性值
      *
      * @param cardDTO    卡片 DTO（包含 linkedCards 关联数据）
-     * @param definition 架构属性定义
-     * @return 架构属性值，即使没有关联数据也返回空的 CascadeFieldValue
+     * @param definition 级联属性定义
+     * @return 级联属性值，即使没有关联数据也返回空的 CascadeFieldValue
      */
     public static CascadeFieldValue build(
             CardDTO cardDTO,
@@ -73,7 +73,7 @@ public final class CascadeFieldValueBuilder {
     /**
      * 递归构建 CascadeItem 链
      * <p>
-     * 架构属性的所有层级节点都与原始卡片直接关联，因此始终从原始卡片的 linkedCards 中获取数据。
+     * 级联属性的所有层级节点都与原始卡片直接关联，因此始终从原始卡片的 linkedCards 中获取数据。
      * 关联缺失时返回 null（中断链），但已构建的节点仍然有效。
      *
      * @param originalCard 原始卡片 DTO（包含所有层级的关联数据）
@@ -104,7 +104,7 @@ public final class CascadeFieldValueBuilder {
             return null;  // 该层级没有关联卡片，链在此中断
         }
 
-        // 取第一个关联卡片（架构属性应该是单选的）
+        // 取第一个关联卡片（级联属性应该是单选的）
         CardDTO linkedCard = cards.iterator().next();
 
         // 递归构建下一层（始终从原始卡片获取，而非从关联卡片）

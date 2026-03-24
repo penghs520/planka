@@ -18,7 +18,7 @@ export enum SchemaType {
   VALUE_STREAM = 'VALUE_STREAM',
   /** 关联类型 */
   LINK_TYPE = 'LINK_TYPE',
-  /** 架构线定义 */
+  /** 级联关系定义 */
   CASCADE_RELATION_DEFINITION = 'CASCADE_RELATION_DEFINITION',
   /** 业务规则 */
   BIZ_RULE = 'BIZ_RULE',
@@ -69,7 +69,7 @@ export enum SchemaSubType {
   ATTACHMENT_FIELD_DEFINITION = 'ATTACHMENT_FIELD_DEFINITION',
   /** 网页链接属性定义 */
   WEB_URL_FIELD_DEFINITION = 'WEB_URL_FIELD_DEFINITION',
-  /** 架构层级属性定义 */
+  /** 级联层级属性定义 */
   CASCADE_FIELD_DEFINITION = 'CASCADE_FIELD_DEFINITION',
 
   // ==================== 属性配置 ====================
@@ -98,8 +98,8 @@ export enum SchemaSubType {
   /** 关联属性配置 */
   LINK_FIELD = 'LINK_FIELD',
 
-  // ==================== 架构线定义 ====================
-  /** 架构线定义 */
+  // ==================== 级联关系定义 ====================
+  /** 级联关系定义 */
   CASCADE_RELATION_DEFINITION = 'CASCADE_RELATION_DEFINITION',
 
   // ==================== 视图 ====================
@@ -197,7 +197,7 @@ export const SchemaSubTypeConfig: Record<SchemaSubType, { label: string; categor
   // 关联类型
   [SchemaSubType.LINK_TYPE]: { label: '实体关系', category: SchemaType.LINK_TYPE },
   [SchemaSubType.LINK_FIELD]: { label: '关联属性配置', category: SchemaType.FIELD_CONFIG },
-  // 架构线定义
+  // 级联关系定义
   [SchemaSubType.CASCADE_RELATION_DEFINITION]: { label: '级联关系定义', category: SchemaType.CASCADE_RELATION_DEFINITION },
   // 价值流定义
   [SchemaSubType.VALUE_STREAM]: { label: '价值流基线', category: SchemaType.VALUE_STREAM },

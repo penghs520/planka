@@ -22,9 +22,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * __PLANKA_EINST__服务
+ * 实体类型服务
  * <p>
- * 提供__PLANKA_EINST__的列表查询，返回 VO 对象供前端展示。
+ * 提供实体类型的列表查询，返回 VO 对象供前端展示。
  */
 @Slf4j
 @Service
@@ -35,12 +35,12 @@ public class CardTypeService {
     private final SchemaQuery schemaQuery;
 
     /**
-     * 查询__PLANKA_EINST__选项列表（用于下拉框）
+     * 查询实体类型选项列表（用于下拉框）
      * <p>
      * 只返回必要字段，不包含继承类型等详细信息
      *
      * @param orgId 组织 ID
-     * @return __PLANKA_EINST__选项列表
+     * @return 实体类型选项列表
      */
     public Result<List<CardTypeOptionVO>> listCardTypeOptions(String orgId) {
         List<SchemaDefinition<?>> schemas = schemaQuery.query(orgId, SchemaType.CARD_TYPE);
@@ -59,10 +59,10 @@ public class CardTypeService {
     }
 
     /**
-     * 查询__PLANKA_EINST__列表
+     * 查询实体类型列表
      *
      * @param orgId 组织 ID
-     * @return __PLANKA_EINST__列表
+     * @return 实体类型列表
      */
     public Result<List<CardTypeVO>> listCardTypes(String orgId) {
         List<SchemaDefinition<?>> schemas = schemaQuery.query(orgId, SchemaType.CARD_TYPE);
@@ -88,20 +88,20 @@ public class CardTypeService {
     }
 
     /**
-     * 根据 ID 获取__PLANKA_EINST__详情
+     * 根据 ID 获取实体类型详情
      *
-     * @param cardTypeId __PLANKA_EINST__ ID
-     * @return __PLANKA_EINST__详情
+     * @param cardTypeId 实体类型 ID
+     * @return 实体类型详情
      */
     public Result<CardTypeVO> getCardTypeById(String cardTypeId) {
         Optional<SchemaDefinition<?>> schemaOpt = schemaRepository.findById(cardTypeId);
         if (schemaOpt.isEmpty()) {
-            return Result.failure("NOT_FOUND", "__PLANKA_EINST__不存在: " + cardTypeId);
+            return Result.failure("NOT_FOUND", "实体类型不存在: " + cardTypeId);
         }
 
         SchemaDefinition<?> schema = schemaOpt.get();
         if (!(schema instanceof CardTypeDefinition cardType)) {
-            return Result.failure("INVALID_TYPE", "非__PLANKA_EINST__: " + cardTypeId);
+            return Result.failure("INVALID_TYPE", "非实体类型: " + cardTypeId);
         }
 
         // 查询父类型名称
@@ -117,7 +117,7 @@ public class CardTypeService {
     }
 
     /**
-     * 批量获取__PLANKA_EINST__名称映射
+     * 批量获取实体类型名称映射
      */
     private Map<String, String> getCardTypeNameMap(Set<String> cardTypeIds) {
         if (cardTypeIds == null || cardTypeIds.isEmpty()) {
@@ -132,7 +132,7 @@ public class CardTypeService {
     }
 
     /**
-     * 将__PLANKA_EINST__转换为 VO
+     * 将实体类型转换为 VO
      */
     private CardTypeVO toVO(CardTypeDefinition cardType, Map<String, String> parentTypeNameMap) {
         if (cardType instanceof AbstractCardType) {
@@ -192,10 +192,10 @@ public class CardTypeService {
     }
 
     /**
-     * 查询继承指定特征类型的__PLANKA_EINST__选项列表
+     * 查询继承指定特征类型的实体类型选项列表
      *
      * @param parentTypeId 父类型 ID（特征类型）
-     * @return __PLANKA_EINST__选项列表
+     * @return 实体类型选项列表
      */
     public Result<List<CardTypeOptionVO>> listConcreteTypesByParentTypeId(String parentTypeId) {
         List<SchemaDefinition<?>> schemaDefinitions = schemaQuery.queryBySecondKey(CardTypeId.of(parentTypeId), SchemaType.CARD_TYPE);

@@ -94,18 +94,18 @@ public class LinkCardService {
             }
             LinkTypeDefinition linkType = linkTypeOpt.get();
 
-            // 3. 根据 LinkPosition 确定对端__PLANKA_EINST__
+            // 3. 根据 LinkPosition 确定对端实体类型
             List<CardTypeId> targetCardTypeIds = getTargetCardTypeIds(linkType, linkPosition);
             if (targetCardTypeIds.isEmpty()) {
-                logger.warn("关联类型 {} 的对端__PLANKA_EINST__为空", linkTypeIdValue);
+                logger.warn("关联类型 {} 的对端实体类型为空", linkTypeIdValue);
                 return Result.success(PageResult.empty());
             }
 
-            // 3.5. 展开特征类型为__PLANKA_EINST__
+            // 3.5. 展开特征类型为实体类型
             // TODO 这个逻辑不用在这里处理，卡片查询接口会负责
             targetCardTypeIds = expandAbstractCardTypes(targetCardTypeIds, orgId);
             if (targetCardTypeIds.isEmpty()) {
-                logger.warn("展开特征类型后，对端__PLANKA_EINST__为空");
+                logger.warn("展开特征类型后，对端实体类型为空");
                 return Result.success(PageResult.empty());
             }
 
@@ -158,7 +158,7 @@ public class LinkCardService {
      * @param orgId      组织ID
      * @param operatorId 操作人ID
      * @param sourceIp   来源IP
-     * @param skipSync   是否跳过架构联动同步（入口2调用时传 true，避免循环）
+     * @param skipSync   是否跳过级联同步（入口2调用时传 true，避免循环）
      * @return 操作结果
      */
     public Result<Void> updateLink(UpdateLinkRequest request, String orgId, String operatorId,
@@ -202,7 +202,7 @@ public class LinkCardService {
             // 4. 获取当前卡片的现有关联（包含卡片详情，用于事件）
             Map<String, CardDTO> existingLinkedCards = getExistingLinkedCardsWithDetail(cardId, linkFieldId, operatorId);
 
-            // 4.1 在关联更新之前，预先计算所有受影响架构属性的旧值（用于变更历史记录）
+            // 4.1 在关联更新之前，预先计算所有受影响级联属性的旧值（用于变更历史记录）
             Map<String, CascadeFieldValue> oldCascadeFieldValues = Map.of();
             if (!skipSync) {
                 oldCascadeFieldValues = cascadeFieldLinkSyncService.getCascadeFieldValuesBeforeUpdate(
@@ -259,13 +259,13 @@ public class LinkCardService {
                 );
             }
 
-            // 9. 架构关联联动同步（入口1）
+            // 9. 级联关系联动同步（入口1）
             if (!skipSync) {
                 CascadeFieldSyncResult syncResult = cascadeFieldLinkSyncService.syncCascadeFieldLinks(
                         cardId, currentCard.getTypeId().value(), linkFieldId, targetCardIds,
                         oldCascadeFieldValues, orgId, operatorId, sourceIp);
                 if (syncResult.synced()) {
-                    logger.debug("架构联动同步完成，addedLinks: {}, removedLinks: {}",
+                    logger.debug("级联同步完成，addedLinks: {}, removedLinks: {}",
                             syncResult.addedLinks().size(), syncResult.removedLinks().size());
                 }
             }
@@ -290,10 +290,10 @@ public class LinkCardService {
     }
 
     /**
-     * 根据 LinkPosition 确定对端__PLANKA_EINST__
+     * 根据 LinkPosition 确定对端实体类型
      * <p>
-     * 如果当前位置是 SOURCE，说明当前卡片是源端，需要查询目标端__PLANKA_EINST__
-     * 如果当前位置是 TARGET，说明当前卡片是目标端，需要查询源端__PLANKA_EINST__
+     * 如果当前位置是 SOURCE，说明当前卡片是源端，需要查询目标端实体类型
+     * 如果当前位置是 TARGET，说明当前卡片是目标端，需要查询源端实体类型
      */
     private List<CardTypeId> getTargetCardTypeIds(LinkTypeDefinition linkType, LinkPosition currentPosition) {
         CardTypeId peerId = currentPosition == LinkPosition.SOURCE
@@ -306,10 +306,10 @@ public class LinkCardService {
     }
 
     /**
-     * 展开特征类型为__PLANKA_EINST__
+     * 展开特征类型为实体类型
      * <p>
      * 如果 cardTypeIds 中包含特征类型（如 member-trait），
-     * 则将其替换为对应的__PLANKA_EINST__（如 member）
+     * 则将其替换为对应的实体类型（如 member）
      */
     private List<CardTypeId> expandAbstractCardTypes(List<CardTypeId> cardTypeIds, String orgId) {
         logger.info("开始展开特征类型，输入: {}", cardTypeIds.stream().map(CardTypeId::value).toList());
@@ -350,7 +350,7 @@ public class LinkCardService {
         queryContext.setOperatorId(operatorId);
         queryRequest.setQueryContext(queryContext);
 
-        // 查询范围：只查询指定__PLANKA_EINST__且为活跃状态的卡片
+        // 查询范围：只查询指定实体类型且为活跃状态的卡片
         QueryScope queryScope = new QueryScope();
         List<String> cardTypeIdStrings = cardTypeIds.stream().map(CardTypeId::value).toList();
         queryScope.setCardTypeIds(cardTypeIdStrings);

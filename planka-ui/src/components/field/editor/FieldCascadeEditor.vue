@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
- * 架构属性编辑器
+ * 级联属性编辑器
  *
- * 以树形下拉框的形式展示架构线的所有节点，支持搜索和选择。
+ * 以树形下拉框的形式展示级联关系的所有节点，支持搜索和选择。
  * 选中任意节点后，会自动构造完整的路径链（从根到选中节点）。
  * 搜索过滤在前端完成。
  */
@@ -17,7 +17,7 @@ interface CascadeItem {
 }
 
 const props = defineProps<{
-  /** 架构属性定义 ID */
+  /** 级联属性定义 ID */
   fieldId: string
   /** 当前值 */
   modelValue?: FieldValue | null
@@ -48,7 +48,7 @@ const displayValue = computed(() => {
   return formatStructurePath(props.modelValue.value as CascadeItem)
 })
 
-// 格式化架构路径为显示文本
+// 格式化级联路径为显示文本
 function formatStructurePath(item: CascadeItem | null): string {
   if (!item) return ''
   const names: string[] = []
@@ -73,7 +73,7 @@ async function loadTreeData() {
     })
     treeData.value = data
   } catch (error) {
-    console.error('加载架构属性选项失败:', error)
+    console.error('加载级联属性选项失败:', error)
     treeData.value = []
   } finally {
     loading.value = false

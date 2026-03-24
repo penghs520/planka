@@ -38,7 +38,7 @@ import java.util.Set;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "schemaSubType", visible = true)
 @JsonSubTypes({
-        // ==================== __PLANKA_EINST__定义 ====================
+        // ==================== 实体类型定义 ====================
         @JsonSubTypes.Type(value = AbstractCardType.class, name = SchemaSubType.TRAIT_CARD_TYPE),
         @JsonSubTypes.Type(value = EntityCardType.class, name = SchemaSubType.ENTITY_CARD_TYPE),
 
@@ -60,7 +60,7 @@ import java.util.Set;
         // ==================== 菜单定义 ====================
         @JsonSubTypes.Type(value = MenuGroupDefinition.class, name = SchemaSubType.MENU_GROUP),
 
-        // ==================== 架构线定义 ====================
+        // ==================== 级联关系定义 ====================
         @JsonSubTypes.Type(value = CascadeRelationDefinition.class, name = SchemaSubType.CASCADE_RELATION_DEFINITION),
 
         // ==================== 其他 Schema 定义 ====================

@@ -65,14 +65,14 @@ public final class LinkTypeDefinition extends AbstractSchemaDefinition<LinkTypeI
     private boolean targetVisible = true;
 
     /**
-     * 源端允许的__PLANKA_EINST__ID（null 表示不限制）
+     * 源端允许的实体类型ID（null 表示不限制）
      */
     @Setter
     @JsonProperty("sourceCardTypeId")
     private CardTypeId sourceCardTypeId;
 
     /**
-     * 目标端允许的__PLANKA_EINST__ID（null 表示不限制）
+     * 目标端允许的实体类型ID（null 表示不限制）
      */
     @Setter
     @JsonProperty("targetCardTypeId")

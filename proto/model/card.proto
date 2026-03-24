@@ -15,7 +15,7 @@ message Card {
   string org_id = 2;
   int64 code_in_org = 3;
   string custom_code = 4;
-  string type_id = 5;                    // __PLANKA_EINST__ID
+  string type_id = 5;                    // 实体类型ID
 
   // ==================== 基本信息 ====================
   Title title = 6;

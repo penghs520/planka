@@ -15,17 +15,17 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 架构线定义
+ * 级联关系定义
  * <p>
- * 架构线是一条多级关联的树形结构，例如：部落->小队->小组。
- * 架构线可以用于生成架构属性定义，当一个__PLANKA_EINST__新建一个架构属性时，
- * 需要指定一条架构线，并且选择当前__PLANKA_EINST__与架构线上每个节点类型的关联匹配关系。
+ * 级联关系是一条多级关联的树形结构，例如：部落->小队->小组。
+ * 级联关系可以用于生成级联属性定义，当一个实体类型新建一个级联属性时，
+ * 需要指定一条级联关系，并且选择当前实体类型与级联关系上每个节点类型的关联匹配关系。
  */
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CascadeRelationDefinition extends AbstractSchemaDefinition<CascadeRelationId> {
 
-    /** 架构线层级列表（有序，从根到叶） */
+    /** 级联关系层级列表（有序，从根到叶） */
     @Setter
     @JsonProperty("levels")
     private List<CascadeRelationLevel> levels;

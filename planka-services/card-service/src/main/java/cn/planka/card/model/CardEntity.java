@@ -41,7 +41,7 @@ public class CardEntity {
     private final OrgId orgId;
 
     /**
-     * __PLANKA_EINST__ID
+     * 实体类型ID
      */
     private final CardTypeId typeId;
 
@@ -113,8 +113,8 @@ public class CardEntity {
         this.typeId = AssertUtils.requireNotNull(typeId, "typeId can't be null");
         this.title = AssertUtils.requireNotNull(title, "title can't be null");
         this.cardCycle = AssertUtils.requireNotNull(cardCycle, "cardCycle can't be null");
-        this.streamId = streamId; // 价值流ID可为空（__PLANKA_EINST__未配置价值流时）
-        this.statusId = statusId; // 状态ID可为空（__PLANKA_EINST__未配置价值流时）
+        this.streamId = streamId; // 价值流ID可为空（实体类型未配置价值流时）
+        this.statusId = statusId; // 状态ID可为空（实体类型未配置价值流时）
         LocalDateTime createdAtTime = AssertUtils.requireNotNull(createdAt, "createdAt can't be null");
         this.createdAt = createdAtTime.atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli();
     }

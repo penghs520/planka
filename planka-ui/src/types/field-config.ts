@@ -156,7 +156,7 @@ export interface LevelBinding {
   required: boolean
 }
 
-/** 架构层级属性配置 */
+/** 级联层级属性配置 */
 export interface CascadeFieldConfig extends FieldConfigBase {
   schemaSubType: 'CASCADE_FIELD'
   /** 级联关系定义 ID */

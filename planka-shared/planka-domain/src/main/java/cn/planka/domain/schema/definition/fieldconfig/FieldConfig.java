@@ -16,9 +16,9 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * __PLANKA_EINST__属性配置基类
+ * 实体类型属性配置基类
  * <p>
- * 属性配置直接挂载在__PLANKA_EINST__下，包含完整的属性定义信息。
+ * 属性配置直接挂载在实体类型下，包含完整的属性定义信息。
  * <p>
  * ID设计规则：
  * 1. 新建FieldConfig时：id 和 fieldId 相同（都使用FieldConfigId生成）
@@ -27,7 +27,7 @@ import java.util.Set;
  * 4. 删除限制：如果原始配置已被继承且子类已持久化，则不能删除
  * 5. 外部引用：其他地方引用属性时，使用 fieldId
  * <p>
- * belongTo: 所属的__PLANKA_EINST__ID
+ * belongTo: 所属的实体类型ID
  * <p>
  * 注意：Jackson 多态注解已集中配置在 {@link cn.planka.domain.schema.definition.SchemaDefinition} 接口上。
  */
@@ -37,7 +37,7 @@ import java.util.Set;
 public abstract class FieldConfig extends AbstractSchemaDefinition<FieldConfigId> {
 
     /**
-     * 所属__PLANKA_EINST__ID
+     * 所属实体类型ID
      */
     @JsonProperty("cardTypeId")
     protected final CardTypeId cardTypeId;
@@ -138,7 +138,7 @@ public abstract class FieldConfig extends AbstractSchemaDefinition<FieldConfigId
      * @param id          Schema ID（可为null，由服务层设置）
      * @param orgId       组织ID（可为null，由服务层设置）
      * @param name        名称（必填）
-     * @param cardTypeId  __PLANKA_EINST__ID（可为null，服务层后续设置）
+     * @param cardTypeId  实体类型ID（可为null，服务层后续设置）
      * @param fieldId     属性唯一标识（必填，不能为空）
      * @param systemField 是否系统内置属性
      */
@@ -175,12 +175,12 @@ public abstract class FieldConfig extends AbstractSchemaDefinition<FieldConfigId
 
     @Override
     public SchemaId belongTo() {
-        return cardTypeId;  // 属性配置属于某个__PLANKA_EINST__
+        return cardTypeId;  // 属性配置属于某个实体类型
     }
 
     @Override
     public Set<SchemaId> secondKeys() {
-        return Set.of(cardTypeId, fieldId);  // 属性配置的二级索引是所属__PLANKA_EINST__和FieldId
+        return Set.of(cardTypeId, fieldId);  // 属性配置的二级索引是所属实体类型和FieldId
     }
 
     @Override

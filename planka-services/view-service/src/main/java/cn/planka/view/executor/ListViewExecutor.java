@@ -346,7 +346,7 @@ public class ListViewExecutor implements ViewExecutor<ListViewDefinition, ListVi
      * <p>
      * 从价值流定义中提取所有状态，转换为 StatusOption 列表
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 状态选项列表，如果获取失败则返回空列表
      */
     private List<ListViewDataResponse.StatusOption> getStatusOptions(CardTypeId cardTypeId) {

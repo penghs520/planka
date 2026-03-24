@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * 架构属性值（链表结构表示层级路径）
+ * 级联属性值（链表结构表示层级路径）
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class CascadeFieldValue implements FieldValue<CascadeItem> {

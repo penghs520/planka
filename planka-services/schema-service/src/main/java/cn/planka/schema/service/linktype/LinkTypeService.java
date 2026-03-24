@@ -50,7 +50,7 @@ public class LinkTypeService {
     public Result<List<LinkTypeVO>> listLinkTypes(String orgId) {
         List<SchemaDefinition<?>> schemas = schemaQuery.query(orgId, SchemaType.LINK_TYPE);
 
-        // 收集所有__PLANKA_EINST__ ID
+        // 收集所有实体类型 ID
         Set<String> allCardTypeIds = new HashSet<>();
         for (SchemaDefinition<?> schema : schemas) {
             if (schema instanceof LinkTypeDefinition linkType) {
@@ -63,7 +63,7 @@ public class LinkTypeService {
             }
         }
 
-        // 批量查询__PLANKA_EINST__名称
+        // 批量查询实体类型名称
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(allCardTypeIds);
 
         List<LinkTypeVO> voList = schemas.stream()
@@ -110,7 +110,7 @@ public class LinkTypeService {
             return Result.failure(CommonErrorCode.BAD_REQUEST, "非关联类型: " + linkTypeId);
         }
 
-        // 收集__PLANKA_EINST__ ID
+        // 收集实体类型 ID
         Set<String> cardTypeIds = collectCardTypeIds(linkType);
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(cardTypeIds);
 
@@ -159,7 +159,7 @@ public class LinkTypeService {
 
         LinkTypeDefinition savedLinkType = (LinkTypeDefinition) createResult.getData();
 
-        // 查询__PLANKA_EINST__名称
+        // 查询实体类型名称
         Set<String> cardTypeIds = collectCardTypeIds(savedLinkType);
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(cardTypeIds);
 
@@ -239,7 +239,7 @@ public class LinkTypeService {
 
         LinkTypeDefinition savedLinkType = (LinkTypeDefinition) updateResult.getData();
 
-        // 查询__PLANKA_EINST__名称
+        // 查询实体类型名称
         Set<String> cardTypeIds = collectCardTypeIds(savedLinkType);
         Map<String, String> cardTypeNameMap = getCardTypeNameMap(cardTypeIds);
 
@@ -260,17 +260,17 @@ public class LinkTypeService {
     }
 
     /**
-     * 查询__PLANKA_EINST__可用的关联类型
+     * 查询实体类型可用的关联类型
      *
-     * @param cardTypeId __PLANKA_EINST__ ID
+     * @param cardTypeId 实体类型 ID
      * @param position   关联位置（可选）
      * @return 可用的关联类型列表
      */
     public Result<List<LinkTypeOptionVO>> getAvailableLinkTypes(String cardTypeId, LinkPosition position) {
-        // 获取__PLANKA_EINST__
+        // 获取实体类型
         Optional<SchemaDefinition<?>> cardTypeOpt = schemaRepository.findById(cardTypeId);
         if (cardTypeOpt.isEmpty() || !(cardTypeOpt.get() instanceof CardTypeDefinition)) {
-            return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "__PLANKA_EINST__不存在");
+            return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "实体类型不存在");
         }
 
         CardTypeDefinition cardType = (CardTypeDefinition) cardTypeOpt.get();
@@ -292,7 +292,7 @@ public class LinkTypeService {
     }
 
     /**
-     * 检查关联类型是否对__PLANKA_EINST__可用
+     * 检查关联类型是否对实体类型可用
      */
     private boolean isLinkTypeAvailableForCardType(LinkTypeDefinition linkType, String cardTypeId, LinkPosition position) {
         if (position == null) {
@@ -323,7 +323,7 @@ public class LinkTypeService {
     }
 
     /**
-     * 批量获取__PLANKA_EINST__名称映射
+     * 批量获取实体类型名称映射
      */
     private Map<String, String> getCardTypeNameMap(Set<String> cardTypeIds) {
         if (cardTypeIds == null || cardTypeIds.isEmpty()) {
@@ -406,7 +406,7 @@ public class LinkTypeService {
     }
 
     /**
-     * 收集关联类型中的__PLANKA_EINST__ID
+     * 收集关联类型中的实体类型ID
      */
     private Set<String> collectCardTypeIds(LinkTypeDefinition linkType) {
         Set<String> cardTypeIds = new HashSet<>();

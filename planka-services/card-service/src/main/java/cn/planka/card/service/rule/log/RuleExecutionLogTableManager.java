@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 /**
  * 规则执行日志表管理器
  * <p>
- * 负责按__PLANKA_EINST__动态创建和管理执行日志表
+ * 负责按实体类型动态创建和管理执行日志表
  */
 @Slf4j
 @Component
@@ -60,7 +60,7 @@ public class RuleExecutionLogTableManager {
     /**
      * 获取或创建执行日志表
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 表名
      */
     public String getOrCreateTable(CardTypeId cardTypeId) {
@@ -152,7 +152,7 @@ public class RuleExecutionLogTableManager {
     /**
      * 获取表名（不自动创建）
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @return 表名，如果不存在返回 null
      */
     public String getTableName(CardTypeId cardTypeId) {

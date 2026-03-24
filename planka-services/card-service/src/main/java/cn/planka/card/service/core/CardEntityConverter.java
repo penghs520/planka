@@ -75,7 +75,7 @@ public class CardEntityConverter {
         for (Map.Entry<String, FieldValue<?>> entry : request.fieldValues().entrySet()) {
             if (entry.getValue() instanceof CascadeFieldValue cascadeFieldValue) {
                 cascadeFieldValues.put(entry.getKey(), cascadeFieldValue);
-                logger.debug("创建请求中发现架构属性: fieldId={}", entry.getKey());
+                logger.debug("创建请求中发现级联属性: fieldId={}", entry.getKey());
             } else {
                 filteredFieldValues.put(entry.getKey(), entry.getValue());
             }
@@ -99,7 +99,7 @@ public class CardEntityConverter {
 
     /**
      * 处理标题生成
-     * 如果__PLANKA_EINST__配置了标题组合规则，则根据规则生成标题
+     * 如果实体类型配置了标题组合规则，则根据规则生成标题
      */
     private CardTitle resolveTitle(CardTitle originalTitle, CardTypeId typeId, CardDTO contextCard) {
         String baseTitle = originalTitle.getValue();

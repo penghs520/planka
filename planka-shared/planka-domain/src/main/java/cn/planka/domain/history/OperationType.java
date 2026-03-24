@@ -33,9 +33,9 @@ public enum OperationType {
     CARD_RESTORED("card.restored", "还原卡片"),
 
     /**
-     * 切换__PLANKA_EINST__
+     * 切换实体类型
      */
-    CARD_TYPE_CHANGED("card.type_changed", "切换__PLANKA_EINST__"),
+    CARD_TYPE_CHANGED("card.type_changed", "切换实体类型"),
 
     // ==================== 属性变更 ====================
 

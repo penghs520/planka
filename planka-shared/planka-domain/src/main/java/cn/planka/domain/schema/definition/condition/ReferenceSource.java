@@ -52,7 +52,7 @@ public interface ReferenceSource {
         private final Path path;
 
         /**
-         * 参数__PLANKA_EINST__ID
+         * 参数实体类型ID
          */
         private final String parameterCardTypeId;
 

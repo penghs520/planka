@@ -92,7 +92,7 @@ const formData = ref<{
   showPreview: boolean
   defaultUrl: string
   defaultLinkText: string
-  // 架构层级类型
+  // 级联层级类型
   cascadeRelationId: string
   levelBindings: LevelBinding[]
 }>({
@@ -544,7 +544,7 @@ async function handleSave(): Promise<void> {
         v-model:default-link-text="formData.defaultLinkText"
       />
 
-      <!-- 架构层级类型配置 -->
+      <!-- 级联层级类型配置 -->
       <CascadeFieldConfig
         v-if="selectedType === SchemaSubType.CASCADE_FIELD"
         v-model:cascade-relation-id="formData.cascadeRelationId"

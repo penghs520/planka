@@ -59,7 +59,7 @@ class YieldEnhancerTest {
     }
 
     @Test
-    @DisplayName("enhance - 当 allFields=true 时不添加架构属性的 YieldLink")
+    @DisplayName("enhance - 当 allFields=true 时不添加级联属性的 YieldLink")
     void enhance_noAdditionalLinks_whenAllFieldsIsTrue() {
         Yield yield = new Yield();
         YieldField field = new YieldField();
@@ -73,9 +73,9 @@ class YieldEnhancerTest {
     }
 
     @Test
-    @DisplayName("enhance - 当 fieldIds 包含架构属性时补充平铺的 YieldLink 列表")
+    @DisplayName("enhance - 当 fieldIds 包含级联属性时补充平铺的 YieldLink 列表")
     void enhance_addsFlatYieldLinks_whenFieldIdsContainStructureField() {
-        // 准备架构属性定义（两层）
+        // 准备级联属性定义（两层）
         CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig(
                 "struct_001",
                 List.of(
@@ -112,7 +112,7 @@ class YieldEnhancerTest {
     @Test
     @DisplayName("enhance - 已存在的 YieldLink 保留（包括其 targetYield），不被覆盖")
     void enhance_mergesLinks_preservesExistingWithTargetYield() {
-        // 准备架构属性定义
+        // 准备级联属性定义
         CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig(
                 "struct_001",
                 List.of(
@@ -147,7 +147,7 @@ class YieldEnhancerTest {
         assertThat(result.getLinks()).hasSize(1);
         YieldLink resultLink = result.getLinks().get(0);
         assertThat(resultLink.getLinkFieldId()).isEqualTo("link_001:SOURCE");
-        // 关键：保留了原有的 targetYield，而不是被架构属性生成的空 targetYield 覆盖
+        // 关键：保留了原有的 targetYield，而不是被级联属性生成的空 targetYield 覆盖
         assertThat(resultLink.getTargetYield()).isNotNull();
         assertThat(resultLink.getTargetYield().getField()).isNotNull();
         assertThat(resultLink.getTargetYield().getField().getFieldIds())
@@ -155,9 +155,9 @@ class YieldEnhancerTest {
     }
 
     @Test
-    @DisplayName("extractCascadeFieldDefs - 递归收集所有层级的架构属性定义")
+    @DisplayName("extractCascadeFieldDefs - 递归收集所有层级的级联属性定义")
     void extractCascadeFieldDefs_collectsFromAllLevels() {
-        // 准备架构属性定义
+        // 准备级联属性定义
         CascadeFieldConfig cascadeRelationDef = createCascadeFieldConfig("struct_001", List.of());
 
         when(schemaCacheService.getByIds(anySet()))
@@ -181,7 +181,7 @@ class YieldEnhancerTest {
         CascadeFieldConfig def = new CascadeFieldConfig(
                 FieldConfigId.of(id),
                 "org_001",
-                "测试架构属性",
+                "测试级联属性",
                 null,
                 FieldId.of(id),
                 false

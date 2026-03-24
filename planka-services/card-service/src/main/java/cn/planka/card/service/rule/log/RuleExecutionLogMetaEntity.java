@@ -22,7 +22,7 @@ public class RuleExecutionLogMetaEntity {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    /** __PLANKA_EINST__ID */
+    /** 实体类型ID */
     private String cardTypeId;
 
     /** 表名 */

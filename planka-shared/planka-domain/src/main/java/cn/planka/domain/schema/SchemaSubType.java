@@ -11,10 +11,10 @@ public final class SchemaSubType {
         // 私有构造函数，防止实例化
     }
 
-    // ==================== __PLANKA_EINST__ ====================
+    // ==================== 实体类型 ====================
     /** 特征类型 */
     public static final String TRAIT_CARD_TYPE = "TRAIT_CARD_TYPE";
-    /** __PLANKA_EINST__ */
+    /** 实体类型 */
     public static final String ENTITY_CARD_TYPE = "ENTITY_CARD_TYPE";
 
     // ==================== 属性配置 ====================
@@ -39,7 +39,7 @@ public final class SchemaSubType {
     /** 关联属性配置 */
     public static final String LINK_FIELD = "LINK_FIELD";
 
-    // ==================== 架构线定义 ====================
+    // ==================== 级联关系定义 ====================
     public static final String CASCADE_RELATION_DEFINITION = "CASCADE_RELATION_DEFINITION";
 
 

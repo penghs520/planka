@@ -14,7 +14,7 @@ public enum ReferenceType {
      * <p>
      * Schema 场景：
      *   - belongTo 字段标识的关系
-     *   - 例：价值流定义、卡面定义、卡片详情页定义 属于 __PLANKA_EINST__，__PLANKA_EINST__删除时会级联删除价值流定义、卡面定义、卡片详情页定义
+     *   - 例：价值流定义、卡面定义、卡片详情页定义 属于 实体类型，实体类型删除时会级联删除价值流定义、卡面定义、卡片详情页定义
      */
     COMPOSITION,
 
@@ -25,7 +25,7 @@ public enum ReferenceType {
      * <p>
      * Schema 场景：
      *   - 普通的 xxxId 引用字段
-     *   - 例：视图 引用了 __PLANKA_EINST__，但__PLANKA_EINST__不属于视图
+     *   - 例：视图 引用了 实体类型，但实体类型不属于视图
      * <p>
      *   删除行为：阻止删除 - 如果被其他 Schema 聚合引用，则不允许删除
      * <p>

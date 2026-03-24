@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 /**
  * 属性配置服务
  * <p>
- * 提供__PLANKA_EINST__属性配置的获取和保存功能。
+ * 提供实体类型属性配置的获取和保存功能。
  * <p>
  * 继承优先级（从高到低）：自身 > 显式父类 > 通用特征类型
  */
@@ -37,10 +37,10 @@ public class FieldConfigService {
     /**
      * 保存属性配置
      * <p>
-     * 如果配置来自父类型（cardTypeId 不匹配），则创建新的配置属于当前__PLANKA_EINST__。
+     * 如果配置来自父类型（cardTypeId 不匹配），则创建新的配置属于当前实体类型。
      * 新建配置时，id 和 fieldId 使用相同的值。
      *
-     * @param cardTypeId __PLANKA_EINST__ID
+     * @param cardTypeId 实体类型ID
      * @param operatorId 操作人ID
      * @param config     属性配置
      * @return 保存结果
@@ -51,17 +51,17 @@ public class FieldConfigService {
         Result<SchemaDefinition<?>> cardTypeResult = schemaCommonService.getById(cardTypeId);
         if (cardTypeResult.isSuccess()) {
             if (cardTypeResult.getData() == null) {
-                return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "__PLANKA_EINST__不存在");
+                return Result.failure(CommonErrorCode.DATA_NOT_FOUND, "实体类型不存在");
             }
         } else {
             return Result.failure(cardTypeResult.getCode(), cardTypeResult.getMessage());
         }
 
         if (!(cardTypeResult.getData() instanceof CardTypeDefinition cardType)) {
-            return Result.failure(CommonErrorCode.BAD_REQUEST, "指定的 Schema 不是__PLANKA_EINST__");
+            return Result.failure(CommonErrorCode.BAD_REQUEST, "指定的 Schema 不是实体类型");
         }
 
-        // 检查配置是否属于当前__PLANKA_EINST__
+        // 检查配置是否属于当前实体类型
         FieldConfig configToSave = config;
         if (config.getCardTypeId() == null || !config.getCardTypeId().value().equals(cardTypeId)) {
             // 配置来自父类型或未设置，需要创建新的配置
@@ -84,13 +84,13 @@ public class FieldConfigService {
     }
 
     /**
-     * 从继承的配置创建当前__PLANKA_EINST__的自有配置
+     * 从继承的配置创建当前实体类型的自有配置
      * <p>
      * 通过 JSON 序列化/反序列化复制配置，并更新 id 和 cardTypeId。
      * 新配置的 id 为 null（保存时会生成新的ID）。
      *
      * @param inheritedConfig 继承的配置
-     * @param cardType        当前__PLANKA_EINST__
+     * @param cardType        当前实体类型
      * @return 新的自有配置
      */
     private FieldConfig createOwnConfig(FieldConfig inheritedConfig,

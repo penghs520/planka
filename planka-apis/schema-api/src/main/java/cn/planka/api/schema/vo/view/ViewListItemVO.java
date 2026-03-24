@@ -82,7 +82,7 @@ public class ViewListItemVO {
     private List<String> visibleTeamCardIds;
 
     /**
-     * 架构节点可见时的节点 ID
+     * 级联节点可见时的节点 ID
      */
     private List<String> visibleCascadeRelationNodeIds;
 

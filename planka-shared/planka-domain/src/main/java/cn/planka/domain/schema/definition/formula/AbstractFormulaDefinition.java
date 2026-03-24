@@ -33,9 +33,9 @@ public abstract class AbstractFormulaDefinition extends AbstractSchemaDefinition
     protected String code;
 
     /**
-     * 关联的__PLANKA_EINST__ID列表
+     * 关联的实体类型ID列表
      * <p>
-     * 可以关联单个__PLANKA_EINST__（EntityCardType）
+     * 可以关联单个实体类型（EntityCardType）
      * 或关联多个特征类型（AbstractCardType）
      */
     @JsonProperty("cardTypeIds")
@@ -72,7 +72,7 @@ public abstract class AbstractFormulaDefinition extends AbstractSchemaDefinition
     public void validate() {
         super.validate();
         // 基本校验：cardTypeIds 如果存在，不能为空列表
-        // 详细的__PLANKA_EINST__存在性和类型检查（抽象/具体）在 Service 层的生命周期处理器中完成
+        // 详细的实体类型存在性和类型检查（抽象/具体）在 Service 层的生命周期处理器中完成
         if (cardTypeIds != null && cardTypeIds.isEmpty()) {
             throw new IllegalArgumentException("cardTypeIds 不能为空列表");
         }

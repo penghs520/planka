@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 /**
- * 架构层级绑定配置
+ * 级联层级绑定配置
  * <p>
- * 定义__PLANKA_EINST__与架构线某一层级的关联关系。
- * 当__PLANKA_EINST__创建架构属性时，需要配置与架构线上每个层级的关联。
+ * 定义实体类型与级联关系某一层级的关联关系。
+ * 当实体类型创建级联属性时，需要配置与级联关系上每个层级的关联。
  *
  * @param levelIndex  层级索引，对应 CascadeRelationLevel 的 index
- * @param linkFieldId 与该层级__PLANKA_EINST__的关联属性ID，格式为 "{linkTypeId}:{SOURCE|TARGET}"
+ * @param linkFieldId 与该层级实体类型的关联属性ID，格式为 "{linkTypeId}:{SOURCE|TARGET}"
  * @param required    该层级是否必须填写，true 表示用户必须选择到此层级
  */
 public record CascadeRelationLevelBinding(

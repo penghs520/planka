@@ -12,15 +12,15 @@ public final class SystemSchemaIds {
         // 工具类禁止实例化
     }
 
-    // ======================= __PLANKA_EINST__ ID =======================
+    // ======================= 实体类型 ID =======================
 
     /**
-     * 成员__PLANKA_EINST__ ID
+     * 成员实体类型 ID
      * <p>
      * 格式：{orgId}:member
      *
      * @param orgId 组织ID
-     * @return 成员__PLANKA_EINST__ID
+     * @return 成员实体类型ID
      */
     public static String memberCardTypeId(String orgId) {
         return orgId + ":member";
@@ -77,7 +77,7 @@ public final class SystemSchemaIds {
         return orgId + ":" + LEGACY_ANY_TRAIT_SUFFIX;
     }
 
-    // ---------- Team / Project / Issue __PLANKA_EINST__ ----------
+    // ---------- Team / Project / Issue 实体类型 ----------
 
     public static String teamCardTypeId(String orgId) {
         return orgId + ":team";

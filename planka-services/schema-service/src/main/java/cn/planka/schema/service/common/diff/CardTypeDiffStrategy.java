@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 /**
- * __PLANKA_EINST__差异比较策略
+ * 实体类型差异比较策略
  * <p>
- * 支持特征类型和__PLANKA_EINST__的差异比较，包括深层级字段：
+ * 支持特征类型和实体类型的差异比较，包括深层级字段：
  * <ul>
  *     <li>parentTypeIds - 继承的特征类型</li>
  *     <li>quickCreateLinkConfigs - 快速创建配置</li>
@@ -97,7 +97,7 @@ public class CardTypeDiffStrategy implements SchemaDiffStrategy {
                     .ifPresent(detail::addFieldChange);
         }
 
-        // 比较继承的父类型列表（仅__PLANKA_EINST__）
+        // 比较继承的父类型列表（仅实体类型）
         if (SchemaSubType.ENTITY_CARD_TYPE.equals(schemaSubType)) {
             detail.getSemanticChanges().addAll(
                     diffHelper.compareStringList(

@@ -246,7 +246,7 @@ fn new_vertex(id: VertexId, card_id: CardId) -> Vertex {
         };
     }
 
-    // 随机选择__PLANKA_EINST__（0-49）
+    // 随机选择实体类型（0-49）
     let card_type_id = CardTypeId::new(format!("card_type_{}", rng.gen_range(0..50)));
     // 随机选择容器ID（0-9）
     let container_id = ContainerId::new(format!("container_{}", rng.gen_range(0..10)));

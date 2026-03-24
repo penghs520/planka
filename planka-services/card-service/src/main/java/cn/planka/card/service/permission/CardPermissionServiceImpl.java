@@ -184,7 +184,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
         Map<CardId, CardBasicInfo> basicInfos = cardCacheService
                 .getBasicInfoByIds(new HashSet<>(targetCardIds));
 
-        // 收集涉及的__PLANKA_EINST__
+        // 收集涉及的实体类型
         Set<CardTypeId> cardTypeIds = basicInfos.values().stream()
                 .map(CardBasicInfo::cardTypeId)
                 .collect(Collectors.toSet());
@@ -213,7 +213,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
                 .findById(operatorId, memberYield, "system")
                 .orElseThrow(() -> new IllegalStateException("操作人卡片不存在: " + operatorId.value()));
 
-        // 4. 按__PLANKA_EINST__分组校验
+        // 4. 按实体类型分组校验
         List<CardId> allowed = new ArrayList<>();
         List<PermissionDeniedItem> denied = new ArrayList<>();
 
@@ -330,7 +330,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
     }
 
     /**
-     * 检查对侧__PLANKA_EINST__的关联属性编辑权限
+     * 检查对侧实体类型的关联属性编辑权限
      */
     private void checkOppositeSidePermission(
             CardId targetCardId,
@@ -374,7 +374,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
                         .add(oppositeCardId);
             }
 
-            // 4. 对每个对侧__PLANKA_EINST__检查权限
+            // 4. 对每个对侧实体类型检查权限
             for (Map.Entry<CardTypeId, List<CardId>> entry : oppositeCardsByType.entrySet()) {
                 CardTypeId oppositeCardTypeId = entry.getKey();
                 List<CardId> oppositeCardIdList = entry.getValue();
@@ -480,7 +480,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
     }
 
     /**
-     * 获取__PLANKA_EINST__名称
+     * 获取实体类型名称
      */
     private String getCardTypeName(CardTypeId cardTypeId) {
         String name = cardTypeCacheQuery.getCardTypeName(cardTypeId);
@@ -556,7 +556,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
     // ========== 辅助方法 ==========
 
     /**
-     * 检查是否有任何权限配置（批量场景，多个__PLANKA_EINST__）
+     * 检查是否有任何权限配置（批量场景，多个实体类型）
      */
     private boolean hasAnyPermissionConfigForBatch(
             Set<CardTypeId> cardTypeIds,
@@ -573,7 +573,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
     }
 
     /**
-     * 收集所有权限配置（多个__PLANKA_EINST__）
+     * 收集所有权限配置（多个实体类型）
      */
     private List<PermissionConfigDefinition> collectAllPermissionConfigs(
             Set<CardTypeId> cardTypeIds) {
@@ -728,7 +728,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
     /**
      * 分组评估权限
      * <p>
-     * 对同一组（相同__PLANKA_EINST__）的卡片进行批量评估
+     * 对同一组（相同实体类型）的卡片进行批量评估
      */
     private void evaluateGroupPermission(
             CardTypeId cardTypeId,
@@ -998,7 +998,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
     }
 
     /**
-     * 对同一__PLANKA_EINST__的卡片批量应用字段读权限
+     * 对同一实体类型的卡片批量应用字段读权限
      */
     private void applyFieldReadPermissionsForGroup(
             CardTypeId cardTypeId,
@@ -1010,7 +1010,7 @@ public class CardPermissionServiceImpl implements CardPermissionService {
 
         // 2. 卫语句：无字段权限配置则跳过
         if (!hasFieldPermissionConfig(configs)) {
-            log.debug("__PLANKA_EINST__ {} 无字段权限配置，跳过", cardTypeId);
+            log.debug("实体类型 {} 无字段权限配置，跳过", cardTypeId);
             return;
         }
 

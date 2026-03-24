@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Objects;
 
 /**
- * 架构线定义ID
+ * 级联关系定义ID
  */
 public record CascadeRelationId(@JsonValue String value) implements SchemaId {
 
