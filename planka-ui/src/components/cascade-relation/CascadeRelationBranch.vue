@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { IconDelete } from '@arco-design/web-vue/es/icon'
+import { IconDelete, IconRight } from '@arco-design/web-vue/es/icon'
 import type { CascadeRelationDefinition } from '@/types/cascade-relation'
 
 const props = defineProps<{
@@ -12,22 +12,19 @@ const emit = defineEmits<{
   (e: 'delete', payload: CascadeRelationDefinition): void
 }>()
 
-// 获取层级列表（从根到叶，需要反转显示，让根在下面）
+/** 从根到叶，与定义顺序一致（左 → 右） */
 const displayLevels = computed(() => {
   if (!props.cascadeRelation.levels) return []
-  return [...props.cascadeRelation.levels].reverse()
+  return [...props.cascadeRelation.levels]
 })
 
-// 处理点击
 function handleClick(event: MouseEvent) {
-  // 阻止删除按钮的点击冒泡
   if ((event.target as HTMLElement).closest('.delete-btn')) {
     return
   }
   emit('click')
 }
 
-// 处理删除
 function handleDelete(event: MouseEvent) {
   event.stopPropagation()
   emit('delete', props.cascadeRelation)
@@ -36,8 +33,7 @@ function handleDelete(event: MouseEvent) {
 
 <template>
   <div class="cascade-relation-branch" @click="handleClick">
-    <!-- 级联关系名称 -->
-    <div class="branch-header">
+    <div class="branch-title">
       <span class="branch-name">{{ cascadeRelation.name }}</span>
       <a-button
         v-if="!cascadeRelation.systemCascadeRelation"
@@ -52,24 +48,13 @@ function handleDelete(event: MouseEvent) {
       </a-button>
     </div>
 
-    <!-- 层级节点列表 -->
-    <div class="levels-container">
-      <div
-        v-for="(level, index) in displayLevels"
-        :key="level.index"
-        class="level-item"
-      >
-        <!-- 层级节点 -->
-        <div class="level-node">
-          <div class="node-dot-wrapper">
-            <div class="node-dot"></div>
-          </div>
-          <span class="node-name">{{ level.name }}</span>
+    <div class="flow-levels">
+      <template v-for="(level, index) in displayLevels" :key="level.index">
+        <div class="level-pill">
+          <span class="level-pill-text">{{ level.name }}</span>
         </div>
-
-        <!-- 连接线（最后一个节点不显示） -->
-        <div v-if="index < displayLevels.length - 1" class="level-connector"></div>
-      </div>
+        <icon-right v-if="index < displayLevels.length - 1" class="flow-sep" />
+      </template>
     </div>
   </div>
 </template>
@@ -77,119 +62,87 @@ function handleDelete(event: MouseEvent) {
 <style scoped>
 .cascade-relation-branch {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 16px;
   cursor: pointer;
-  min-width: 120px;
-  position: relative;
-  z-index: 10;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border-1);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-2);
+  box-sizing: border-box;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
 }
 
-.branch-header {
+.cascade-relation-branch:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: 0 2px 12px rgba(var(--color-primary-rgb), 0.12);
+}
+
+.branch-title {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  background: transparent;
-  margin-bottom: 24px;
-  min-width: 100px;
-  height: 36px;
+  gap: 8px;
+  flex-shrink: 0;
+  min-width: 0;
+  max-width: 100%;
 }
-
-
 
 .branch-name {
   font-size: 14px;
   color: var(--color-text-1);
   white-space: nowrap;
-  font-weight: 500;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .delete-btn {
-  position: absolute;
-  right: -8px;
-  top: -8px;
   opacity: 0;
   transition: opacity 0.2s;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
 .cascade-relation-branch:hover .delete-btn {
   opacity: 1;
 }
 
-.levels-container {
+.flow-levels {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align left to keep line vertical */
-  padding-left: 20px; /* Offset to center under header somewhat, or just align items */
-  position: relative;
-}
-
-/* Adjust alignment to center the line relative to the header?
-   Actually, the design shows the line is aligned to the left side of the text,
-   but centered under the header usually looks best.
-   Let's align items center.
-*/
-.levels-container {
+  flex-direction: row;
   align-items: center;
-  padding-left: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
-.level-item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Node text to the right of dot */
-  position: relative;
-}
-
-.level-node {
-  display: flex;
+.level-pill {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  height: 24px; /* Fixed height for node row */
+  padding: 4px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-fill-2);
+  border: 1px solid var(--color-border-2);
+  max-width: 100%;
 }
 
-.node-dot-wrapper {
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.node-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #66ccff;
-  position: relative;
-}
-
-/* No halo effect */
-.node-dot::after {
-  display: none;
-}
-
-.node-name {
+.level-pill-text {
   font-size: 13px;
   color: var(--color-text-2);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.level-connector {
-  width: 1px;
-  height: 40px; /* Spacing between nodes */
-  background: #C9CDD4;
-  margin-left: 7.5px; /* Center with 16px wrapper: 8px center - 0.5px width = 7.5px */
+.flow-sep {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--color-text-4);
 }
 </style>
