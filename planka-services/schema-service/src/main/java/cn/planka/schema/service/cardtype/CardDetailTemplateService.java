@@ -1,12 +1,17 @@
 package cn.planka.schema.service.cardtype;
 
+import cn.planka.api.schema.service.FieldConfigQueryService;
 import cn.planka.common.result.Result;
 import cn.planka.domain.card.CardTypeId;
 import cn.planka.domain.schema.CardDetailTemplateId;
 import cn.planka.domain.schema.EntityState;
 import cn.planka.domain.schema.SchemaType;
 import cn.planka.domain.schema.definition.SchemaDefinition;
+import cn.planka.domain.schema.definition.fieldconfig.FieldConfig;
 import cn.planka.domain.schema.definition.template.CardDetailTemplateDefinition;
+import cn.planka.domain.schema.template.detail.CardDetailTemplateEffectiveHelper;
+import cn.planka.domain.schema.template.detail.DefaultCardDetailTemplateBuilder;
+import cn.planka.schema.dto.EffectiveCardDetailTemplateVO;
 import cn.planka.schema.dto.TemplateListItemVO;
 import cn.planka.schema.repository.SchemaRepository;
 import cn.planka.schema.service.common.SchemaQuery;
@@ -16,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +33,7 @@ public class CardDetailTemplateService {
 
     private final SchemaRepository schemaRepository;
     private final SchemaQuery schemaQuery;
+    private final FieldConfigQueryService fieldConfigQueryService;
 
     /**
      * 查询模板列表
@@ -73,6 +80,36 @@ public class CardDetailTemplateService {
     }
 
     /**
+     * 获取实体类型当前生效的详情页模板（与卡片详情运行时选取规则一致；无已存模板时返回默认构建结果）。
+     */
+    public Result<EffectiveCardDetailTemplateVO> getEffectiveForCardType(String cardTypeId) {
+        List<SchemaDefinition<?>> definitions = schemaQuery.queryBySecondKey(
+                CardTypeId.of(cardTypeId), SchemaType.CARD_DETAIL_TEMPLATE);
+
+        List<CardDetailTemplateDefinition> templates = definitions.stream()
+                .filter(d -> d instanceof CardDetailTemplateDefinition)
+                .map(d -> (CardDetailTemplateDefinition) d)
+                .collect(Collectors.toList());
+
+        Optional<CardDetailTemplateDefinition> selected = CardDetailTemplateEffectiveHelper.selectFromList(templates);
+        if (selected.isPresent()) {
+            EffectiveCardDetailTemplateVO vo = new EffectiveCardDetailTemplateVO();
+            vo.setDefinition(selected.get());
+            vo.setPersisted(true);
+            return Result.success(vo);
+        }
+
+        List<FieldConfig> fieldConfigs = fieldConfigQueryService.getFieldConfigs(cardTypeId);
+        CardDetailTemplateDefinition built = DefaultCardDetailTemplateBuilder.build(fieldConfigs);
+        built.setCardTypeId(CardTypeId.of(cardTypeId));
+
+        EffectiveCardDetailTemplateVO vo = new EffectiveCardDetailTemplateVO();
+        vo.setDefinition(built);
+        vo.setPersisted(false);
+        return Result.success(vo);
+    }
+
+    /**
      * 复制模板
      *
      * @param templateId 源模板ID
@@ -89,6 +126,15 @@ public class CardDetailTemplateService {
         }
         if (!(source instanceof CardDetailTemplateDefinition sourceTemplate)) {
             return Result.failure("INVALID_TEMPLATE_TYPE", "无效的模板类型");
+        }
+
+        if (sourceTemplate.getCardTypeId() != null) {
+            List<SchemaDefinition<?>> sameType = schemaQuery.queryBySecondKey(
+                    sourceTemplate.getCardTypeId(), SchemaType.CARD_DETAIL_TEMPLATE);
+            long count = sameType.stream().filter(d -> d instanceof CardDetailTemplateDefinition).count();
+            if (count >= 1) {
+                return Result.failure("CARD_DETAIL_TEMPLATE_LIMIT", "该实体类型仅允许一个详情页模板，无法复制新增");
+            }
         }
 
         // 创建副本

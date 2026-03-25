@@ -39,10 +39,11 @@ const activeTabId = ref<string>('')
 // 宽度拖拽状态
 const resizingField = ref<{ sectionId: string; fieldConfigId: string; startX: number; startWidth: number } | null>(null)
 const sectionContentRefs = ref<Map<string, HTMLElement>>(new Map())
-const layoutCanvasRef = ref<HTMLElement | null>(null)
+/** 仅 Tab 内容区滚动，顶栏/Tab/顶边横线不随滚动消失；拖拽自动滚动作用在此容器 */
+const detailBodyRef = ref<HTMLElement | null>(null)
 
 // 自动滚动 (使用 Composable)
-const { stopAutoScroll } = useAutoScroll(layoutCanvasRef)
+const { stopAutoScroll } = useAutoScroll(detailBodyRef)
 
 // 允许的宽度值
 const allowedWidths = [25, 33, 50, 66, 75, 100]
@@ -803,7 +804,7 @@ function handleTabDrop(tabId: string, event: DragEvent) {
 </script>
 
 <template>
-  <div ref="layoutCanvasRef" class="layout-canvas" @click="handleCanvasClick">
+  <div class="layout-canvas" @click="handleCanvasClick">
     <!-- 详情页预览容器 -->
     <div class="detail-preview">
       <!-- 详情页头部 -->
@@ -862,8 +863,8 @@ function handleTabDrop(tabId: string, event: DragEvent) {
         </div>
       </div>
 
-      <!-- Tab 内容区 -->
-      <div class="detail-body">
+      <!-- Tab 内容区：仅此区域纵向滚动，避免顶边线与 header/tabs 被卷走 -->
+      <div ref="detailBodyRef" class="detail-body">
         <!-- 系统 Tab 提示 -->
         <div
           v-if="currentTab?.tabType === 'SYSTEM' && currentTab.systemTabType !== 'BASIC_INFO'"
@@ -934,25 +935,41 @@ function handleTabDrop(tabId: string, event: DragEvent) {
 </template>
 
 <style scoped lang="scss">
+/* 详情预览主列左右描边（略粗于 1px 分隔线） */
+$detail-side-edge: 2px solid var(--color-border-2);
+
 .layout-canvas {
-  height: 100%;
-  overflow: auto;
-  background: #f5f6f7;
-  padding: 20px;
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-bg-1);
+  /* 顶部与工具栏/切换区紧贴；左右略收紧，底部留白 */
+  padding: 0 8px 16px;
 }
 
 .detail-preview {
-  max-width: 960px;
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  /* 与左右主列描边一致，顶部横线在预览框顶端，不随下方内容滚动 */
+  border-top: $detail-side-edge;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 // 头部
 .detail-header {
   padding: 16px 20px;
+  border-left: $detail-side-edge;
+  border-right: $detail-side-edge;
   border-bottom: 1px solid var(--color-border-2);
   flex-shrink: 0;
 }
@@ -1002,7 +1019,8 @@ function handleTabDrop(tabId: string, event: DragEvent) {
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
-  background-color: var(--color-fill-2);
+  background-color: var(--color-bg-1);
+  border: 1px solid var(--color-border-2);
   color: var(--color-text-1) !important;
   white-space: nowrap;
 }
@@ -1017,9 +1035,11 @@ function handleTabDrop(tabId: string, event: DragEvent) {
 
 // Tab 栏
 .detail-tabs {
-  padding: 0 0 0 20px;
-  border-bottom: 1px solid var(--color-border-2);
   flex-shrink: 0;
+  padding: 0 0 0 20px;
+  border-left: $detail-side-edge;
+  border-right: $detail-side-edge;
+  border-bottom: 1px solid var(--color-border-2);
   overflow-x: auto;
   overflow-y: hidden;
 
@@ -1129,11 +1149,38 @@ function handleTabDrop(tabId: string, event: DragEvent) {
   }
 }
 
-// 内容区
+// 内容区（唯一纵向滚动区域）；与 .detail-header / .detail-tabs 使用同一左内边距，保证标题、Tab、区域名、字段左对齐
 .detail-body {
-  padding: 16px 20px 16px 20px;
-  min-height: 500px;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-x: visible;
+  overflow-y: auto;
+  padding: 12px 20px 16px;
   background: var(--color-bg-1);
+  border-left: $detail-side-edge;
+  border-right: $detail-side-edge;
+
+  /* 细滚动条，减少占用宽度 */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-3) transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-3);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--color-fill-3);
+  }
 }
 
 .system-tab-hint {
@@ -1161,80 +1208,11 @@ function handleTabDrop(tabId: string, event: DragEvent) {
   }
 }
 
-// 区域容器
+// 区域容器（区域块样式在 TemplateSection.vue，scoped 无法作用于子组件）
 .sections-container {
   display: flex;
   flex-direction: column;
   gap: 24px;
-}
-
-.section-card {
-  background: #fff;
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
-  overflow: hidden;
-  transition: all 0.2s;
-
-  &:hover {
-    .section-actions {
-      opacity: 1;
-    }
-  }
-
-  &.selected {
-    border-color: rgb(var(--primary-6));
-    box-shadow: 0 0 0 1px rgb(var(--primary-6));
-  }
-
-  &.drag-over {
-    border-color: rgb(var(--primary-6));
-    border-style: dashed;
-    background: rgb(var(--primary-1));
-  }
-
-  &.dragging {
-    opacity: 0.5;
-    border-style: dashed;
-  }
-
-  &.drop-before {
-    position: relative;
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 4px;
-      background: rgb(var(--primary-6));
-      z-index: 10;
-      border-radius: 2px;
-    }
-  }
-
-  &.drop-after {
-    position: relative;
-    &::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 4px;
-      background: rgb(var(--primary-6));
-      z-index: 10;
-      border-radius: 2px;
-    }
-  }
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: #fafbfc;
-  border-bottom: 1px solid var(--color-border);
 }
 
 // 添加区域按钮
@@ -1246,15 +1224,14 @@ function handleTabDrop(tabId: string, event: DragEvent) {
   padding: 20px;
   color: var(--color-text-3);
   font-size: 14px;
-  border: 2px dashed var(--color-border);
+  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
-  background: #fff;
+  background: transparent;
 
   &:hover {
     color: rgb(var(--primary-6));
-    border-color: rgb(var(--primary-6));
     background: rgb(var(--primary-1));
   }
 }

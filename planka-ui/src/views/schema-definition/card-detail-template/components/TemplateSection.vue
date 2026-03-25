@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, nextTick, inject } from 'vue'
-import { IconDelete } from '@arco-design/web-vue/es/icon'
+import { IconDelete, IconDragDotVertical } from '@arco-design/web-vue/es/icon'
 import FieldMockPreview from './FieldMockPreview.vue'
 import type {
   SectionConfig,
@@ -118,9 +118,7 @@ defineExpose({
       'drop-before': dropTargetSection?.sectionId === section.sectionId && dropTargetSection?.position === 'before',
       'drop-after': dropTargetSection?.sectionId === section.sectionId && dropTargetSection?.position === 'after'
     }"
-    draggable="true"
     @click="emit('select', { type: 'section', id: section.sectionId, tabId: '' })" 
-    @dragstart="emit('section-dragstart', $event)"
     @dragenter="emit('section-dragenter', $event)"
     @dragleave="emit('section-dragleave')"
     @dragover="emit('section-dragover', $event)"
@@ -128,21 +126,33 @@ defineExpose({
   >
     <!-- 区域标题 -->
     <div class="section-header">
-      <div class="section-title-wrapper">
-        <a-input
-          v-if="editingName"
-          ref="nameInputRef"
-          v-model="tempName"
-          size="small"
-          class="section-name-input"
-          @blur="finishEditName"
-          @keyup.enter="finishEditName"
-          @keyup.escape="cancelEditName"
+      <div class="section-title-area">
+        <div
+          class="section-drag-handle"
+          tabindex="0"
+          draggable="true"
+          aria-label="拖拽调整区域顺序"
           @click.stop
-        />
-        <span v-else class="section-title" @click.stop="startEditName">
-          {{ section.name || '未命名区域' }}
-        </span>
+          @dragstart="emit('section-dragstart', $event)"
+        >
+          <IconDragDotVertical />
+        </div>
+        <div class="section-title-wrapper">
+          <a-input
+            v-if="editingName"
+            ref="nameInputRef"
+            v-model="tempName"
+            size="small"
+            class="section-name-input"
+            @blur="finishEditName"
+            @keyup.enter="finishEditName"
+            @keyup.escape="cancelEditName"
+            @click.stop
+          />
+          <span v-else class="section-title" @click.stop="startEditName">
+            {{ section.name || '未命名区域' }}
+          </span>
+        </div>
       </div>
       <div class="section-actions">
         <a-button type="text" size="mini" status="danger" @click.stop="emit('delete')">
@@ -228,9 +238,10 @@ defineExpose({
 
 <style scoped lang="scss">
 .section-card {
-  background: transparent;
-  border-radius: 0;
+  background: #fff;
+  border-radius: 8px;
   border: none;
+  /* 允许区域拖拽手柄伸入 .detail-body 左侧留白，避免裁切 */
   overflow: visible;
   transition: all 0.2s;
 
@@ -241,19 +252,18 @@ defineExpose({
   }
 
   &.selected {
-    border-color: rgb(var(--primary-6));
     box-shadow: 0 0 0 1px rgb(var(--primary-6));
   }
 
   &.drag-over {
-    border-color: rgb(var(--primary-6));
-    border-style: dashed;
+    border: 2px dashed rgb(var(--primary-6));
     background: rgb(var(--primary-1));
   }
 
   &.dragging {
     opacity: 0.5;
-    border-style: dashed;
+    outline: 1px dashed var(--color-border-3);
+    outline-offset: -1px;
   }
 
   &.drop-before {
@@ -291,14 +301,64 @@ defineExpose({
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 12px;
-  background: var(--color-fill-1);
-  border-bottom: 1px solid var(--color-border);
+  padding: 4px 8px 2px 0;
+  background: var(--color-bg-1);
+  border-bottom: none;
   border-radius: 6px 6px 0 0;
+}
+
+.section-title-area {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+
+/* 手柄叠在 body 左留白内，不推动区域名称，与详情标题左缘对齐 */
+.section-drag-handle {
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  color: var(--color-text-3);
+  cursor: grab;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+  user-select: none;
+
+  &:hover {
+    color: var(--color-text-2);
+    background: var(--color-fill-2);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  :deep(svg) {
+    font-size: 12px;
+  }
+}
+
+.section-header:hover .section-drag-handle,
+.section-card.dragging .section-drag-handle,
+.section-drag-handle:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .section-title-wrapper {
   flex: 1;
+  min-width: 0;
 }
 
 .section-title {
@@ -306,13 +366,13 @@ defineExpose({
   font-weight: 600;
   color: var(--color-text-1);
   cursor: pointer;
-  padding: 4px 8px;
-  margin: -4px -8px;
+  padding: 2px 8px 2px 0;
+  margin: -2px 0;
   border-radius: 4px;
   transition: background 0.2s;
 
   &:hover {
-    background: var(--color-fill-2);
+    background: transparent;
   }
 }
 
@@ -329,22 +389,24 @@ defineExpose({
 }
 
 .section-content {
-  padding: 12px 8px;
+  padding: 0 4px 6px 0;
 }
 
-// 字段 flex 布局
+// 字段 flex 布局（无额外 padding；行距由内联 rowGap / Tab 字段行间距控制）
 .field-flex {
   display: flex;
   flex-wrap: wrap;
-  column-gap: 0; // 列间距为0，字段之间无水平间距
-  row-gap: 8px; // 默认行间距（会被内联样式覆盖）
+  margin: 0;
+  padding: 0;
+  column-gap: 0;
+  row-gap: 8px; /* 无内联 rowGap 时的兜底，通常由 FieldRowSpacingConfig 覆盖 */
 }
 
 .field-item {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 2px 8px 2px 0;
+  padding: 0 8px 2px 0;
   border-radius: 4px;
   border: 1px solid transparent;
   position: relative;
@@ -354,7 +416,7 @@ defineExpose({
   min-width: 25%;
 
   &:hover {
-    background: var(--color-fill-1);
+    background: transparent;
 
     .field-delete {
       opacity: 1;
@@ -506,11 +568,11 @@ defineExpose({
   align-items: center;
   justify-content: center;
   height: 60px;
-  border: 1px dashed var(--color-border-2);
+  border: none;
   border-radius: 6px;
   color: var(--color-text-3);
   font-size: 14px;
-  background: var(--color-fill-1);
+  background: transparent;
 }
 
 .field-delete {

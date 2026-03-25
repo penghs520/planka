@@ -24,6 +24,9 @@ export interface CardDetailTemplateDefinition extends SchemaDefinition {
   /** 优先级（数字越小优先级越高，用于多模板匹配） */
   priority: number
 
+  /** 是否默认模板（与后端 isDefault 一致） */
+  isDefault?: boolean
+
   /** 头部配置 */
   header?: DetailHeaderConfig
 
@@ -74,9 +77,9 @@ export type FieldRowSpacing = 'COMPACT' | 'NORMAL' | 'LOOSE'
  * 字段行间距配置
  */
 export const FieldRowSpacingConfig: Record<FieldRowSpacing, { label: string; rowGap: string }> = {
-  COMPACT: { label: '紧凑', rowGap: '12px' },
-  NORMAL: { label: '正常', rowGap: '20px' },
-  LOOSE: { label: '宽松', rowGap: '28px' },
+  COMPACT: { label: '紧凑', rowGap: '8px' },
+  NORMAL: { label: '正常', rowGap: '14px' },
+  LOOSE: { label: '宽松', rowGap: '22px' },
 }
 
 /**

@@ -8,16 +8,16 @@ import cn.planka.api.card.request.YieldLink;
 import cn.planka.api.schema.service.FieldConfigQueryService;
 import cn.planka.card.service.core.CardQueryService;
 import cn.planka.common.result.Result;
-import cn.planka.common.util.SystemSchemaIds;
 import cn.planka.domain.card.CardId;
 import cn.planka.domain.card.CardTypeId;
 import cn.planka.domain.link.LinkFieldIdUtils;
 import cn.planka.domain.schema.definition.cardtype.CardTypeDefinition;
 import cn.planka.domain.schema.definition.stream.StatusConfig;
 import cn.planka.domain.schema.definition.stream.StepConfig;
-import cn.planka.domain.schema.definition.fieldconfig.FieldType;
 import cn.planka.domain.schema.definition.stream.ValueStreamDefinition;
 import cn.planka.domain.schema.definition.template.CardDetailTemplateDefinition;
+import cn.planka.domain.schema.template.detail.CardDetailTemplateEffectiveHelper;
+import cn.planka.domain.schema.template.detail.DefaultCardDetailTemplateBuilder;
 import cn.planka.domain.schema.definition.template.detail.DetailHeaderConfig;
 import cn.planka.domain.schema.definition.template.detail.FieldItemConfig;
 import cn.planka.domain.schema.definition.template.detail.SectionConfig;
@@ -26,7 +26,6 @@ import cn.planka.domain.stream.StatusId;
 import cn.planka.infra.cache.schema.SchemaCacheService;
 import cn.planka.infra.cache.schema.query.CardDetailTemplateCacheQuery;
 import cn.planka.infra.cache.schema.query.ValueStreamCacheQuery;
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -151,18 +150,14 @@ public class CardDetailService {
             List<cn.planka.domain.schema.definition.fieldconfig.FieldConfig> fieldConfigs) {
         try {
             List<CardDetailTemplateDefinition> templates = cardDetailTemplateCacheQuery.getByCardTypeId(cardTypeId);
-            if (CollectionUtils.isNotEmpty(templates)) {
-                // 优先选择默认模板，如果没有设置默认则随机返回一个
-                return templates.stream()
-                        .filter(CardDetailTemplateDefinition::isDefault)
-                        .findFirst()
-                        .orElse(templates.get(0));
+            Optional<CardDetailTemplateDefinition> selected = CardDetailTemplateEffectiveHelper.selectFromList(templates);
+            if (selected.isPresent()) {
+                return selected.get();
             }
         } catch (Exception e) {
             logger.warn("获取详情模板失败: {}", e.getMessage());
         }
-        // 没有配置模板时，创建默认模板
-        return createDefaultTemplateDefinition(fieldConfigs);
+        return DefaultCardDetailTemplateBuilder.build(fieldConfigs);
     }
 
     /**
@@ -291,149 +286,6 @@ public class CardDetailService {
                 .header(header)
                 .tabs(tabs)
                 .build();
-    }
-
-    /**
-     * 创建默认模板定义
-     */
-    private CardDetailTemplateDefinition createDefaultTemplateDefinition(
-            List<cn.planka.domain.schema.definition.fieldconfig.FieldConfig> fieldConfigs) {
-        CardDetailTemplateDefinition template = new CardDetailTemplateDefinition(
-                cn.planka.domain.schema.CardDetailTemplateId.of("default_template"),
-                null,
-                "默认模板");
-        template.setDefault(true);
-        template.setSystemTemplate(true);
-
-        // 头部配置
-        DetailHeaderConfig header = new DetailHeaderConfig();
-        header.setShowTypeIcon(true);
-        header.setShowCardNumber(true);
-        header.setShowStatus(true);
-        template.setHeader(header);
-
-        // 创建字段项配置列表
-        List<FieldItemConfig> fieldItems = new ArrayList<>();
-        int currentRowWidth = 0;
-
-        // 1. 第一行：创建时间、更新时间（各25%），然后强制换行
-        FieldItemConfig createdAtItem = new FieldItemConfig();
-        createdAtItem.setFieldConfigId("$createdAt");
-        createdAtItem.setWidthPercent(25);
-        createdAtItem.setCustomLabel("创建时间");
-        createdAtItem.setStartNewRow(false);
-        fieldItems.add(createdAtItem);
-        currentRowWidth += 25;
-
-        FieldItemConfig updatedAtItem = new FieldItemConfig();
-        updatedAtItem.setFieldConfigId("$updatedAt");
-        updatedAtItem.setWidthPercent(25);
-        updatedAtItem.setCustomLabel("更新时间");
-        updatedAtItem.setStartNewRow(false);
-        fieldItems.add(updatedAtItem);
-        // 第一行结束，强制换行，后续字段从新行开始
-        currentRowWidth = 0;
-
-        // 2. 自定义字段：按字段类型排列，每行四列（25%）
-        // 独占一行的类型：TEXTAREA(多行文本)、MARKDOWN、ATTACHMENT(附件)
-        // 排除字段：存档人、回收人
-        boolean isFirstField = true;
-        if (CollectionUtils.isNotEmpty(fieldConfigs)) {
-            for (cn.planka.domain.schema.definition.fieldconfig.FieldConfig fieldConfig : fieldConfigs) {
-                String fieldId = fieldConfig.getFieldId().value();
-
-                // 排除存档人和回收人字段
-                if (isArchiverOrDiscarderField(fieldId)) {
-                    continue;
-                }
-
-                FieldType fieldType = fieldConfig.getFieldType();
-                boolean isFullWidth = isFullWidthFieldType(fieldType);
-                int widthPercent = isFullWidth ? 100 : 25;
-
-                // 判断是否需要换行：
-                // - 第一个字段强制换行（从新行开始）
-                // - 或者当前行剩余空间不足
-                boolean startNewRow = isFirstField || (currentRowWidth + widthPercent) > 100;
-                if (startNewRow) {
-                    currentRowWidth = 0;
-                }
-
-                FieldItemConfig item = new FieldItemConfig();
-                item.setFieldConfigId(fieldId);
-                item.setWidthPercent(widthPercent);
-                item.setStartNewRow(startNewRow);
-                fieldItems.add(item);
-
-                currentRowWidth += widthPercent;
-                if (currentRowWidth >= 100) {
-                    currentRowWidth = 0;
-                }
-                isFirstField = false;
-            }
-        }
-
-        // 3. 最后显示描述（独占一行）
-        FieldItemConfig descriptionItem = new FieldItemConfig();
-        descriptionItem.setFieldConfigId("$description");
-        descriptionItem.setWidthPercent(100);
-        descriptionItem.setCustomLabel("描述");
-        descriptionItem.setStartNewRow(true);
-        fieldItems.add(descriptionItem);
-
-        // 区域配置（不设置名称，使用 Tab 页标题作为唯一标题）
-        SectionConfig section = new SectionConfig();
-        section.setSectionId("basic_section");
-        section.setName(null);
-        section.setCollapsed(false);
-        section.setCollapsible(true);
-        section.setFieldItems(fieldItems);
-
-        // 基础信息标签页
-        TabConfig basicInfoTab = new TabConfig();
-        basicInfoTab.setTabId("basic_info");
-        basicInfoTab.setTabType(TabConfig.TabType.SYSTEM);
-        basicInfoTab.setName("基础信息");
-        basicInfoTab.setSystemTabType(TabConfig.SystemTabType.BASIC_INFO);
-        basicInfoTab.setFieldRowSpacing(TabConfig.FieldRowSpacing.NORMAL);
-        basicInfoTab.setSections(Collections.singletonList(section));
-
-        // 评论标签页
-        TabConfig commentTab = new TabConfig();
-        commentTab.setTabId("comment");
-        commentTab.setTabType(TabConfig.TabType.SYSTEM);
-        commentTab.setName("评论");
-        commentTab.setSystemTabType(TabConfig.SystemTabType.COMMENT);
-        commentTab.setFieldRowSpacing(TabConfig.FieldRowSpacing.NORMAL);
-
-        // 操作记录标签页
-        TabConfig activityLogTab = new TabConfig();
-        activityLogTab.setTabId("activity_log");
-        activityLogTab.setTabType(TabConfig.TabType.SYSTEM);
-        activityLogTab.setName("操作记录");
-        activityLogTab.setSystemTabType(TabConfig.SystemTabType.ACTIVITY_LOG);
-        activityLogTab.setFieldRowSpacing(TabConfig.FieldRowSpacing.NORMAL);
-
-        template.setTabs(Arrays.asList(basicInfoTab, commentTab, activityLogTab));
-
-        return template;
-    }
-
-    /**
-     * 判断字段类型是否需要独占一行（100%宽度）
-     */
-    private boolean isFullWidthFieldType(FieldType fieldType) {
-        return fieldType == FieldType.TEXTAREA
-                || fieldType == FieldType.MARKDOWN
-                || fieldType == FieldType.ATTACHMENT;
-    }
-
-    /**
-     * 判断是否为存档人或回收人字段
-     */
-    private boolean isArchiverOrDiscarderField(String fieldId) {
-        return fieldId.contains(SystemSchemaIds.LINK_ARCHIVER_PATTERN)
-                || fieldId.contains(SystemSchemaIds.LINK_DISCARDER_PATTERN);
     }
 
     /**

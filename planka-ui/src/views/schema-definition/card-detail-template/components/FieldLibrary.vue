@@ -181,8 +181,7 @@ function handleDragStart(field: FieldConfig, event: DragEvent) {
 }
 
 .library-header {
-  padding: 12px;
-  border-bottom: 1px solid var(--color-border);
+  padding: 12px 12px 12px 8px;
   flex-shrink: 0;
 }
 
@@ -231,7 +230,7 @@ function handleDragStart(field: FieldConfig, event: DragEvent) {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding-left: 22px;
+  padding-left: 18px;
   padding-right: 12px;
 }
 
@@ -244,12 +243,12 @@ function handleDragStart(field: FieldConfig, event: DragEvent) {
   cursor: grab;
   transition: all 0.15s;
   font-size: 12px;
-  background: var(--color-fill-1);
+  background: var(--color-bg-1);
   border: 1px solid var(--color-border-2);
 
   &:hover:not(.is-used) {
-    background: var(--color-fill-2);
-    border-color: var(--color-border-3);
+    background: var(--color-bg-1);
+    border-color: rgb(var(--primary-6));
   }
 
   &.is-used {

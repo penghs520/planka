@@ -176,7 +176,8 @@ function getMockEnumOption(fieldConfigId: string): { name: string; color: string
     font-size: 12px;
     font-weight: 500;
     line-height: 18px;
-    background-color: var(--color-fill-2);
+    background-color: var(--color-bg-1);
+    border: 1px solid var(--color-border-2);
     color: #333 !important;
     white-space: nowrap;
   }
@@ -226,15 +227,16 @@ function getMockEnumOption(fieldConfigId: string): { name: string; color: string
     display: inline-flex;
     align-items: center;
     padding: 2px 8px;
-    background-color: var(--color-fill-2);
+    background-color: var(--color-bg-1);
+    border: 1px solid var(--color-border-2);
     border-radius: 4px;
     font-size: 13px;
     color: var(--color-text-1);
     cursor: default;
-    transition: background-color 0.2s;
+    transition: border-color 0.2s;
 
     &:hover {
-      background-color: var(--color-fill-3);
+      border-color: var(--color-border-3);
     }
   }
 }

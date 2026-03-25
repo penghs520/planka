@@ -479,7 +479,10 @@ const createModalBodyStyle = computed(() => ({
 <style scoped>
 .drawer-spin {
   width: 100%;
-  height: 100%;
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .drawer-content {
@@ -505,10 +508,14 @@ const createModalBodyStyle = computed(() => ({
   padding-top: 12px;
 }
 
-/* 可滚动 Tab：基础信息、价值流等 */
+/* 可滚动 Tab：基础信息、价值流等；flex 列便于「页面布局」等子区占满剩余高度 */
 .edit-mode-tab-scroll {
   flex: 1;
   min-height: 0;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -642,7 +649,28 @@ const createModalBodyStyle = computed(() => ({
 /* body-class 渲染在 Drawer 内部；与主内容区白底一致，避免 fill-1 灰底 */
 .card-type-form-drawer-body.arco-drawer-body {
   background-color: var(--color-main-panel);
-  padding: 0 16px 16px;
+  /* 左略收紧，页面布局下字段资源库更贴抽屉左缘 */
+  padding: 0 16px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.card-type-form-drawer-body.arco-drawer-body .drawer-spin {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card-type-form-drawer-body.arco-drawer-body .drawer-spin .arco-spin-children {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .card-type-create-modal .card-type-create-footer {

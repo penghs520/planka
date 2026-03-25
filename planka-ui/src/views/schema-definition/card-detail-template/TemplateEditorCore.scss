@@ -1,0 +1,153 @@
+.template-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  min-width: 0;
+  background: var(--color-main-panel);
+  overflow: hidden;
+}
+
+/* 内嵌在实体类型抽屉：占满 Tab 内容区高度（由父级 flex 链传递），不再限制 max-height */
+.template-editor--embedded {
+  flex: 1 1 0;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+  /* 顶边与 PageLayoutTab 切换/操作行衔接；左侧与抽屉内容区对齐，不画左边框 */
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-left: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--color-bg-2);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+/* 实体类型抽屉内嵌：无模板名称/实体类型时，操作区靠右 */
+.editor-toolbar--embedded-only-actions {
+  justify-content: flex-end;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  :deep(.arco-btn) {
+    &:focus-visible,
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
+
+.save-status {
+  font-size: 12px;
+  color: rgb(var(--success-6));
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &.has-changes {
+    color: rgb(var(--warning-6));
+  }
+}
+
+.field-label {
+  font-size: 14px;
+  color: var(--color-text-3);
+  white-space: nowrap;
+}
+
+.required-mark {
+  color: rgb(var(--danger-6));
+  margin-right: 2px;
+}
+
+.template-name-input {
+  width: 200px;
+  border-radius: 4px;
+
+  :deep(.arco-input-wrapper) {
+    border-radius: 4px;
+  }
+}
+
+.card-type-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-text-1);
+}
+
+.card-type-prefix {
+  color: var(--color-text-3);
+}
+
+/* 横向三栏：内嵌在抽屉内时必须显式 row + nowrap，并设 min-width:0 避免 flex 子项被压成单列 */
+.editor-main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.editor-sidebar-left {
+  flex: 0 0 220px;
+  width: 220px;
+  max-width: 220px;
+  min-width: 0;
+  background: var(--color-bg-1);
+  /* 字段资源库与画布无竖线分隔 */
+  border-right: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-canvas {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-bg-1);
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-sidebar-right {
+  flex: 0 0 280px;
+  width: 280px;
+  max-width: 280px;
+  min-width: 0;
+  background: var(--color-bg-1);
+  border-left: 1px solid var(--color-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 200px;
+}

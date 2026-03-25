@@ -5,6 +5,12 @@ import type { CreateSchemaRequest, UpdateSchemaRequest } from '@/types/schema'
 
 const TEMPLATE_URL = '/api/v1/schemas/card-detail-templates'
 
+/** GET /effective/{cardTypeId} 响应 */
+export interface EffectiveCardDetailTemplateResult {
+  definition: CardDetailTemplateDefinition
+  persisted: boolean
+}
+
 /**
  * 卡片详情页模板 API
  */
@@ -29,6 +35,13 @@ export const cardDetailTemplateApi = {
    */
   getByCardType(cardTypeId: string): Promise<CardDetailTemplateDefinition[]> {
     return request.get(`${TEMPLATE_URL}/by-card-type/${cardTypeId}`)
+  },
+
+  /**
+   * 当前生效的详情模板（无已存记录时返回默认构建结果）
+   */
+  getEffectiveByCardType(cardTypeId: string): Promise<EffectiveCardDetailTemplateResult> {
+    return request.get(`${TEMPLATE_URL}/effective/${cardTypeId}`)
   },
 
   /**

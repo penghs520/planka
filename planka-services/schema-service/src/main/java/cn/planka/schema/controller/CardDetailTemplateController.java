@@ -3,6 +3,7 @@ package cn.planka.schema.controller;
 import cn.planka.api.schema.request.detailtemplate.CardDetailTemplateCopyRequest;
 import cn.planka.common.result.Result;
 import cn.planka.domain.schema.definition.template.CardDetailTemplateDefinition;
+import cn.planka.schema.dto.EffectiveCardDetailTemplateVO;
 import cn.planka.schema.dto.TemplateListItemVO;
 import cn.planka.schema.service.cardtype.CardDetailTemplateService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,15 @@ public class CardDetailTemplateController {
     public Result<List<CardDetailTemplateDefinition>> getByCardType(
             @PathVariable("cardTypeId") String cardTypeId) {
         return templateService.getByCardType(cardTypeId);
+    }
+
+    /**
+     * 当前生效的详情页模板（无已存记录时返回与运行时一致的默认构建结果）
+     */
+    @GetMapping("/effective/{cardTypeId}")
+    public Result<EffectiveCardDetailTemplateVO> getEffectiveForCardType(
+            @PathVariable("cardTypeId") String cardTypeId) {
+        return templateService.getEffectiveForCardType(cardTypeId);
     }
 
     /**
