@@ -142,23 +142,21 @@ public class WorkflowEngine {
             return;
         }
 
-        // 查找下一个节点并推进
+        // 并行分叉：依次递归推进每个下级（顺序执行；含审批等待时后续分支未启动属已知限制）
         List<String> nextNodeIds = findNextNodeIds(definition, currentNode.id());
         if (nextNodeIds.isEmpty()) {
             log.warn("节点无后续节点: instanceId={}, nodeId={}", instance.getId(), currentNode.id());
             return;
         }
 
-        // MVP 线性流程只支持一个后续节点
-        String nextNodeId = nextNodeIds.get(0);
-        NodeDefinition nextNode = findNodeById(definition, nextNodeId);
-        if (nextNode == null) {
-            log.error("后续节点不存在: instanceId={}, nextNodeId={}", instance.getId(), nextNodeId);
-            return;
+        for (String nextNodeId : nextNodeIds) {
+            NodeDefinition nextNode = findNodeById(definition, nextNodeId);
+            if (nextNode == null) {
+                log.error("后续节点不存在: instanceId={}, nextNodeId={}", instance.getId(), nextNodeId);
+                continue;
+            }
+            advanceFromNode(instance, definition, nextNode, context);
         }
-
-        // 递归推进
-        advanceFromNode(instance, definition, nextNode, context);
     }
 
     /**
@@ -195,15 +193,8 @@ public class WorkflowEngine {
 
         logEvent(instanceId, "NODE_COMPLETED", nodeId, null, null);
 
-        // 查找下一个节点并推进
         List<String> nextNodeIds = findNextNodeIds(definition, nodeId);
         if (nextNodeIds.isEmpty()) {
-            return;
-        }
-
-        String nextNodeId = nextNodeIds.get(0);
-        NodeDefinition nextNode = findNodeById(definition, nextNodeId);
-        if (nextNode == null) {
             return;
         }
 
@@ -217,17 +208,27 @@ public class WorkflowEngine {
                 .workflowId(instance.getWorkflowId())
                 .build();
 
-        advanceFromNode(instance, definition, nextNode, context);
+        for (String nextNodeId : nextNodeIds) {
+            NodeDefinition nextNode = findNodeById(definition, nextNodeId);
+            if (nextNode == null) {
+                continue;
+            }
+            advanceFromNode(instance, definition, nextNode, context);
+        }
     }
 
     /**
      * 完成工作流
      */
     private void completeWorkflow(WorkflowInstanceEntity instance, Long completedBy) {
-        instance.setStatus(WorkflowInstanceStatus.COMPLETED.name());
-        instance.setCompletedBy(completedBy);
-        instance.setCompletedAt(LocalDateTime.now());
-        instanceMapper.completeInstance(instance);
+        WorkflowInstanceEntity latest = instanceMapper.selectById(instance.getId());
+        if (latest == null || !WorkflowInstanceStatus.RUNNING.name().equals(latest.getStatus())) {
+            return;
+        }
+        latest.setStatus(WorkflowInstanceStatus.COMPLETED.name());
+        latest.setCompletedBy(completedBy);
+        latest.setCompletedAt(LocalDateTime.now());
+        instanceMapper.completeInstance(latest);
 
         logEvent(instance.getId(), "WORKFLOW_COMPLETED", null, null, completedBy);
         log.info("工作流实例已完成: instanceId={}", instance.getId());

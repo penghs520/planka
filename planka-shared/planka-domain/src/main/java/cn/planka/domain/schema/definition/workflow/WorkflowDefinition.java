@@ -127,6 +127,7 @@ public final class WorkflowDefinition extends AbstractSchemaDefinition<WorkflowI
                 .map(NodeDefinition::id)
                 .orElseThrow();
 
+        // 画布编辑允许暂时出现孤岛；保存/启动前必须全图从「开始」可达
         Set<String> reachableNodes = getReachableNodes(startNodeId);
         if (reachableNodes.size() != nodes.size()) {
             throw new IllegalArgumentException("存在无法从开始节点到达的孤立节点");

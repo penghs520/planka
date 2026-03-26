@@ -990,9 +990,8 @@ targetFieldsRequired: '请选择目标属性',
     workflowName: '工作流名称',
     nodesLabel: '节点数',
     nodesCount: '{count} 个节点',
-    palette: {
-      title: '节点库',
-      hint: '点击将节点添加到「结束」节点之前',
+    addNodeMenu: {
+      title: '选择要插入的节点类型',
     },
     canvas: {
       zoomPercent: '{percent}%',

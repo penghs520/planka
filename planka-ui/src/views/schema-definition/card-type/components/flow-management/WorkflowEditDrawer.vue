@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * 工作流全屏编辑器（Coze 风格：顶栏 + 左侧节点库 + 画布 + 底部悬浮控件）
+ * 工作流全屏编辑器（顶栏 + 画布 + 底部悬浮控件；从节点右侧拖线选择插入类型）
  */
 import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -9,7 +9,7 @@ import WorkflowCanvas from './WorkflowCanvas.vue'
 import { workflowApi } from '@/api/workflow'
 import { useOrgStore } from '@/stores/org'
 import type { WorkflowDefinition } from '@/types/workflow'
-import { createEmptyWorkflow, WorkflowNodeType } from '@/types/workflow'
+import { createEmptyWorkflow } from '@/types/workflow'
 
 const { t } = useI18n()
 const orgStore = useOrgStore()
@@ -27,7 +27,6 @@ const emit = defineEmits<{
 
 const saving = ref(false)
 const localWorkflow = ref<WorkflowDefinition | null>(null)
-const canvasRef = ref<InstanceType<typeof WorkflowCanvas> | null>(null)
 
 const isEdit = computed(() => !!props.workflow?.id)
 
@@ -53,10 +52,6 @@ function handleUpdateWorkflow(wf: WorkflowDefinition) {
   localWorkflow.value = wf
 }
 
-function handleAddNode(nodeType: WorkflowNodeType) {
-  canvasRef.value?.addNodeBeforeEnd(nodeType)
-}
-
 async function handleSave() {
   if (!localWorkflow.value) return
 
@@ -79,9 +74,9 @@ async function handleSave() {
     Message.success(t('admin.message.saveSuccess'))
     emit('success')
     handleClose()
-  } catch (error: any) {
+  } catch (error: unknown) {
+    // 失败提示已由 @/api/request 拦截器统一弹出，此处不再 Message.error 避免重复
     console.error('Failed to save workflow:', error)
-    Message.error(error.message || t('admin.workflow.message.saveFailed'))
   } finally {
     saving.value = false
   }
@@ -118,45 +113,12 @@ async function handleSave() {
           </div>
         </div>
 
-        <!-- 左侧节点库 + 画布 -->
         <div class="wf-editor-body">
-          <aside class="wf-palette" aria-label="workflow-palette">
-            <div class="wf-palette__title">
-              {{ t('admin.workflow.palette.title') }}
-            </div>
-            <p class="wf-palette__hint">
-              {{ t('admin.workflow.palette.hint') }}
-            </p>
-            <a-button
-              block
-              class="wf-palette__btn"
-              @click="handleAddNode(WorkflowNodeType.APPROVAL)"
-            >
-              <span class="wf-palette__btn-inner">
-                <span class="wf-palette__dot" style="background: #3370ff" />
-                {{ t('admin.workflow.nodeType.APPROVAL') }}
-              </span>
-            </a-button>
-            <a-button
-              block
-              class="wf-palette__btn"
-              @click="handleAddNode(WorkflowNodeType.AUTO_ACTION)"
-            >
-              <span class="wf-palette__btn-inner">
-                <span class="wf-palette__dot" style="background: #ff9500" />
-                {{ t('admin.workflow.nodeType.AUTO_ACTION') }}
-              </span>
-            </a-button>
-          </aside>
-
-          <div class="wf-canvas-area">
-            <WorkflowCanvas
-              ref="canvasRef"
-              :workflow="localWorkflow"
-              :card-type-id="cardTypeId"
-              @update:workflow="handleUpdateWorkflow"
-            />
-          </div>
+          <WorkflowCanvas
+            :workflow="localWorkflow"
+            :card-type-id="cardTypeId"
+            @update:workflow="handleUpdateWorkflow"
+          />
         </div>
       </div>
     </transition>
@@ -214,62 +176,6 @@ async function handleSave() {
 
 .wf-editor-body {
   flex: 1;
-  display: flex;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.wf-palette {
-  width: 220px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px 14px;
-  background: #fff;
-  border-right: 1px solid var(--color-border-1);
-  box-shadow: 1px 0 0 rgba(31, 35, 41, 0.04);
-}
-
-.wf-palette__title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-text-1);
-  line-height: 1.4;
-}
-
-.wf-palette__hint {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--color-text-3);
-}
-
-.wf-palette__btn {
-  justify-content: flex-start;
-  border-radius: 8px;
-  color: var(--color-text-1);
-}
-
-.wf-palette__btn-inner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  text-align: left;
-}
-
-.wf-palette__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-// 画布区域
-.wf-canvas-area {
-  flex: 1;
-  min-width: 0;
   min-height: 0;
   overflow: hidden;
   background: #f5f6f8;

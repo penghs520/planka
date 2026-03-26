@@ -2,15 +2,24 @@
 /**
  * 工作流画布编辑器（Coze 风格：浅色点阵画布 + 横向卡片节点 + 右侧属性面板）
  */
-import { ref, computed, watch, markRaw, nextTick } from 'vue'
+import { ref, computed, watch, markRaw, nextTick, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { VueFlow, useVueFlow, MarkerType, Position } from '@vue-flow/core'
+import { VueFlow, useVueFlow, MarkerType, Position, ConnectionLineType } from '@vue-flow/core'
+import type {
+  Node,
+  Edge,
+  NodeTypesObject,
+  EdgeTypesObject,
+  Connection,
+  OnConnectStartParams,
+  EdgeChange,
+} from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
-import type { Node, Edge, NodeTypesObject } from '@vue-flow/core'
 import StartNode from './nodes/StartNode.vue'
 import EndNode from './nodes/EndNode.vue'
 import ApprovalNode from './nodes/ApprovalNode.vue'
 import AutoActionNode from './nodes/AutoActionNode.vue'
+import WorkflowBezierEdge from './WorkflowBezierEdge.vue'
 import WorkflowFlowBottomBar from './WorkflowFlowBottomBar.vue'
 import ApprovalNodePanel from './panels/ApprovalNodePanel.vue'
 import AutoActionNodePanel from './panels/AutoActionNodePanel.vue'
@@ -45,12 +54,182 @@ const nodeTypes: NodeTypesObject = {
   AUTO_ACTION: markRaw(AutoActionNode) as any,
 }
 
+const edgeTypes: EdgeTypesObject = {
+  workflowBezier: markRaw(WorkflowBezierEdge) as any,
+}
+
 const { fitView, updateNodeInternals } = useVueFlow()
+
+/** 开放折线箭头（非实心三角），与主题蓝一致；strokeWidth 与边线一致（略细于 2px） */
+const WORKFLOW_EDGE_MARKER_END = {
+  type: MarkerType.Arrow,
+  width: 14,
+  height: 14,
+  color: '#3370FF',
+  strokeWidth: 1.5,
+} as const
+
+/** 拖线预览：同色贝塞尔 + 相同箭头 */
+const workflowConnectionLineOptions = {
+  type: ConnectionLineType.Bezier,
+  style: { stroke: '#3370FF', strokeWidth: 1.5 },
+  markerEnd: { ...WORKFLOW_EDGE_MARKER_END },
+} as const
 
 const nodes = ref<Node[]>([])
 const edges = ref<Edge[]>([])
 const selectedNodeId = ref<string | null>(null)
 const zoomPercent = ref(100)
+
+/** 从右侧 wf-out 拖线结束：弹出菜单插入到该节点的出边上 */
+const connectDragSourceId = ref<string | null>(null)
+const pendingInsertSourceId = ref<string | null>(null)
+const addNodeMenuVisible = ref(false)
+const addNodeMenuX = ref(0)
+const addNodeMenuY = ref(0)
+/** 避免拖线松手时触发的 pane-click 立刻关掉弹层 */
+const addNodeMenuOpenedAt = ref(0)
+/** 本次拖线是否已在「下一节点」入点上成功吸附（connect 先于 connectEnd 触发） */
+const lastConnectWasValidSnap = ref(false)
+
+function getClientPosition(event?: MouseEvent | TouchEvent): { x: number; y: number } | null {
+  if (!event) return null
+  if ('changedTouches' in event && event.changedTouches?.length) {
+    const touch = event.changedTouches.item(0) ?? event.changedTouches[0]
+    if (!touch) return null
+    return { x: touch.clientX, y: touch.clientY }
+  }
+  if ('touches' in event && event.touches?.length) {
+    const touch = event.touches.item(0) ?? event.touches[0]
+    if (!touch) return null
+    return { x: touch.clientX, y: touch.clientY }
+  }
+  if ('clientX' in event && typeof event.clientX === 'number') {
+    return { x: event.clientX, y: event.clientY }
+  }
+  return null
+}
+
+/**
+ * 允许从 wf-out 连到 wf-in（结束节点无出点、开始节点无入点）。
+ * 并行：同一源可连多条出边；非结束目标仍保持单入边（新连会替换该目标的旧入边）；结束节点允许多入边（并行汇合）。
+ */
+function isValidWorkflowConnection(connection: Connection): boolean {
+  const { source, target, sourceHandle, targetHandle } = connection
+  if (!source || !target || source === target) return false
+  if (sourceHandle != null && sourceHandle !== 'wf-out') return false
+  if (targetHandle != null && targetHandle !== 'wf-in') return false
+
+  const sourceDef = props.workflow.nodes.find((n) => n.id === source)
+  const targetDef = props.workflow.nodes.find((n) => n.id === target)
+  if (!sourceDef || !targetDef) return false
+  if (sourceDef.nodeType === WorkflowNodeType.END) return false
+  if (targetDef.nodeType === WorkflowNodeType.START) return false
+
+  return true
+}
+
+/** 并行分叉：保留源节点已有其它出边；非 END 目标去掉旧入边后再接 source→target；END 允许多入边，仅禁止重复 source→END */
+function applyParallelConnection(source: string, target: string) {
+  if (
+    props.workflow.edges.some(
+      (e) => e.sourceNodeId === source && e.targetNodeId === target,
+    )
+  ) {
+    return
+  }
+
+  const targetDef = props.workflow.nodes.find((n) => n.id === target)
+  const isEnd = targetDef?.nodeType === WorkflowNodeType.END
+
+  const newEdges = isEnd
+    ? [...props.workflow.edges]
+    : props.workflow.edges.filter((e) => e.targetNodeId !== target)
+
+  newEdges.push({
+    id: generateEdgeId(),
+    sourceNodeId: source,
+    targetNodeId: target,
+  })
+  emit('update:workflow', { ...props.workflow, edges: newEdges })
+}
+
+function handleConnect(connection: Connection) {
+  lastConnectWasValidSnap.value = true
+  connectDragSourceId.value = null
+  const { source, target } = connection
+  if (!source || !target) return
+  applyParallelConnection(source, target)
+}
+
+function handleConnectStart(
+  params: OnConnectStartParams & { event?: MouseEvent | TouchEvent },
+) {
+  lastConnectWasValidSnap.value = false
+  connectDragSourceId.value = null
+  if (!params.nodeId || params.handleId !== 'wf-out') return
+  const nodeDef = props.workflow.nodes.find((n) => n.id === params.nodeId)
+  if (!nodeDef || nodeDef.nodeType === WorkflowNodeType.END) return
+  connectDragSourceId.value = params.nodeId
+}
+
+function handleConnectEnd(event?: MouseEvent | TouchEvent) {
+  if (lastConnectWasValidSnap.value) {
+    lastConnectWasValidSnap.value = false
+    connectDragSourceId.value = null
+    return
+  }
+
+  const sourceId = connectDragSourceId.value
+  connectDragSourceId.value = null
+  if (!sourceId) return
+
+  const outgoingFromSource = props.workflow.edges.filter(
+    (e) => e.sourceNodeId === sourceId,
+  )
+  if (outgoingFromSource.length !== 1) return
+
+  const pos = getClientPosition(event)
+  if (!pos) return
+
+  const x = Math.min(pos.x, window.innerWidth - 220)
+  const y = Math.min(pos.y, window.innerHeight - 140)
+
+  nextTick(() => {
+    pendingInsertSourceId.value = sourceId
+    addNodeMenuX.value = x
+    addNodeMenuY.value = y
+    addNodeMenuVisible.value = true
+    addNodeMenuOpenedAt.value = Date.now()
+  })
+}
+
+function closeAddNodeMenu() {
+  addNodeMenuVisible.value = false
+  pendingInsertSourceId.value = null
+}
+
+function insertNodeAfterSource(sourceNodeId: string, nodeType: WorkflowNodeType) {
+  const outgoingList = props.workflow.edges.filter((e) => e.sourceNodeId === sourceNodeId)
+  if (outgoingList.length !== 1) return
+  insertNodeOnEdge(outgoingList[0]!.id, nodeType)
+}
+
+function pickNodeTypeFromMenu(nodeType: WorkflowNodeType) {
+  const sourceId = pendingInsertSourceId.value
+  closeAddNodeMenu()
+  if (!sourceId) return
+  insertNodeAfterSource(sourceId, nodeType)
+}
+
+onBeforeUnmount(() => {
+  closeAddNodeMenu()
+})
+
+const addNodeMenuStyle = computed(() => ({
+  left: `${addNodeMenuX.value}px`,
+  top: `${addNodeMenuY.value}px`,
+}))
 
 /** 仅当节点/边结构变化时触发 fitView，避免拖拽保存后画布跳动 */
 const lastWorkflowStructureKey = ref<string>('')
@@ -76,28 +255,44 @@ function workflowStructureKey(def: WorkflowDefinition): string {
 
 // ==================== 数据转换 ====================
 
+/** 从「开始」BFS 得到节点顺序（支持并行分叉）；未访问的节点（孤岛等）排在后面 */
+function bfsOrderFromStart(def: WorkflowDefinition): string[] {
+  const startNode = def.nodes.find((n) => n.nodeType === WorkflowNodeType.START)
+  if (!startNode) return def.nodes.map((n) => n.id)
+
+  const adj = new Map<string, string[]>()
+  for (const e of def.edges) {
+    if (!adj.has(e.sourceNodeId)) adj.set(e.sourceNodeId, [])
+    adj.get(e.sourceNodeId)!.push(e.targetNodeId)
+  }
+
+  const ordered: string[] = []
+  const visited = new Set<string>()
+  const queue: string[] = [startNode.id]
+  visited.add(startNode.id)
+
+  while (queue.length > 0) {
+    const id = queue.shift()!
+    ordered.push(id)
+    for (const next of adj.get(id) ?? []) {
+      if (!visited.has(next)) {
+        visited.add(next)
+        queue.push(next)
+      }
+    }
+  }
+
+  for (const n of def.nodes) {
+    if (!visited.has(n.id)) ordered.push(n.id)
+  }
+  return ordered
+}
+
 function definitionToFlow(def: WorkflowDefinition) {
   const NODE_GAP = 300
   const NODE_Y = 80
 
-  const orderedIds: string[] = []
-  const visited = new Set<string>()
-  const edgeMap = new Map<string, string>()
-  def.edges.forEach((e) => edgeMap.set(e.sourceNodeId, e.targetNodeId))
-
-  const startNode = def.nodes.find((n) => n.nodeType === WorkflowNodeType.START)
-  if (startNode) {
-    let currentId: string | undefined = startNode.id
-    while (currentId && !visited.has(currentId)) {
-      visited.add(currentId)
-      orderedIds.push(currentId)
-      currentId = edgeMap.get(currentId)
-    }
-  }
-
-  def.nodes.forEach((n) => {
-    if (!visited.has(n.id)) orderedIds.push(n.id)
-  })
+  const orderedIds = bfsOrderFromStart(def)
 
   const nodeMap = new Map(def.nodes.map((n) => [n.id, n]))
   const layout = def.canvasLayout ?? {}
@@ -127,16 +322,13 @@ function definitionToFlow(def: WorkflowDefinition) {
     targetHandle: 'wf-in',
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
-    type: 'default',
+    type: 'workflowBezier',
     animated: false,
-    style: { stroke: '#3370FF', strokeWidth: 2 },
+    deletable: true,
+    selectable: true,
+    style: { stroke: '#3370FF', strokeWidth: 1.5 },
     pathOptions: { curvature: 0.38 },
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-      width: 18,
-      height: 18,
-      color: '#3370FF',
-    },
+    markerEnd: { ...WORKFLOW_EDGE_MARKER_END },
   }))
 
   return { flowNodes, flowEdges }
@@ -164,6 +356,18 @@ function buildNodeData(nodeDef: NodeDefinition) {
 
 function onViewportChange(viewport: { zoom: number }) {
   zoomPercent.value = Math.round(viewport.zoom * 100)
+}
+
+/** 将 Vue Flow 的删边同步到 workflow.edges，否则仅改本地 ref，下次布局/保存会还原 */
+function handleEdgesChange(changes: EdgeChange[]) {
+  const removeIds = new Set<string>()
+  for (const c of changes) {
+    if (c.type === 'remove') removeIds.add(c.id)
+  }
+  if (removeIds.size === 0) return
+
+  const newEdges = props.workflow.edges.filter((e) => !removeIds.has(e.id))
+  emit('update:workflow', { ...props.workflow, edges: newEdges })
 }
 
 function onNodeDragStop({ node }: { node: Node }) {
@@ -243,15 +447,17 @@ function deleteNode(nodeId: string) {
   )
     return
 
-  const inEdge = props.workflow.edges.find((e) => e.targetNodeId === nodeId)
-  const outEdge = props.workflow.edges.find((e) => e.sourceNodeId === nodeId)
+  const inEdges = props.workflow.edges.filter((e) => e.targetNodeId === nodeId)
+  const outEdges = props.workflow.edges.filter((e) => e.sourceNodeId === nodeId)
 
   const newNodes = props.workflow.nodes.filter((n) => n.id !== nodeId)
   const newEdges = props.workflow.edges.filter(
     (e) => e.sourceNodeId !== nodeId && e.targetNodeId !== nodeId,
   )
 
-  if (inEdge && outEdge) {
+  if (inEdges.length === 1 && outEdges.length === 1) {
+    const inEdge = inEdges[0]!
+    const outEdge = outEdges[0]!
     newEdges.push({
       id: generateEdgeId(),
       sourceNodeId: inEdge.sourceNodeId,
@@ -278,6 +484,10 @@ function handleNodeClick(event: { node: Node }) {
 
 function handlePaneClick() {
   selectedNodeId.value = null
+  if (addNodeMenuVisible.value && Date.now() - addNodeMenuOpenedAt.value < 120) {
+    return
+  }
+  closeAddNodeMenu()
 }
 
 function handleNodeUpdate(updatedNode: NodeDefinition) {
@@ -297,9 +507,14 @@ defineExpose({ addNodeBeforeEnd, deleteNode, selectedNodeId })
         v-model:nodes="nodes"
         v-model:edges="edges"
         :node-types="nodeTypes"
+        :edge-types="edgeTypes"
         :nodes-draggable="true"
-        :nodes-connectable="false"
+        :nodes-connectable="true"
+        :is-valid-connection="isValidWorkflowConnection"
+        :connection-radius="40"
         :edges-updatable="false"
+        :default-edge-options="{ deletable: true, selectable: true }"
+        :connection-line-options="workflowConnectionLineOptions"
         :zoom-on-scroll="true"
         :pan-on-scroll="true"
         :fit-view-on-init="true"
@@ -309,6 +524,10 @@ defineExpose({ addNodeBeforeEnd, deleteNode, selectedNodeId })
         @pane-click="handlePaneClick"
         @viewport-change="onViewportChange"
         @node-drag-stop="onNodeDragStop"
+        @edges-change="handleEdgesChange"
+        @connect="handleConnect"
+        @connect-start="handleConnectStart"
+        @connect-end="handleConnectEnd"
       >
         <Background
           variant="dots"
@@ -357,6 +576,37 @@ defineExpose({ addNodeBeforeEnd, deleteNode, selectedNodeId })
         </div>
       </div>
     </transition>
+
+    <teleport to="body">
+      <div
+        v-if="addNodeMenuVisible"
+        class="wf-add-node-overlay"
+        role="presentation"
+        @click="closeAddNodeMenu"
+      >
+        <div class="wf-add-node-menu" :style="addNodeMenuStyle" @click.stop>
+          <div class="wf-add-node-menu__title">
+            {{ t('admin.workflow.addNodeMenu.title') }}
+          </div>
+          <button
+            type="button"
+            class="wf-add-node-menu__btn"
+            @click="pickNodeTypeFromMenu(WorkflowNodeType.APPROVAL)"
+          >
+            <span class="wf-add-node-menu__dot" style="background: #3370ff" />
+            {{ t('admin.workflow.nodeType.APPROVAL') }}
+          </button>
+          <button
+            type="button"
+            class="wf-add-node-menu__btn"
+            @click="pickNodeTypeFromMenu(WorkflowNodeType.AUTO_ACTION)"
+          >
+            <span class="wf-add-node-menu__dot" style="background: #ff9500" />
+            {{ t('admin.workflow.nodeType.AUTO_ACTION') }}
+          </button>
+        </div>
+      </div>
+    </teleport>
   </div>
 </template>
 
@@ -367,6 +617,7 @@ defineExpose({ addNodeBeforeEnd, deleteNode, selectedNodeId })
  */
 @import '@vue-flow/core/dist/style.css';
 @import '@vue-flow/core/dist/theme-default.css';
+
 </style>
 
 <style scoped lang="scss">
@@ -418,8 +669,12 @@ defineExpose({ addNodeBeforeEnd, deleteNode, selectedNodeId })
 // 仅绘制一条可见边线，避免与主题叠加产生「加粗」观感
 :deep(.vue-flow__edge-path) {
   stroke: #3370ff;
-  stroke-width: 2;
+  stroke-width: 1.5;
   fill: none;
+}
+
+:deep(.vue-flow__connection-path) {
+  stroke-width: 1.5;
 }
 
 :deep(.vue-flow__edge.selected .vue-flow__edge-path) {
@@ -476,5 +731,59 @@ defineExpose({ addNodeBeforeEnd, deleteNode, selectedNodeId })
 .slide-right-enter-from,
 .slide-right-leave-to {
   transform: translateX(100%);
+}
+
+.wf-add-node-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.wf-add-node-menu {
+  position: fixed;
+  z-index: 2101;
+  min-width: 200px;
+  padding: 8px 0;
+  background: #fff;
+  border: 1px solid var(--color-border-1);
+  border-radius: 10px;
+  box-shadow:
+    0 8px 28px rgba(31, 35, 41, 0.12),
+    0 0 1px rgba(31, 35, 41, 0.08);
+}
+
+.wf-add-node-menu__title {
+  padding: 4px 14px 8px;
+  font-size: 12px;
+  color: var(--color-text-3);
+  line-height: 1.4;
+}
+
+.wf-add-node-menu__btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 14px;
+  margin: 0;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--color-text-1);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--color-fill-2);
+  }
+}
+
+.wf-add-node-menu__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 </style>

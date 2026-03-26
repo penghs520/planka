@@ -1029,9 +1029,8 @@ targetFieldsRequired: 'Please select target fields',
     workflowName: 'Workflow Name',
     nodesLabel: 'Nodes',
     nodesCount: '{count} nodes',
-    palette: {
-      title: 'Node library',
-      hint: 'Click to insert a node before End',
+    addNodeMenu: {
+      title: 'Select node type to insert',
     },
     canvas: {
       zoomPercent: '{percent}%',
