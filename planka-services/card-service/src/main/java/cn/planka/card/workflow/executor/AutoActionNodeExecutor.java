@@ -72,13 +72,13 @@ public class AutoActionNodeExecutor implements NodeExecutor<AutoActionNodeDefini
 
             if (!result.isSuccess()) {
                 if (node.failureStrategy() == FailureStrategy.BLOCK_WORKFLOW) {
-                    log.error("动作执行失败，阻塞流程: nodeId={}, actionType={}, error={}",
-                            node.id(), action.getActionType(), result.getErrorMessage());
+                    log.error("动作执行失败，阻塞流程: nodeId={}, actionType={}, actionName={}, error={}",
+                            node.id(), action.getActionType(), action.getName(), result.getErrorMessage());
                     return NodeExecutionResult.failed(result.getErrorMessage());
                 }
                 // CONTINUE 策略：记录错误但继续
-                log.warn("动作执行失败但继续: nodeId={}, actionType={}, error={}",
-                        node.id(), action.getActionType(), result.getErrorMessage());
+                log.warn("动作执行失败但继续: nodeId={}, actionType={}, actionName={}, error={}",
+                        node.id(), action.getActionType(), action.getName(), result.getErrorMessage());
             }
         }
 

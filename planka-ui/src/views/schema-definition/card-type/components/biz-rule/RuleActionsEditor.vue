@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, nextTick, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { IconPlus, IconDelete, IconDragDotVertical, IconDown, IconRight } from '@arco-design/web-vue/es/icon'
 import { Modal } from '@arco-design/web-vue'
@@ -29,13 +29,28 @@ import ActionTargetSelector from './ActionTargetSelector.vue'
 import TextExpressionTemplateEditor from '@/components/common/text-expression-template/TextExpressionTemplateEditor.vue'
 import type { FieldProvider } from '@/components/common/text-expression-template/types'
 import { getMemberFieldsCached } from '@/views/schema-definition/card-type/components/permission/memberFieldsCache'
+import { useWorkflowPopupContainer } from '@/views/schema-definition/card-type/components/flow-management/workflowPopupContext'
 const { t } = useI18n()
 const orgStore = useOrgStore()
+
+const injectedArcoPopup = useWorkflowPopupContainer()
 
 const props = defineProps<{
   modelValue: RuleAction[]
   cardTypeId: string
+  /** 打开时展开指定序号（0-based），用于工作流侧栏点选 */
+  initialExpandedIndex?: number | null
+  /** 仅配置已有动作，不展示「添加动作」（如工作流自动执行节点弹窗） */
+  singleActionMode?: boolean
+  /**
+   * Arco 浮层挂载容器（显式覆盖）；不传时在工作流全屏内使用 WorkflowEditDrawer 的 provide。
+   * 卡片动作等通用场景无需传。
+   */
+  arcoPopupContainer?: string
 }>()
+
+/** 子组件用的挂载点：优先 props，否则 inject（工作流内） */
+const effectiveArcoPopup = computed(() => props.arcoPopupContainer ?? injectedArcoPopup)
 
 const emit = defineEmits<{
   'update:modelValue': [value: RuleAction[]]
@@ -111,6 +126,13 @@ const actionTargetFieldsLoading = ref<Map<number, boolean>>(new Map())
 const actionTargetStatusOptions = ref<Map<number, StatusOption[]>>(new Map())
 const actionTargetStatusLoading = ref<Map<number, boolean>>(new Map())
 
+/** ref<Map> 原地 .set() 不会触发依赖更新，需整体替换 Map 引用 */
+function replaceMapEntry<K, V>(mapRef: Ref<Map<K, V>>, key: K, value: V) {
+  const next = new Map(mapRef.value)
+  next.set(key, value)
+  mapRef.value = next
+}
+
 // 表达式模板编辑器的字段提供者（带请求缓存）
 let cardFieldsCache: Promise<FieldOption[]> | null = null
 const linkFieldsCache = new Map<string, Promise<FieldOption[]>>()
@@ -135,29 +157,32 @@ const expressionFieldProvider: FieldProvider = {
 
 // 加载动作目标实体类型的字段选项
 async function loadActionTargetFieldOptions(index: number, targetCardTypeId: string) {
-  actionTargetFieldsLoading.value.set(index, true)
+  replaceMapEntry(actionTargetFieldsLoading, index, true)
   try {
     const fields = await fieldOptionsApi.getFields(targetCardTypeId)
-    actionTargetFieldOptions.value.set(index, fields.filter(f => !f.systemField))
+    const filtered = fields.filter(f => !f.systemField)
+    // 与「当前卡片」一致：若无非系统字段则回退全量，避免下拉为空
+    const toStore = filtered.length > 0 ? filtered : fields
+    replaceMapEntry(actionTargetFieldOptions, index, toStore)
   } catch (e) {
     console.error('Failed to load action target field options:', e)
-    actionTargetFieldOptions.value.set(index, [])
+    replaceMapEntry(actionTargetFieldOptions, index, [])
   } finally {
-    actionTargetFieldsLoading.value.set(index, false)
+    replaceMapEntry(actionTargetFieldsLoading, index, false)
   }
 }
 
 // 加载动作目标实体类型的状态选项
 async function loadActionTargetStatusOptions(index: number, targetCardTypeId: string) {
-  actionTargetStatusLoading.value.set(index, true)
+  replaceMapEntry(actionTargetStatusLoading, index, true)
   try {
     const statuses = await valueStreamBranchApi.getStatusOptions(targetCardTypeId)
-    actionTargetStatusOptions.value.set(index, statuses)
+    replaceMapEntry(actionTargetStatusOptions, index, statuses)
   } catch (e) {
     console.error('Failed to load action target status options:', e)
-    actionTargetStatusOptions.value.set(index, [])
+    replaceMapEntry(actionTargetStatusOptions, index, [])
   } finally {
-    actionTargetStatusLoading.value.set(index, false)
+    replaceMapEntry(actionTargetStatusLoading, index, false)
   }
 }
 
@@ -165,7 +190,10 @@ async function loadActionTargetStatusOptions(index: number, targetCardTypeId: st
 function getActionFieldOptions(index: number, action: RuleAction): FieldOption[] {
   const target = getActionTarget(action)
   if (target.targetType === ActionTargetType.CURRENT_CARD) {
-    return editableFieldOptions.value
+    const editable = editableFieldOptions.value
+    // 接口有数据但全是 systemField 时，editable 会为空，下拉无选项；回退到全量字段供选择
+    if (editable.length > 0) return editable
+    return fieldOptions.value
   }
   return actionTargetFieldOptions.value.get(index) || []
 }
@@ -354,6 +382,7 @@ function createDefaultAction(actionType: RuleActionType, sortOrder: number): Rul
 
 // 添加动作
 function handleAddAction() {
+  if (props.singleActionMode) return
   const newAction = createDefaultAction(RuleActionType.UPDATE_CARD, actions.value.length)
   actions.value = [...actions.value, newAction]
 }
@@ -588,6 +617,24 @@ function toggleCollapse(index: number) {
 function isCollapsed(index: number): boolean {
   return collapsedIndices.value.has(index)
 }
+// 外部指定展开某一动作（如工作流侧栏点选）
+watch(
+  () => props.initialExpandedIndex,
+  (idx) => {
+    if (idx === undefined || idx === null || idx < 0) return
+    nextTick(() => {
+      const len = actions.value.length
+      if (len === 0 || idx >= len) return
+      const next = new Set<number>()
+      for (let i = 0; i < len; i++) {
+        if (i !== idx) next.add(i)
+      }
+      collapsedIndices.value = next
+    })
+  },
+  { immediate: true },
+)
+
 
 // 判断动作是否有配置
 function hasActionConfig(action: RuleAction): boolean {
@@ -629,7 +676,11 @@ function hasActionConfig(action: RuleAction): boolean {
 // 获取动作摘要
 function getActionSummary(action: RuleAction): string {
   const actionTypeLabel = actionTypeOptions.value.find(o => o.value === action.actionType)?.label || action.actionType
-  const configCount = hasActionConfig(action) ? '已配置' : '未配置'
+  const configCount = hasActionConfig(action) ? t('admin.bizRule.actionConfig.configured') : t('admin.bizRule.actionConfig.notConfigured')
+  const displayName = action.name?.trim()
+  if (displayName) {
+    return `${displayName} · ${actionTypeLabel} · ${configCount}`
+  }
   return `${actionTypeLabel} · ${configCount}`
 }
 
@@ -661,7 +712,7 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
   const newActions = [...actions.value]
   const oldAction = newActions[index]
   const newAction = createDefaultAction(actionType, oldAction?.sortOrder ?? index)
-  newActions[index] = newAction
+  newActions[index] = { ...newAction, name: oldAction?.name }
   actions.value = newActions
 }
 </script>
@@ -693,6 +744,7 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
               :options="actionTypeOptions"
               class="action-type-select"
               size="small"
+              :popup-container="effectiveArcoPopup"
               @change="(val: RuleActionType) => handleActionTypeChangeWithConfirm(index, val)"
               @click.stop
             />
@@ -709,6 +761,14 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
 
         <!-- 动作配置区域 -->
         <div v-show="!isCollapsed(index)" class="action-config">
+          <a-form-item :label="t('admin.bizRule.actionConfig.actionDisplayName')" class="action-name-row">
+            <a-input
+              :model-value="action.name || ''"
+              :placeholder="t('admin.bizRule.actionConfig.actionDisplayNamePlaceholder')"
+              allow-clear
+              @update:model-value="(v: string) => updateAction(index, { name: v || undefined } as Partial<RuleAction>)"
+            />
+          </a-form-item>
           <!-- 操作对象选择器（适用于操作卡片的动作类型） -->
           <div v-if="needsTargetSelector(action.actionType)" class="action-target-row">
             <span class="action-target-label">{{ t('admin.bizRule.actionConfig.actionTarget') }}：</span>
@@ -716,6 +776,7 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
               :model-value="getActionTarget(action)"
               :field-options="fieldOptions"
               :card-type-id="cardTypeId"
+              :arco-popup-container="effectiveArcoPopup"
               @update:model-value="(val: ActionTargetSelectorType) => setActionTarget(index, val)"
             />
           </div>
@@ -731,6 +792,7 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
                 :current-card-type-id="cardTypeId"
                 :member-card-type-id="memberCardTypeId"
                 :hide-user-input="true"
+                :arco-popup-container="effectiveArcoPopup"
                 @update:model-value="(val: FieldAssignment[]) => setFieldAssignments(index, val)"
               />
             </div>
@@ -743,6 +805,7 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
                 :model-value="getMoveToStatus(action)"
                 :placeholder="t('admin.bizRule.actionConfig.toStatusPlaceholder')"
                 allow-clear
+                :popup-container="effectiveArcoPopup"
                 @change="(val: string) => setMoveToStatus(index, val || '')"
               >
                 <a-option
@@ -800,6 +863,7 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
                 :current-card-type-id="cardTypeId"
                 :member-card-type-id="memberCardTypeId"
                 :hide-user-input="true"
+                :arco-popup-container="effectiveArcoPopup"
                 @update:model-value="(val: FieldAssignment[]) => setFieldAssignments(index, val)"
               />
             </div>
@@ -838,6 +902,7 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
                 :current-card-type-id="cardTypeId"
                 :member-card-type-id="memberCardTypeId"
                 :hide-user-input="true"
+                :arco-popup-container="effectiveArcoPopup"
                 @update:model-value="(val: FieldAssignment[]) => setFieldAssignments(index, val)"
               />
             </div>
@@ -873,6 +938,7 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
                   <a-select
                     :model-value="getHttpMethod(action)"
                     :options="httpMethodOptions"
+                    :popup-container="effectiveArcoPopup"
                     @update:model-value="(val: string) => setHttpMethod(index, val)"
                   />
                 </a-form-item>
@@ -905,14 +971,25 @@ function doActionTypeChange(index: number, actionType: RuleActionType) {
     <!-- 空状态提示 -->
     <div v-if="actions.length === 0" class="empty-action-state">
       <div class="empty-hint">{{ t('admin.bizRule.actionConfig.emptyHint') }}</div>
-      <a-button type="outline" class="add-action-btn" @click="handleAddAction">
+      <a-button
+        v-if="!singleActionMode"
+        type="outline"
+        class="add-action-btn"
+        @click="handleAddAction"
+      >
         <template #icon><IconPlus /></template>
         {{ t('admin.bizRule.actionConfig.addAction') }}
       </a-button>
     </div>
 
     <!-- 添加动作按钮（有内容时显示在底部） -->
-    <a-button v-else type="outline" long class="add-action-btn-bottom" @click="handleAddAction">
+    <a-button
+      v-else-if="!singleActionMode"
+      type="outline"
+      long
+      class="add-action-btn-bottom"
+      @click="handleAddAction"
+    >
       <template #icon><IconPlus /></template>
       {{ t('admin.bizRule.actionConfig.addAction') }}
     </a-button>

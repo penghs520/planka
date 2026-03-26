@@ -21,6 +21,8 @@ defineProps<{
   memberCardTypeId?: string
   /** 是否隐藏用户输入选项（业务规则等自动执行场景使用） */
   hideUserInput?: boolean
+  /** Arco 浮层挂载容器，透传给 FieldAssignmentEditor */
+  arcoPopupContainer?: string
 }>()
 
 const modelValue = defineModel<FieldAssignment[]>({ default: () => [] })
@@ -69,6 +71,7 @@ function updateAssignment(index: number, assignment: FieldAssignment) {
           :current-card-type-id="currentCardTypeId"
           :member-card-type-id="memberCardTypeId"
           :hide-user-input="hideUserInput"
+          :arco-popup-container="arcoPopupContainer"
           @update:model-value="updateAssignment(index, $event)"
         />
         <a-button

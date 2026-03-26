@@ -38,4 +38,12 @@ public sealed interface RuleAction
     default int getSortOrder() {
         return 0;
     }
+
+    /**
+     * 可选展示名称（用户自定义，便于识别）
+     */
+    default String getName() {
+        return null;
+    }
+
 }

@@ -15,15 +15,18 @@ public final class MoveCardAction implements RuleAction {
 
     private final ActionTargetSelector target;
     private final StatusId toStatusId;
+    private final String name;
     private final int sortOrder;
 
     @JsonCreator
     public MoveCardAction(
             @JsonProperty("target") ActionTargetSelector target,
             @JsonProperty("toStatusId") StatusId toStatusId,
+            @JsonProperty("name") String name,
             @JsonProperty("sortOrder") Integer sortOrder) {
         this.target = Objects.requireNonNull(target, "target must not be null");
         this.toStatusId = Objects.requireNonNull(toStatusId, "toStatusId must not be null");
+        this.name = name;
         this.sortOrder = sortOrder != null ? sortOrder : 0;
     }
 
@@ -35,6 +38,12 @@ public final class MoveCardAction implements RuleAction {
     @JsonProperty("toStatusId")
     public StatusId getToStatusId() {
         return toStatusId;
+    }
+
+    @Override
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     @Override

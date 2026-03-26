@@ -19,6 +19,7 @@ public final class CallExternalApiAction implements RuleAction {
     private final Map<String, String> headers;
     private final TextExpressionTemplate bodyTemplate;
     private final int timeoutMs;
+    private final String name;
     private final int sortOrder;
 
     @JsonCreator
@@ -28,12 +29,14 @@ public final class CallExternalApiAction implements RuleAction {
             @JsonProperty("headers") Map<String, String> headers,
             @JsonProperty("bodyTemplate") TextExpressionTemplate bodyTemplate,
             @JsonProperty("timeoutMs") Integer timeoutMs,
+            @JsonProperty("name") String name,
             @JsonProperty("sortOrder") Integer sortOrder) {
         this.urlTemplate = Objects.requireNonNull(urlTemplate, "urlTemplate must not be null");
         this.method = method != null ? method : HttpMethod.POST;
         this.headers = headers;
         this.bodyTemplate = bodyTemplate;
         this.timeoutMs = timeoutMs != null ? timeoutMs : 30000;
+        this.name = name;
         this.sortOrder = sortOrder != null ? sortOrder : 0;
     }
 
@@ -60,6 +63,12 @@ public final class CallExternalApiAction implements RuleAction {
     @JsonProperty("timeoutMs")
     public int getTimeoutMs() {
         return timeoutMs;
+    }
+
+    @Override
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     @Override

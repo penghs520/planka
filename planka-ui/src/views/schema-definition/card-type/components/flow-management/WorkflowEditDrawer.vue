@@ -2,16 +2,27 @@
 /**
  * 工作流全屏编辑器（顶栏 + 画布 + 底部悬浮控件；从节点右侧拖线选择插入类型）
  */
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Message } from '@arco-design/web-vue'
 import WorkflowCanvas from './WorkflowCanvas.vue'
 import { workflowApi } from '@/api/workflow'
 import { useOrgStore } from '@/stores/org'
-import type { WorkflowDefinition } from '@/types/workflow'
-import { createEmptyWorkflow } from '@/types/workflow'
+import {
+  WorkflowNodeType,
+  createEmptyWorkflow,
+  type WorkflowDefinition,
+  type AutoActionNodeDefinition,
+} from '@/types/workflow'
+import { validateRuleAction } from '@/types/biz-rule'
+import {
+  WORKFLOW_POPUP_CONTAINER_KEY,
+  WORKFLOW_POPUP_CONTAINER_SELECTOR,
+} from './workflowPopupContext'
 
 const { t } = useI18n()
+
+provide(WORKFLOW_POPUP_CONTAINER_KEY, WORKFLOW_POPUP_CONTAINER_SELECTOR)
 const orgStore = useOrgStore()
 
 const props = defineProps<{
@@ -58,6 +69,28 @@ async function handleSave() {
   if (!localWorkflow.value.name?.trim()) {
     Message.warning(t('admin.workflow.message.nameRequired'))
     return
+  }
+
+  for (const n of localWorkflow.value.nodes) {
+    if (n.nodeType !== WorkflowNodeType.AUTO_ACTION) continue
+    const auto = n as AutoActionNodeDefinition
+    const acts = auto.actions || []
+    for (let i = 0; i < acts.length; i++) {
+      const action = acts[i]
+      if (!action) continue
+      const detail = validateRuleAction(action, t)
+      if (detail) {
+        const typeName = t(`admin.bizRule.actionType.${action.actionType}`)
+        Message.error(
+          t('admin.bizRule.actionConfig.actionIncomplete', {
+            index: i + 1,
+            type: typeName,
+            detail,
+          }),
+        )
+        return
+      }
+    }
   }
 
   saving.value = true
@@ -120,6 +153,11 @@ async function handleSave() {
             @update:workflow="handleUpdateWorkflow"
           />
         </div>
+
+        <!-- Arco 浮层统一挂到此节点（见 workflowPopupContext），避免 Teleport 到 body 被全屏层挡住 -->
+        <div id="workflow-popup-root" class="workflow-popup-root" />
+
+        <div id="workflow-action-modal-root" class="workflow-action-modal-root" />
       </div>
     </transition>
   </teleport>
@@ -179,6 +217,29 @@ async function handleSave() {
   min-height: 0;
   overflow: hidden;
   background: #f5f6f8;
+}
+
+/** 与 modal-root 同级，略高层级，保证动作弹窗内的下拉浮在遮罩之上 */
+.workflow-popup-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2200;
+  pointer-events: none;
+}
+
+.workflow-popup-root > * {
+  pointer-events: auto;
+}
+
+.workflow-action-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  pointer-events: none;
+}
+
+.workflow-action-modal-root > * {
+  pointer-events: auto;
 }
 
 // 进出动画

@@ -19,15 +19,18 @@ public final class UpdateCardAction implements RuleAction {
 
     private final ActionTargetSelector target;
     private final List<FieldAssignment> fieldAssignments;
+    private final String name;
     private final int sortOrder;
 
     @JsonCreator
     public UpdateCardAction(
             @JsonProperty("target") ActionTargetSelector target,
             @JsonProperty("fieldAssignments") List<FieldAssignment> fieldAssignments,
+            @JsonProperty("name") String name,
             @JsonProperty("sortOrder") Integer sortOrder) {
         this.target = Objects.requireNonNull(target, "target must not be null");
         this.fieldAssignments = AssertUtils.requireNotEmpty(fieldAssignments, "fieldAssignments must not be empty");
+        this.name = name;
         this.sortOrder = sortOrder != null ? sortOrder : 0;
     }
 
@@ -39,6 +42,12 @@ public final class UpdateCardAction implements RuleAction {
     @JsonProperty("fieldAssignments")
     public List<FieldAssignment> getFieldAssignments() {
         return fieldAssignments;
+    }
+
+    @Override
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     @Override

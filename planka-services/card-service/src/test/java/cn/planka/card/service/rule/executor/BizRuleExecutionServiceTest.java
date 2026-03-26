@@ -73,7 +73,7 @@ class BizRuleExecutionServiceTest {
     private RuleAction createAction() {
         ActionTargetSelector target = new ActionTargetSelector(
                 ActionTargetSelector.TargetType.CURRENT_CARD, null, null);
-        return new DiscardCardAction(target, null, 0);
+        return new DiscardCardAction(target, null, null, 0);
     }
 
     @Nested

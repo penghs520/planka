@@ -6,8 +6,10 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { ApprovalNodeDefinition } from '@/types/workflow'
 import { ApprovalMode } from '@/types/workflow'
+import { useWorkflowPopupContainer } from '../workflowPopupContext'
 
 const { t } = useI18n()
+const workflowPopupContainer = useWorkflowPopupContainer()
 
 const props = defineProps<{
   node: ApprovalNodeDefinition
@@ -88,6 +90,7 @@ const selectorTypeOptions = computed(() => [
         <a-select
           :model-value="node.approvalMode"
           :options="approvalModeOptions"
+          :popup-container="workflowPopupContainer"
           @update:model-value="updateApprovalMode"
         />
       </a-form-item>
@@ -96,6 +99,7 @@ const selectorTypeOptions = computed(() => [
         <a-select
           :model-value="node.approverSelector.selectorType"
           :options="selectorTypeOptions"
+          :popup-container="workflowPopupContainer"
           @update:model-value="updateSelectorType"
         />
       </a-form-item>
@@ -109,6 +113,7 @@ const selectorTypeOptions = computed(() => [
           multiple
           allow-search
           :placeholder="t('admin.workflow.panel.approversPlaceholder')"
+          :popup-container="workflowPopupContainer"
           @update:model-value="updateMemberIds"
         />
       </a-form-item>
@@ -122,6 +127,7 @@ const selectorTypeOptions = computed(() => [
           multiple
           allow-search
           :placeholder="t('admin.workflow.panel.rolesPlaceholder')"
+          :popup-container="workflowPopupContainer"
           @update:model-value="updateRoleIds"
         />
       </a-form-item>

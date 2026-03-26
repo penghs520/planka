@@ -15,15 +15,18 @@ public final class DiscardCardAction implements RuleAction {
 
     private final ActionTargetSelector target;
     private final TextExpressionTemplate reasonTemplate;
+    private final String name;
     private final int sortOrder;
 
     @JsonCreator
     public DiscardCardAction(
             @JsonProperty("target") ActionTargetSelector target,
             @JsonProperty("reasonTemplate") TextExpressionTemplate reasonTemplate,
+            @JsonProperty("name") String name,
             @JsonProperty("sortOrder") Integer sortOrder) {
         this.target = Objects.requireNonNull(target, "target must not be null");
         this.reasonTemplate = reasonTemplate;
+        this.name = name;
         this.sortOrder = sortOrder != null ? sortOrder : 0;
     }
 
@@ -35,6 +38,12 @@ public final class DiscardCardAction implements RuleAction {
     @JsonProperty("reasonTemplate")
     public TextExpressionTemplate getReasonTemplate() {
         return reasonTemplate;
+    }
+
+    @Override
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     @Override

@@ -15,15 +15,18 @@ public final class CommentCardAction implements RuleAction {
 
     private final ActionTargetSelector target;
     private final TextExpressionTemplate contentTemplate;
+    private final String name;
     private final int sortOrder;
 
     @JsonCreator
     public CommentCardAction(
             @JsonProperty("target") ActionTargetSelector target,
             @JsonProperty("contentTemplate") TextExpressionTemplate contentTemplate,
+            @JsonProperty("name") String name,
             @JsonProperty("sortOrder") Integer sortOrder) {
         this.target = Objects.requireNonNull(target, "target must not be null");
         this.contentTemplate = Objects.requireNonNull(contentTemplate, "contentTemplate must not be null");
+        this.name = name;
         this.sortOrder = sortOrder != null ? sortOrder : 0;
     }
 
@@ -35,6 +38,12 @@ public final class CommentCardAction implements RuleAction {
     @JsonProperty("contentTemplate")
     public TextExpressionTemplate getContentTemplate() {
         return contentTemplate;
+    }
+
+    @Override
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     @Override

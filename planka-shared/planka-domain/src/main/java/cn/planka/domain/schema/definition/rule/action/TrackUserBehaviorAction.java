@@ -16,15 +16,18 @@ public final class TrackUserBehaviorAction implements RuleAction {
 
     private final String behaviorType;
     private final Map<String, TextExpressionTemplate> properties;
+    private final String name;
     private final int sortOrder;
 
     @JsonCreator
     public TrackUserBehaviorAction(
             @JsonProperty("behaviorType") String behaviorType,
             @JsonProperty("properties") Map<String, TextExpressionTemplate> properties,
+            @JsonProperty("name") String name,
             @JsonProperty("sortOrder") Integer sortOrder) {
         this.behaviorType = Objects.requireNonNull(behaviorType, "behaviorType must not be null");
         this.properties = properties;
+        this.name = name;
         this.sortOrder = sortOrder != null ? sortOrder : 0;
     }
 
@@ -36,6 +39,12 @@ public final class TrackUserBehaviorAction implements RuleAction {
     @JsonProperty("properties")
     public Map<String, TextExpressionTemplate> getProperties() {
         return properties;
+    }
+
+    @Override
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     @Override

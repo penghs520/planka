@@ -13,6 +13,8 @@ const props = defineProps<{
   fieldOptions: FieldOption[]
   /** 当前实体类型ID */
   cardTypeId: string
+  /** Arco 浮层挂载容器；高层级场景由外层传入 */
+  arcoPopupContainer?: string
 }>()
 
 const modelValue = defineModel<ActionTargetSelector>({ required: true })
@@ -138,6 +140,7 @@ watch(selectedLinkField, (field) => {
     :popup-visible="dropdownVisible"
     position="bl"
     auto-fit-popup-min-width
+    :popup-container="arcoPopupContainer"
     @popup-visible-change="handleDropdownVisibleChange"
   >
     <!-- 触发器 -->

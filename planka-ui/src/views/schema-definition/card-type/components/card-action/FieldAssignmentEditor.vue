@@ -21,6 +21,8 @@ const props = defineProps<{
   memberCardTypeId?: string
   /** 是否隐藏用户输入选项（业务规则等自动执行场景使用） */
   hideUserInput?: boolean
+  /** Arco 浮层挂载容器，传给字段选择与赋值方式下拉；高层级场景由外层传入 */
+  arcoPopupContainer?: string
 }>()
 
 const modelValue = defineModel<FieldAssignment>({ required: true })
@@ -55,6 +57,7 @@ function handleFieldChange(fieldId: string) {
       :model-value="modelValue.fieldId"
       :placeholder="t('admin.cardAction.updateCard.targetFieldPlaceholder')"
       class="field-select"
+      :popup-container="arcoPopupContainer"
       @change="handleFieldChange"
     >
       <a-option
@@ -75,6 +78,7 @@ function handleFieldChange(fieldId: string) {
       :current-card-type-id="currentCardTypeId"
       :member-card-type-id="memberCardTypeId"
       :hide-user-input="hideUserInput"
+      :arco-popup-container="arcoPopupContainer"
       class="value-selector"
     />
   </div>

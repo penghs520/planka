@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n'
 import { Panel } from '@vue-flow/core'
 import { Controls } from '@vue-flow/controls'
 import { WorkflowNodeType } from '@/types/workflow'
+import { useWorkflowPopupContainer } from './workflowPopupContext'
 
 import '@vue-flow/controls/dist/style.css'
 
@@ -18,6 +19,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const workflowPopupContainer = useWorkflowPopupContainer()
 
 function addApproval() {
   emit('addNode', WorkflowNodeType.APPROVAL)
@@ -40,7 +42,7 @@ function addAutoAction() {
       <span class="wf-flow-bottom-bar__zoom">
         {{ t('admin.workflow.canvas.zoomPercent', { percent: zoomPercent }) }}
       </span>
-      <a-dropdown trigger="click" position="top">
+      <a-dropdown trigger="click" position="top" :popup-container="workflowPopupContainer">
         <a-button type="primary" size="small" class="wf-flow-bottom-bar__add">
           <template #icon>
             <icon-plus />

@@ -105,6 +105,8 @@ export interface RecipientSelector {
  * 规则动作基础接口
  */
 export interface BaseRuleAction {
+  /** 可选展示名称，便于区分多条同类型动作 */
+  name?: string
   actionType: RuleActionType
   sortOrder?: number
 }
@@ -303,6 +305,18 @@ export function createDefaultTarget(): ActionTargetSelector {
   return {
     targetType: ActionTargetType.CURRENT_CARD,
   }
+}
+
+/**
+ * 创建一条默认规则动作（与 RuleActionsEditor「添加动作」默认一致：更新卡片）
+ */
+export function createDefaultRuleAction(sortOrder = 0): RuleAction {
+  return {
+    actionType: RuleActionType.UPDATE_CARD,
+    sortOrder,
+    target: { targetType: ActionTargetType.CURRENT_CARD },
+    fieldAssignments: [],
+  } as UpdateCardAction
 }
 
 /**

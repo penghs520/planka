@@ -4,6 +4,7 @@
     :popup-visible="dropdownVisible"
     position="bl"
     auto-fit-popup-min-width
+    :popup-container="arcoPopupContainer"
     @popup-visible-change="handleDropdownVisibleChange"
   >
     <!-- 触发器：模拟 select 外观 -->
@@ -287,6 +288,11 @@ const props = defineProps<{
   memberCardTypeId?: string
   /** 是否隐藏用户输入选项（业务规则等自动执行场景使用） */
   hideUserInput?: boolean
+  /**
+   * Arco 浮层挂载容器（与 a-trigger 的 popup-container 一致）。
+   * 由外层在高层级场景传入，例如 `#workflow-popup-root`；不传则 Arco 默认挂 body。
+   */
+  arcoPopupContainer?: string
 }>()
 
 const modelValue = defineModel<FieldAssignment>({ required: true })

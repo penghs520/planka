@@ -21,6 +21,7 @@ public final class CreateCardAction implements RuleAction {
     private final TextExpressionTemplate titleTemplate;
     private final StatusId initialStatusId;
     private final List<FieldAssignment> fieldAssignments;
+    private final String name;
     private final int sortOrder;
 
     @JsonCreator
@@ -29,11 +30,13 @@ public final class CreateCardAction implements RuleAction {
             @JsonProperty("titleTemplate") TextExpressionTemplate titleTemplate,
             @JsonProperty("initialStatusId") StatusId initialStatusId,
             @JsonProperty("fieldAssignments") List<FieldAssignment> fieldAssignments,
+            @JsonProperty("name") String name,
             @JsonProperty("sortOrder") Integer sortOrder) {
         this.cardTypeId = Objects.requireNonNull(cardTypeId, "cardTypeId must not be null");
         this.titleTemplate = Objects.requireNonNull(titleTemplate, "titleTemplate must not be null");
         this.initialStatusId = initialStatusId;
         this.fieldAssignments = fieldAssignments;
+        this.name = name;
         this.sortOrder = sortOrder != null ? sortOrder : 0;
     }
 
@@ -55,6 +58,12 @@ public final class CreateCardAction implements RuleAction {
     @JsonProperty("fieldAssignments")
     public List<FieldAssignment> getFieldAssignments() {
         return fieldAssignments;
+    }
+
+    @Override
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     @Override
