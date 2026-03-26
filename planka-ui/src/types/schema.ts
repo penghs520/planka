@@ -38,6 +38,8 @@ export enum SchemaType {
   FORMULA_DEFINITION = 'FORMULA_DEFINITION',
   /** 卡片动作 */
   CARD_ACTION = 'CARD_ACTION',
+  /** 工作流 */
+  WORKFLOW = 'WORKFLOW',
 }
 
 /**
@@ -143,6 +145,10 @@ export enum SchemaSubType {
   // ==================== 卡片动作 ====================
   /** 卡片动作配置 */
   CARD_ACTION_CONFIG = 'CARD_ACTION_CONFIG',
+
+  // ==================== 工作流 ====================
+  /** 工作流定义 */
+  WORKFLOW_DEFINITION = 'WORKFLOW_DEFINITION',
 }
 
 /**
@@ -164,6 +170,7 @@ export const SchemaTypeConfig: Record<SchemaType, { label: string; requiresBelon
   [SchemaType.CARD_PERMISSION]: { label: '权限定义', requiresBelongTo: true },
   [SchemaType.MENU]: { label: '菜单定义', requiresBelongTo: false },
   [SchemaType.CARD_ACTION]: { label: '卡片动作', requiresBelongTo: true },
+  [SchemaType.WORKFLOW]: { label: '工作流', requiresBelongTo: true },
   [SchemaType.FORMULA_DEFINITION]: { label: '计算公式', requiresBelongTo: true },
 }
 
@@ -214,6 +221,8 @@ export const SchemaSubTypeConfig: Record<SchemaSubType, { label: string; categor
   [SchemaSubType.CARD_PERMISSION]: { label: '权限配置', category: SchemaType.CARD_PERMISSION },
   // 卡片动作
   [SchemaSubType.CARD_ACTION_CONFIG]: { label: '卡片动作配置', category: SchemaType.CARD_ACTION },
+  // 工作流
+  [SchemaSubType.WORKFLOW_DEFINITION]: { label: '工作流定义', category: SchemaType.WORKFLOW },
   // 计算公式
   [SchemaSubType.TIME_POINT_FORMULA_DEFINITION]: { label: '时间点公式', category: SchemaType.FORMULA_DEFINITION },
   [SchemaSubType.TIME_RANGE_FORMULA_DEFINITION]: { label: '时间段公式', category: SchemaType.FORMULA_DEFINITION },

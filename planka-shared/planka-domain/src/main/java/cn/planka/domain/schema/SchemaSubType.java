@@ -83,4 +83,8 @@ public final class SchemaSubType {
     /** 卡片动作配置 */
     public static final String CARD_ACTION_CONFIG = "CARD_ACTION_CONFIG";
 
+    // ==================== 工作流定义 ====================
+    /** 工作流定义 */
+    public static final String WORKFLOW_DEFINITION = "WORKFLOW_DEFINITION";
+
 }

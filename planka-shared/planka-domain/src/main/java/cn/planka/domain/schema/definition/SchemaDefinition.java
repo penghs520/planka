@@ -20,6 +20,7 @@ import cn.planka.domain.schema.definition.template.CardDetailTemplateDefinition;
 import cn.planka.domain.schema.definition.template.CardCreatePageTemplateDefinition;
 import cn.planka.domain.schema.definition.template.CardFaceDefinition;
 import cn.planka.domain.schema.definition.view.ListViewDefinition;
+import cn.planka.domain.schema.definition.workflow.WorkflowDefinition;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -71,6 +72,7 @@ import java.util.Set;
         @JsonSubTypes.Type(value = CardFaceDefinition.class, name = SchemaSubType.CARD_FACE),
         @JsonSubTypes.Type(value = PermissionConfigDefinition.class, name = SchemaSubType.CARD_PERMISSION),
         @JsonSubTypes.Type(value = BizRuleDefinition.class, name = SchemaSubType.BIZ_RULE),
+        @JsonSubTypes.Type(value = WorkflowDefinition.class, name = SchemaSubType.WORKFLOW_DEFINITION),
 
 
         // ==================== 计算公式定义 ====================

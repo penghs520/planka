@@ -979,6 +979,86 @@ targetFieldsRequired: '请选择目标属性',
     title: '审批流定义',
   },
 
+  // 工作流管理
+  workflow: {
+    title: '工作流',
+    createButton: '新建工作流',
+    createTitle: '新建工作流',
+    editTitle: '编辑工作流 - {name}',
+    emptyDescription: '暂无工作流定义',
+    searchPlaceholder: '搜索工作流名称',
+    workflowName: '工作流名称',
+    nodesLabel: '节点数',
+    nodesCount: '{count} 个节点',
+    palette: {
+      title: '节点库',
+      hint: '点击将节点添加到「结束」节点之前',
+    },
+    canvas: {
+      zoomPercent: '{percent}%',
+    },
+    nodeCard: {
+      startHint: '流程入口',
+      endHint: '流程结束',
+    },
+    addNode: '添加节点',
+    approverCount: '{count} 位审批人',
+    actionsCount: '{count} 个动作',
+    // 节点类型
+    nodeType: {
+      START: '开始',
+      END: '结束',
+      APPROVAL: '人工审批',
+      AUTO_ACTION: '自动执行',
+    },
+    // 审批模式
+    approvalMode: {
+      ANY_ONE: '或签（任一人通过）',
+      ALL_REQUIRED: '会签（所有人通过）',
+    },
+    // 审批人选择器类型
+    selectorType: {
+      FIXED_MEMBERS: '指定成员',
+      ROLE_BASED: '按角色',
+    },
+    // 失败策略
+    failureStrategy: {
+      BLOCK_WORKFLOW: '阻断流程',
+      CONTINUE: '继续执行',
+    },
+    // 表单
+    form: {
+      name: '名称',
+      namePlaceholder: '请输入工作流名称',
+      description: '描述',
+      descriptionPlaceholder: '请输入工作流描述',
+    },
+    // 属性面板
+    panel: {
+      title: '节点配置',
+      nodeName: '节点名称',
+      nodeNamePlaceholder: '请输入节点名称',
+      approvalMode: '审批模式',
+      approverType: '审批人类型',
+      approvers: '审批人',
+      approversPlaceholder: '选择审批人',
+      roles: '角色',
+      rolesPlaceholder: '选择角色',
+      failureStrategy: '失败策略',
+      actions: '执行动作',
+      actionsEmpty: '暂未配置执行动作',
+      deleteNode: '删除节点',
+    },
+    // 提示消息
+    message: {
+      nameRequired: '请输入工作流名称',
+      saveFailed: '保存工作流失败',
+      deleteFailed: '删除工作流失败',
+      confirmDelete: '确定要删除工作流「{name}」吗？删除后不可恢复。',
+      toggleFailed: '操作失败',
+    },
+  },
+
   ai: {
     title: 'AI',
   },

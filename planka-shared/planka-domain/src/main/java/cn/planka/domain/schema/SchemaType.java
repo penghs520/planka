@@ -90,7 +90,12 @@ public enum SchemaType {
     /**
      * 卡片动作配置（属于某个实体类型）
      */
-    CARD_ACTION("卡片动作配置", true);
+    CARD_ACTION("卡片动作配置", true),
+
+    /**
+     * 工作流定义（属于某个实体类型）
+     */
+    WORKFLOW("工作流", true);
 
     private final String displayName;
     private final boolean requiresBelongTo;
